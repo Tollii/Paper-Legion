@@ -29,7 +29,7 @@ CREATE TABLE Matches(
   match_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   player1 int NOT NULL,
   player2 int,
-  game_started BOOLEAN NOT NULL,
+  game_started BOOLEAN NOT NULL DEFAULT 0,
   FOREIGN KEY(player1) REFERENCES Users(user_id),
   FOREIGN KEY(player2) REFERENCES Users(user_id)
 );
@@ -39,7 +39,7 @@ CREATE TABLE Turns(
   match_id int NOT NULL,
   player int NOT NULL,
   PRIMARY KEY(turn_id, match_id, player),
-  FOREIGN KEY(match_id) REFERENCES Matches(match_id)
+  FOREIGN KEY(match_id) REFERENCES Matches(match_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Pieces(
@@ -48,22 +48,26 @@ CREATE TABLE Pieces(
   position point NOT NULL,
   player int NOT NULL,
   PRIMARY KEY(piece_id, match_id),
-  FOREIGN KEY(match_id) REFERENCES Matches(match_id)
+  FOREIGN KEY(match_id) REFERENCES Matches(match_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Obstacles(
-  piece_id int NOT NULL PRIMARY KEY,
-  FOREIGN KEY(piece_id) REFERENCES Pieces(piece_id)
+  piece_id int NOT NULL,
+  match_id int NOT NULL,
+  PRIMARY KEY(piece_id, match_id),
+  FOREIGN KEY(piece_id, match_id) REFERENCES Pieces(piece_id, match_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Units(
-  piece_id int NOT NULL PRIMARY KEY,
+  piece_id int NOT NULL,
+  match_id int NOT NULL,
   current_health int NOT NULL,
   current_attack int NOT NULL,
   current_attack_range int NOT NULL,
-  current_ability_cooldown int NOT NULL,
+  current_ability_cooldown int,
   unit_type_id int NOT NULL,
-  FOREIGN KEY(piece_id) REFERENCES Pieces(piece_id),
+  PRIMARY KEY(piece_id, match_id),
+  FOREIGN KEY(piece_id, match_id) REFERENCES Pieces(piece_id, match_id) ON DELETE CASCADE,
   FOREIGN KEY(unit_type_id) REFERENCES Unit_types(unit_type_id)
 );
 
@@ -74,16 +78,20 @@ CREATE TABLE Movements(
   start_pos point NOT NULL,
   end_pos point NOT NULL,
   PRIMARY KEY(turn_id, piece_id, match_id),
-  FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id)
+  FOREIGN KEY(piece_id) REFERENCES Units(piece_id),
+  FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Attacks(
   turn_id int NOT NULL,
-  piece_id int NOT NULL,
+  attacker int NOT NULL,
+  reciever int NOT NULL,
   match_id int NOT NULL,
   damage_dealt int NOT NULL,
-  PRIMARY KEY(turn_id, piece_id, match_id),
-  FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id)
+  PRIMARY KEY(turn_id, attacker, reciever, match_id),
+  FOREIGN KEY(attacker) REFERENCES Units(piece_id),
+  FOREIGN KEY(reciever) REFERENCES Units(piece_id),
+  FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Abilities(
@@ -91,5 +99,6 @@ CREATE TABLE Abilities(
   piece_id int NOT NULL,
   match_id int NOT NULL,
   PRIMARY KEY(turn_id, piece_id, match_id),
-  FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id)
+  FOREIGN KEY(piece_id) REFERENCES Units(piece_id),
+  FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id) ON DELETE CASCADE
 );
