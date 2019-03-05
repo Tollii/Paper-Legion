@@ -1,4 +1,6 @@
-DROP TABLE IF EXISTS Users, Statistics, Unit_types, Matches, Turns, Pieces, Obstacles, Units, Movements, Attcks, Abilities;
+SET foreign_key_checks = 0;
+DROP TABLE IF EXISTS Users, Statistics, Unit_types, Matches, Turns, Pieces, Obstacles, Units, Movements, Attacks, Abilities;
+SET foreign_key_checks = 1;
 
 CREATE TABLE Users(
   user_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
