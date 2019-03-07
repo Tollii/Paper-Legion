@@ -1,84 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<<<<<<< HEAD
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.layout.AnchorPane?>
-
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <JFXTextField layoutX="218.0" layoutY="128.0" />
-   </children>
-</AnchorPane>
-=======
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.loginController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" StackPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="200.0" StackPane.alignment="CENTER">
+         <StackPane.margin>
+            <Insets />
+         </StackPane.margin>
          <center>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <center>
-                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="BOTTOM_CENTER">
+            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0">
                      <children>
-                        <JFXTextField fx:id="usernameInput" labelFloat="true" promptText="username" />
-                        <JFXPasswordField fx:id="passwordInput" labelFloat="true" promptText="password">
+                        <JFXTextField alignment="CENTER" promptText="Username" />
+                        <JFXPasswordField alignment="CENTER" promptText="Password" />
+                        <VBox alignment="TOP_RIGHT" prefHeight="150.0" prefWidth="100.0">
+                           <children>
+                              <Label text="New user?" />
+                           </children>
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="-35.0" />
                            </VBox.margin>
-                        </JFXPasswordField>
-                        <BorderPane prefHeight="75.0" prefWidth="200.0">
-                           <right>
-                              <VBox alignment="TOP_RIGHT" prefHeight="30.0" prefWidth="100.0" BorderPane.alignment="BOTTOM_RIGHT">
-                                 <children>
-                                    <Label fx:id="newUserButton" contentDisplay="RIGHT" text="New User?">
-                                       <VBox.margin>
-                                          <Insets top="5.0" />
-                                       </VBox.margin>
-                                       <font>
-                                          <Font size="9.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="forgotPasswordButton" text="Forgot password?">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <font>
-                                          <Font size="9.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                           </right>
-                           <bottom>
-                              <JFXButton fx:id="enterButton" defaultButton="true" text="Enter" BorderPane.alignment="CENTER" />
-                           </bottom>
-                        </BorderPane>
+                        </VBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </StackPane.margin>
+                  </VBox>
+               </children>
+            </StackPane>
+         </center>
+         <bottom>
+            <BorderPane prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+               <bottom>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <JFXButton style="-fx-background-color: #000000; -fx-text-fill: #ffffff;" text="Enter" />
                      </children>
                      <BorderPane.margin>
-                        <Insets left="20.0" right="20.0" top="100.0" />
+                        <Insets left="50.0" right="50.0" />
                      </BorderPane.margin>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
                   </VBox>
-               </center>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
+               </bottom>
             </BorderPane>
-         </center>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
+         </bottom>
+         <top>
+            <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </top>
       </BorderPane>
    </children>
 </StackPane>
->>>>>>> login
