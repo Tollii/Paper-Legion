@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cac4d5f7-6cfd-46bf-871b-d06487804b66" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/sample/Database/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Database/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Database/Config.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,8 +39,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/Database/Config.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="135">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -84,6 +84,7 @@
         <option value="$PROJECT_DIR$/Joakim_mad_adolfsen.txt" />
         <option value="$PROJECT_DIR$/src/sample/Main.java" />
         <option value="$PROJECT_DIR$/src/sample/database/Config.java" />
+        <option value="$PROJECT_DIR$/src/sample/Database/Config.java" />
       </list>
     </option>
   </component>
@@ -134,7 +135,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551957951136" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551958075612" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
@@ -236,7 +237,7 @@
       <workItem from="1551952145681" duration="264000" />
       <workItem from="1551952580549" duration="536000" />
       <workItem from="1551953329692" duration="1285000" />
-      <workItem from="1551955711213" duration="2208000" />
+      <workItem from="1551955711213" duration="2333000" />
     </task>
     <task id="LOCAL-00001" summary="Jåkim test :)">
       <created>1551953918019</created>
@@ -259,11 +260,18 @@
       <option name="project" value="LOCAL" />
       <updated>1551957211760</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Lagt til Config.java">
+      <created>1551957971853</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1551957971853</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4293000" />
+    <option name="totallyTimeSpent" value="4418000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="2880" height="1800" extended-state="6" />
@@ -312,7 +320,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Jåkim test :)" />
     <MESSAGE value="Lagt til jfoenix library" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lagt til jfoenix library" />
+    <MESSAGE value="Lagt til Config.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lagt til Config.java" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/joakimtest.txt" />
@@ -373,8 +382,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Database/Config.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>
