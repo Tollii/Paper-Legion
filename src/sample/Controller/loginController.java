@@ -23,10 +23,10 @@ public class loginController {
     private JFXTextField usernameInput;
 
     @FXML
-    private JFXButton enterButton;
+    private JFXButton loginButton;
 
     @FXML
-    private Label newUserButton;
+    private Label signUpButton;
 
     @FXML
     private JFXPasswordField passwordInput;
