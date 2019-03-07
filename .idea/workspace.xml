@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cac4d5f7-6cfd-46bf-871b-d06487804b66" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Joakim mad adolfsen.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="cac4d5f7-6cfd-46bf-871b-d06487804b66" name="Default Changelist" comment="Jåkim test :)">
+      <change afterPath="$PROJECT_DIR$/Joakim_mad_adolfsen.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Joakim mad adolfsen.txt" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,10 +34,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Joakim mad adolfsen.txt">
+        <entry file="file://$PROJECT_DIR$/Joakim_mad_adolfsen.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="40" lean-forward="true" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
+            <state relative-caret-position="85">
+              <caret line="5" column="42" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -53,6 +52,7 @@
       <list>
         <option value="$PROJECT_DIR$/src/joakimtest.txt" />
         <option value="$PROJECT_DIR$/Joakim mad adolfsen.txt" />
+        <option value="$PROJECT_DIR$/Joakim_mad_adolfsen.txt" />
       </list>
     </option>
   </component>
@@ -115,7 +115,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551953687355" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551954408522" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -202,15 +202,24 @@
       <updated>1551951012462</updated>
       <workItem from="1551952145681" duration="264000" />
       <workItem from="1551952580549" duration="536000" />
-      <workItem from="1551953329692" duration="531000" />
+      <workItem from="1551953329692" duration="1285000" />
     </task>
+    <task id="LOCAL-00001" summary="Jåkim test :)">
+      <created>1551953918019</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1551953918019</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1331000" />
+    <option name="totallyTimeSpent" value="2085000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2332905" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -252,6 +261,10 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Jåkim test :)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Jåkim test :)" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/joakimtest.txt" />
     <entry file="file://$PROJECT_DIR$/joakimtest.txt">
@@ -277,6 +290,12 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Joakim Mad Adolfsen">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Joakim mad adolfsen.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -284,13 +303,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Joakim Mad Adolfsen">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Joakim mad adolfsen.txt">
+    <entry file="file://$PROJECT_DIR$/Joakim_mad_adolfsen.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="40" lean-forward="true" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
+        <state relative-caret-position="85">
+          <caret line="5" column="42" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
         </state>
       </provider>
     </entry>
