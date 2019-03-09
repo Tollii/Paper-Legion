@@ -2,9 +2,11 @@
 
 
 import dragAndDrop.Tile;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -17,16 +19,24 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+
 import java.util.ArrayList;
 
 
 public class Main extends Application {
     static Tile[][] liste = new Tile[6][6];
     private static final int tileSize = 100;
+    private double oldPosX;
+    private double oldPosY;
 
 
     //Har alle tiles i seg.
     GridPane ins = new GridPane();
+    public void setOldPos(double x, double y){
+        this.oldPosX = x;
+        this.oldPosY = y;
+    }
+
 
 
     @Override
@@ -66,6 +76,7 @@ public class Main extends Application {
 
 
         tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
+            setOldPos(tile.getTranslateX(), tile.getTranslateY() );
             tile.setStroke(Color.RED);
         });
 
@@ -80,10 +91,8 @@ public class Main extends Application {
         });
 
 
-
         //Drar spillerbrikke når mus blir holdt inne.
         tile.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-
             double rectPosX = tile.getLayoutX()+ tile.getWidth();
             double rectPosY = tile.getLayoutY() + tile.getHeight();
             double precRectPosX = tile.getLayoutX()+ tile.getWidth()/2;
@@ -100,21 +109,29 @@ public class Main extends Application {
             double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
             double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
 
+            System.out.println(oldPosX + "   " + oldPosY);
             tile.setTranslateX(movementPrecX);
             tile.setTranslateY(movementPrecY);
 
             tile.addEventHandler(MouseEvent.MOUSE_RELEASED, e ->{
-                tile.setTranslateX(a);
-                tile.setTranslateY(b);
+                //Hvis avstanden er 2 eller mindre
+                if(!(Math.abs(a/100-oldPosX/100)>2) && (!(Math.abs(b/100-oldPosY/100)>2))){
+                    tile.setTranslateX(a);
+                    tile.setTranslateY(b);
+                    //Hvis avstanden er stører enn 2, flyttes ikke brikken.
+                } else{
+                    tile.setTranslateX(oldPosX);
+                    tile.setTranslateY(oldPosY);
+                }
+
             });
 
             //En måte å holde oversikt på posisjonen til spillerbrikken på. Oppgitt i 0,1, -- 1,2 osv. passer med array.
-            System.out.println("PosX: " + (int)tile.getTranslateX()/100 + " PosY: " + (int) tile.getTranslateY()/100);
+            //System.out.println("PosX: " + (int)tile.getTranslateX()/100 + " PosY: " + (int) tile.getTranslateY()/100);
 
             //tile.setTranslateY(posX-rectPosX);
             //tile.setTranslateY(posY-rectPosY);
         });
-
 
 
 
