@@ -1,5 +1,6 @@
 
 
+
 import dragAndDrop.Tile;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
-
-
 
 import java.util.ArrayList;
 
@@ -53,10 +52,10 @@ public class Main extends Application {
         //Lager gridmap med tiles.
         for(int i=0; i<6; i++){
             for(int j=0; j<6; j++){
-               Tile tile2 = new Tile(100,100);
+                Tile tile2 = new Tile(100,100);
                 tile2.setTranslateX(j *100);
                 tile2.setTranslateY(i *100);
-               // sp.getChildren().add(tile2.getRectangle());
+                // sp.getChildren().add(tile2.getRectangle());
                 ins.getChildren().add(tile2.getRectangle());
                 liste[i][j] = tile2;
             }
@@ -66,43 +65,55 @@ public class Main extends Application {
         sp.getChildren().addAll(ins, tile);
 
 
-            tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
-                tile.setStroke(Color.RED);
-            });
-            
-            //Mouse hovered over spillerbrikke så blir fargen på brikken rød.
-            tile.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event -> {
-                tile.setFill(Color.RED);
-            });
+        tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
+            tile.setStroke(Color.RED);
+        });
 
-            //Når musen flyttes over grid og vekk fra spillerbrikke så blir orginalfarge satt tilbake igjen.
-            ins.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event -> {
-                tile.setFill(Color.BLACK);
-            });
+        //Mouse hovered over spillerbrikke så blir fargen på brikken rød.
+        tile.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event -> {
+            tile.setFill(Color.RED);
+        });
+
+        //Når musen flyttes over grid og vekk fra spillerbrikke så blir orginalfarge satt tilbake igjen.
+        ins.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event -> {
+            tile.setFill(Color.BLACK);
+        });
 
 
 
-            //Drar spillerbrikke når mus blir holdt inne. 
-            tile.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
+        //Drar spillerbrikke når mus blir holdt inne.
+        tile.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
 
-                double rectPosX = tile.getLayoutX()+ tile.getWidth();
-                double rectPosY = tile.getLayoutY() + tile.getHeight();
-                double posX = event.getSceneX();
-                double posY =event.getSceneY();
-                double movementX = posX-rectPosX;
-                double movementY = posY-rectPosY;
-                double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
-                double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
+            double rectPosX = tile.getLayoutX()+ tile.getWidth();
+            double rectPosY = tile.getLayoutY() + tile.getHeight();
+            double precRectPosX = tile.getLayoutX()+ tile.getWidth()/2;
+            double precRectPosY = tile.getLayoutY() + tile.getHeight()/2;
 
+            double posX = event.getSceneX();
+            double posY =event.getSceneY();
+            double movementX = posX-rectPosX;
+            double movementY = posY-rectPosY;
+
+            double movementPrecX = posX-precRectPosX;
+            double movementPrecY = posY-precRectPosY;
+
+            double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
+            double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
+
+            tile.setTranslateX(movementPrecX);
+            tile.setTranslateY(movementPrecY);
+
+            tile.addEventHandler(MouseEvent.MOUSE_RELEASED, e ->{
                 tile.setTranslateX(a);
                 tile.setTranslateY(b);
-
-                //En måte å holde oversikt på posisjonen til spillerbrikken på. Oppgitt i 0,1, -- 1,2 osv. passer med array.
-                System.out.println("PosX: " + (int)tile.getTranslateX()/100 + " PosY: " + (int) tile.getTranslateY()/100);
-
-                //tile.setTranslateY(posX-rectPosX);
-                //tile.setTranslateY(posY-rectPosY);
             });
+
+            //En måte å holde oversikt på posisjonen til spillerbrikken på. Oppgitt i 0,1, -- 1,2 osv. passer med array.
+            System.out.println("PosX: " + (int)tile.getTranslateX()/100 + " PosY: " + (int) tile.getTranslateY()/100);
+
+            //tile.setTranslateY(posX-rectPosX);
+            //tile.setTranslateY(posY-rectPosY);
+        });
 
 
 
