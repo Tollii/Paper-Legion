@@ -4,30 +4,25 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
-public class Tile {
-    Rectangle tile;
+
+public class Tile extends Rectangle {
+    // Vet ikke om disse attributtene er nødvendige.
+    double oldPosX;
+    double oldPosY;
     boolean pieceOnTile;
 
     public Tile(int sizeX, int sizeY){
-        this.tile = new Rectangle(sizeX,sizeY);
-        tile.setFill(Color.WHITE);
-        tile.setStrokeType(StrokeType.OUTSIDE);
-        tile.setStroke(Color.BLACK);
+        super(sizeX,sizeY,Color.WHITE);
+        super.setStrokeType(StrokeType.INSIDE);
+        super.setStroke(Color.BLACK);
+
 
     }
 
-    public void setTranslateX(double a){
-        tile.setTranslateX(a);
-    }
 
-    public void setTranslateY(double a){
-        tile.setTranslateY(a);
-    }
 
-    public Rectangle getRectangle(){
-        return tile;
-    }
 
+    // vet ikke om disse metodene er nødvendige.
     public void setPieceOnTile(boolean piece){
         this.pieceOnTile = piece;
     }
@@ -35,4 +30,11 @@ public class Tile {
     public boolean getPieceOnTile(){
         return pieceOnTile;
     }
+
+    public void setPos(double posX, double posY){
+        this.oldPosX = posX;
+        this.oldPosY = posY;
+    }
 }
+
+

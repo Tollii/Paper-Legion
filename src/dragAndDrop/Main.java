@@ -1,8 +1,8 @@
 
+package dragAndDrop;
 
-
+import dragAndDrop.Piece;
 import dragAndDrop.Tile;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -25,6 +25,10 @@ import java.util.ArrayList;
 
 public class Main extends Application {
     static Tile[][] liste = new Tile[6][6];
+    static Piece[][] piecesListe = new Piece[6][6];
+    static int enemyhealth = 100;
+    static Rectangle enemy = new Rectangle(100,100);
+
     private static final int tileSize = 100;
     private double oldPosX;
     private double oldPosY;
@@ -66,18 +70,40 @@ public class Main extends Application {
                 tile2.setTranslateX(j *100);
                 tile2.setTranslateY(i *100);
                 // sp.getChildren().add(tile2.getRectangle());
-                ins.getChildren().add(tile2.getRectangle());
+                ins.getChildren().add(tile2);
                 liste[i][j] = tile2;
             }
         }
 
+        piecesListe[0][5]= new Piece(100,100);
+        enemy.setTranslateY(500);
+
+
+
         //Legger alle tiles til i stackpane.
-        sp.getChildren().addAll(ins, tile);
+        sp.getChildren().addAll(ins, enemy,tile);
+
+        Piece test = new Piece(100,100);
+
+        test.setTranslateX(500);
+        sp.getChildren().add(test);
+
+
 
 
         tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
             setOldPos(tile.getTranslateX(), tile.getTranslateY() );
             tile.setStroke(Color.RED);
+
+            enemy.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                enemyhealth -= 40;
+                System.out.println(enemyhealth);
+                if(enemyhealth<=0){
+                    sp.getChildren().removeAll(enemy);
+                    // må og fjernes fra eventuelle lister denne fienden kan ligge i.
+                }
+                ;
+            });
         });
 
         //Mouse hovered over spillerbrikke så blir fargen på brikken rød.
@@ -109,7 +135,7 @@ public class Main extends Application {
             double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
             double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
 
-            System.out.println(oldPosX + "   " + oldPosY);
+            //System.out.println(oldPosX + "   " + oldPosY);
             tile.setTranslateX(movementPrecX);
             tile.setTranslateY(movementPrecY);
 
