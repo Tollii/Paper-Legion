@@ -1,8 +1,9 @@
 package dragAndDrop;
 
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-
 
 public class Grid extends Rectangle {
     Tile[][]liste;
