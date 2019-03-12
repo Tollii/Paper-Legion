@@ -1,10 +1,13 @@
 package dragAndDrop;
 
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
@@ -14,38 +17,68 @@ public class Piece extends Rectangle {
     private double oldPosY; // Nødvendig?
     private double hp;
     private Label healthbar;
+    private boolean enemy;
     //private Rectangle piece;
 
-    public Piece(double width, double height, double row, double column, double hp){
+    public Piece(double width, double height, double row, double column, double hp, boolean enemy){
         super.setWidth(width);
         super.setHeight(height);
-        super.setFill(Color.BLACK);
+        this.enemy = enemy;
+
         setPosition(column*100,row*100);
         this.hp = hp;
-        System.out.println(hp);
+
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
         healthbar.setTranslateX(column*100);
         healthbar.setTranslateY(row*100);
-        healthbar.setTextFill(Color.WHITE);
+        healthbar.setTextFill(Color.RED);
         healthbar.setTextAlignment(TextAlignment.CENTER);
 
+        healthbar.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        healthbar.setAlignment(Pos.CENTER);
+        healthbar.setPrefWidth(100);
+        StackPane test = new StackPane();
 
-        a.getChildren().addAll(this, healthbar);
+        test.getChildren().addAll(this);
+        Image archer = new Image("/dragAndDrop/assets/archer.png");
+        this.setFill(new ImagePattern(archer));
+
+
+
+
+
+
+        a.getChildren().addAll(test, healthbar);
 
 
 
     }
 
+    public void setOldPos(double oldPosX, double oldPosY){
+        this.oldPosX = oldPosX;
+        this.oldPosY = oldPosY;
+    }
+
+    public double getOldPosX(){
+        return oldPosX;
+    }
+
+    public double getOldPosY(){
+        return oldPosY;
+    }
 
     public void setPosition(double x, double y){
         super.setTranslateX(x);
         super.setTranslateY(y);
+
     }
 
-    public Piece getObject(){
-        return this;
+    public boolean getEnemy(){
+        return enemy;
     }
+
+
 
     public void takeDamage(){
         this.hp -=20;

@@ -2,6 +2,7 @@
 package dragAndDrop;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -18,15 +19,13 @@ import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
 
+
 import java.util.ArrayList;
 
 
 public class Main extends Application {
     static Tile[][] liste = new Tile[6][6];
     static Piece[][] piecesListe = new Piece[6][6];
-    static int enemyhealth = 100;
-    static Piece enemy = new Piece(100,100,5,0,100);
-
     private static final int tileSize = 100;
     private double oldPosX;
     private double oldPosY;
@@ -41,146 +40,149 @@ public class Main extends Application {
 
 
 
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Stage window = primaryStage;
         Scene scene1;
-
-
         StackPane sp = new StackPane();
         sp.setAlignment(Pos.BASELINE_LEFT);
-
         Grid testGrid = new Grid(6,6);
         ins.getChildren().add(testGrid.gp);
 
 
         //Bruker denne som spiller brikke foreløpig.
-        Piece tile = new Piece(100,100, 0,0,100);
+        Piece tile = new Piece(100,100, 0,0,100,false);
+
+        //////////////Add enemy in array and place them on board ///////////////
+        piecesListe[0][1] = new Piece(100,100,0,1,100, true);
+        piecesListe[0][2] = new Piece(100,100,0,2,60, true);
+        piecesListe[1][4] = new Piece(100,100,1,4,100,false);
+
 
 
         //Når musen klikkes utforbi spillerbrikken endres fargen tilbake til normalt.
         ins.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            tile.setStroke(Color.BLACK);
+            for (int i=0; i<piecesListe.length; i++){
+                for(int j=0; j<piecesListe[i].length; j++){
+                    if(piecesListe[i][j]!= null){
+                        piecesListe[i][j].setStroke(Color.TRANSPARENT);
+                    }
+                }
+            }
         });
 
-
-
-
-
-
-
-
-
-
-
-        //////////////Add enemy in array and place them on board ///////////////
-        piecesListe[0][1] = new Piece(100,100,0,1,100);
-        piecesListe[0][2] = new Piece(100,100,0,2,60);
-        piecesListe[1][4] = new Piece(100,100,1,4,100);
+        //Legger alle tiles til i stackpane.
+        sp.getChildren().add(ins);
 
 
         for(int i=0; i<piecesListe.length; i++){
             for(int j=0; j<piecesListe[i].length; j++){
                 if(piecesListe[i][j] != null){
-                    System.out.println(piecesListe[i][j]);
-                    ins.getChildren().add(piecesListe[i][j].a);
+                    sp.getChildren().add(piecesListe[i][j]);
                 }
 
             }
         }
 
-        ///////////////////////////////////////////////////////////////////////
 
-        //Legger alle tiles til i stackpane.
-        sp.getChildren().addAll(ins, enemy.a,tile);
-
+        sp.getChildren().add(tile);
+        scene1 = new Scene(sp, 500,400);
 
 
+        //////////////////////////////////////////////////////////////////////////////ANGRIP/////////////////////////////////////////////////
+        scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event2 -> {
+            double rectPosX1 = 100;
+            double rectPosY1 = 100;
+            double posX1 = event2.getSceneX();
+            double posY1 =event2.getSceneY();
+            double movementX1 = posX1-rectPosX1;
+            double movementY1 = posY1-rectPosY1;
+            double a1 = (int) (Math.ceil(movementX1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+            double b1 = (int) (Math.ceil(movementY1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
 
+            if(piecesListe[(int) b1/100][(int)a1/100] == null) {
 
+                piecesListe[(int) b1][(int) a1].addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                    setOldPos(tile.getTranslateX(), tile.getTranslateY());
+                    piecesListe[(int) b1][(int) a1].setStrokeType(StrokeType.INSIDE);
+                    piecesListe[(int) b1][(int) a1].setStrokeWidth(3);
+                    piecesListe[(int) b1][(int) a1].setStroke(Color.RED);
 
-        tile.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
-            setOldPos(tile.getTranslateX(), tile.getTranslateY() );
-            tile.setStrokeType(StrokeType.INSIDE);
-            tile.setStrokeWidth(3);
-            tile.setStroke(Color.RED);
+                    sp.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                        double rectPosX = tile.getLayoutX() + tile.getWidth();
+                        double rectPosY = tile.getLayoutY() + tile.getHeight();
+                        double precRectPosX = tile.getLayoutX() + tile.getWidth() / 2;
+                        double precRectPosY = tile.getLayoutY() + tile.getHeight() / 2;
+                        double posX = event.getSceneX();
+                        double posY = event.getSceneY();
+                        double movementX = posX - rectPosX;
+                        double movementY = posY - rectPosY;
+                        double a = (int) (Math.ceil(movementX / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+                        double b = (int) (Math.ceil(movementY / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
 
-            //Check possible moves in array
+                        if (piecesListe[(int) b][(int) a] != null) {
+                            if (piecesListe[(int) b][(int) a].getEnemy()) {
+                                piecesListe[(int) b][(int) a].addEventHandler(MouseEvent.MOUSE_CLICKED, event1 -> {
+                                    System.out.println("attack");
+                                    piecesListe[(int) b][(int) a].takeDamage();
+                                    // System.out.println(enemyhealth);
+                                    if (piecesListe[(int) b][(int) a].getHp() <= 0) {
+                                        sp.getChildren().removeAll(piecesListe[(int) b][(int) a]);
+                                        piecesListe[(int) b][(int) a] = null;
+                                        // må og fjernes fra eventuelle lister denne fienden kan ligge i.
+                                    }
+                                    ;
+                                });
+                            }
+                        }
+                    });
+                });
+            }
 
-            ///////////////////////////////
-
-
-
-
-            enemy.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                enemy.takeDamage();
-                // System.out.println(enemyhealth);
-                if(enemy.getHp()<=0){
-                    sp.getChildren().removeAll(enemy.a);
-                    // må og fjernes fra eventuelle lister denne fienden kan ligge i.
-                }
-                ;
-            });
         });
-
-        //Mouse hovered over spillerbrikke så blir fargen på brikken rød.
-        tile.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event -> {
-            tile.setFill(Color.RED);
-        });
-
-        //Når musen flyttes over grid og vekk fra spillerbrikke så blir orginalfarge satt tilbake igjen.
-        ins.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET, event -> {
-            tile.setFill(Color.BLACK);
-        });
+        ////////////////////////////////////////////////////////ANGRIP SLUTT/////////////////////////////////////////////////////////////
 
 
-        //Drar spillerbrikke når mus blir holdt inne.
+        ////////////////////////////////////////////////////////BEVEGELSE//////////////////////////////////////////////////////////////
         tile.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
             double rectPosX = tile.getLayoutX()+ tile.getWidth();
             double rectPosY = tile.getLayoutY() + tile.getHeight();
             double precRectPosX = tile.getLayoutX()+ tile.getWidth()/2;
             double precRectPosY = tile.getLayoutY() + tile.getHeight()/2;
-
             double posX = event.getSceneX();
             double posY =event.getSceneY();
             double movementX = posX-rectPosX;
             double movementY = posY-rectPosY;
-
             double movementPrecX = posX-precRectPosX;
             double movementPrecY = posY-precRectPosY;
 
             double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
             double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
 
-            //System.out.println(oldPosX + "   " + oldPosY);
             tile.setTranslateX(movementPrecX);
             tile.setTranslateY(movementPrecY);
 
             tile.addEventHandler(MouseEvent.MOUSE_RELEASED, e ->{
                 //Hvis avstanden er 2 eller mindre
                 if(!(Math.abs(a/100-oldPosX/100)>2) && (!(Math.abs(b/100-oldPosY/100)>2))){
-                    tile.setTranslateX(a);
-                    tile.setTranslateY(b);
+                    if(a/100 >=0 && a/100<testGrid.getColumns() && b/100 >=0 && b/100<testGrid.getRows()){
+                        if(piecesListe[(int) b/100][(int)a/100] == null){
+                            tile.setTranslateX(a);
+                            tile.setTranslateY(b);
+                        }
+                    }
                     //Hvis avstanden er stører enn 2, flyttes ikke brikken.
                 } else{
-                    tile.setTranslateX(oldPosX);
-                    tile.setTranslateY(oldPosY);
+                    tile.setTranslateX(tile.getOldPosX());
+                    tile.setTranslateY(tile.getOldPosY());
                 }
-
             });
-
-            //En måte å holde oversikt på posisjonen til spillerbrikken på. Oppgitt i 0,1, -- 1,2 osv. passer med array.
-            //System.out.println("PosX: " + (int)tile.getTranslateX()/100 + " PosY: " + (int) tile.getTranslateY()/100);
-
-            //tile.setTranslateY(posX-rectPosX);
-            //tile.setTranslateY(posY-rectPosY);
         });
 
+        /////////////////////////////////////////BEVEGELSE SLUTT///////////////////////////////////////////////////////
 
 
-
-
-        scene1 = new Scene(sp, 500,400);
 
         window.setTitle("Hello World");
         window.setScene(scene1);
