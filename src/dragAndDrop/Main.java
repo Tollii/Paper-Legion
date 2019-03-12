@@ -26,17 +26,14 @@ public class Main extends Application {
     static Tile[][] liste = new Tile[6][6];
     static Piece[][] piecesListe = new Piece[6][6];
     private static final int tileSize = 100;
-    private double oldPosX;
-    private double oldPosY;
+    static int selectedPosX;
+    static int selectedPosY;
     static boolean selected=false;
 
 
     //Har alle tiles i seg.
     GridPane ins = new GridPane();
-    public void setOldPos(double x, double y){
-        this.oldPosX = x;
-        this.oldPosY = y;
-    }
+
 
 
 
@@ -49,7 +46,7 @@ public class Main extends Application {
         sp.setAlignment(Pos.BASELINE_LEFT);
         Grid testGrid = new Grid(6,6);
         ins.getChildren().add(testGrid.gp);
-
+        scene1 = new Scene(sp, 500,400);
 
         //Bruker denne som spiller brikke foreløpig.
         //Piece tile = new Piece(100,100, 0,0,100,false);
@@ -67,6 +64,8 @@ public class Main extends Application {
                 for(int j=0; j<piecesListe[i].length; j++){
                     if(piecesListe[i][j]!= null){
                         piecesListe[i][j].setStroke(Color.TRANSPARENT);
+                        scene1.setOnMouseClicked(null);
+                        sp.setOnMouseClicked(null);
                     }
                 }
             }
@@ -86,107 +85,108 @@ public class Main extends Application {
             }
         }
 
-
-        //sp.getChildren().add(tile);
-        scene1 = new Scene(sp, 500,400);
-
-
         //////////////////////////////////////////////////////////////////////////////ANGRIP/////////////////////////////////////////////////
+
         scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event2 -> {
-            double rectPosX1 = tileSize;
-            double rectPosY1 = tileSize;
-            double posX1 = event2.getSceneX();
-            double posY1 =event2.getSceneY();
-            double movementX1 = posX1-rectPosX1;
-            double movementY1 = posY1-rectPosY1;
-            double a1 = (int) (Math.ceil(movementX1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
-            double b1 = (int) (Math.ceil(movementY1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+            int posX = getPosXFromEvent(event2);
+            int posY = getPosYromEvent(event2);
 
-            if(piecesListe[(int) b1][(int)a1] != null) {
-                if(!selected){
-                    setOldPos(piecesListe[(int) b1][(int)a1].getTranslateX(), piecesListe[(int) b1][(int)a1].getTranslateY());
-                    piecesListe[(int) b1][(int) a1].setStrokeType(StrokeType.INSIDE);
-                    piecesListe[(int) b1][(int) a1].setStrokeWidth(3);
-                    piecesListe[(int) b1][(int) a1].setStroke(Color.RED);
-                    selected=true;
+            if(piecesListe[posY][posX] != null) {
+                if (!selected) {
+                    piecesListe[posY][posX].setOldPos(piecesListe[posY][posX].getTranslateX(), piecesListe[posY][posX].getTranslateY());
+                    piecesListe[posY][posX].setStrokeType(StrokeType.INSIDE);
+                    piecesListe[posY][posX].setStrokeWidth(3);
+                    piecesListe[posY][posX].setStroke(Color.RED);
+                    selected = true;
+                    selectedPosX = posX;
+                    selectedPosY = posY;
                 }
-
-                piecesListe[(int) b1][(int) a1].addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-
-                    sp.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                        double rectPosX = tileSize;
-                        double rectPosY =  tileSize;
-                        double precRectPosX = rectPosX / 2;
-                        double precRectPosY = rectPosY / 2;
-                        double posX = event.getSceneX();
-                        double posY = event.getSceneY();
-                        double movementX = posX - rectPosX;
-                        double movementY = posY - rectPosY;
-                        double a = (int) (Math.ceil(movementX / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
-                        double b = (int) (Math.ceil(movementY / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
-
-
-                        if (piecesListe[(int) b][(int) a] != null) {
-                            if (piecesListe[(int) b][(int) a].getEnemy()) {
-                                piecesListe[(int) b][(int) a].addEventHandler(MouseEvent.MOUSE_CLICKED, event1 -> {
-
-                                    if(piecesListe[(int)b1][(int)a1] != piecesListe[(int)b][(int)a]){
-                                        if (selected) {
-                                            System.out.println("attack");
-                                            piecesListe[(int) b][(int) a].takeDamage();
-                                            if (piecesListe[(int) b][(int) a].getHp() <= 0) {
-                                                sp.getChildren().removeAll(piecesListe[(int) b][(int) a]);
-                                                piecesListe[(int) b][(int) a] = null;
-                                                // må og fjernes fra eventuelle lister denne fienden kan ligge i.
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
-                });
             }
         });
+
+        sp.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if(selected){
+                int nyPosX = getPosXFromEvent(event);
+                int nyPosY = getPosYromEvent(event);
+                if (piecesListe[nyPosY][nyPosX] != null) {
+                    if (piecesListe[nyPosY][nyPosX].getEnemy()) {
+                        if(piecesListe[nyPosY][nyPosX] != piecesListe[selectedPosY][selectedPosX]){
+                            if (selected) {
+                                System.out.println("attack");
+                                piecesListe[nyPosY][nyPosX].takeDamage();
+                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
+                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
+                                    piecesListe[nyPosY][nyPosX] = null;
+                                    event = null;
+                                    // må og fjernes fra eventuelle lister denne fienden kan ligge i.
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         ////////////////////////////////////////////////////////ANGRIP SLUTT/////////////////////////////////////////////////////////////
 
 
         ////////////////////////////////////////////////////////BEVEGELSE//////////////////////////////////////////////////////////////
+//        sp.addEventHandler(MouseEvent.MOUSE_CLICKED,event2 -> {
+//            double rectPosX1 = tileSize;
+//            double rectPosY1 = tileSize;
+//            double posX1 = event2.getSceneX();
+//            double posY1 =event2.getSceneY();
+//            double movementX1 = posX1-rectPosX1;
+//            double movementY1 = posY1-rectPosY1;
+//            double a1 = (int) (Math.ceil(movementX1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+//            double b1 = (int) (Math.ceil(movementY1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
 //
-//        tile.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-//            double rectPosX = tile.getLayoutX()+ tile.getWidth();
-//            double rectPosY = tile.getLayoutY() + tile.getHeight();
-//            double precRectPosX = tile.getLayoutX()+ tile.getWidth()/2;
-//            double precRectPosY = tile.getLayoutY() + tile.getHeight()/2;
-//            double posX = event.getSceneX();
-//            double posY =event.getSceneY();
-//            double movementX = posX-rectPosX;
-//            double movementY = posY-rectPosY;
-//            double movementPrecX = posX-precRectPosX;
-//            double movementPrecY = posY-precRectPosY;
 //
-//            double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
-//            double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
+//            piecesListe[(int)b1][(int)a1].addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
+//                double rectPosX = piecesListe[(int)b1][(int)a1].getLayoutX() +tileSize;
+//                double rectPosY = piecesListe[(int)b1][(int)a1].getLayoutY() +tileSize;
+//                double precRectPosX = tileSize/2;
+//                double precRectPosY = tileSize/2;
+//                double posX = event.getSceneX();
+//                double posY =event.getSceneY();
+//                double movementX = posX-rectPosX;
+//                double movementY = posY-rectPosY;
+//                double movementPrecX = posX-precRectPosX;
+//                double movementPrecY = posY-precRectPosY;
 //
-//            tile.setTranslateX(movementPrecX);
-//            tile.setTranslateY(movementPrecY);
+//                double a = (int) (Math.ceil(movementX/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
+//                double b = (int) (Math.ceil(movementY/100.0))*100; // Runder til nærmeste 100 for snap to grid funksjonalitet
 //
-//            tile.addEventHandler(MouseEvent.MOUSE_RELEASED, e ->{
-//                //Hvis avstanden er 2 eller mindre
-//                if(!(Math.abs(a/100-oldPosX/100)>2) && (!(Math.abs(b/100-oldPosY/100)>2))){
-//                    if(a/100 >=0 && a/100<testGrid.getColumns() && b/100 >=0 && b/100<testGrid.getRows()){
-//                        if(piecesListe[(int) b/100][(int)a/100] == null){
-//                            tile.setTranslateX(a);
-//                            tile.setTranslateY(b);
+//                piecesListe[(int)b1][(int)a1].setTranslateX(movementPrecX);
+//                piecesListe[(int)b1][(int)a1].setTranslateY(movementPrecY);
+//
+//                piecesListe[(int)b1][(int)a1].addEventHandler(MouseEvent.MOUSE_RELEASED, e ->{
+//                    //Hvis avstanden er 2 eller mindre
+//                    if(!(Math.abs(a/100-oldPosX/100)>2) && (!(Math.abs(b/100-oldPosY/100)>2))){
+//                        if(a/100 >=0 && a/100<testGrid.getColumns() && b/100 >=0 && b/100<testGrid.getRows()){
+//                            if(piecesListe[(int) b/100][(int)a/100] == null){
+//                                piecesListe[(int)b1][(int)a1].setTranslateX(a);
+//                                piecesListe[(int)b1][(int)a1].setTranslateY(b);
+//
+//                                piecesListe[(int)b][(int)a] = piecesListe[(int)b1][(int)a1];
+//                                piecesListe[(int)b1][(int)a1]= null;
+//                            }
 //                        }
+//                        //Hvis avstanden er stører enn 2, flyttes ikke brikken.
+//                    } else{
+//                        piecesListe[(int)b1][(int)a1].setTranslateX(piecesListe[(int)b1][(int)a1].getOldPosX());
+//                        piecesListe[(int)b1][(int)a1].setTranslateY(piecesListe[(int)b1][(int)a1].getOldPosY());
 //                    }
-//                    //Hvis avstanden er stører enn 2, flyttes ikke brikken.
-//                } else{
-//                    tile.setTranslateX(tile.getOldPosX());
-//                    tile.setTranslateY(tile.getOldPosY());
-//                }
+//                });
 //            });
+//
+//
+//
+//
+//
+//
 //        });
+
 
         /////////////////////////////////////////BEVEGELSE SLUTT///////////////////////////////////////////////////////
 
@@ -199,6 +199,20 @@ public class Main extends Application {
         window.setTitle("Hello World");
         window.setScene(scene1);
         window.show();
+    }
+
+    private int getPosXFromEvent(MouseEvent event2) {
+        double rectPosX1 = tileSize;
+        double posX1 = event2.getSceneX();
+        double movementX1 = posX1-rectPosX1;
+        return (int) (Math.ceil(movementX1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+    }
+
+    private int getPosYromEvent(MouseEvent event2) {
+        double rectPosY1 = tileSize;
+        double posY1 =event2.getSceneY();
+        double movementY1 = posY1-rectPosY1;
+        return (int) (Math.ceil(movementY1/100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
 
