@@ -84,7 +84,7 @@ public class Main extends Application {
 
             if(piecesListe[posY][posX] != null) {
                 if (!selected) {
-                    piecesListe[posY][posX].setOldPos(piecesListe[posY][posX].getTranslateX(), piecesListe[posY][posX].getTranslateY());
+                    piecesListe[posY][posX].setOldPos(piecesListe[posY][posX].getTranslateX()/100, piecesListe[posY][posX].getTranslateY()/100);
                     piecesListe[posY][posX].setStrokeType(StrokeType.INSIDE);
                     piecesListe[posY][posX].setStrokeWidth(3);
                     piecesListe[posY][posX].setStroke(Color.RED);
@@ -104,14 +104,17 @@ public class Main extends Application {
                     if (piecesListe[nyPosY][nyPosX].getEnemy()) {
                         if(piecesListe[nyPosY][nyPosX] != piecesListe[selectedPosY][selectedPosX]){
                             if (selected) {
-                                piecesListe[nyPosY][nyPosX].takeDamage();
-                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
-                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
-                                    piecesListe[nyPosY][nyPosX] = null;
-                                    event = null;
-                                    // må og fjernes fra eventuelle lister denne fienden kan ligge i.
-                                }
+                                if(withinBounds(nyPosX,nyPosY)) {
+                                    piecesListe[nyPosY][nyPosX].takeDamage();
+                                    System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                                    if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
+                                        sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
+                                        piecesListe[nyPosY][nyPosX] = null;
+                                        event = null;
+                                        // må og fjernes fra eventuelle lister denne fienden kan ligge i.
+                                    }
+
+                                    }
                             }
                         }
                     }
@@ -178,6 +181,13 @@ public class Main extends Application {
         window.setTitle("Hello World");
         window.setScene(scene1);
         window.show();
+    }
+
+    private boolean withinBounds(int nyPosX, int nyPosY) {
+        if(!(Math.abs(nyPosX-piecesListe[selectedPosY][selectedPosX].getOldPosX())>2) && (!(Math.abs(nyPosY-piecesListe[selectedPosY][selectedPosX].getOldPosY())>2))){
+            return true;
+        }
+        return false;
     }
 
     private int getPosXFromEvent(MouseEvent event2) {

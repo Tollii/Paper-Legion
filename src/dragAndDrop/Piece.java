@@ -25,6 +25,7 @@ public class Piece extends Rectangle {
         super.setHeight(height);
         this.enemy = enemy;
 
+
         setPosition(column*100,row*100);
         this.hp = hp;
 
@@ -43,6 +44,7 @@ public class Piece extends Rectangle {
         test.getChildren().addAll(this);
         Image archer = new Image("/dragAndDrop/assets/archer.png");
         this.setFill(new ImagePattern(archer));
+
         a.getChildren().addAll(test, healthbar);
     }
 
