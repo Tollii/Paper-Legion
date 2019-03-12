@@ -25,37 +25,29 @@ import java.util.ArrayList;
 public class Main extends Application {
     static Tile[][] liste = new Tile[6][6];
     static Piece[][] piecesListe = new Piece[6][6];
-    private static final int tileSize = 100;
-    static int selectedPosX;
-    static int selectedPosY;
+    private static final int tileSize = 100; //
+    static int selectedPosX; //Holder position X til den brikken som er markert.
+    static int selectedPosY; //Holder position Y til den brikken som er markert.
     static boolean selected=false;
-
-
-    //Har alle tiles i seg.
-    GridPane ins = new GridPane();
-
-
-
-
+    GridPane ins = new GridPane(); // For alle tiles.
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Stage window = primaryStage;
-        Scene scene1;
+        Stage window = primaryStage; // Program window
+        Scene scene1;                //Scene for second and third phase of the game
         StackPane sp = new StackPane();
-        sp.setAlignment(Pos.BASELINE_LEFT);
-        Grid testGrid = new Grid(6,6);
-        ins.getChildren().add(testGrid.gp);
+        sp.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
+        Grid testGrid = new Grid(6,6); //Sets up Grid 6x6
+        ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
         scene1 = new Scene(sp, 500,400);
 
         //Bruker denne som spiller brikke foreløpig.
         //Piece tile = new Piece(100,100, 0,0,100,false);
 
         //////////////Add enemy in array and place them on board ///////////////
-        piecesListe[0][1] = new Piece(100,100,0,1,100, true);
-        piecesListe[0][2] = new Piece(100,100,0,2,60, true);
-        piecesListe[1][4] = new Piece(100,100,1,4,100,false);
-
+        piecesListe[0][1] = new Piece(tileSize,tileSize,0,1,100, true);
+        piecesListe[0][2] = new Piece(tileSize,tileSize,0,2,60, true);
+        piecesListe[1][4] = new Piece(tileSize,tileSize,1,4,100,false);
 
 
         //Når musen klikkes utforbi spillerbrikken endres fargen tilbake til normalt.
@@ -64,18 +56,16 @@ public class Main extends Application {
                 for(int j=0; j<piecesListe[i].length; j++){
                     if(piecesListe[i][j]!= null){
                         piecesListe[i][j].setStroke(Color.TRANSPARENT);
-                        scene1.setOnMouseClicked(null);
-                        sp.setOnMouseClicked(null);
                     }
                 }
             }
             selected = false;
         });
 
-        //Legger alle tiles til i stackpane.
+        //Legger alle tiles til i stackpane som blir lagt til scenen.
         sp.getChildren().add(ins);
 
-
+        //Legger alle brikkene inn på brettet.
         for(int i=0; i<piecesListe.length; i++){
             for(int j=0; j<piecesListe[i].length; j++){
                 if(piecesListe[i][j] != null){
@@ -87,6 +77,7 @@ public class Main extends Application {
 
         //////////////////////////////////////////////////////////////////////////////ANGRIP/////////////////////////////////////////////////
 
+        //Velger hvilken brikke du vil bruke.
         scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event2 -> {
             int posX = getPosXFromEvent(event2);
             int posY = getPosYromEvent(event2);
@@ -104,6 +95,7 @@ public class Main extends Application {
             }
         });
 
+        //Når du har valgt en brikke, så kan du angripe en annen med denne.
         sp.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if(selected){
                 int nyPosX = getPosXFromEvent(event);
@@ -112,8 +104,8 @@ public class Main extends Application {
                     if (piecesListe[nyPosY][nyPosX].getEnemy()) {
                         if(piecesListe[nyPosY][nyPosX] != piecesListe[selectedPosY][selectedPosX]){
                             if (selected) {
-                                System.out.println("attack");
                                 piecesListe[nyPosY][nyPosX].takeDamage();
+                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
                                 if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
                                     sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
                                     piecesListe[nyPosY][nyPosX] = null;
@@ -179,21 +171,8 @@ public class Main extends Application {
 //                    }
 //                });
 //            });
-//
-//
-//
-//
-//
-//
 //        });
-
-
         /////////////////////////////////////////BEVEGELSE SLUTT///////////////////////////////////////////////////////
-
-
-
-
-
 
 
         window.setTitle("Hello World");

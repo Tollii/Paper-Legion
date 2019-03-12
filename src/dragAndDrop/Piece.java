@@ -13,8 +13,8 @@ import javafx.scene.text.TextAlignment;
 
 public class Piece extends Rectangle {
     GridPane a = new GridPane();
-    private double oldPosX; // Nødvendig?
-    private double oldPosY; // Nødvendig?
+    private double oldPosX;
+    private double oldPosY;
     private double hp;
     private Label healthbar;
     private boolean enemy;
@@ -43,16 +43,7 @@ public class Piece extends Rectangle {
         test.getChildren().addAll(this);
         Image archer = new Image("/dragAndDrop/assets/archer.png");
         this.setFill(new ImagePattern(archer));
-
-
-
-
-
-
         a.getChildren().addAll(test, healthbar);
-
-
-
     }
 
     public void setOldPos(double oldPosX, double oldPosY){
@@ -71,14 +62,11 @@ public class Piece extends Rectangle {
     public void setPosition(double x, double y){
         super.setTranslateX(x);
         super.setTranslateY(y);
-
     }
 
     public boolean getEnemy(){
         return enemy;
     }
-
-
 
     public void takeDamage(){
         this.hp -=20;
