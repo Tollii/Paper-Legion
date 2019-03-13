@@ -60,6 +60,9 @@ public class Main extends Application {
                 for(int j=0; j<piecesListe[i].length; j++){
                     if(piecesListe[i][j]!= null){
                         piecesListe[i][j].setStroke(Color.TRANSPARENT);
+                        selectedPosX =0;
+                        selectedPosY = 0;
+                        selected = false;
                         //testGrid.liste[i][j].setFill(Color.TRANSPARENT);
                     }
                 }
@@ -101,7 +104,10 @@ public class Main extends Application {
                         event2.consume();
                     }
                 }
-                ifDragged(posX, posY);
+                if (selected) {
+                    ifDragged(posX, posY);
+                }
+
             }
         });
 
@@ -196,9 +202,10 @@ public class Main extends Application {
                             piecesListe[startPosY][startPosX].setTranslateY(dropPosY * 100);
 
                             piecesListe[dropPosY][dropPosX] = piecesListe[startPosY][startPosX];
+                            piecesListe[dropPosY][dropPosX].setOldPos(dropPosX, dropPosY);
 ////                                selectedPosX = dropPosX;
 ////                                selectedPosY = dropPosY;
-
+                            selected  = false;
 
                             piecesListe[selectedPosY][selectedPosX] = null;
                             selectedPosX = dropPosX;
