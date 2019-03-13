@@ -1,0 +1,2 @@
+-- her skrives koden for Hashing og Salting av passord og shit
+SELECT * from Turns;
