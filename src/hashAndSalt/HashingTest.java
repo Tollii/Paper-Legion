@@ -19,6 +19,7 @@ public class HashingTest {
 
         String password = "rudeboi69";
         String s = "";
+        String s2 = new String(salt);
 
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
 
@@ -27,10 +28,13 @@ public class HashingTest {
             byte[] hash = factory.generateSecret(spec).getEncoded();
             s = new String(hash);
 
+
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
+
         System.out.println("HASHED: "+s);
+        System.out.println("SALT: "+s2);
 
 
 
