@@ -79,6 +79,6 @@ public class Piece extends Rectangle {
         return hp;
     }
 
-
+//
 
 }

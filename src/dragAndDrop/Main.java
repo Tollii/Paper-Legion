@@ -69,7 +69,7 @@ public class Main extends Application {
             }
             selected = false;
         });
-
+//
         //Legger alle tiles til i stackpane som blir lagt til scenen.
         sp.getChildren().add(ins);
 
