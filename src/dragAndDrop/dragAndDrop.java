@@ -1,4 +1,4 @@
-package sample;
+package dragAndDrop;
 
 
 import javafx.application.Application;
@@ -13,8 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
-
-
 
 public class dragAndDrop extends Application {
 
