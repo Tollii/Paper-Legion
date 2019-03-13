@@ -24,7 +24,6 @@ public class SignUp {
 
         byte[] hash = generateHash(password);
 
-
     }
 
     private byte[] generateHash(String password) {
