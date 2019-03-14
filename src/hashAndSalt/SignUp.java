@@ -29,6 +29,8 @@ public class SignUp {
         byte[] hash = generateHash(password);
 
         addUserToDatabase();
+
+        return true;
     }
 
     public boolean login(String username, String password) {

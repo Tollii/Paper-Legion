@@ -56,7 +56,6 @@ public class loginController {
         });
 
         enterButton.setOnAction(event ->  {
-            if ());
         });
 
     }
