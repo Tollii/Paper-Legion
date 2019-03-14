@@ -192,6 +192,7 @@ public class Main extends Application {
 
 
 
+
         window.setTitle("BINARY WARFARE");
         window.setScene(scene1);
         window.show();
@@ -204,10 +205,10 @@ public class Main extends Application {
         int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getMaxMoveMent();
 
         System.out.println(selectedPosX + "SelectposX");
-        System.out.println("PosX+1: " +(posX+1));
-        System.out.println("PosX-1: " +(posX-1));
-        System.out.println("PosY+1: " +(posY+1));
-        System.out.println("PosY-1: " +(posY-1));
+        System.out.println("PosX+1: " +(posX+2));
+        System.out.println("PosX-1: " +(posX-2));
+        System.out.println("PosY+1: " +(posY+2));
+        System.out.println("PosY-1: " +(posY-2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if(selectedPosX-1>=0){
@@ -249,6 +250,30 @@ public class Main extends Application {
         }
         ////////////////////////////////////////////////////////////////////
 
+        //////////////IF PIECE HAS LONGER RANGE////////////////////////////
+        if(piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()>1){
+
+            if(selectedPosX-maxPossibleMoves>=0){
+                testGrid.liste[posY][posX-maxPossibleMoves].setFill(Color.DARKRED);
+            }
+
+            if(selectedPosX+maxPossibleMoves<boardSize){
+                testGrid.liste[posY][posX + maxPossibleMoves].setFill(Color.DARKRED);
+            }
+
+            if(selectedPosY-maxPossibleMoves>=0){
+                testGrid.liste[posY - maxPossibleMoves][posX].setFill(Color.DARKRED);
+            }
+
+            if(selectedPosY+maxPossibleMoves<boardSize){
+                testGrid.liste[posY + maxPossibleMoves][posX].setFill(Color.DARKRED);
+            }
+
+
+
+        }
+
+        ///////////////////////////////////////////////////////////////////
     }
 
     private void clearHighlight(){
