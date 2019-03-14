@@ -18,7 +18,6 @@ public class Piece extends Rectangle {
     private double hp;
     private Label healthbar;
     private boolean enemy;
-    //private Rectangle piece;
 
     public Piece(double width, double height, double row, double column, double hp, boolean enemy){
         super.setWidth(width);

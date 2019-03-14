@@ -1,3 +1,13 @@
+
+//  ██████╗ ██╗███╗   ██╗ █████╗ ██████╗ ██╗   ██╗    ██╗    ██╗ █████╗ ██████╗ ███████╗ █████╗ ██████╗ ███████╗
+//  ██╔══██╗██║████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║    ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝
+//  ██████╔╝██║██╔██╗ ██║███████║██████╔╝ ╚████╔╝     ██║ █╗ ██║███████║██████╔╝█████╗  ███████║██████╔╝█████╗
+//  ██╔══██╗██║██║╚██╗██║██╔══██║██╔══██╗  ╚██╔╝      ██║███╗██║██╔══██║██╔══██╗██╔══╝  ██╔══██║██╔══██╗██╔══╝
+//  ██████╔╝██║██║ ╚████║██║  ██║██║  ██║   ██║       ╚███╔███╔╝██║  ██║██║  ██║██║     ██║  ██║██║  ██║███████╗
+//  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝        ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+//
+
+
 package dragAndDrop;
 
 import javafx.animation.AnimationTimer;
@@ -26,7 +36,6 @@ import java.util.ArrayList;
 public class Main extends Application {
     static Tile[][] liste = new Tile[6][6];
     static Piece[][] piecesListe = new Piece[6][6];
-    static Piece[][] moveResult = new Piece[6][6];
     private static final int tileSize = 100; //
     static int selectedPosX; //Holder position X til den brikken som er markert.
     static int selectedPosY; //Holder position Y til den brikken som er markert.
@@ -159,7 +168,7 @@ public class Main extends Application {
 
         }); // MOUSE EVENT END
 
-
+        ///////////////////////////////////////////////////////////////////////////////////////
 
 
 
