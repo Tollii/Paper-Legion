@@ -1,6 +1,8 @@
 package dragAndDrop;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
@@ -15,7 +17,8 @@ public class Tile extends Rectangle {
         super(sizeX,sizeY,Color.WHITE);
         super.setStrokeType(StrokeType.INSIDE);
         super.setStroke(Color.BLACK);
-
+        //Image tile = new Image("/dragAndDrop/assets/tile.jpg");
+       // this.setFill(new ImagePattern(tile));
 
     }
 

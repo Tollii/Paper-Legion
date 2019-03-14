@@ -18,6 +18,7 @@
 
 package dragAndDrop;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 public class Main extends Application {
     private static final int boardSize = 7; // 7x7 for example
     static Piece[][] piecesListe = new Piece[boardSize][boardSize];
-    private static final int tileSize = 100; //
+    public static final int tileSize = 100; //
     static int selectedPosX; //Holds the X position to the selected piece.
     static int selectedPosY; //Holds the Y position to the selected piece.
     static boolean selected = false; // True or false for selected piece.
@@ -64,19 +65,37 @@ public class Main extends Application {
         sp.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
         sp.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
+        BorderPane bp = new BorderPane();
+        VBox vbox = new VBox();
+        JFXButton endturn = new JFXButton("end turn");
+        endturn.setPrefWidth(150);
+        endturn.setPrefHeight(75);
+        endturn.setTextFill(Color.WHITE);
+        endturn.setStyle("-fx-background-color: #000000");
+        vbox.getChildren().add(endturn);
+        vbox.setAlignment(Pos.BOTTOM_CENTER);
+        vbox.setPadding(new Insets(50,200,150,50));
+
+
+
+        bp.setLeft(sp);
+        bp.setRight(vbox);
+
+        // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES POSITION.
+
 
         //ins.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
        // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
-        scene1 = new Scene(sp, 800, 600);
+        scene1 = new Scene(bp, 800, 600);
 
         ///////////////////////////////////SETUP END/////////////////////////////////////////////
 
 
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        piecesListe[0][1] = new Piece(tileSize, tileSize, 0, 1, 100, true);
-        piecesListe[0][2] = new Piece(tileSize, tileSize, 0, 2, 60, true);
-        piecesListe[1][4] = new Piece(tileSize, tileSize, 1, 4, 100, false);
+        piecesListe[0][1] = new Piece( 0, 1, 100, true, new UnitType("Archer",60,1,2));
+        piecesListe[0][2] = new Piece( 0, 2, 60, true, new UnitType("Swordsman",120,2.5,1));
+        piecesListe[1][4] = new Piece( 1, 4, 100, false, new UnitType("Archer",60,1,2));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 

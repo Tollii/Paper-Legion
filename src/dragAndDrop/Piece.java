@@ -14,37 +14,51 @@ import javafx.scene.text.TextAlignment;
 public class Piece extends Rectangle {
     GridPane a = new GridPane();
     private Label healthbar;
+    private UnitType type;
     private double oldPosX;
     private double oldPosY;
     private double hp;
-    private double damageMultiplier = 2.0;
-    private int range=2;
+    private double damageMultiplier;
+    private int range;
     private boolean enemy;
 
-    public Piece(double width, double height, double row, double column, double hp, boolean enemy){
-        super.setWidth(width);
-        super.setHeight(height);
+    public Piece(double row, double column, double hp, boolean enemy, UnitType type){
+        super.setWidth(Main.tileSize);
+        super.setHeight(Main.tileSize);
         this.enemy = enemy;
+        this.type = type;
+        this.damageMultiplier = type.getAttackMultiplier();
+        this.hp = type.getHp();
+        this.range = type.getRange();
 
 
-        setPosition(column*100,row*100);
+
+        setPosition(column*Main.tileSize,row*Main.tileSize);
         this.hp = hp;
 
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
-        healthbar.setTranslateX(column*100);
-        healthbar.setTranslateY(row*100);
+        healthbar.setTranslateX(column*Main.tileSize);
+        healthbar.setTranslateY(row*Main.tileSize);
         healthbar.setTextFill(Color.RED);
         healthbar.setTextAlignment(TextAlignment.CENTER);
 
         healthbar.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         healthbar.setAlignment(Pos.CENTER);
-        healthbar.setPrefWidth(100);
+        healthbar.setPrefWidth(Main.tileSize);
         StackPane test = new StackPane();
 
         test.getChildren().addAll(this);
-        Image archer = new Image("/dragAndDrop/assets/archer.png");
-        this.setFill(new ImagePattern(archer));
+        if(type.getType().equalsIgnoreCase("Archer")){
+            Image archer = new Image("/dragAndDrop/assets/archer.png");
+            this.setFill(new ImagePattern(archer));
+        }
+        if(type.getType().equalsIgnoreCase("Swordsman")){
+            Image swordsman = new Image("/dragAndDrop/assets/sword.png");
+            this.setFill(new ImagePattern(swordsman));
+        }
+
+
 
         a.getChildren().addAll(test, healthbar);
     }
