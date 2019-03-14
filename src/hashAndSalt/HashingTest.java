@@ -81,7 +81,7 @@ public class HashingTest {
             System.out.println("Logged in for svarte helvete");
         }
 
-        if (Arrays.toString(hash).equals(Arrays.toString(fromDB))) {
+        if (Arrays.equals(hash,fromDB)) {
             System.out.println("Logged in for svarte helvete");
         }
         

@@ -10,9 +10,8 @@ import java.sql.*;
 
 public class SignUp {
 
-    private static Connection myConn;
     private SecureRandom random = new SecureRandom();
-    private byte[] salt = new byte[16];
+    private Connection myConn;
 
     public SignUp() {
         try {
@@ -26,47 +25,18 @@ public class SignUp {
 
         //TODO Check if user is not already registered, or username is taken.
 
-        byte[] hash = generateHash(password);
-
-        addUserToDatabase();
-
-        return true;
-    }
-
-    public boolean login(String username, String password) {
-
-        //SELECT statement finds hashed password and salt from the entered user.
-        String stmt = "SELECT hashedpassword,passwordsalt FROM Users WHERE username = ?";
-        try {
-            PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setString(1,username);
-
-            ResultSet rs = preparedStatement.executeQuery();
-            rs.next();
-            byte[] hash = rs.getBytes("hashedpassword");
-            byte[] salt = rs.getBytes("passwordsalt");
-
-            if (verifyPassword(password,hash,salt)) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean verifyPassword(String password,byte[] hash,byte[] salt) {
-        //TODO
-        return true;
-    }
-
-    private void addUserToDatabase() {
-
-        //TODO
-    }
-
-    private byte[] generateHash(String password) {
-        //random is used to create a unique set of bytes.
+        //random is used to generate salt by creating a unique set of bytes.
+        byte[] salt = new byte[16];
         random.nextBytes(salt);
+
+        byte[] hash = generateHash(password,salt);
+
+        return addUserToDatabase(user,"email",hash,salt);
+    }
+
+
+
+    private byte[] generateHash(String password,byte[] salt) {
         try {
             //PBKDF is used to create the hashed password. The salt is used as parameter.
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -76,5 +46,23 @@ public class SignUp {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private boolean addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
+        String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setString(1, username);
+            preparedStatement.setBytes(2, hash);
+            preparedStatement.setBytes(3, salt);
+            preparedStatement.setString(4, email);
+            preparedStatement.setInt(5, 0);
+
+            return (preparedStatement.executeUpdate() > 0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

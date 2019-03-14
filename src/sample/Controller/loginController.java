@@ -3,6 +3,7 @@ package sample.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import hashAndSalt.Login;
 import hashAndSalt.SignUp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,6 +57,10 @@ public class loginController {
         });
 
         enterButton.setOnAction(event ->  {
+
+            Login li = new Login();
+            li.login(usernameInput.toString(),passwordInput.toString());
+
         });
 
     }
