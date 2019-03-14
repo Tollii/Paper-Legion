@@ -1,4 +1,4 @@
-package hashAndSalt;
+package hashAndSalt.testing;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -34,6 +34,8 @@ public class HashingTest {
         String password = "rudeboi69";
         String wrongPwd = "wrongboi68";
         String correctPwd = "rudeboi69";
+
+        password = "admin";
 
         String stmt = "SELECT hashedpassword,passwordsalt FROM Users WHERE username = 'TestUser'";
         try {
@@ -91,10 +93,10 @@ public class HashingTest {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setString(1,"TestUser");
+            preparedStatement.setString(1,"admin");
             preparedStatement.setBytes(2,hash);
             preparedStatement.setBytes(3,salt);
-            preparedStatement.setString(4,"TestEmail");
+            preparedStatement.setString(4,"N/A");
             preparedStatement.setInt(5,0);
 
             return preparedStatement.executeUpdate();

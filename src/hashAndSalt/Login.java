@@ -32,19 +32,19 @@ public class Login {
             rs.next();
             byte[] hash = rs.getBytes("hashedpassword");
             byte[] salt = rs.getBytes("passwordsalt");
-
             if (verifyPassword(password, hash, salt)) {
+                //SET ONLINE TO 1 IN DB.
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            //e.printStackTrace();
         }
         return false;
     }
 
+    //Compares entered password with the one stored in the DB.
     private boolean verifyPassword(String password, byte[] hash, byte[] salt) {
-;       byte[] enteredPassword;
+        byte[] enteredPassword;
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);

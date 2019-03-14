@@ -34,8 +34,6 @@ public class SignUp {
         return addUserToDatabase(user,"email",hash,salt);
     }
 
-
-
     private byte[] generateHash(String password,byte[] salt) {
         try {
             //PBKDF is used to create the hashed password. The salt is used as parameter.

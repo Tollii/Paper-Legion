@@ -45,9 +45,9 @@ public class loginController {
             newUserButton.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/sample/View/signUp.fxml"));
-            try{
+            try {
                 loader.load();
-            } catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             Parent root = loader.getRoot();
@@ -56,12 +56,19 @@ public class loginController {
             stage.show();
         });
 
-        enterButton.setOnAction(event ->  {
-
-            Login li = new Login();
-            li.login(usernameInput.toString(),passwordInput.toString());
-
+        enterButton.setOnAction(event -> {
+                enterButton.getScene().getWindow().hide();
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/sample/View/mainMenu.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
         });
-
     }
 }

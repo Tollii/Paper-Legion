@@ -54,8 +54,6 @@ public class signUpController {
             stage.setScene(new Scene(root));
             stage.show();
 
-
         });
-
     }
 }
