@@ -22,6 +22,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -42,16 +43,17 @@ import java.util.ArrayList;
 
 
 public class Main extends Application {
-    static Tile[][] liste = new Tile[6][6];
-    static Piece[][] piecesListe = new Piece[6][6];
+    private static final int boardSize = 7; // 7x7 for example
+    static Piece[][] piecesListe = new Piece[boardSize][boardSize];
     private static final int tileSize = 100; //
-    static int selectedPosX; //Holder position X til den brikken som er markert.
-    static int selectedPosY; //Holder position Y til den brikken som er markert.
-    static boolean selected = false;
-    GridPane ins = new GridPane(); // For alle tiles.
-    static Grid testGrid = new Grid(6, 6); //Sets up Grid 6x6
-    private int moveCounter =0;
-    private int attackCount = 0;
+    static int selectedPosX; //Holds the X position to the selected piece.
+    static int selectedPosY; //Holds the Y position to the selected piece.
+    static boolean selected = false; // True or false for selected piece.
+    GridPane ins = new GridPane(); // Holds all the tiles.
+    static Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
+    private int moveCounter =0; // Counter for movement phase.
+    private int attackCount = 0; // Counter for attack phase.
+    //private static final int offset = 15; // FOR LATER DESIGN.
 
 
     @Override
@@ -64,6 +66,8 @@ public class Main extends Application {
         sp.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
         sp.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
+        //ins.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
+       // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
         scene1 = new Scene(sp, 800, 600);
 
         ///////////////////////////////////SETUP END/////////////////////////////////////////////
@@ -110,8 +114,7 @@ public class Main extends Application {
                             selectedPosX = posX;
                             selectedPosY = posY;
                             counter++;
-
-                            System.out.println(counter);
+                            highlightPossibleMoves();
                         }
                     }
                 }
@@ -123,16 +126,18 @@ public class Main extends Application {
                 if(selected){
                     int nyPosX = getPosXFromEvent(event2);
                     int nyPosY = getPosYFromEvent(event2);
-                    if(withinBounds(nyPosX,nyPosY)){
+                    if(attackRange(nyPosX,nyPosY)){
                         if (piecesListe[nyPosY][nyPosX] == null) {
                             piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
                             piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                            clearHighlight();
                             piecesListe[nyPosY][nyPosX] = piecesListe[selectedPosY][selectedPosX];
                             piecesListe[selectedPosY][selectedPosX] = null;
                             selectedPosX = nyPosX;
                             selectedPosY = nyPosY;
                             piecesListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
                             moveCounter++;
+                            highlightPossibleMoves();
                         }
                     }
 
@@ -147,7 +152,7 @@ public class Main extends Application {
                         int nyPosX = getPosXFromEvent(event2);
                         int nyPosY = getPosYFromEvent(event2);
                         if (piecesListe[nyPosY][nyPosX] != null) {
-                            if(withinBounds(nyPosX,nyPosY)){
+                            if(attackRange(nyPosX,nyPosY)){
                                 if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
                                     piecesListe[nyPosY][nyPosX].takeDamage();
                                     attackCount++;
@@ -174,9 +179,10 @@ public class Main extends Application {
                         }
                     }
                 }
+
                 selected = false;
                 counter = 0;
-                System.out.println(counter);
+                clearHighlight();
             }
             //////////////////////////UNSELECT END/////////////////////////////////////////////
 
@@ -192,10 +198,71 @@ public class Main extends Application {
     }
 
 
+    private void highlightPossibleMoves(){
+        int posX = selectedPosX;
+        int posY = selectedPosY;
+        int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getMaxMoveMent();
+
+        System.out.println(selectedPosX + "SelectposX");
+        System.out.println("PosX+1: " +(posX+1));
+        System.out.println("PosX-1: " +(posX-1));
+        System.out.println("PosY+1: " +(posY+1));
+        System.out.println("PosY-1: " +(posY-1));
+
+        ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
+        if(selectedPosX-1>=0){
+            testGrid.liste[posY][posX-1].setFill(Color.DARKRED);
+        }
+
+        if(selectedPosX+1<boardSize){
+            testGrid.liste[posY][posX + 1].setFill(Color.DARKRED);
+        }
+
+        if(selectedPosY-1>=0){
+            testGrid.liste[posY - 1][posX].setFill(Color.DARKRED);
+        }
+
+        if(selectedPosY+1<boardSize){
+            testGrid.liste[posY + 1][posX].setFill(Color.DARKRED);
+        }
+
+        //////////////////////////////////////////////////////////////////////
 
 
+        ////////////////////////////CORNERS///////////////////////////////////
 
-    private boolean withinBounds(int nyPosX, int nyPosY) {
+        if(selectedPosX+1<boardSize && selectedPosY+1<boardSize){
+            testGrid.liste[posY + 1][posX + 1].setFill(Color.DARKRED);
+        }
+
+        if(selectedPosX-1>=0 && selectedPosY-1>=0){
+            testGrid.liste[posY - 1][posX - 1].setFill(Color.DARKRED);
+        }
+
+        if(selectedPosX-1>=0 && selectedPosY+1<boardSize){
+            testGrid.liste[posY + 1][posX - 1].setFill(Color.DARKRED);
+        }
+
+        if(selectedPosX+1<boardSize && selectedPosY-1>=0){
+            testGrid.liste[posY - 1][posX + 1].setFill(Color.DARKRED);
+
+        }
+        ////////////////////////////////////////////////////////////////////
+
+    }
+
+    private void clearHighlight(){
+        for (int i = 0; i < testGrid.liste.length; i++) {
+            for (int j = 0; j < testGrid.liste[i].length; j++) {
+            testGrid.liste[i][j].setFill(Color.TRANSPARENT);
+
+            }
+        }
+
+    }
+
+
+    private boolean attackRange(int nyPosX, int nyPosY) {
         if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()))) {
             return true;
         }
