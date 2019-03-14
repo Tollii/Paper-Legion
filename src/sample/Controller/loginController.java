@@ -3,6 +3,7 @@ package sample.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import hashAndSalt.SignUp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,16 +24,16 @@ public class loginController {
     private URL location;
 
     @FXML
-    private Label forgotPasswordButton;
-
-    @FXML
-    private JFXTextField usernameInput;
-
-    @FXML
     private JFXButton enterButton;
 
     @FXML
     private JFXButton newUserButton;
+
+    @FXML
+    private Label forgotPasswordButton;
+
+    @FXML
+    private JFXTextField usernameInput;
 
     @FXML
     private JFXPasswordField passwordInput;
@@ -52,6 +53,10 @@ public class loginController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
+        });
+
+        enterButton.setOnAction(event ->  {
+            if ());
         });
 
     }
