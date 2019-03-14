@@ -13,12 +13,13 @@ import javafx.scene.text.TextAlignment;
 
 public class Piece extends Rectangle {
     GridPane a = new GridPane();
+    private Label healthbar;
     private double oldPosX;
     private double oldPosY;
     private double hp;
-    private Label healthbar;
+    private double damageMultiplier = 2.0;
+    private int range=2;
     private boolean enemy;
-    private int maxMovement=2;
 
     public Piece(double width, double height, double row, double column, double hp, boolean enemy){
         super.setWidth(width);
@@ -71,7 +72,7 @@ public class Piece extends Rectangle {
     }
 
     public void takeDamage(){
-        this.hp -=20;
+        this.hp -= (20*damageMultiplier);
         healthbar.setText(String.valueOf(hp));
     }
 
@@ -79,8 +80,8 @@ public class Piece extends Rectangle {
         return hp;
     }
 
-    public int getMaxMoveMent() {
-        return maxMovement;
+    public int getRange() {
+        return range;
     }
 
 //

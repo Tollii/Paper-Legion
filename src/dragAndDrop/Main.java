@@ -27,12 +27,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -66,6 +64,7 @@ public class Main extends Application {
         sp.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
         sp.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
+
         //ins.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
        // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
         scene1 = new Scene(sp, 800, 600);
@@ -202,7 +201,7 @@ public class Main extends Application {
     private void highlightPossibleMoves(){
         int posX = selectedPosX;
         int posY = selectedPosY;
-        int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getMaxMoveMent();
+        int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getRange();
 
         System.out.println(selectedPosX + "SelectposX");
         System.out.println("PosX+1: " +(posX+2));
@@ -251,7 +250,7 @@ public class Main extends Application {
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE////////////////////////////
-        if(piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()>1){
+        if(piecesListe[selectedPosY][selectedPosX].getRange()>1){
 
             if(selectedPosX-maxPossibleMoves>=0){
                 testGrid.liste[posY][posX-maxPossibleMoves].setFill(Color.DARKRED);
@@ -288,7 +287,7 @@ public class Main extends Application {
 
 
     private boolean attackRange(int nyPosX, int nyPosY) {
-        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()))) {
+        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getRange()) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getRange()))) {
             return true;
         }
         return false;
