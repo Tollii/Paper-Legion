@@ -1,6 +1,7 @@
 
 package dragAndDrop;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -60,9 +61,7 @@ public class Main extends Application {
                 for(int j=0; j<piecesListe[i].length; j++){
                     if(piecesListe[i][j]!= null){
                         piecesListe[i][j].setStroke(Color.TRANSPARENT);
-                        selectedPosX =0;
-                        selectedPosY = 0;
-                        selected = false;
+
                         //testGrid.liste[i][j].setFill(Color.TRANSPARENT);
                     }
                 }
@@ -90,25 +89,24 @@ public class Main extends Application {
             int posX = getPosXFromEvent(event2);
             int posY = getPosYFromEvent(event2);
 
-            if(piecesListe[posY][posX] != piecesListe[selectedPosY][selectedPosX]){
-                if(piecesListe[posY][posX] != null) {
-                    if (!selected) {
-                        piecesListe[posY][posX].setOldPos(piecesListe[posY][posX].getTranslateX()/100, piecesListe[posY][posX].getTranslateY()/100);
-                        piecesListe[posY][posX].setStrokeType(StrokeType.INSIDE);
-                        piecesListe[posY][posX].setStrokeWidth(3);
-                        piecesListe[posY][posX].setStroke(Color.RED);
-                        selected = true;
-                        selectedPosX = posX;
-                        selectedPosY = posY;
-                        //highlightPossibleMoves(selectedPosX, selectedPosY);
-                        event2.consume();
-                    }
-                }
-                if (selected) {
-                    ifDragged(posX, posY);
-                }
 
+            if(piecesListe[posY][posX] != null) {
+                if (!selected) {
+                    piecesListe[posY][posX].setOldPos(piecesListe[posY][posX].getTranslateX()/100, piecesListe[posY][posX].getTranslateY()/100);
+                    piecesListe[posY][posX].setStrokeType(StrokeType.INSIDE);
+                    piecesListe[posY][posX].setStrokeWidth(3);
+                    piecesListe[posY][posX].setStroke(Color.RED);
+                    selected = true;
+                    selectedPosX = posX;
+                    selectedPosY = posY;
+                    System.out.println(posX + " : " + posY);
+                }
             }
+
+            if (selected) {
+                ifDragged(selectedPosX, selectedPosY);
+            }
+
         });
 
 
@@ -184,17 +182,20 @@ public class Main extends Application {
             piecesListe[startPosY][startPosX].setOldPos(startPosX, startPosY);
 
             piecesListe[startPosY][startPosX].addEventHandler(MouseEvent.MOUSE_DRAGGED, event1 -> {
-              double precPosX = getPrecPosXFromEvent(event1);
-              double precPosY = getPrecPosYFromEvent(event1);
-              piecesListe[startPosY][startPosX].setTranslateX(precPosX);
-              piecesListe[startPosY][startPosX].setTranslateY(precPosY);
+                double precPosX = getPrecPosXFromEvent(event1);
+                double precPosY = getPrecPosYFromEvent(event1);
+                piecesListe[startPosY][startPosX].setTranslateX(precPosX);
+                piecesListe[startPosY][startPosX].setTranslateY(precPosY);
 
 
             });
+        }
+
 
             piecesListe[startPosY][startPosX].addEventHandler(MouseEvent.MOUSE_RELEASED, event2 -> {
                 int dropPosX = getPosXFromEvent(event2);
                 int dropPosY = getPosYFromEvent(event2);
+
                 if(piecesListe[dropPosY][dropPosX] == null) {
                     if(withinBounds(dropPosX, dropPosY)){
                         if (dropPosX >= 0 && dropPosX < testGrid.getColumns() && dropPosY >= 0 && dropPosY < testGrid.getRows()) {
@@ -207,26 +208,29 @@ public class Main extends Application {
 ////                                selectedPosY = dropPosY;
                             selected  = false;
 
-                            piecesListe[selectedPosY][selectedPosX] = null;
+                           // piecesListe[selectedPosY][selectedPosX] = null;
                             selectedPosX = dropPosX;
                             selectedPosY = dropPosY;
+
 
                             for(int i=0; i<piecesListe.length; i++){
                                 for(int j=0; j<piecesListe[i].length; j++){
                                     System.out.println(piecesListe[i][j]);
                                 }
                             }
-                        } else {
-                            piecesListe[startPosY][startPosX].setTranslateX(piecesListe[startPosY][startPosX].getOldPosX() * 100);
-                            piecesListe[startPosY][startPosX].setTranslateY(piecesListe[startPosY][startPosX].getOldPosY() * 100);
-
                         }
                     }
 
 
+                }  else {
+                    piecesListe[startPosY][startPosX].setTranslateX(piecesListe[startPosY][startPosX].getOldPosX() * 100);
+                    piecesListe[startPosY][startPosX].setTranslateY(piecesListe[startPosY][startPosX].getOldPosY() * 100);
+
                 }
             });
-        }
+
+
+
 
     }
 
@@ -254,7 +258,7 @@ public class Main extends Application {
 //        }
 
 
-        }
+    }
 
 
     private void clearHighlightPossible(int posX, int posY) {
