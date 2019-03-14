@@ -18,6 +18,7 @@ public class Piece extends Rectangle {
     private double hp;
     private Label healthbar;
     private boolean enemy;
+    private int maxMovement=2;
 
     public Piece(double width, double height, double row, double column, double hp, boolean enemy){
         super.setWidth(width);
@@ -76,6 +77,10 @@ public class Piece extends Rectangle {
 
     public double getHp(){
         return hp;
+    }
+
+    public int getMaxMoveMent() {
+        return maxMovement;
     }
 
 //

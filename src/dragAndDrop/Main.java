@@ -1,11 +1,19 @@
 
-//  ██████╗ ██╗███╗   ██╗ █████╗ ██████╗ ██╗   ██╗    ██╗    ██╗ █████╗ ██████╗ ███████╗ █████╗ ██████╗ ███████╗
-//  ██╔══██╗██║████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║    ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝
-//  ██████╔╝██║██╔██╗ ██║███████║██████╔╝ ╚████╔╝     ██║ █╗ ██║███████║██████╔╝█████╗  ███████║██████╔╝█████╗
-//  ██╔══██╗██║██║╚██╗██║██╔══██║██╔══██╗  ╚██╔╝      ██║███╗██║██╔══██║██╔══██╗██╔══╝  ██╔══██║██╔══██╗██╔══╝
-//  ██████╔╝██║██║ ╚████║██║  ██║██║  ██║   ██║       ╚███╔███╔╝██║  ██║██║  ██║██║     ██║  ██║██║  ██║███████╗
-//  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝        ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
-//
+//  ██████╗ ██╗███╗   ██╗ █████╗ ██████╗ ██╗   ██╗    ██╗    ██╗ █████╗ ██████╗ ███████╗ █████╗ ██████╗ ███████╗  //
+//  ██╔══██╗██║████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║    ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝  //
+//  ██████╔╝██║██╔██╗ ██║███████║██████╔╝ ╚████╔╝     ██║ █╗ ██║███████║██████╔╝█████╗  ███████║██████╔╝█████╗    //
+//  ██╔══██╗██║██║╚██╗██║██╔══██║██╔══██╗  ╚██╔╝      ██║███╗██║██╔══██║██╔══██╗██╔══╝  ██╔══██║██╔══██╗██╔══╝    //
+//  ██████╔╝██║██║ ╚████║██║  ██║██║  ██║   ██║       ╚███╔███╔╝██║  ██║██║  ██║██║     ██║  ██║██║  ██║███████╗  //
+//  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝        ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝  //
+//                                                                                                                //
+
+                        //   ######## ########    ###    ##     ##       ##   ########     //
+                        //      ##    ##         ## ##   ###   ###     ####   ##    ##     //
+                        //      ##    ##        ##   ##  #### ####       ##       ##       //
+                        //      ##    ######   ##     ## ## ### ##       ##      ##        //
+                        //      ##    ##       ######### ##     ##       ##     ##         //
+                        //      ##    ##       ##     ## ##     ##       ##     ##         //
+                        //      ##    ######## ##     ## ##     ##     ######   ##         //
 
 
 package dragAndDrop;
@@ -115,15 +123,19 @@ public class Main extends Application {
                 if(selected){
                     int nyPosX = getPosXFromEvent(event2);
                     int nyPosY = getPosYFromEvent(event2);
-                    if (piecesListe[nyPosY][nyPosX] == null) {
-                        piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                        piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
-                        piecesListe[nyPosY][nyPosX] = piecesListe[selectedPosY][selectedPosX];
-                        piecesListe[selectedPosY][selectedPosX] = null;
-                        selectedPosX = nyPosX;
-                        selectedPosY = nyPosY;
-                        moveCounter++;
+                    if(withinBounds(nyPosX,nyPosY)){
+                        if (piecesListe[nyPosY][nyPosX] == null) {
+                            piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
+                            piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                            piecesListe[nyPosY][nyPosX] = piecesListe[selectedPosY][selectedPosX];
+                            piecesListe[selectedPosY][selectedPosX] = null;
+                            selectedPosX = nyPosX;
+                            selectedPosY = nyPosY;
+                            piecesListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                            moveCounter++;
+                        }
                     }
+
                 }
             }
             ///////////////////////////////MOVE END///////////////////////////////////////////////
@@ -135,14 +147,16 @@ public class Main extends Application {
                         int nyPosX = getPosXFromEvent(event2);
                         int nyPosY = getPosYFromEvent(event2);
                         if (piecesListe[nyPosY][nyPosX] != null) {
-                            if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
-                                piecesListe[nyPosY][nyPosX].takeDamage();
-                                attackCount++;
-                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                            if(withinBounds(nyPosX,nyPosY)){
+                                if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
+                                    piecesListe[nyPosY][nyPosX].takeDamage();
+                                    attackCount++;
+                                    System.out.println(piecesListe[nyPosY][nyPosX].getHp());
 
-                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
-                                    piecesListe[nyPosY][nyPosX] = null;
+                                    if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
+                                        sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
+                                        piecesListe[nyPosY][nyPosX] = null;
+                                    }
                                 }
                             }
                         }
@@ -182,7 +196,7 @@ public class Main extends Application {
 
 
     private boolean withinBounds(int nyPosX, int nyPosY) {
-        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > 2) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > 2))) {
+        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getMaxMoveMent()))) {
             return true;
         }
         return false;
