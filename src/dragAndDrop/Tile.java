@@ -18,7 +18,7 @@ public class Tile extends Rectangle {
         super.setStrokeType(StrokeType.INSIDE);
         super.setStroke(Color.BLACK);
         //Image tile = new Image("/dragAndDrop/assets/tile.jpg");
-       // this.setFill(new ImagePattern(tile));
+        //this.setFill(new ImagePattern(tile));
 
     }
 

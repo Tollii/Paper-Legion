@@ -5,6 +5,7 @@ public class UnitType {
     private double hp;
     private double attackMultiplier;
     private int range;
+    private String description;
 
 
     public UnitType(String type, double hp, double attackMultiplier, int range){
@@ -12,6 +13,8 @@ public class UnitType {
         this.hp = hp;
         this.attackMultiplier = attackMultiplier;
         this.range = range;
+
+
     }
 
     public String getType() {
