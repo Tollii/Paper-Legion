@@ -1,4 +1,3 @@
-
 //  ██████╗ ██╗███╗   ██╗ █████╗ ██████╗ ██╗   ██╗    ██╗    ██╗ █████╗ ██████╗ ███████╗ █████╗ ██████╗ ███████╗  //
 //  ██╔══██╗██║████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║    ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝  //
 //  ██████╔╝██║██╔██╗ ██║███████║██████╔╝ ╚████╔╝     ██║ █╗ ██║███████║██████╔╝█████╗  ███████║██████╔╝█████╗    //
@@ -29,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -42,6 +42,8 @@ import java.util.ArrayList;
 
 
 public class Main extends Application {
+    Label description = new Label();
+    static String selectedUnit;
     private static final int boardSize = 7; // 7x7 for example
     static Piece[][] piecesListe = new Piece[boardSize][boardSize];
     public static final int tileSize = 100; //
@@ -52,7 +54,9 @@ public class Main extends Application {
     static Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private int moveCounter =0; // Counter for movement phase.
     private int attackCount = 0; // Counter for attack phase.
-    //private static final int offset = 15; // FOR LATER DESIGN.
+    public static final int offsetX = 100;
+    public static final int offsetY = 100;
+
 
 
     @Override
@@ -66,37 +70,41 @@ public class Main extends Application {
         ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
         sp.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        BorderPane bp = new BorderPane();
+        //BorderPane bp = new BorderPane();
         VBox vbox = new VBox();
         JFXButton endturn = new JFXButton("end turn");
+        HBox hbox = new HBox();
+        hbox.getChildren().add(sp);
+        hbox.getChildren().add(vbox);
+        hbox.setSpacing(150);
+        sp.setPrefWidth(900);
+        description.setStyle("-fx-font-family: 'Arial Black'");
+        vbox.setPrefWidth(250);
         endturn.setPrefWidth(150);
         endturn.setPrefHeight(75);
         endturn.setTextFill(Color.WHITE);
         endturn.setStyle("-fx-background-color: #000000");
         vbox.getChildren().add(endturn);
+        vbox.setPrefWidth(650);
+        description.setPadding(new Insets(0,0,350,0));
         vbox.setAlignment(Pos.BOTTOM_CENTER);
-        vbox.setPadding(new Insets(50,200,50,50));
+        hbox.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
+
+
+        // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
 
 
 
-        bp.setLeft(sp);
-        bp.setRight(vbox);
-
-        // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES POSITION.
-
-
-        //ins.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
-       // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
-        scene1 = new Scene(bp, 800, 600);
+        scene1 = new Scene(hbox, 1024, 768);
 
         ///////////////////////////////////SETUP END/////////////////////////////////////////////
 
 
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        piecesListe[0][1] = new Piece( 0, 1,  true, new UnitType("Archer",60,1,2));
-        piecesListe[0][2] = new Piece( 0, 2,  true, new UnitType("Swordsman",120,2.5,1));
-        piecesListe[1][4] = new Piece( 1, 4,  false, new UnitType("Archer",60,1,2));
+        piecesListe[0][1] = new Piece( 0*tileSize, 1*tileSize,  true, new UnitType("Archer",60,1,2));
+        piecesListe[0][2] = new Piece( 0*tileSize, 2*tileSize,  true, new UnitType("Swordsman",120,2.5,1));
+        piecesListe[1][4] = new Piece( 1*tileSize, 4*tileSize,  false, new UnitType("Archer",60,1,2));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -107,6 +115,8 @@ public class Main extends Application {
             for (int j = 0; j < piecesListe[i].length; j++) {
                 if (piecesListe[i][j] != null) {
                     sp.getChildren().add(piecesListe[i][j]);
+
+
                 }
             }
         }
@@ -133,6 +143,10 @@ public class Main extends Application {
                             selectedPosY = posY;
                             counter++;
                             highlightPossibleMoves();
+                            description.setText(piecesListe[selectedPosY][selectedPosX].getDescription());
+                            vbox.getChildren().add(description);
+                            description.toBack();
+
                         }
                     }
                 }
@@ -167,22 +181,22 @@ public class Main extends Application {
             if(event2.getClickCount() == 2){
                 if(selected){
 
-                        int nyPosX = getPosXFromEvent(event2);
-                        int nyPosY = getPosYFromEvent(event2);
-                        if (piecesListe[nyPosY][nyPosX] != null) {
-                            if(attackRange(nyPosX,nyPosY)){
-                                if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
-                                    piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
-                                    attackCount++;
-                                    System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                    int nyPosX = getPosXFromEvent(event2);
+                    int nyPosY = getPosYFromEvent(event2);
+                    if (piecesListe[nyPosY][nyPosX] != null) {
+                        if(attackRange(nyPosX,nyPosY)){
+                            if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
+                                piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
+                                attackCount++;
+                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
 
-                                    if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
-                                        sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
-                                        piecesListe[nyPosY][nyPosX] = null;
-                                    }
+                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
+                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
+                                    piecesListe[nyPosY][nyPosX] = null;
                                 }
                             }
                         }
+                    }
 
                 }
             }
@@ -198,6 +212,7 @@ public class Main extends Application {
                     }
                 }
 
+                vbox.getChildren().remove(description);
                 selected = false;
                 counter = 0;
                 clearHighlight();
@@ -297,7 +312,7 @@ public class Main extends Application {
     private void clearHighlight(){
         for (int i = 0; i < testGrid.liste.length; i++) {
             for (int j = 0; j < testGrid.liste[i].length; j++) {
-            testGrid.liste[i][j].setFill(Color.TRANSPARENT);
+                testGrid.liste[i][j].setFill(Color.TRANSPARENT);
 
             }
         }
@@ -313,14 +328,14 @@ public class Main extends Application {
     }
 
     private int getPosXFromEvent(MouseEvent event2) {
-        double rectPosX1 = tileSize;
+        double rectPosX1 = tileSize+offsetX;
         double posX1 = event2.getSceneX();
         double movementX1 = posX1 - rectPosX1;
         return (int) (Math.ceil(movementX1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
     private int getPosYFromEvent(MouseEvent event2) {
-        double rectPosY1 = tileSize;
+        double rectPosY1 = tileSize+offsetY;
         double posY1 = event2.getSceneY();
         double movementY1 = posY1 - rectPosY1;
         return (int) (Math.ceil(movementY1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
