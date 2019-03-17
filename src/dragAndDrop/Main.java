@@ -32,30 +32,51 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 
 public class Main extends Application {
-    Label description = new Label();
-    static String selectedUnit;
     private static final int boardSize = 7; // 7x7 for example
-    static Piece[][] piecesListe = new Piece[boardSize][boardSize];
     public static final int tileSize = 100; //
-    static int selectedPosX; //Holds the X position to the selected piece.
-    static int selectedPosY; //Holds the Y position to the selected piece.
-    static boolean selected = false; // True or false for selected piece.
-    GridPane ins = new GridPane(); // Holds all the tiles.
-    static Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private int moveCounter =0; // Counter for movement phase.
-    private int attackCount = 0; // Counter for attack phase.
+    static Piece[][] piecesListe = new Piece[boardSize][boardSize];
     public static final int offsetX = 100;
     public static final int offsetY = 100;
+    private Label description = new Label();
+    private int selectedPosX; //Holds the X position to the selected piece.
+    private int selectedPosY; //Holds the Y position to the selected piece.
+    private boolean selected = false; // True or false for selected piece.
+    private GridPane ins = new GridPane(); // Holds all the tiles.
+    private Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
+    private int moveCounter =0; // Counter for movement phase.
+    private int attackCount = 0; // Counter for attack phase.
+
+    private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
+    private AudioClip bow = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/arrow.wav").toString());
+
+
+
+
+
+    //////////////////////////GAME INFO FROM MYSQL//////////////////////////////////////////////////////////////////////////////////
+    //Match: player1, player2, match id, game_started                                                                             //
+    //Attacks: turn_id, attacker, receiever, match_id, damage_dealt                                                               //
+    //Movements: turn_id, piece_id, match_id, start_pos, end_pos                                                                  //
+    //Pieces: piece_id, match_id, position, player                                                                                //
+    //Turns: turn_id, match_id, player                                                                                            //
+    //Unit_types: unit_type_id, unit_name, max_health, attack, attack_range, ability_cooldown                                     //
+    //Units: piece_id, match_id, current_health, current_attack, current_attack_range, current_ability_cooldown,unit_type_id      //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 
@@ -189,6 +210,13 @@ public class Main extends Application {
                                 piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
                                 attackCount++;
                                 System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                                if(piecesListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
+                                    sword.play();
+                                }
+
+                                else if(piecesListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
+                                    bow.play();
+                                }
 
                                 if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
                                     sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
