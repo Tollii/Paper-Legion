@@ -42,6 +42,7 @@ public class Unit extends Rectangle {
         healthbar.setAlignment(Pos.CENTER);
 
 
+
         healthbar.setTranslateX(this.getTranslateX());
         healthbar.setTranslateY(this.getTranslateY()+40);
 
@@ -52,12 +53,23 @@ public class Unit extends Rectangle {
 
 
         if(type.getType().equalsIgnoreCase("Archer")){
-            Image archer = new Image("/dragAndDrop/assets/archer.png");
-            this.setFill(new ImagePattern(archer));
+            if(enemy){
+                Image archerGold = new Image("/dragAndDrop/assets/archer_gold.png");
+                this.setFill(new ImagePattern(archerGold));
+            } else{
+                Image archerBlue = new Image("/dragAndDrop/assets/archer_blue.png");
+                this.setFill(new ImagePattern(archerBlue));
+            }
         }
         if(type.getType().equalsIgnoreCase("Swordsman")){
-            Image swordsman = new Image("/dragAndDrop/assets/sword.png");
-            this.setFill(new ImagePattern(swordsman));
+            if(enemy){
+                Image swordsmanGold = new Image("/dragAndDrop/assets/sword_gold.png");
+                this.setFill(new ImagePattern(swordsmanGold));
+            } else{
+                Image swordsmanBlue = new Image("/dragAndDrop/assets/sword_blue.png");
+                this.setFill(new ImagePattern(swordsmanBlue));
+            }
+
         }
     }
 

@@ -112,6 +112,7 @@ public class Main extends Application {
         hbox.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
 
 
+
         // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
 //window.widthProperty().addListener();
 
