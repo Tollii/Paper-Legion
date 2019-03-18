@@ -13,6 +13,7 @@ public class SignUp {
     private SecureRandom random = new SecureRandom();
     private Connection myConn;
 
+    //JDBC connection
     public SignUp() {
         try {
             myConn = DriverManager.getConnection("jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo", "thomabmo", "EEo6fscj");

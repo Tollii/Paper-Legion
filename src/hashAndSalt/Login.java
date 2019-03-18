@@ -20,6 +20,7 @@ public class Login {
         }
     }
 
+    //Should probably return more than a boolean so we can identify who is logged in.
     public boolean login(String username, String password) {
 
         //SELECT statement finds hashed password and salt from the entered user.
@@ -33,7 +34,7 @@ public class Login {
             byte[] hash = rs.getBytes("hashedpassword");
             byte[] salt = rs.getBytes("passwordsalt");
             if (verifyPassword(password, hash, salt)) {
-                //SET ONLINE TO 1 IN DB.
+                //TODO SET ONLINE TO 1 IN DB.
                 return true;
             }
         } catch (SQLException e) {

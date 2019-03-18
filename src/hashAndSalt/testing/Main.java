@@ -30,7 +30,7 @@ public class Main extends Application {
 
         enter.setOnAction(event -> {
             Login log = new Login();
-            if (log.login(username.toString(),password.toString())) {
+            if (log.login(username.getText(),password.getText())) {
                 window.setScene(scene2);
             } else {
                 error.setText("Error logging in");

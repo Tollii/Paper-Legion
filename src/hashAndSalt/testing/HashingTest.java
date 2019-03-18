@@ -14,7 +14,7 @@ public class HashingTest {
     private static Connection myConn;
 
     public static void main(String[] args) {
-
+        //This one is just a mess of things we used to test things in the beginning.
         try {
             myConn = DriverManager.getConnection("jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo", "thomabmo", "EEo6fscj");
         } catch (SQLException e) {
