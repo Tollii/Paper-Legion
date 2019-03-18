@@ -6,12 +6,12 @@ CREATE TABLE Users(
   user_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   username varchar(40) NOT NULL,
   hashedpassword varchar(40) NOT NULL,
-  salt varchar(40) NOT NULL,
+  passwordsalt varchar(40) NOT NULL,
   email varchar(40) NOT NULL,
   online_status BOOLEAN NOT NULL
 );
 
-CREATE TABLE Statistics(
+CREATE TABLE Stats(
   user_id int NOT NULL PRIMARY KEY,
   games_won int NOT NULL DEFAULT 0,
   games_played int NOT NULL DEFAULT 0,
