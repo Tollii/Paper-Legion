@@ -16,7 +16,7 @@ public class SignUp {
     private SecureRandom random = new SecureRandom();
     //JDBC connection
 
-    public boolean signUp(String user, String password) {
+    public boolean signUp(String user, String password,String email) {
 
         //TODO Check if user is not already registered, or username is taken.
 
@@ -26,7 +26,7 @@ public class SignUp {
 
         byte[] hash = generateHash(password,salt);
 
-        return addUserToDatabase(user,"email",hash,salt);
+        return addUserToDatabase(user,email,hash,salt);
     }
 
     private byte[] generateHash(String password,byte[] salt) {

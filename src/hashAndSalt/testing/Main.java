@@ -1,10 +1,13 @@
 package hashAndSalt.testing;
 
 import hashAndSalt.Login;
+import hashAndSalt.SignUp;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -13,7 +16,7 @@ import javafx.scene.control.Label;
 
 public class Main extends Application {
 
-    private Scene scene1,scene2;
+    private Scene scene1,scene2,scene3;
     Login log;
 
     @Override
@@ -22,19 +25,41 @@ public class Main extends Application {
         Stage window = primaryStage;
 
         VBox layout = new VBox();
-        Label error = new Label("");
+        HBox buttons = new HBox();
+        Label notice = new Label("");
         TextField username = new TextField("admin");
-        TextField password = new TextField("admin");
+        TextField password = new PasswordField();
         Button enter = new Button("Enter");
-        layout.getChildren().addAll(error,username,password,enter);
+        Button signup = new Button("SignUp");
+        buttons.getChildren().addAll(enter,signup);
+        layout.getChildren().addAll(notice,username,password,buttons);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
+        log = new Login();
+
         enter.setOnAction(event -> {
-            log = new Login();
             if (log.login(username.getText(),password.getText())) {
                 window.setScene(scene2);
             } else {
-                error.setText("Error logging in");
+                notice.setText("Error logging in");
+            }
+        });
+
+        signup.setOnAction(event -> {
+            window.setScene(scene3);
+        });
+        VBox layout3 = new VBox();
+        TextField su_username = new TextField();
+        TextField su_password = new PasswordField();
+        TextField su_email = new TextField();
+        Button add = new Button("Sign up");
+        layout3.getChildren().addAll(su_username,su_password,su_email,add);
+
+        SignUp su = new SignUp();
+        add.setOnAction(event -> {
+            if (su.signUp(su_username.getText(),su_password.getText(),su_email.getText())) {
+                window.setScene(scene1);
+                notice.setText("User added");
             }
         });
 
@@ -52,6 +77,7 @@ public class Main extends Application {
 
         scene1 = new Scene(layout,200,200);
         scene2 = new Scene(layout2,200,200);
+        scene3 = new Scene(layout3,200,200);
 
         window.setScene(scene1);
         window.setTitle("Login");
