@@ -45,11 +45,14 @@ public class Login {
                 preparedStatement2.setString(1, username);
                 int change1 = preparedStatement2.executeUpdate();
                 this.username = username;
+                preparedStatement.close();
+                preparedStatement2.close();
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -73,6 +76,7 @@ public class Login {
             preparedStatement.setString(1, username);
 
             int change1 = preparedStatement.executeUpdate();
+            preparedStatement.close();
             return true;
         }
         catch (SQLException e){
