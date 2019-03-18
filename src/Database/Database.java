@@ -93,7 +93,32 @@ public class Database {
             connectionPool.releaseConnection(myConn);
             return -1;
         }
+    }
 
+    public boolean pollGameStarted(int match_id){
+        int gameStarted=0;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning= "select * from Matches where match_id=? and game_started=1";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1,match_id);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()){
+                gameStarted = result.getInt(4);
+            }
+            if(gameStarted == 1){
+                connectionPool.releaseConnection(myConn);
+                return true;
+            }
+            connectionPool.releaseConnection(myConn);
+            return false;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+            return false;
+        }
     }
 
     public void test(){

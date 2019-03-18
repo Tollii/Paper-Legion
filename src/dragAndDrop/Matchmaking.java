@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 
 public class Matchmaking {
     static int player_id = 2;
-    Database con = new Database();
+    private Database con = new Database();
+    private boolean gameStarted=false;
 
     public Matchmaking(){
 
@@ -16,6 +17,17 @@ public class Matchmaking {
         //if none available create own game
         if(match_id<0){
             con.createGame(player_id);
+        }
+
+        //
+        while(!gameStarted){
+            gameStarted = con.pollGameStarted(match_id);
+            if(gameStarted){
+                //switch scenes.
+                System.out.println("Game started");
+            }
+
+
         }
 
         //wait for other players to join
