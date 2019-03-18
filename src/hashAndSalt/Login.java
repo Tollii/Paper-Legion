@@ -72,8 +72,7 @@ public class Login {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
 
-            ResultSet rs = preparedStatement.executeQuery();
-            rs.next();
+            int change1 = preparedStatement.executeUpdate();
             return true;
         }
         catch (SQLException e){
