@@ -135,7 +135,7 @@ public class Main extends Application {
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
-                    sp.getChildren().add(unitListe[i][j]);
+                    sp.getChildren().add(unitListe[i][j].a);
                 }
             }
         }
@@ -179,8 +179,9 @@ public class Main extends Application {
                     int nyPosY = getPosYFromEvent(event2);
                     if(attackRange(nyPosX,nyPosY)){
                         if (unitListe[nyPosY][nyPosX] == null) {
-                            unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                            unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                            unitListe[selectedPosY][selectedPosX].setTranslate(nyPosX, nyPosY);
+                           // unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
+                            //unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
                             clearHighlight();
                             unitListe[nyPosY][nyPosX] = unitListe[selectedPosY][selectedPosX];
                             unitListe[selectedPosY][selectedPosX] = null;

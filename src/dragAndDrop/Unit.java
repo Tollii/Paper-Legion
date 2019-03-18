@@ -20,6 +20,8 @@ public class Unit extends Rectangle {
     private double damageMultiplier;
     private int range;
     private boolean enemy;
+    GridPane a =  new GridPane();
+
 
     public Unit(double row, double column, boolean enemy, UnitType type){
         super.setWidth(Main.tileSize);
@@ -30,9 +32,18 @@ public class Unit extends Rectangle {
         this.hp = type.getHp();
         this.range = type.getRange();
 
-        setPosition(column,row);
+        setPositionArray(column,row);
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
+        StackPane sp = new StackPane();
+        sp.getChildren().addAll(this, healthbar);
+        a.getChildren().add(sp);
+
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY());
+
+
+
 
         if(type.getType().equalsIgnoreCase("Archer")){
             Image archer = new Image("/dragAndDrop/assets/archer.png");
@@ -47,6 +58,8 @@ public class Unit extends Rectangle {
     public void setOldPos(double oldPosX, double oldPosY){
         this.oldPosX = oldPosX;
         this.oldPosY = oldPosY;
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY());
     }
 
     public double getOldPosX(){
@@ -57,9 +70,16 @@ public class Unit extends Rectangle {
         return oldPosY;
     }
 
-    public void setPosition(double x, double y){
+    public void setPositionArray(double x, double y){
         super.setTranslateX(x);
         super.setTranslateY(y);
+    }
+
+    public void setTranslate(double x, double y){
+        super.setTranslateX(x*100);
+        super.setTranslateY(y*100);
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY());
     }
 
     public boolean getEnemy(){
