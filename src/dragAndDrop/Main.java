@@ -45,7 +45,7 @@ import java.util.ArrayList;
 
 
 public class Main extends Application {
-    private static final int boardSize = 8; // 7x7 for example
+    private static final int boardSize = 7; // 7x7 for example
     public static final int tileSize = 100; //
     static Unit[][] unitListe = new Unit[boardSize][boardSize];
     public static final int offsetX = 100;
@@ -218,7 +218,7 @@ public class Main extends Application {
                                 }
 
                                 if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX]);
+                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX].a);
                                     unitListe[nyPosY][nyPosX] = null;
                                 }
                             }

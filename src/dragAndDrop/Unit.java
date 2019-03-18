@@ -38,9 +38,15 @@ public class Unit extends Rectangle {
         StackPane sp = new StackPane();
         sp.getChildren().addAll(this, healthbar);
         a.getChildren().add(sp);
+        healthbar.setPrefWidth(Main.tileSize);
+        healthbar.setAlignment(Pos.CENTER);
+
 
         healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY());
+        healthbar.setTranslateY(this.getTranslateY()+40);
+
+
+        healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
 
 
 
@@ -59,7 +65,7 @@ public class Unit extends Rectangle {
         this.oldPosX = oldPosX;
         this.oldPosY = oldPosY;
         healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY());
+        healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
     public double getOldPosX(){
@@ -79,7 +85,7 @@ public class Unit extends Rectangle {
         super.setTranslateX(x*100);
         super.setTranslateY(y*100);
         healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY());
+        healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
     public boolean getEnemy(){
@@ -89,6 +95,10 @@ public class Unit extends Rectangle {
     public void takeDamage(double damageDealt){
         this.hp -= 20*damageDealt;
         healthbar.setText(String.valueOf(hp));
+
+        if(hp<=20){
+            healthbar.setStyle("-fx-background-color: Red");
+        }
     }
 
     public double getHp(){
