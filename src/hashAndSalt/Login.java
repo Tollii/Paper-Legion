@@ -58,4 +58,8 @@ public class Login {
         }
         return Arrays.equals(enteredPassword, hash);
     }
+
+    private void release() {
+
+    }
 }
