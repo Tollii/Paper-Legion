@@ -84,4 +84,6 @@ public class Login {
         }
         return false;
     }
+
+    //TODO Close metode
 }

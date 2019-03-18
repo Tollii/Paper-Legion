@@ -60,8 +60,8 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        log.logout();
         // executed when the application shuts down
+        log.logout();
     }
 
     public static void main(String[] args) {
