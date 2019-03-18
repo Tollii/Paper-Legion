@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.Arrays;
 
 import Database.BasicConnectionPool;
+import Database.Cleaner;
 
 public class Login {
 
@@ -32,11 +33,15 @@ public class Login {
         //SELECT statement finds hashed password and salt from the entered user.
         String stmt = "SELECT hashedpassword,passwordsalt,online_status FROM Users WHERE username = ?";
         String stmt2 = "UPDATE Users SET online_status = 1 WHERE username = ?";
+
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
 
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             rs.next();
             byte[] hash = rs.getBytes("hashedpassword");
             byte[] salt = rs.getBytes("passwordsalt");
@@ -44,19 +49,21 @@ public class Login {
 
             //Checks if the user is already logged in. If not the user is logged in.
             if (verifyPassword(password, hash, salt) && loginStatus == 0) {
-                PreparedStatement preparedStatement2 = myConn.prepareStatement(stmt2);
+                preparedStatement2 = myConn.prepareStatement(stmt2);
                 preparedStatement2.setString(1, username);
                 preparedStatement2.executeUpdate();
                 this.username = username;
-                preparedStatement.close();
-                preparedStatement2.close();
+                Cleaner.closeStatement(preparedStatement);
+                Cleaner.closeStatement(preparedStatement2);
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeStatement(preparedStatement2);
+            Cleaner.closeResSet(rs);
         }
-
-        pool.releaseConnection(myConn);
         return false;
     }
 

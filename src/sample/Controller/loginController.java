@@ -48,7 +48,7 @@ public class loginController {
         });
 
         loginEnterButton.setOnAction(event -> {
-            System.out.println("ENter button");
+            changeScene("/sample/View/mainMenu.fxml");
         });
     }
 
