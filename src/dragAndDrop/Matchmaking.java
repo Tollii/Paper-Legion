@@ -5,19 +5,22 @@ import Database.Database;
 import java.sql.ResultSet;
 
 public class Matchmaking {
+    static int player_id = 2;
     Database con = new Database();
 
     public Matchmaking(){
-        //Click find match button,
-        int match_id = con.matchMaking_search();
-        System.out.println(match_id);
-        //If available join game.
-      //  con.joinGame();
 
-        //search for available games
+        //Click to search for games and join if available
+        int match_id = con.matchMaking_search(player_id);
+
         //if none available create own game
+        if(match_id<0){
+            con.createGame(player_id);
+        }
+
         //wait for other players to join
         //when player join enter game
+        //delete game on abort.
     }
 
     public static void main(String[]args){

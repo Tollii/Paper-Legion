@@ -24,7 +24,7 @@ public class Database {
         }
     }
 
-    public int matchMaking_search(){
+    public int matchMaking_search(int player_id){
         Connection myConn = connectionPool.getConnection();
         String sqlString = "SELECT * FROM Matches where game_started=0";
         ResultSet results;
@@ -35,17 +35,22 @@ public class Database {
             int match_id=-1;
             while(results.next()){
                 match_id = results.getInt(1);
-
             }
-            connectionPool.releaseConnection(myConn);
-            return match_id;
+
+            if(match_id>0){
+                System.out.println("Match Found: " + match_id);
+                joinGame(match_id,player_id);
+                connectionPool.releaseConnection(myConn);
+                return match_id;
+            } else{
+                return -1;
+            }
 
 
         } catch (SQLException e) {
             e.printStackTrace();
             connectionPool.releaseConnection(myConn);
             return -1;
-
         }
     }
 
@@ -55,10 +60,11 @@ public class Database {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1,match_id);
-            preparedStatement.setInt(2,player2);
+            preparedStatement.setInt(1,player2);
+            preparedStatement.setInt(2,match_id);
             int resultSet = preparedStatement.executeUpdate();
             if(resultSet == 1){
+                System.out.println("Joined game");
                 connectionPool.releaseConnection(myConn);
                 return true;
             }
@@ -67,6 +73,27 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
         return false;
+    }
+
+    public int createGame(int player_id){
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning= "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1,player_id);
+            int result = preparedStatement.executeUpdate();
+            if(result>0) {
+                System.out.println("Created Game");
+            }
+            connectionPool.releaseConnection(myConn);
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+            return -1;
+        }
+
     }
 
     public void test(){
