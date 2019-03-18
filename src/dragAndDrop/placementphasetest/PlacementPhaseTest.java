@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 
 public class PlacementPhaseTest extends Application {
-  final Grid gp = new Grid(7, 7);
+  final int boardSize = 7;
+  final Grid gp = new Grid(boardSize, boardSize);
+  Piece[][] pieces = new Piece[boardSize][boardSize];
 
   @Override
   public void start(Stage stage) {
