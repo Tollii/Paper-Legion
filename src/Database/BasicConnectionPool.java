@@ -12,73 +12,70 @@ package Database;
  *
  */
 
-
+import Database.Config;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicConnectionPool implements ConnectionPool {
-
-    private String url;
-    private String user;
-    private String password;
+public class BasicConnectionPool {
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
-    private static int INITIAL_POOL_SIZE = 10;
-    private static int MAX_POOL_SIZE = 20;
+    private static int INITIAL_POOL_SIZE = 5;
+    private static int MAX_POOL_SIZE = 10;
 
 
     // Initializes an ArrayList, then fills it with connections. This is the connectionPool.
-    public static BasicConnectionPool create(String url, String user, String password) throws SQLException{
-
-
-
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-        for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
-            pool.add(createConnection(url, user, password));
+    public static BasicConnectionPool create() throws SQLException{
+        try{
+            Config config = Config.getInstance();
+            Class.forName(config.DB_DRIVER);
+            List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
+            for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
+                pool.add(createConnection());
+            }
+            return new BasicConnectionPool(pool);
+        } catch (ClassNotFoundException clne){
+            clne.printStackTrace();
         }
-        return new BasicConnectionPool(url, user, password, pool);
+        return null;
     }
 
-
-    public BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-        this.connectionPool = connectionPool;
-
+    public BasicConnectionPool(List<Connection> pool){
+        this.connectionPool = pool;
     }
 
     // Fetches a connection from the connection pool
     // If connection pool is empty, it will create a new connection
-    @Override
     public Connection getConnection(){
-/*
-        try{
 
+        try{
             if(connectionPool.isEmpty()){
                 if(usedConnections.size() < MAX_POOL_SIZE){
-                    connectionPool.add(createConnection(url, user, password));
+                    connectionPool.add(createConnection());
+                } else{
+                    System.out.println("Max pool size reached");
                 }
             }
         } catch (SQLException sqle){
             sqle.printStackTrace();
         }
-*/
+
         Connection con = connectionPool.remove(connectionPool.size() - 1);
         usedConnections.add(con);
         return con;
     }
 
     // Will put the connection back into the connection pool and remove it from the usedConnections list
-    @Override
     public boolean releaseConnection(Connection con){
         connectionPool.add(con);
+        System.out.println("Connection released");
         return usedConnections.remove(con);
     }
 
-    private static Connection createConnection(String url, String user, String password) throws SQLException{
-        return DriverManager.getConnection(url, user, password);
+    // Creates a connection
+    private static Connection createConnection() throws SQLException{
+        Config config = Config.getInstance();
+        return DriverManager.getConnection(config.DB_URL, config.DB_USER_NAME, config.DB_PASSWORD);
     }
 
     // Gets total amount of connections (used and unused)
@@ -89,34 +86,24 @@ public class BasicConnectionPool implements ConnectionPool {
 
     /**
      *
-     * Does not work at the moment. Throws an exception when it calls releaseConnection()
+     * Possible to find a better solution
      *
      */
 
     public void shutdown() throws SQLException{
-        usedConnections.forEach(this::releaseConnection);
-        for (Connection c : connectionPool){
-            c.close();
+        connectionPool.addAll(usedConnections);
+        int i = 1;
+        for(Connection con : connectionPool){
+            con.close();
+            System.out.println("Connection " + i + " closed");
+            i++;
         }
+        System.out.println("All connections closed");
         connectionPool.clear();
+        usedConnections = new ArrayList<>();
+
     }
 
-
-
-    @Override
-    public String getUrl() {
-        return url;
-    }
-
-    @Override
-    public String getUser() {
-        return user;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     public List<Connection> getConnectionPool() {
         return connectionPool;
@@ -134,27 +121,20 @@ public class BasicConnectionPool implements ConnectionPool {
         return MAX_POOL_SIZE;
     }
 
+    // Small test that finds ISBN and forfatter from one of the programming exercises and then shuts down the connection pools
     public static void main(String[]args){
 
-        String adr = "jdbc:mysql://mysql.stud.idi.ntnu.no:3306/andrtoln";
-        String user = "andrtoln";
-        String pw = "GVAXiZju";
-        String driver1 = "org.apache.derby.jdbc.ClientDriver";
-        String driver2 = "com.mysql.cj.jdbc.Driver";
         BasicConnectionPool pool;
 
-
         try{
-            Class.forName(driver2);
-
-            pool = create(adr, user, pw);
+            pool = create();
 
             Connection con = pool.getConnection();
 
             if(con.isValid(1)){
-                System.out.println("Success");
+                System.out.println("Success connection 1");
             } else{
-                System.out.println("Failure");
+                System.out.println("Failure connection 1");
             }
 
 
@@ -168,19 +148,24 @@ public class BasicConnectionPool implements ConnectionPool {
                 System.out.println(rs.getString("isbn"));
             }
             rs.close();
-            con.close();
-            pool.releaseConnection(con);
+
+            Connection con2 = pool.getConnection();
+            Statement st2 = con2.createStatement();
+            String query2 = "SELECT forfatter FROM boktittel";
+            ResultSet rs2 = st2.executeQuery(query2);
+
+            while(rs2.next()){
+                System.out.println(rs2.getString("forfatter"));
+            }
+            rs2.close();
 
 
 
 
-
-            //  pool.shutdown();
+            pool.shutdown();
             System.out.println("Shutdown");
 
-        } catch (ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
-        } catch (SQLException sqle){
+        }   catch (SQLException sqle){
             sqle.printStackTrace();
         }
 
