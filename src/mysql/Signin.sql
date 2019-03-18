@@ -9,5 +9,5 @@ SELECT hashedpassword,passwordsalt FROM Users WHERE username = 'admin';
 INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,0);
 
 -- Update Online Status
-UPDATE TABLE Users SET online_status = 1 WHERE username = ?;
-UPDATE TABLE Users SET online_status = 1 WHERE username = ?;
+UPDATE Users SET online_status = 1 WHERE username = ?;
+UPDATE Users SET online_status = 1 WHERE username = 'admin';

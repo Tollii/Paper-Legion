@@ -43,7 +43,6 @@ public class Main extends Application {
         layout2.getChildren().addAll(text,logout);
 
         logout.setOnAction(event -> window.setScene(scene1));
-
         layout.setAlignment(Pos.CENTER);
         layout2.setAlignment(Pos.CENTER);
 

@@ -19,9 +19,9 @@ public class Config {
     }
 
     private void init(){
-        DB_USER_NAME = "andrtoln";
-        DB_PASSWORD = "GVAXiZju";
-        DB_URL = "jdbc:mysql://mysql.stud.idi.ntnu.no:3306/andrtoln";
+        DB_USER_NAME = "thomabmo";
+        DB_PASSWORD = "EEo6fscj";
+        DB_URL = "jdbc:mysql://mysql.stud.idi.ntnu.no:3306/thomabmo";
         DB_DRIVER = "com.mysql.cj.jdbc.Driver";
         DB_MAX_CONNECTIONS = 10;
     }
