@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 public class Main extends Application {
 
     private Scene scene1,scene2;
+    Login log;
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,7 +30,7 @@ public class Main extends Application {
         layout.setPadding(new Insets(20, 20, 20, 20));
 
         enter.setOnAction(event -> {
-            Login log = new Login();
+             = new Login();
             if (log.login(username.getText(),password.getText())) {
                 window.setScene(scene2);
             } else {
@@ -52,6 +53,12 @@ public class Main extends Application {
         window.setScene(scene1);
         window.setTitle("Login");
         window.show();
+    }
+
+    @Override
+    public void stop() {
+        log.lo
+        // executed when the application shuts down
     }
 
     public static void main(String[] args) {

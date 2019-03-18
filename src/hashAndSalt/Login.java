@@ -13,6 +13,7 @@ public class Login {
 
     public static BasicConnectionPool pool;
     public static Connection myConn;
+    private String username;
 
     public Login() {
         try {
@@ -28,6 +29,7 @@ public class Login {
 
         //SELECT statement finds hashed password and salt from the entered user.
         String stmt = "SELECT hashedpassword,passwordsalt FROM Users WHERE username = ?";
+        String stmt2 = "UPDATE Users SET online_status = 1 WHERE username = ?";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
@@ -38,10 +40,15 @@ public class Login {
             byte[] salt = rs.getBytes("passwordsalt");
             if (verifyPassword(password, hash, salt)) {
                 //TODO SET ONLINE TO 1 IN DB.
+                PreparedStatement preparedStatement2 = myConn.prepareStatement(stmt2);
+
+                ResultSet rs2 = preparedStatement2.executeQuery();
+                rs2.next();
+                this.username = username;
                 return true;
             }
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return false;
     }
@@ -57,5 +64,21 @@ public class Login {
             return false;
         }
         return Arrays.equals(enteredPassword, hash);
+    }
+
+    private boolean logout(){
+        String stmt = "UPDATE Users SET online_status = 0 WHERE username = ?";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setString(1, username);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }
