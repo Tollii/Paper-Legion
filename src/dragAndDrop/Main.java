@@ -45,7 +45,7 @@ import java.util.ArrayList;
 
 
 public class Main extends Application {
-    private static final int boardSize = 7; // 7x7 for example
+    private static final int boardSize = 8; // 7x7 for example
     public static final int tileSize = 100; //
     static Piece[][] piecesListe = new Piece[boardSize][boardSize];
     public static final int offsetX = 100;
@@ -113,7 +113,7 @@ public class Main extends Application {
 
 
         // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
-
+//window.widthProperty().addListener();
 
 
         scene1 = new Scene(hbox, 1024, 768);
@@ -349,9 +349,25 @@ public class Main extends Application {
 
 
     private boolean attackRange(int nyPosX, int nyPosY) {
-        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getRange()) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getRange()))) {
+
+        ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
+        if (piecesListe[selectedPosY][selectedPosX].getRange()<2){
+            if((Math.abs(nyPosX-piecesListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- piecesListe[selectedPosY][selectedPosX].getOldPosY())<2)){
+                return true;
+            } else{
+                return false;
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////
+
+        /////////////ATTACK RANGE > 1///////////////////////////////////////
+        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getRange()) &&
+                (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getRange()))) {
             return true;
         }
+
+        ////////////////////////////////////////////////////////////////////
         return false;
     }
 
