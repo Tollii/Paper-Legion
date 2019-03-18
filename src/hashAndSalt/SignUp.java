@@ -1,5 +1,7 @@
 package hashAndSalt;
 
+import Database.BasicConnectionPool;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -10,17 +12,9 @@ import java.sql.*;
 
 public class SignUp {
 
+    private Connection myConn = Login.pool.getConnection();
     private SecureRandom random = new SecureRandom();
-    private Connection myConn;
-
     //JDBC connection
-    public SignUp() {
-        try {
-            myConn = DriverManager.getConnection("jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo", "thomabmo", "EEo6fscj");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public boolean signUp(String user, String password) {
 

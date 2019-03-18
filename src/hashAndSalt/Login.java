@@ -2,19 +2,23 @@ package hashAndSalt;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.xml.transform.Result;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.*;
 import java.util.Arrays;
+import Database.BasicConnectionPool;
 
 public class Login {
 
-    private static Connection myConn;
+    public static BasicConnectionPool pool;
+    public static Connection myConn;
 
     public Login() {
         try {
-            myConn = DriverManager.getConnection("jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo", "thomabmo", "EEo6fscj");
+            pool = BasicConnectionPool.create();
+            myConn = pool.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,6 +44,8 @@ public class Login {
         } catch (SQLException e) {
             //e.printStackTrace();
         }
+
+        pool.releaseConnection(myConn);
         return false;
     }
 
