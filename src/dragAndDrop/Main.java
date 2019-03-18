@@ -45,7 +45,7 @@ import java.util.ArrayList;
 
 
 public class Main extends Application {
-    private static final int boardSize = 8; // 7x7 for example
+    private static final int boardSize = 7; // 7x7 for example
     public static final int tileSize = 100; //
     static Unit[][] unitListe = new Unit[boardSize][boardSize];
     public static final int offsetX = 100;
@@ -112,6 +112,7 @@ public class Main extends Application {
         hbox.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
 
 
+
         // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
 //window.widthProperty().addListener();
 
@@ -135,9 +136,7 @@ public class Main extends Application {
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
-                    sp.getChildren().add(unitListe[i][j]);
-
-
+                    sp.getChildren().add(unitListe[i][j].a);
                 }
             }
         }
@@ -181,8 +180,9 @@ public class Main extends Application {
                     int nyPosY = getPosYFromEvent(event2);
                     if(attackRange(nyPosX,nyPosY)){
                         if (unitListe[nyPosY][nyPosX] == null) {
-                            unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                            unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                            unitListe[selectedPosY][selectedPosX].setTranslate(nyPosX, nyPosY);
+                           // unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
+                            //unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
                             clearHighlight();
                             unitListe[nyPosY][nyPosX] = unitListe[selectedPosY][selectedPosX];
                             unitListe[selectedPosY][selectedPosX] = null;
@@ -219,7 +219,7 @@ public class Main extends Application {
                                 }
 
                                 if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX]);
+                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX].a);
                                     unitListe[nyPosY][nyPosX] = null;
                                 }
                             }
@@ -265,11 +265,6 @@ public class Main extends Application {
         int posY = selectedPosY;
         int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getRange();
 
-        System.out.println(selectedPosX + "SelectposX");
-        System.out.println("PosX+1: " +(posX+2));
-        System.out.println("PosX-1: " +(posX-2));
-        System.out.println("PosY+1: " +(posY+2));
-        System.out.println("PosY-1: " +(posY-2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if(selectedPosX-1>=0){
@@ -362,10 +357,19 @@ public class Main extends Application {
         ////////////////////////////////////////////////////////////////////
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
-        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
-                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
-            return true;
-        }
+
+           if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getRange()){ //Beautiful math skills in progress.
+               return true;
+           }
+
+
+
+
+
+//        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
+//                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
+//            return true;
+//        }
 
         ////////////////////////////////////////////////////////////////////
         return false;

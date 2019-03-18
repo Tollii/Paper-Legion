@@ -20,6 +20,8 @@ public class Unit extends Rectangle {
     private double damageMultiplier;
     private int range;
     private boolean enemy;
+    GridPane a =  new GridPane();
+
 
     public Unit(double row, double column, boolean enemy, UnitType type){
         super.setWidth(Main.tileSize);
@@ -30,23 +32,52 @@ public class Unit extends Rectangle {
         this.hp = (double) type.getHp();
         this.range = type.getRange();
 
-        setPosition(column,row);
+        setPositionArray(column,row);
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
+        StackPane sp = new StackPane();
+        sp.getChildren().addAll(this, healthbar);
+        a.getChildren().add(sp);
+        healthbar.setPrefWidth(Main.tileSize);
+        healthbar.setAlignment(Pos.CENTER);
+
+
+
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY()+40);
+
+
+        healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
+
+
+
 
         if(type.getType().equalsIgnoreCase("Archer")){
-            Image archer = new Image("/dragAndDrop/assets/archer.png");
-            this.setFill(new ImagePattern(archer));
+            if(enemy){
+                Image archerGold = new Image("/dragAndDrop/assets/archer_gold.png");
+                this.setFill(new ImagePattern(archerGold));
+            } else{
+                Image archerBlue = new Image("/dragAndDrop/assets/archer_blue.png");
+                this.setFill(new ImagePattern(archerBlue));
+            }
         }
         if(type.getType().equalsIgnoreCase("Swordsman")){
-            Image swordsman = new Image("/dragAndDrop/assets/sword.png");
-            this.setFill(new ImagePattern(swordsman));
+            if(enemy){
+                Image swordsmanGold = new Image("/dragAndDrop/assets/sword_gold.png");
+                this.setFill(new ImagePattern(swordsmanGold));
+            } else{
+                Image swordsmanBlue = new Image("/dragAndDrop/assets/sword_blue.png");
+                this.setFill(new ImagePattern(swordsmanBlue));
+            }
+
         }
     }
 
     public void setOldPos(double oldPosX, double oldPosY){
         this.oldPosX = oldPosX;
         this.oldPosY = oldPosY;
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
     public double getOldPosX(){
@@ -57,9 +88,16 @@ public class Unit extends Rectangle {
         return oldPosY;
     }
 
-    public void setPosition(double x, double y){
+    public void setPositionArray(double x, double y){
         super.setTranslateX(x);
         super.setTranslateY(y);
+    }
+
+    public void setTranslate(double x, double y){
+        super.setTranslateX(x*100);
+        super.setTranslateY(y*100);
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
     public boolean getEnemy(){
@@ -70,6 +108,10 @@ public class Unit extends Rectangle {
     public void takeDamage(double damageDealt){
         this.hp -= 20*damageDealt;
         healthbar.setText(String.valueOf(hp));
+
+        if(hp<=20){
+            healthbar.setStyle("-fx-background-color: Red");
+        }
     }
 
     public double getHp(){
