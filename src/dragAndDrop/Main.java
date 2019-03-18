@@ -6,13 +6,13 @@
 //  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝        ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝  //
 //                                                                                                                //
 
-                        //   ######## ########    ###    ##     ##       ##   ########     //
-                        //      ##    ##         ## ##   ###   ###     ####   ##    ##     //
-                        //      ##    ##        ##   ##  #### ####       ##       ##       //
-                        //      ##    ######   ##     ## ## ### ##       ##      ##        //
-                        //      ##    ##       ######### ##     ##       ##     ##         //
-                        //      ##    ##       ##     ## ##     ##       ##     ##         //
-                        //      ##    ######## ##     ## ##     ##     ######   ##         //
+//   ######## ########    ###    ##     ##       ##   ########     //
+//      ##    ##         ## ##   ###   ###     ####   ##    ##     //
+//      ##    ##        ##   ##  #### ####       ##       ##       //
+//      ##    ######   ##     ## ## ### ##       ##      ##        //
+//      ##    ##       ######### ##     ##       ##     ##         //
+//      ##    ##       ##     ## ##     ##       ##     ##         //
+//      ##    ######## ##     ## ##     ##     ######   ##         //
 
 
 package dragAndDrop;
@@ -121,14 +121,11 @@ public class Main extends Application {
         ///////////////////////////////////SETUP END/////////////////////////////////////////////
 
 
-
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
         piecesListe[0][1] = new Piece( 0*tileSize, 1*tileSize,  true, new UnitType("Archer",60,1,2));
         piecesListe[0][2] = new Piece( 0*tileSize, 2*tileSize,  true, new UnitType("Swordsman",120,2.5,1));
         piecesListe[1][4] = new Piece( 1*tileSize, 4*tileSize,  false, new UnitType("Archer",60,1,2));
         ///////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
         ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
@@ -144,12 +141,11 @@ public class Main extends Application {
         /////////////////////////////////////////////////////////////////////////////////////////
 
 
-
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event2 -> {
-            int counter=0;
-            if(counter<1){
-                if(!(event2.getButton() == MouseButton.SECONDARY)) {
+            int counter = 0;
+            if (counter < 1) {
+                if (!(event2.getButton() == MouseButton.SECONDARY)) {
                     int posX = getPosXFromEvent(event2);
                     int posY = getPosYFromEvent(event2);
 
@@ -175,20 +171,20 @@ public class Main extends Application {
             ////////////////////////////SELECTION END/////////////////////////////////////////////
 
             /////////////////////////////////MOVE/////////////////////////////////////////////////
-            if (event2.getClickCount() == 2){
-                if(selected){
+            if (event2.getClickCount() == 2) {
+                if (selected) {
                     int nyPosX = getPosXFromEvent(event2);
                     int nyPosY = getPosYFromEvent(event2);
-                    if(attackRange(nyPosX,nyPosY)){
+                    if (attackRange(nyPosX, nyPosY)) {
                         if (piecesListe[nyPosY][nyPosX] == null) {
-                            piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                            piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                            piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX * 100);
+                            piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY * 100);
                             clearHighlight();
                             piecesListe[nyPosY][nyPosX] = piecesListe[selectedPosY][selectedPosX];
                             piecesListe[selectedPosY][selectedPosX] = null;
                             selectedPosX = nyPosX;
                             selectedPosY = nyPosY;
-                            piecesListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                            piecesListe[nyPosY][nyPosX].setOldPos(nyPosX, nyPosY);
                             moveCounter++;
                             highlightPossibleMoves();
                         }
@@ -231,7 +227,7 @@ public class Main extends Application {
             //////////////////////////////ATTACK END////////////////////////////////////////////
 
             //////////////////////////////UNSELECT/////////////////////////////////////////////
-            if(event2.getButton() == MouseButton.SECONDARY){
+            if (event2.getButton() == MouseButton.SECONDARY) {
                 for (int i = 0; i < piecesListe.length; i++) {
                     for (int j = 0; j < piecesListe[i].length; j++) {
                         if (piecesListe[i][j] != null) {
@@ -252,39 +248,37 @@ public class Main extends Application {
         ///////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
         window.setTitle("BINARY WARFARE");
         window.setScene(scene1);
         window.show();
     }
 
 
-    private void highlightPossibleMoves(){
+    private void highlightPossibleMoves() {
         int posX = selectedPosX;
         int posY = selectedPosY;
         int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getRange();
 
         System.out.println(selectedPosX + "SelectposX");
-        System.out.println("PosX+1: " +(posX+2));
-        System.out.println("PosX-1: " +(posX-2));
-        System.out.println("PosY+1: " +(posY+2));
-        System.out.println("PosY-1: " +(posY-2));
+        System.out.println("PosX+1: " + (posX + 2));
+        System.out.println("PosX-1: " + (posX - 2));
+        System.out.println("PosY+1: " + (posY + 2));
+        System.out.println("PosY-1: " + (posY - 2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
-        if(selectedPosX-1>=0){
-            testGrid.liste[posY][posX-1].setFill(Color.DARKRED);
+        if (selectedPosX - 1 >= 0) {
+            testGrid.liste[posY][posX - 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX+1<boardSize){
+        if (selectedPosX + 1 < boardSize) {
             testGrid.liste[posY][posX + 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosY-1>=0){
+        if (selectedPosY - 1 >= 0) {
             testGrid.liste[posY - 1][posX].setFill(Color.DARKRED);
         }
 
-        if(selectedPosY+1<boardSize){
+        if (selectedPosY + 1 < boardSize) {
             testGrid.liste[posY + 1][posX].setFill(Color.DARKRED);
         }
 
@@ -293,43 +287,42 @@ public class Main extends Application {
 
         ////////////////////////////CORNERS///////////////////////////////////
 
-        if(selectedPosX+1<boardSize && selectedPosY+1<boardSize){
+        if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
             testGrid.liste[posY + 1][posX + 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX-1>=0 && selectedPosY-1>=0){
+        if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
             testGrid.liste[posY - 1][posX - 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX-1>=0 && selectedPosY+1<boardSize){
+        if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
             testGrid.liste[posY + 1][posX - 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX+1<boardSize && selectedPosY-1>=0){
+        if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
             testGrid.liste[posY - 1][posX + 1].setFill(Color.DARKRED);
 
         }
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE////////////////////////////
-        if(piecesListe[selectedPosY][selectedPosX].getRange()>1){
+        if (piecesListe[selectedPosY][selectedPosX].getRange() > 1) {
 
-            if(selectedPosX-maxPossibleMoves>=0){
-                testGrid.liste[posY][posX-maxPossibleMoves].setFill(Color.DARKRED);
+            if (selectedPosX - maxPossibleMoves >= 0) {
+                testGrid.liste[posY][posX - maxPossibleMoves].setFill(Color.DARKRED);
             }
 
-            if(selectedPosX+maxPossibleMoves<boardSize){
+            if (selectedPosX + maxPossibleMoves < boardSize) {
                 testGrid.liste[posY][posX + maxPossibleMoves].setFill(Color.DARKRED);
             }
 
-            if(selectedPosY-maxPossibleMoves>=0){
+            if (selectedPosY - maxPossibleMoves >= 0) {
                 testGrid.liste[posY - maxPossibleMoves][posX].setFill(Color.DARKRED);
             }
 
-            if(selectedPosY+maxPossibleMoves<boardSize){
+            if (selectedPosY + maxPossibleMoves < boardSize) {
                 testGrid.liste[posY + maxPossibleMoves][posX].setFill(Color.DARKRED);
             }
-
 
 
         }
@@ -337,7 +330,7 @@ public class Main extends Application {
         ///////////////////////////////////////////////////////////////////
     }
 
-    private void clearHighlight(){
+    private void clearHighlight() {
         for (int i = 0; i < testGrid.liste.length; i++) {
             for (int j = 0; j < testGrid.liste[i].length; j++) {
                 testGrid.liste[i][j].setFill(Color.TRANSPARENT);

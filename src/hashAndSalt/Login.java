@@ -8,12 +8,14 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.*;
 import java.util.Arrays;
+
 import Database.BasicConnectionPool;
 
 public class Login {
 
     public static BasicConnectionPool pool;
     public static Connection myConn;
+    private String username;
 
     public Login() {
         try {
@@ -28,7 +30,8 @@ public class Login {
     public boolean login(String username, String password) {
 
         //SELECT statement finds hashed password and salt from the entered user.
-        String stmt = "SELECT hashedpassword,passwordsalt FROM Users WHERE username = ?";
+        String stmt = "SELECT hashedpassword,passwordsalt,online_status FROM Users WHERE username = ?";
+        String stmt2 = "UPDATE Users SET online_status = 1 WHERE username = ?";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
@@ -37,12 +40,20 @@ public class Login {
             rs.next();
             byte[] hash = rs.getBytes("hashedpassword");
             byte[] salt = rs.getBytes("passwordsalt");
-            if (verifyPassword(password, hash, salt)) {
-                //TODO SET ONLINE TO 1 IN DB.
+            int loginStatus = rs.getInt("online_status");
+
+            //Checks if the user is already logged in. If not the user is logged in.
+            if (verifyPassword(password, hash, salt) && loginStatus == 0) {
+                PreparedStatement preparedStatement2 = myConn.prepareStatement(stmt2);
+                preparedStatement2.setString(1, username);
+                preparedStatement2.executeUpdate();
+                this.username = username;
+                preparedStatement.close();
+                preparedStatement2.close();
                 return true;
             }
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
 
         pool.releaseConnection(myConn);
@@ -61,4 +72,21 @@ public class Login {
         }
         return Arrays.equals(enteredPassword, hash);
     }
+
+    public boolean logout() {
+        //Logs out the user. Sets online_status to 0.
+        String stmt = "UPDATE Users SET online_status = 0 WHERE username = ?";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setString(1, username);
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
