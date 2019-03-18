@@ -28,6 +28,7 @@ public class loginController {
     @FXML
     private JFXButton newUserButton;
 
+    //Forgot password. Does nothing right now.
     @FXML
     private Label forgotPasswordButton;
 
@@ -49,12 +50,14 @@ public class loginController {
             changeScene("/sample/View/signUp.fxml");
         });
 
+        Login user = new Login();
+
         loginEnterButton.setOnAction(event -> {
-            Login login = new Login();
             //Logs user in and enter main menu. Currently no info about the user is sent along.
-            if (login.login(usernameInput.getText(),passwordInput.getText())) {
+            if (user.login(usernameInput.getText(),passwordInput.getText())) {
                 changeScene("/sample/View/mainMenu.fxml");
             } else {
+                //If the user is not logged in this error is shown. More speficity to what went wrong, can be implemented.
                 alertField.setText("Error occured while logging in");
             }
         });

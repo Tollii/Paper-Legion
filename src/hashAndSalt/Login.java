@@ -2,7 +2,6 @@ package hashAndSalt;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.xml.transform.Result;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -12,6 +11,8 @@ import Database.BasicConnectionPool;
 import Database.Cleaner;
 
 public class Login {
+
+    //Planen atm er å flytte hel login inn i database og aksessere sql statements
 
     public static BasicConnectionPool pool;
     public static Connection myConn;
@@ -93,6 +94,10 @@ public class Login {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
 }

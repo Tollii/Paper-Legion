@@ -35,8 +35,6 @@ public class Main extends Application {
         layout.getChildren().addAll(notice,username,password,buttons);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
-        log = new Login();
-
         enter.setOnAction(event -> {
             if (log.login(username.getText(),password.getText())) {
                 window.setScene(scene2);
