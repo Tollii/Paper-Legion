@@ -43,7 +43,10 @@ public class Main extends Application {
         Button logout = new Button("Log out");
         layout2.getChildren().addAll(text,logout);
 
-        logout.setOnAction(event -> window.setScene(scene1));
+        logout.setOnAction(event -> {
+            log.logout();
+            window.setScene(scene1);
+        });
         layout.setAlignment(Pos.CENTER);
         layout2.setAlignment(Pos.CENTER);
 
