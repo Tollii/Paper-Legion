@@ -2,6 +2,7 @@ package hashAndSalt;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.xml.transform.Result;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -43,6 +44,8 @@ public class Login {
         } catch (SQLException e) {
             //e.printStackTrace();
         }
+
+        pool.releaseConnection(myConn);
         return false;
     }
 
