@@ -19,9 +19,9 @@ public class Grid extends Rectangle {
         this.liste = new Tile[rows][columns];
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
-                Tile tile2 = new Tile(100,100);
-                tile2.setTranslateX(j *100);
-                tile2.setTranslateY(i *100);
+                Tile tile2 = new Tile(Main.tileSize,Main.tileSize);
+                tile2.setTranslateX(j *Main.tileSize);
+                tile2.setTranslateY(i *Main.tileSize);
                 this.liste[i][j] = tile2;
                 gp.getChildren().add(tile2);
             }

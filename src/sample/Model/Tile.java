@@ -1,5 +1,6 @@
 package sample.Model;
 
+import dragAndDrop.Piece;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -10,6 +11,7 @@ public class Tile {
     double posY = tile.getY();
     double distanceFromPiece;
     boolean pieceOnTile;
+    Piece currenPiece;
 
     public Tile(int sizeX, int sizeY){
         this.tile = new Rectangle(sizeX,sizeY);

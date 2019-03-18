@@ -30,7 +30,7 @@ public class Piece extends Rectangle {
         this.hp = type.getHp();
         this.range = type.getRange();
 
-        setPosition(column*Main.tileSize,row*Main.tileSize);
+        setPosition(column,row);
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
 
@@ -83,6 +83,38 @@ public class Piece extends Rectangle {
         return damageMultiplier;
     }
 
-//
+    public String getDescription(){
+
+        //DUMMY TEXT, HAVE TO INTEGRATE THIS DECRIPTION INTO UNIT TYPE INSTEAD.
+        if(type.getType().equalsIgnoreCase("Swordsman")){
+            String description =
+                    "Legendary Swordsman\n" +
+                            "\nHp: " + getHp()
+                            +"\nRange: " + getRange() +
+                            "\nAttack: " + getDamageMultiplier() + "x\n" +
+                            "\nBecause he failed to get into clown college,\n" +
+                            "he was so distraught that he wowed to get stronger and faster,\n" +
+                            "but incidentally he was now better suited to be a legendary swordsman. \n" +
+                            "Has an Attack 2.5x, which can slay even the most dangerous of foes.";
+            return description;
+        }
+        if(type.getType().equalsIgnoreCase("Archer")){
+            String description =
+                    "Heroic Archer\n" +
+                            "\nHp: " + getHp()
+                            +"\nRange: " + getRange() +
+                            "\nAttack: " + getDamageMultiplier() + "x\n" +
+                    "\nHe has mastered his Sodoku in such a ingenious way,\n"+
+                            "he is now considered godlike amongst his peers.\n"+
+                            "Too bad this doesn't help him in battle though.\n"+
+                            "Because of his bow, he has a longer range than others.";
+            return description;
+        }
+        return null;
+    }
+
+    public String getType(){
+        return type.getType();
+    }
 
 }
