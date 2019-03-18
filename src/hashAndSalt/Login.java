@@ -54,8 +54,6 @@ public class Login {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        pool.releaseConnection(myConn);
         return false;
     }
 

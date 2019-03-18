@@ -48,18 +48,23 @@ public class Main extends Application {
         signup.setOnAction(event -> {
             window.setScene(scene3);
         });
+
         VBox layout3 = new VBox();
         TextField su_username = new TextField();
         TextField su_password = new PasswordField();
         TextField su_email = new TextField();
+        Label notice2 = new Label("");
         Button add = new Button("Sign up");
-        layout3.getChildren().addAll(su_username,su_password,su_email,add);
+        layout3.getChildren().addAll(notice2,su_username,su_password,su_email,add);
 
         SignUp su = new SignUp();
         add.setOnAction(event -> {
             if (su.signUp(su_username.getText(),su_password.getText(),su_email.getText())) {
                 window.setScene(scene1);
                 notice.setText("User added");
+            } else {
+                notice2.setText("User not added");
+                //Catch SQLIntegrityConstraintViolationException to notify about username already taken
             }
         });
 

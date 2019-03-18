@@ -1,22 +1,12 @@
 package hashAndSalt.testing;
 
 import hashAndSalt.Login;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+
 import static org.junit.Assert.*;
-
-
 
 public class LoginTest {
     private Login instance;
-
-
-    public LoginTest() {
-
-    }
 
     @BeforeClass
     public static void setUpClass() {
@@ -38,7 +28,6 @@ public class LoginTest {
     public void tearDown() {
         instance.logout();
     }
-
 
     @Test
     public void testLogin(){
@@ -64,14 +53,5 @@ public class LoginTest {
         boolean result = instance.logout();
         assertEquals(expResult, result);
     }
-
-
-
-
-
-    public static void main(String args[]) {
-        //org.junit.runner.JUnitCore.main(LoginTest.class.getName());
-    }
-
 }
 
