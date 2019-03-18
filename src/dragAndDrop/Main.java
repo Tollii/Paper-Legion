@@ -136,8 +136,6 @@ public class Main extends Application {
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
                     sp.getChildren().add(unitListe[i][j]);
-
-
                 }
             }
         }
@@ -265,11 +263,6 @@ public class Main extends Application {
         int posY = selectedPosY;
         int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getRange();
 
-        System.out.println(selectedPosX + "SelectposX");
-        System.out.println("PosX+1: " +(posX+2));
-        System.out.println("PosX-1: " +(posX-2));
-        System.out.println("PosY+1: " +(posY+2));
-        System.out.println("PosY-1: " +(posY-2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if(selectedPosX-1>=0){
@@ -362,10 +355,19 @@ public class Main extends Application {
         ////////////////////////////////////////////////////////////////////
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
-        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
-                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
-            return true;
-        }
+
+           if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getRange()){ //Beautiful math skills in progress.
+               return true;
+           }
+
+
+
+
+
+//        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
+//                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
+//            return true;
+//        }
 
         ////////////////////////////////////////////////////////////////////
         return false;
