@@ -62,7 +62,7 @@ public class Main extends Application {
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
     private AudioClip bow = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/arrow.wav").toString());
 
-
+    private UnitGenerator unitGenerator = new UnitGenerator();
 
 
 
@@ -123,9 +123,9 @@ public class Main extends Application {
 
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, new UnitType("Archer",60,1,2));
-        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, new UnitType("Swordsman",120,2.5,1));
-        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, new UnitType("Archer",60,1,2));
+        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
+        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
+        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newArcher());
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 

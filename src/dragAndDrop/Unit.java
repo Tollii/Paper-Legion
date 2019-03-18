@@ -27,7 +27,7 @@ public class Unit extends Rectangle {
         this.enemy = enemy;
         this.type = type;
         this.damageMultiplier = type.getAttackMultiplier();
-        this.hp = type.getHp();
+        this.hp = (double) type.getHp();
         this.range = type.getRange();
 
         setPosition(column,row);
@@ -66,6 +66,7 @@ public class Unit extends Rectangle {
         return enemy;
     }
 
+    /////////////////////MÅ ENDRES////////////////////////
     public void takeDamage(double damageDealt){
         this.hp -= 20*damageDealt;
         healthbar.setText(String.valueOf(hp));
@@ -91,11 +92,8 @@ public class Unit extends Rectangle {
                     "Legendary Swordsman\n" +
                             "\nHp: " + getHp()
                             +"\nRange: " + getRange() +
-                            "\nAttack: " + getDamageMultiplier() + "x\n" +
-                            "\nBecause he failed to get into clown college,\n" +
-                            "he was so distraught that he wowed to get stronger and faster,\n" +
-                            "but incidentally he was now better suited to be a legendary swordsman. \n" +
-                            "Has an Attack 2.5x, which can slay even the most dangerous of foes.";
+                            "\nAttack: " + getDamageMultiplier() + "x\n" + "\n";
+
             return description;
         }
         if(type.getType().equalsIgnoreCase("Archer")){
@@ -103,11 +101,7 @@ public class Unit extends Rectangle {
                     "Heroic Archer\n" +
                             "\nHp: " + getHp()
                             +"\nRange: " + getRange() +
-                            "\nAttack: " + getDamageMultiplier() + "x\n" +
-                    "\nHe has mastered his Sodoku in such a ingenious way,\n"+
-                            "he is now considered godlike amongst his peers.\n"+
-                            "Too bad this doesn't help him in battle though.\n"+
-                            "Because of his bow, he has a longer range than others.";
+                            "\nAttack: " + getDamageMultiplier() + "x\n" + "\n";
             return description;
         }
         return null;

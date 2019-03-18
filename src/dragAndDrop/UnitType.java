@@ -1,35 +1,22 @@
 package dragAndDrop;
 
-public class UnitType {
-    private String type;
-    private double hp;
-    private double attackMultiplier;
-    private int range;
-    private String description;
+public interface UnitType {
 
+    String getType();
 
-    public UnitType(String type, double hp, double attackMultiplier, int range){
-        this.type = type;
-        this.hp = hp;
-        this.attackMultiplier = attackMultiplier;
-        this.range = range;
+    double getHp();
 
+    int getAttack();
 
-    }
+    int getAbilityCooldown();
 
-    public String getType() {
-        return type;
-    }
+    double getDefenceMultiplier();
 
-    public double getHp() {
-        return hp;
-    }
+    int getMinAttackRange();
 
-    public double getAttackMultiplier() {
-        return attackMultiplier;
-    }
+    int getMaxAttackRange();
 
-    public int getRange() {
-        return range;
-    }
+    int getMovementRange();
+
+    String getDescription();
 }
