@@ -11,7 +11,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
-public class Piece extends Rectangle {
+public class Unit extends Rectangle {
     private Label healthbar;
     private UnitType type;
     private double oldPosX;
@@ -21,7 +21,7 @@ public class Piece extends Rectangle {
     private int range;
     private boolean enemy;
 
-    public Piece(double row, double column, boolean enemy, UnitType type){
+    public Unit(double row, double column, boolean enemy, UnitType type){
         super.setWidth(Main.tileSize);
         super.setHeight(Main.tileSize);
         this.enemy = enemy;

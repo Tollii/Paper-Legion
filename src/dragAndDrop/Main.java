@@ -47,7 +47,7 @@ import java.util.ArrayList;
 public class Main extends Application {
     private static final int boardSize = 8; // 7x7 for example
     public static final int tileSize = 100; //
-    static Piece[][] piecesListe = new Piece[boardSize][boardSize];
+    static Unit[][] unitListe = new Unit[boardSize][boardSize];
     public static final int offsetX = 100;
     public static final int offsetY = 100;
     private Label description = new Label();
@@ -123,19 +123,19 @@ public class Main extends Application {
 
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        piecesListe[0][1] = new Piece( 0*tileSize, 1*tileSize,  true, new UnitType("Archer",60,1,2));
-        piecesListe[0][2] = new Piece( 0*tileSize, 2*tileSize,  true, new UnitType("Swordsman",120,2.5,1));
-        piecesListe[1][4] = new Piece( 1*tileSize, 4*tileSize,  false, new UnitType("Archer",60,1,2));
+        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, new UnitType("Archer",60,1,2));
+        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, new UnitType("Swordsman",120,2.5,1));
+        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, new UnitType("Archer",60,1,2));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
         ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-        for (int i = 0; i < piecesListe.length; i++) {
-            for (int j = 0; j < piecesListe[i].length; j++) {
-                if (piecesListe[i][j] != null) {
-                    sp.getChildren().add(piecesListe[i][j]);
+        for (int i = 0; i < unitListe.length; i++) {
+            for (int j = 0; j < unitListe[i].length; j++) {
+                if (unitListe[i][j] != null) {
+                    sp.getChildren().add(unitListe[i][j]);
 
 
                 }
@@ -153,18 +153,18 @@ public class Main extends Application {
                     int posX = getPosXFromEvent(event2);
                     int posY = getPosYFromEvent(event2);
 
-                    if (piecesListe[posY][posX] != null) {
+                    if (unitListe[posY][posX] != null) {
                         if (!selected) {
-                            piecesListe[posY][posX].setOldPos(piecesListe[posY][posX].getTranslateX() / 100, piecesListe[posY][posX].getTranslateY() / 100);
-                            piecesListe[posY][posX].setStrokeType(StrokeType.INSIDE);
-                            piecesListe[posY][posX].setStrokeWidth(3);
-                            piecesListe[posY][posX].setStroke(Color.RED);
+                            unitListe[posY][posX].setOldPos(unitListe[posY][posX].getTranslateX() / 100, unitListe[posY][posX].getTranslateY() / 100);
+                            unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
+                            unitListe[posY][posX].setStrokeWidth(3);
+                            unitListe[posY][posX].setStroke(Color.RED);
                             selected = true;
                             selectedPosX = posX;
                             selectedPosY = posY;
                             counter++;
                             highlightPossibleMoves();
-                            description.setText(piecesListe[selectedPosY][selectedPosX].getDescription());
+                            description.setText(unitListe[selectedPosY][selectedPosX].getDescription());
                             vbox.getChildren().add(description);
                             description.toBack();
 
@@ -180,15 +180,15 @@ public class Main extends Application {
                     int nyPosX = getPosXFromEvent(event2);
                     int nyPosY = getPosYFromEvent(event2);
                     if(attackRange(nyPosX,nyPosY)){
-                        if (piecesListe[nyPosY][nyPosX] == null) {
-                            piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                            piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                        if (unitListe[nyPosY][nyPosX] == null) {
+                            unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
+                            unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
                             clearHighlight();
-                            piecesListe[nyPosY][nyPosX] = piecesListe[selectedPosY][selectedPosX];
-                            piecesListe[selectedPosY][selectedPosX] = null;
+                            unitListe[nyPosY][nyPosX] = unitListe[selectedPosY][selectedPosX];
+                            unitListe[selectedPosY][selectedPosX] = null;
                             selectedPosX = nyPosX;
                             selectedPosY = nyPosY;
-                            piecesListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                            unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
                             moveCounter++;
                             highlightPossibleMoves();
                         }
@@ -204,23 +204,23 @@ public class Main extends Application {
 
                     int nyPosX = getPosXFromEvent(event2);
                     int nyPosY = getPosYFromEvent(event2);
-                    if (piecesListe[nyPosY][nyPosX] != null) {
+                    if (unitListe[nyPosY][nyPosX] != null) {
                         if(attackRange(nyPosX,nyPosY)){
-                            if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
-                                piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
+                            if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
+                                unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getDamageMultiplier());
                                 attackCount++;
-                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
-                                if(piecesListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
+                                System.out.println(unitListe[nyPosY][nyPosX].getHp());
+                                if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
                                     sword.play();
                                 }
 
-                                else if(piecesListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
+                                else if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
                                     bow.play();
                                 }
 
-                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
-                                    piecesListe[nyPosY][nyPosX] = null;
+                                if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
+                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX]);
+                                    unitListe[nyPosY][nyPosX] = null;
                                 }
                             }
                         }
@@ -232,10 +232,10 @@ public class Main extends Application {
 
             //////////////////////////////UNSELECT/////////////////////////////////////////////
             if(event2.getButton() == MouseButton.SECONDARY){
-                for (int i = 0; i < piecesListe.length; i++) {
-                    for (int j = 0; j < piecesListe[i].length; j++) {
-                        if (piecesListe[i][j] != null) {
-                            piecesListe[i][j].setStroke(Color.TRANSPARENT);
+                for (int i = 0; i < unitListe.length; i++) {
+                    for (int j = 0; j < unitListe[i].length; j++) {
+                        if (unitListe[i][j] != null) {
+                            unitListe[i][j].setStroke(Color.TRANSPARENT);
                         }
                     }
                 }
@@ -263,7 +263,7 @@ public class Main extends Application {
     private void highlightPossibleMoves(){
         int posX = selectedPosX;
         int posY = selectedPosY;
-        int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getRange();
+        int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getRange();
 
         System.out.println(selectedPosX + "SelectposX");
         System.out.println("PosX+1: " +(posX+2));
@@ -312,7 +312,7 @@ public class Main extends Application {
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE////////////////////////////
-        if(piecesListe[selectedPosY][selectedPosX].getRange()>1){
+        if(unitListe[selectedPosY][selectedPosX].getRange()>1){
 
             if(selectedPosX-maxPossibleMoves>=0){
                 testGrid.liste[posY][posX-maxPossibleMoves].setFill(Color.DARKRED);
@@ -351,8 +351,8 @@ public class Main extends Application {
     private boolean attackRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
-        if (piecesListe[selectedPosY][selectedPosX].getRange()<2){
-            if((Math.abs(nyPosX-piecesListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- piecesListe[selectedPosY][selectedPosX].getOldPosY())<2)){
+        if (unitListe[selectedPosY][selectedPosX].getRange()<2){
+            if((Math.abs(nyPosX-unitListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- unitListe[selectedPosY][selectedPosX].getOldPosY())<2)){
                 return true;
             } else{
                 return false;
@@ -362,8 +362,8 @@ public class Main extends Application {
         ////////////////////////////////////////////////////////////////////
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
-        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getRange()) &&
-                (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getRange()))) {
+        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
+                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
             return true;
         }
 
