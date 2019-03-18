@@ -30,7 +30,7 @@ public class Main extends Application {
         layout.setPadding(new Insets(20, 20, 20, 20));
 
         enter.setOnAction(event -> {
-             = new Login();
+            log = new Login();
             if (log.login(username.getText(),password.getText())) {
                 window.setScene(scene2);
             } else {
@@ -57,7 +57,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        log.lo
+        log.logout();
         // executed when the application shuts down
     }
 

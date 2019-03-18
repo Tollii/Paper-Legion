@@ -28,7 +28,7 @@ public class Login {
     public boolean login(String username, String password) {
 
         //SELECT statement finds hashed password and salt from the entered user.
-        String stmt = "SELECT hashedpassword,passwordsalt FROM Users WHERE username = ?";
+        String stmt = "SELECT hashedpassword,passwordsalt,online_status FROM Users WHERE username = ?";
         String stmt2 = "UPDATE Users SET online_status = 1 WHERE username = ?";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
@@ -38,12 +38,12 @@ public class Login {
             rs.next();
             byte[] hash = rs.getBytes("hashedpassword");
             byte[] salt = rs.getBytes("passwordsalt");
-            if (verifyPassword(password, hash, salt)) {
+            int loginStatus = rs.getInt("online_status");
+            if (verifyPassword(password, hash, salt)&& loginStatus==0) {
                 //TODO SET ONLINE TO 1 IN DB.
                 PreparedStatement preparedStatement2 = myConn.prepareStatement(stmt2);
-
-                ResultSet rs2 = preparedStatement2.executeQuery();
-                rs2.next();
+                preparedStatement2.setString(1, username);
+                int change1 = preparedStatement2.executeUpdate();
                 this.username = username;
                 return true;
             }
@@ -66,7 +66,7 @@ public class Login {
         return Arrays.equals(enteredPassword, hash);
     }
 
-    private boolean logout(){
+    public boolean logout(){
         String stmt = "UPDATE Users SET online_status = 0 WHERE username = ?";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
