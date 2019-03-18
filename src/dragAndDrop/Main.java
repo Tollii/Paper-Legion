@@ -1,4 +1,3 @@
-
 //  ██████╗ ██╗███╗   ██╗ █████╗ ██████╗ ██╗   ██╗    ██╗    ██╗ █████╗ ██████╗ ███████╗ █████╗ ██████╗ ███████╗  //
 //  ██╔══██╗██║████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║    ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝  //
 //  ██████╔╝██║██╔██╗ ██║███████║██████╔╝ ╚████╔╝     ██║ █╗ ██║███████║██████╔╝█████╗  ███████║██████╔╝█████╗    //
@@ -29,30 +28,56 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 
 public class Main extends Application {
-    private static final int boardSize = 7; // 7x7 for example
-    static Piece[][] piecesListe = new Piece[boardSize][boardSize];
+    private static final int boardSize = 8; // 7x7 for example
     public static final int tileSize = 100; //
-    static int selectedPosX; //Holds the X position to the selected piece.
-    static int selectedPosY; //Holds the Y position to the selected piece.
-    static boolean selected = false; // True or false for selected piece.
-    GridPane ins = new GridPane(); // Holds all the tiles.
-    static Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
+    static Piece[][] piecesListe = new Piece[boardSize][boardSize];
+    public static final int offsetX = 100;
+    public static final int offsetY = 100;
+    private Label description = new Label();
+    private int selectedPosX; //Holds the X position to the selected piece.
+    private int selectedPosY; //Holds the Y position to the selected piece.
+    private boolean selected = false; // True or false for selected piece.
+    private GridPane ins = new GridPane(); // Holds all the tiles.
+    private Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private int moveCounter =0; // Counter for movement phase.
     private int attackCount = 0; // Counter for attack phase.
-    //private static final int offset = 15; // FOR LATER DESIGN.
+
+    private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
+    private AudioClip bow = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/arrow.wav").toString());
+
+
+
+
+
+    //////////////////////////GAME INFO FROM MYSQL//////////////////////////////////////////////////////////////////////////////////
+    //Match: player1, player2, match id, game_started                                                                             //
+    //Attacks: turn_id, attacker, receiever, match_id, damage_dealt                                                               //
+    //Movements: turn_id, piece_id, match_id, start_pos, end_pos                                                                  //
+    //Pieces: piece_id, match_id, position, player                                                                                //
+    //Turns: turn_id, match_id, player                                                                                            //
+    //Unit_types: unit_type_id, unit_name, max_health, attack, attack_range, ability_cooldown                                     //
+    //Units: piece_id, match_id, current_health, current_attack, current_attack_range, current_ability_cooldown,unit_type_id      //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
     @Override
@@ -66,37 +91,41 @@ public class Main extends Application {
         ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
         sp.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        BorderPane bp = new BorderPane();
+        //BorderPane bp = new BorderPane();
         VBox vbox = new VBox();
         JFXButton endturn = new JFXButton("end turn");
+        HBox hbox = new HBox();
+        hbox.getChildren().add(sp);
+        hbox.getChildren().add(vbox);
+        hbox.setSpacing(150);
+        sp.setPrefWidth(900);
+        description.setStyle("-fx-font-family: 'Arial Black'");
+        vbox.setPrefWidth(250);
         endturn.setPrefWidth(150);
         endturn.setPrefHeight(75);
         endturn.setTextFill(Color.WHITE);
         endturn.setStyle("-fx-background-color: #000000");
         vbox.getChildren().add(endturn);
+        vbox.setPrefWidth(650);
+        description.setPadding(new Insets(0,0,350,0));
         vbox.setAlignment(Pos.BOTTOM_CENTER);
-        vbox.setPadding(new Insets(50,200,50,50));
+        hbox.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
 
 
-
-        bp.setLeft(sp);
-        bp.setRight(vbox);
-
-        // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES POSITION.
+        // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
+//window.widthProperty().addListener();
 
 
-        //ins.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
-       // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
-        scene1 = new Scene(bp, 800, 600);
+        scene1 = new Scene(hbox, 1024, 768);
 
         ///////////////////////////////////SETUP END/////////////////////////////////////////////
 
 
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        piecesListe[0][1] = new Piece( 0, 1,  true, new UnitType("Archer",60,1,2));
-        piecesListe[0][2] = new Piece( 0, 2,  true, new UnitType("Swordsman",120,2.5,1));
-        piecesListe[1][4] = new Piece( 1, 4,  false, new UnitType("Archer",60,1,2));
+        piecesListe[0][1] = new Piece( 0*tileSize, 1*tileSize,  true, new UnitType("Archer",60,1,2));
+        piecesListe[0][2] = new Piece( 0*tileSize, 2*tileSize,  true, new UnitType("Swordsman",120,2.5,1));
+        piecesListe[1][4] = new Piece( 1*tileSize, 4*tileSize,  false, new UnitType("Archer",60,1,2));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -107,6 +136,8 @@ public class Main extends Application {
             for (int j = 0; j < piecesListe[i].length; j++) {
                 if (piecesListe[i][j] != null) {
                     sp.getChildren().add(piecesListe[i][j]);
+
+
                 }
             }
         }
@@ -133,6 +164,10 @@ public class Main extends Application {
                             selectedPosY = posY;
                             counter++;
                             highlightPossibleMoves();
+                            description.setText(piecesListe[selectedPosY][selectedPosX].getDescription());
+                            vbox.getChildren().add(description);
+                            description.toBack();
+
                         }
                     }
                 }
@@ -167,22 +202,29 @@ public class Main extends Application {
             if(event2.getClickCount() == 2){
                 if(selected){
 
-                        int nyPosX = getPosXFromEvent(event2);
-                        int nyPosY = getPosYFromEvent(event2);
-                        if (piecesListe[nyPosY][nyPosX] != null) {
-                            if(attackRange(nyPosX,nyPosY)){
-                                if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
-                                    piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
-                                    attackCount++;
-                                    System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                    int nyPosX = getPosXFromEvent(event2);
+                    int nyPosY = getPosYFromEvent(event2);
+                    if (piecesListe[nyPosY][nyPosX] != null) {
+                        if(attackRange(nyPosX,nyPosY)){
+                            if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
+                                piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
+                                attackCount++;
+                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                                if(piecesListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
+                                    sword.play();
+                                }
 
-                                    if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
-                                        sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
-                                        piecesListe[nyPosY][nyPosX] = null;
-                                    }
+                                else if(piecesListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
+                                    bow.play();
+                                }
+
+                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
+                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
+                                    piecesListe[nyPosY][nyPosX] = null;
                                 }
                             }
                         }
+                    }
 
                 }
             }
@@ -198,6 +240,7 @@ public class Main extends Application {
                     }
                 }
 
+                vbox.getChildren().remove(description);
                 selected = false;
                 counter = 0;
                 clearHighlight();
@@ -297,7 +340,7 @@ public class Main extends Application {
     private void clearHighlight(){
         for (int i = 0; i < testGrid.liste.length; i++) {
             for (int j = 0; j < testGrid.liste[i].length; j++) {
-            testGrid.liste[i][j].setFill(Color.TRANSPARENT);
+                testGrid.liste[i][j].setFill(Color.TRANSPARENT);
 
             }
         }
@@ -306,21 +349,37 @@ public class Main extends Application {
 
 
     private boolean attackRange(int nyPosX, int nyPosY) {
-        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getRange()) && (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getRange()))) {
+
+        ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
+        if (piecesListe[selectedPosY][selectedPosX].getRange()<2){
+            if((Math.abs(nyPosX-piecesListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- piecesListe[selectedPosY][selectedPosX].getOldPosY())<2)){
+                return true;
+            } else{
+                return false;
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////
+
+        /////////////ATTACK RANGE > 1///////////////////////////////////////
+        if (!(Math.abs(nyPosX - piecesListe[selectedPosY][selectedPosX].getOldPosX()) > piecesListe[selectedPosY][selectedPosX].getRange()) &&
+                (!(Math.abs(nyPosY - piecesListe[selectedPosY][selectedPosX].getOldPosY()) > piecesListe[selectedPosY][selectedPosX].getRange()))) {
             return true;
         }
+
+        ////////////////////////////////////////////////////////////////////
         return false;
     }
 
     private int getPosXFromEvent(MouseEvent event2) {
-        double rectPosX1 = tileSize;
+        double rectPosX1 = tileSize+offsetX;
         double posX1 = event2.getSceneX();
         double movementX1 = posX1 - rectPosX1;
         return (int) (Math.ceil(movementX1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
     private int getPosYFromEvent(MouseEvent event2) {
-        double rectPosY1 = tileSize;
+        double rectPosY1 = tileSize+offsetY;
         double posY1 = event2.getSceneY();
         double movementY1 = posY1 - rectPosY1;
         return (int) (Math.ceil(movementY1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
