@@ -7,13 +7,13 @@
 //  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝        ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝  //
 //                                                                                                                //
 
-                        //   ######## ########    ###    ##     ##       ##   ########     //
-                        //      ##    ##         ## ##   ###   ###     ####   ##    ##     //
-                        //      ##    ##        ##   ##  #### ####       ##       ##       //
-                        //      ##    ######   ##     ## ## ### ##       ##      ##        //
-                        //      ##    ##       ######### ##     ##       ##     ##         //
-                        //      ##    ##       ##     ## ##     ##       ##     ##         //
-                        //      ##    ######## ##     ## ##     ##     ######   ##         //
+//   ######## ########    ###    ##     ##       ##   ########     //
+//      ##    ##         ## ##   ###   ###     ####   ##    ##     //
+//      ##    ##        ##   ##  #### ####       ##       ##       //
+//      ##    ######   ##     ## ## ### ##       ##      ##        //
+//      ##    ##       ######### ##     ##       ##     ##         //
+//      ##    ##       ##     ## ##     ##       ##     ##         //
+//      ##    ######## ##     ## ##     ##     ######   ##         //
 
 
 package dragAndDrop;
@@ -50,7 +50,7 @@ public class Main extends Application {
     static boolean selected = false; // True or false for selected piece.
     GridPane ins = new GridPane(); // Holds all the tiles.
     static Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private int moveCounter =0; // Counter for movement phase.
+    private int moveCounter = 0; // Counter for movement phase.
     private int attackCount = 0; // Counter for attack phase.
     //private static final int offset = 15; // FOR LATER DESIGN.
 
@@ -75,8 +75,7 @@ public class Main extends Application {
         endturn.setStyle("-fx-background-color: #000000");
         vbox.getChildren().add(endturn);
         vbox.setAlignment(Pos.BOTTOM_CENTER);
-        vbox.setPadding(new Insets(50,200,50,50));
-
+        vbox.setPadding(new Insets(50, 200, 50, 50));
 
 
         bp.setLeft(sp);
@@ -86,20 +85,17 @@ public class Main extends Application {
 
 
         //ins.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
-       // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
+        // sp.setPadding(new Insets(offset,offset,offset,offset)); // FOR LATER DESIGN
         scene1 = new Scene(bp, 800, 600);
 
         ///////////////////////////////////SETUP END/////////////////////////////////////////////
 
 
-
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        piecesListe[0][1] = new Piece( 0, 1,  true, new UnitType("Archer",60,1,2));
-        piecesListe[0][2] = new Piece( 0, 2,  true, new UnitType("Swordsman",120,2.5,1));
-        piecesListe[1][4] = new Piece( 1, 4,  false, new UnitType("Archer",60,1,2));
+        piecesListe[0][1] = new Piece(0, 1, true, new UnitType("Archer", 60, 1, 2));
+        piecesListe[0][2] = new Piece(0, 2, true, new UnitType("Swordsman", 120, 2.5, 1));
+        piecesListe[1][4] = new Piece(1, 4, false, new UnitType("Archer", 60, 1, 2));
         ///////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
         ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
@@ -113,12 +109,11 @@ public class Main extends Application {
         /////////////////////////////////////////////////////////////////////////////////////////
 
 
-
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event2 -> {
-            int counter=0;
-            if(counter<1){
-                if(!(event2.getButton() == MouseButton.SECONDARY)) {
+            int counter = 0;
+            if (counter < 1) {
+                if (!(event2.getButton() == MouseButton.SECONDARY)) {
                     int posX = getPosXFromEvent(event2);
                     int posY = getPosYFromEvent(event2);
 
@@ -140,20 +135,20 @@ public class Main extends Application {
             ////////////////////////////SELECTION END/////////////////////////////////////////////
 
             /////////////////////////////////MOVE/////////////////////////////////////////////////
-            if (event2.getClickCount() == 2){
-                if(selected){
+            if (event2.getClickCount() == 2) {
+                if (selected) {
                     int nyPosX = getPosXFromEvent(event2);
                     int nyPosY = getPosYFromEvent(event2);
-                    if(attackRange(nyPosX,nyPosY)){
+                    if (attackRange(nyPosX, nyPosY)) {
                         if (piecesListe[nyPosY][nyPosX] == null) {
-                            piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                            piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                            piecesListe[selectedPosY][selectedPosX].setTranslateX(nyPosX * 100);
+                            piecesListe[selectedPosY][selectedPosX].setTranslateY(nyPosY * 100);
                             clearHighlight();
                             piecesListe[nyPosY][nyPosX] = piecesListe[selectedPosY][selectedPosX];
                             piecesListe[selectedPosY][selectedPosX] = null;
                             selectedPosX = nyPosX;
                             selectedPosY = nyPosY;
-                            piecesListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                            piecesListe[nyPosY][nyPosX].setOldPos(nyPosX, nyPosY);
                             moveCounter++;
                             highlightPossibleMoves();
                         }
@@ -164,32 +159,32 @@ public class Main extends Application {
             ///////////////////////////////MOVE END///////////////////////////////////////////////
 
             /////////////////////////////////ATTACK///////////////////////////////////////////////
-            if(event2.getClickCount() == 2){
-                if(selected){
+            if (event2.getClickCount() == 2) {
+                if (selected) {
 
-                        int nyPosX = getPosXFromEvent(event2);
-                        int nyPosY = getPosYFromEvent(event2);
-                        if (piecesListe[nyPosY][nyPosX] != null) {
-                            if(attackRange(nyPosX,nyPosY)){
-                                if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]){
-                                    piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
-                                    attackCount++;
-                                    System.out.println(piecesListe[nyPosY][nyPosX].getHp());
+                    int nyPosX = getPosXFromEvent(event2);
+                    int nyPosY = getPosYFromEvent(event2);
+                    if (piecesListe[nyPosY][nyPosX] != null) {
+                        if (attackRange(nyPosX, nyPosY)) {
+                            if (piecesListe[selectedPosY][selectedPosX] != piecesListe[nyPosY][nyPosX]) {
+                                piecesListe[nyPosY][nyPosX].takeDamage(piecesListe[selectedPosY][selectedPosX].getDamageMultiplier());
+                                attackCount++;
+                                System.out.println(piecesListe[nyPosY][nyPosX].getHp());
 
-                                    if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
-                                        sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
-                                        piecesListe[nyPosY][nyPosX] = null;
-                                    }
+                                if (piecesListe[nyPosY][nyPosX].getHp() <= 0) {
+                                    sp.getChildren().removeAll(piecesListe[nyPosY][nyPosX]);
+                                    piecesListe[nyPosY][nyPosX] = null;
                                 }
                             }
                         }
+                    }
 
                 }
             }
             //////////////////////////////ATTACK END////////////////////////////////////////////
 
             //////////////////////////////UNSELECT/////////////////////////////////////////////
-            if(event2.getButton() == MouseButton.SECONDARY){
+            if (event2.getButton() == MouseButton.SECONDARY) {
                 for (int i = 0; i < piecesListe.length; i++) {
                     for (int j = 0; j < piecesListe[i].length; j++) {
                         if (piecesListe[i][j] != null) {
@@ -209,39 +204,37 @@ public class Main extends Application {
         ///////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
         window.setTitle("BINARY WARFARE");
         window.setScene(scene1);
         window.show();
     }
 
 
-    private void highlightPossibleMoves(){
+    private void highlightPossibleMoves() {
         int posX = selectedPosX;
         int posY = selectedPosY;
         int maxPossibleMoves = piecesListe[selectedPosY][selectedPosX].getRange();
 
         System.out.println(selectedPosX + "SelectposX");
-        System.out.println("PosX+1: " +(posX+2));
-        System.out.println("PosX-1: " +(posX-2));
-        System.out.println("PosY+1: " +(posY+2));
-        System.out.println("PosY-1: " +(posY-2));
+        System.out.println("PosX+1: " + (posX + 2));
+        System.out.println("PosX-1: " + (posX - 2));
+        System.out.println("PosY+1: " + (posY + 2));
+        System.out.println("PosY-1: " + (posY - 2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
-        if(selectedPosX-1>=0){
-            testGrid.liste[posY][posX-1].setFill(Color.DARKRED);
+        if (selectedPosX - 1 >= 0) {
+            testGrid.liste[posY][posX - 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX+1<boardSize){
+        if (selectedPosX + 1 < boardSize) {
             testGrid.liste[posY][posX + 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosY-1>=0){
+        if (selectedPosY - 1 >= 0) {
             testGrid.liste[posY - 1][posX].setFill(Color.DARKRED);
         }
 
-        if(selectedPosY+1<boardSize){
+        if (selectedPosY + 1 < boardSize) {
             testGrid.liste[posY + 1][posX].setFill(Color.DARKRED);
         }
 
@@ -250,43 +243,42 @@ public class Main extends Application {
 
         ////////////////////////////CORNERS///////////////////////////////////
 
-        if(selectedPosX+1<boardSize && selectedPosY+1<boardSize){
+        if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
             testGrid.liste[posY + 1][posX + 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX-1>=0 && selectedPosY-1>=0){
+        if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
             testGrid.liste[posY - 1][posX - 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX-1>=0 && selectedPosY+1<boardSize){
+        if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
             testGrid.liste[posY + 1][posX - 1].setFill(Color.DARKRED);
         }
 
-        if(selectedPosX+1<boardSize && selectedPosY-1>=0){
+        if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
             testGrid.liste[posY - 1][posX + 1].setFill(Color.DARKRED);
 
         }
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE////////////////////////////
-        if(piecesListe[selectedPosY][selectedPosX].getRange()>1){
+        if (piecesListe[selectedPosY][selectedPosX].getRange() > 1) {
 
-            if(selectedPosX-maxPossibleMoves>=0){
-                testGrid.liste[posY][posX-maxPossibleMoves].setFill(Color.DARKRED);
+            if (selectedPosX - maxPossibleMoves >= 0) {
+                testGrid.liste[posY][posX - maxPossibleMoves].setFill(Color.DARKRED);
             }
 
-            if(selectedPosX+maxPossibleMoves<boardSize){
+            if (selectedPosX + maxPossibleMoves < boardSize) {
                 testGrid.liste[posY][posX + maxPossibleMoves].setFill(Color.DARKRED);
             }
 
-            if(selectedPosY-maxPossibleMoves>=0){
+            if (selectedPosY - maxPossibleMoves >= 0) {
                 testGrid.liste[posY - maxPossibleMoves][posX].setFill(Color.DARKRED);
             }
 
-            if(selectedPosY+maxPossibleMoves<boardSize){
+            if (selectedPosY + maxPossibleMoves < boardSize) {
                 testGrid.liste[posY + maxPossibleMoves][posX].setFill(Color.DARKRED);
             }
-
 
 
         }
@@ -294,10 +286,10 @@ public class Main extends Application {
         ///////////////////////////////////////////////////////////////////
     }
 
-    private void clearHighlight(){
+    private void clearHighlight() {
         for (int i = 0; i < testGrid.liste.length; i++) {
             for (int j = 0; j < testGrid.liste[i].length; j++) {
-            testGrid.liste[i][j].setFill(Color.TRANSPARENT);
+                testGrid.liste[i][j].setFill(Color.TRANSPARENT);
 
             }
         }
