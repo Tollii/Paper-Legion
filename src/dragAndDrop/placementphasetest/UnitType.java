@@ -4,6 +4,9 @@ public interface UnitType {
   final double hp, dmg, atkRange, movement;
   final String type;
 
+  static void attack() {
+
+ }
   static public String getType() {
     return type;
   }
