@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -19,8 +20,8 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0">
                      <children>
-                        <JFXTextField alignment="CENTER" promptText="Username" />
-                        <JFXPasswordField alignment="CENTER" promptText="Password" />
+                        <JFXTextField fx:id="usernameInput" alignment="CENTER" promptText="Username" />
+                        <JFXPasswordField fx:id="passwordInput" alignment="CENTER" promptText="Password" />
                         <VBox alignment="TOP_RIGHT" prefHeight="150.0" prefWidth="100.0">
                            <VBox.margin>
                               <Insets top="-35.0" />
@@ -52,7 +53,10 @@
             </BorderPane>
          </bottom>
          <top>
-            <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <Label fx:id="alertField" textFill="#e10303" BorderPane.alignment="CENTER" />
+               </center></BorderPane>
          </top>
       </BorderPane>
    </children>

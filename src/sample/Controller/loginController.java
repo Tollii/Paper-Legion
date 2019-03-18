@@ -1,8 +1,6 @@
 package sample.Controller;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import hashAndSalt.Login;
 import hashAndSalt.SignUp;
 import javafx.fxml.FXML;
@@ -40,7 +38,11 @@ public class loginController {
     private JFXPasswordField passwordInput;
 
     @FXML
+    private Label alertField;
+
+    @FXML
     void initialize() {
+
         newUserButton.setOnAction(event -> {
             newUserButton.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
@@ -48,7 +50,13 @@ public class loginController {
         });
 
         loginEnterButton.setOnAction(event -> {
-            changeScene("/sample/View/mainMenu.fxml");
+            Login login = new Login();
+            //Logs user in and enter main menu. Currently no info about the user is sent along.
+            if (login.login(usernameInput.getText(),passwordInput.getText())) {
+                changeScene("/sample/View/mainMenu.fxml");
+            } else {
+                alertField.setText("Error occured while logging in");
+            }
         });
     }
 

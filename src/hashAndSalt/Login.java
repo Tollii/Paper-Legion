@@ -57,7 +57,7 @@ public class Login {
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
             Cleaner.closeStatement(preparedStatement2);
@@ -87,7 +87,7 @@ public class Login {
             preparedStatement.setString(1, username);
 
             preparedStatement.executeUpdate();
-            preparedStatement.close();
+            Cleaner.closeStatement(preparedStatement);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

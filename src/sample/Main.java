@@ -19,7 +19,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    //Eric push test
-    //Thomas push test
-    //Kristoffer push test
 }
