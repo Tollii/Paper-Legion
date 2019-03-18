@@ -141,25 +141,25 @@ public class BasicConnectionPool {
 
 
             Statement st = con.createStatement();
-            String query = "SELECT isbn FROM boktittel";
+            String query = "SELECT username FROM Users";
 
 
             ResultSet rs = st.executeQuery(query);
 
             while(rs.next()){
-                System.out.println(rs.getString("isbn"));
+                System.out.println(rs.getString("username"));
             }
             rs.close();
 
-            Connection con2 = pool.getConnection();
-            Statement st2 = con2.createStatement();
-            String query2 = "SELECT forfatter FROM boktittel";
-            ResultSet rs2 = st2.executeQuery(query2);
-
-            while(rs2.next()){
-                System.out.println(rs2.getString("forfatter"));
-            }
-            rs2.close();
+//            Connection con2 = pool.getConnection();
+//            Statement st2 = con2.createStatement();
+//            String query2 = "SELECT forfatter FROM boktittel";
+//            ResultSet rs2 = st2.executeQuery(query2);
+//
+//            while(rs2.next()){
+//                System.out.println(rs2.getString("forfatter"));
+//            }
+//            rs2.close();
 
 
 
