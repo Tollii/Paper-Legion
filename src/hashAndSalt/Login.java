@@ -7,6 +7,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.*;
 import java.util.Arrays;
+
 import Database.BasicConnectionPool;
 
 public class Login {
@@ -39,11 +40,12 @@ public class Login {
             byte[] hash = rs.getBytes("hashedpassword");
             byte[] salt = rs.getBytes("passwordsalt");
             int loginStatus = rs.getInt("online_status");
-            if (verifyPassword(password, hash, salt)&& loginStatus==0) {
-                //TODO SET ONLINE TO 1 IN DB.
+
+            //Checks if the user is already logged in. If not the user is logged in.
+            if (verifyPassword(password, hash, salt) && loginStatus == 0) {
                 PreparedStatement preparedStatement2 = myConn.prepareStatement(stmt2);
                 preparedStatement2.setString(1, username);
-                int change1 = preparedStatement2.executeUpdate();
+                preparedStatement2.executeUpdate();
                 this.username = username;
                 preparedStatement.close();
                 preparedStatement2.close();
@@ -52,7 +54,6 @@ public class Login {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
@@ -69,21 +70,20 @@ public class Login {
         return Arrays.equals(enteredPassword, hash);
     }
 
-    public boolean logout(){
+    public boolean logout() {
+        //Logs out the user. Sets online_status to 0.
         String stmt = "UPDATE Users SET online_status = 0 WHERE username = ?";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
 
-            int change1 = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
             preparedStatement.close();
             return true;
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    //TODO Close metode
 }
