@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static sample.Controller.loginController.changeScene;
+
 public class signUpController {
     @FXML
     private ResourceBundle resources;
@@ -42,18 +44,11 @@ public class signUpController {
     void initialize() {
         goBackButton.setOnAction(event -> {
             goBackButton.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/sample/View/login.fxml"));
-            try{
-                loader.load();
-            } catch(IOException e){
-                e.printStackTrace();
-            }
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
+            changeScene("/sample/View/login.fxml");
 
         });
     }
+
+
+
 }

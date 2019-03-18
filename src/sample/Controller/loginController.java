@@ -25,7 +25,7 @@ public class loginController {
     private URL location;
 
     @FXML
-    private JFXButton enterButton;
+    private JFXButton loginEnterButton;
 
     @FXML
     private JFXButton newUserButton;
@@ -44,31 +44,26 @@ public class loginController {
         newUserButton.setOnAction(event -> {
             newUserButton.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/sample/View/signUp.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
+            changeScene("/sample/View/signUp.fxml");
         });
 
-        enterButton.setOnAction(event -> {
-                enterButton.getScene().getWindow().hide();
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/sample/View/mainMenu.fxml"));
-                try {
-                    loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Parent root = loader.getRoot();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.show();
+        loginEnterButton.setOnAction(event -> {
+            changeScene("/sample/View/mainMenu.fxml");
         });
+    }
+
+    public static void changeScene(String fxmldir){
+        FXMLLoader loader = new FXMLLoader();
+        Class currentClass = new Object() { }.getClass().getEnclosingClass();
+        loader.setLocation(currentClass.getResource(fxmldir));
+        try{
+            loader.load();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
