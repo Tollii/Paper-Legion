@@ -74,7 +74,6 @@ public class Login {
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
-
             int change1 = preparedStatement.executeUpdate();
             preparedStatement.close();
             return true;
