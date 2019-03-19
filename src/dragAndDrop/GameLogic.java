@@ -86,34 +86,34 @@ public class GameLogic extends Application {
         //////////////////////////SCENE AND CONTAINER SETUP///////////////////////////////////////
         Stage window = primaryStage; // Program window
         Scene scene1;                //Scene for second and third phase of the game
-        StackPane sp = new StackPane();
-        sp.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
+        StackPane stackPane = new StackPane();
+        stackPane.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
-        sp.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
+        stackPane.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
         //BorderPane bp = new BorderPane();
-        VBox vbox = new VBox();
+        VBox rSidePanel = new VBox();
         JFXButton endturn = new JFXButton("end turn");
         HBox hbox = new HBox();
-        hbox.getChildren().add(sp);
-        hbox.getChildren().add(vbox);
+        hbox.getChildren().add(stackPane);
+        hbox.getChildren().add(rSidePanel);
         hbox.setSpacing(150);
-        sp.setPrefWidth(900);
+        stackPane.setPrefWidth(900);
         description.setStyle("-fx-font-family: 'Arial Black'");
-        vbox.setPrefWidth(250);
+        rSidePanel.setPrefWidth(250);
         endturn.setPrefWidth(150);
         endturn.setPrefHeight(75);
         endturn.setTextFill(Color.WHITE);
         endturn.setStyle("-fx-background-color: #000000");
-        vbox.getChildren().add(endturn);
-        vbox.setPrefWidth(650);
+        rSidePanel.getChildren().add(endturn);
+        rSidePanel.setPrefWidth(650);
         description.setPadding(new Insets(0,0,350,0));
-        vbox.setAlignment(Pos.BOTTOM_CENTER);
+        rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
         hbox.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
 
 
 
-        // IF INSETS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
+        // IF INSERTS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
 //window.widthProperty().addListener();
 
 
@@ -133,7 +133,7 @@ public class GameLogic extends Application {
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
-                    sp.getChildren().add(unitListe[i][j].getPieceAvatar());
+                    stackPane.getChildren().add(unitListe[i][j].getPieceAvatar());
                 }
             }
         }
@@ -141,39 +141,17 @@ public class GameLogic extends Application {
 
 
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
-        scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event2 -> {
-            int counter = 0;
-            if (counter < 1) {
-                if (!(event2.getButton() == MouseButton.SECONDARY)) {
-                    int posX = getPosXFromEvent(event2);
-                    int posY = getPosYFromEvent(event2);
-
-                    if (unitListe[posY][posX] != null) {
-                        if (!selected) {
-                            unitListe[posY][posX].setOldPos(unitListe[posY][posX].getTranslateX() / 100, unitListe[posY][posX].getTranslateY() / 100);
-                            unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
-                            unitListe[posY][posX].setStrokeWidth(3);
-                            unitListe[posY][posX].setStroke(Color.RED);
-                            selected = true;
-                            selectedPosX = posX;
-                            selectedPosY = posY;
-                            counter++;
-                            highlightPossibleMoves();
-                            description.setText(unitListe[selectedPosY][selectedPosX].getDescription());
-                            vbox.getChildren().add(description);
-                            description.toBack();
-
-                        }
-                    }
-                }
+        scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!selected) {
+               select(event, rSidePanel);
             }
             ////////////////////////////SELECTION END/////////////////////////////////////////////
 
             /////////////////////////////////MOVE/////////////////////////////////////////////////
-            if (event2.getClickCount() == 2) {
-                if (selected) {
-                    int nyPosX = getPosXFromEvent(event2);
-                    int nyPosY = getPosYFromEvent(event2);
+            if (event.getClickCount() == 1) {
+                if (selected && event.getButton() == MouseButton.PRIMARY) {
+                    int nyPosX = getPosXFromEvent(event);
+                    int nyPosY = getPosYFromEvent(event);
                     if(attackRange(nyPosX,nyPosY)){
                         if (unitListe[nyPosY][nyPosX] == null) {
                             unitListe[selectedPosY][selectedPosX].setTranslate(nyPosX, nyPosY);
@@ -195,11 +173,11 @@ public class GameLogic extends Application {
             ///////////////////////////////MOVE END///////////////////////////////////////////////
 
             /////////////////////////////////ATTACK///////////////////////////////////////////////
-            if(event2.getClickCount() == 2){
+            if(event.getClickCount() == 2){
                 if(selected){
 
-                    int nyPosX = getPosXFromEvent(event2);
-                    int nyPosY = getPosYFromEvent(event2);
+                    int nyPosX = getPosXFromEvent(event);
+                    int nyPosY = getPosYFromEvent(event);
                     if (unitListe[nyPosY][nyPosX] != null) {
                         if(attackRange(nyPosX,nyPosY)){
                             if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
@@ -215,7 +193,7 @@ public class GameLogic extends Application {
                                 }
 
                                 if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
+                                    stackPane.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
                                     unitListe[nyPosY][nyPosX] = null;
                                 }
                             }
@@ -226,22 +204,11 @@ public class GameLogic extends Application {
             }
             //////////////////////////////ATTACK END////////////////////////////////////////////
 
-            //////////////////////////////UNSELECT/////////////////////////////////////////////
-            if(event2.getButton() == MouseButton.SECONDARY){
-                for (int i = 0; i < unitListe.length; i++) {
-                    for (int j = 0; j < unitListe[i].length; j++) {
-                        if (unitListe[i][j] != null) {
-                            unitListe[i][j].setStroke(Color.TRANSPARENT);
-                        }
-                    }
-                }
-
-                vbox.getChildren().remove(description);
-                selected = false;
-                counter = 0;
-                clearHighlight();
+            //////////////////////////////DESELECT/////////////////////////////////////////////
+            if(event.getButton() == MouseButton.SECONDARY){
+                deSelect(event, rSidePanel);
             }
-            //////////////////////////UNSELECT END/////////////////////////////////////////////
+            //////////////////////////DESELECT END/////////////////////////////////////////////
 
         }); // MOUSE EVENT END
 
@@ -251,6 +218,46 @@ public class GameLogic extends Application {
         window.setTitle("BINARY WARFARE");
         window.setScene(scene1);
         window.show();
+    }
+
+    private void select(MouseEvent event, VBox vBox){
+        if (!(event.getButton() == MouseButton.SECONDARY)) {
+            int posX = getPosXFromEvent(event);
+            int posY = getPosYFromEvent(event);
+
+            if (unitListe[posY][posX] != null) {
+                if (!selected) {
+                    unitListe[posY][posX].setOldPos(unitListe[posY][posX].getTranslateX() / 100, unitListe[posY][posX].getTranslateY() / 100);
+                    unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
+                    unitListe[posY][posX].setStrokeWidth(3);
+                    unitListe[posY][posX].setStroke(Color.RED);
+                    selected = true;
+                    selectedPosX = posX;
+                    selectedPosY = posY;
+                    highlightPossibleMoves();
+                    description.setText(unitListe[selectedPosY][selectedPosX].getDescription());
+                    vBox.getChildren().add(description);
+                    description.toBack();
+
+                }
+            }
+        }
+    }
+
+    private void deSelect(Event event, VBox sidePanel){
+
+        for (int i = 0; i < unitListe.length; i++) {
+            for (int j = 0; j < unitListe[i].length; j++) {
+                if (unitListe[i][j] != null) {
+                    unitListe[i][j].setStroke(Color.TRANSPARENT);
+                }
+            }
+        }
+
+        sidePanel.getChildren().remove(description);
+        selected = false;
+        clearHighlight();
+
     }
 
 
