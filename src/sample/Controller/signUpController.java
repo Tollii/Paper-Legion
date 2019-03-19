@@ -8,7 +8,8 @@ import javafx.fxml.FXML;
 import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-import static sample.Controller.loginController.changeScene;
+
+import static sample.Controller.controllerHelper.*;
 
 public class signUpController {
 
