@@ -133,8 +133,6 @@ public class Main extends Application {
             for (int j = 0; j < piecesListe[i].length; j++) {
                 if (piecesListe[i][j] != null) {
                     sp.getChildren().add(piecesListe[i][j]);
-
-
                 }
             }
         }
