@@ -40,17 +40,6 @@ public class Matchmaking extends Thread {
         return match_id;
     }
 
-
-
-
-    public static void main(String[]args) throws Exception {
-        Thread thread = new Matchmaking();
-        System.out.println("Before thread start");
-        thread.start();
-        System.out.println("After thread start");
-
-
-    }
     public void enterGame(int match_id, int player_id){
         System.out.println("switch scenes");
     }
