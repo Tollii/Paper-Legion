@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import static sample.Controller.controllerHelper.*;
 import static sample.Main.db;
 
 public class mainMenuController {
@@ -17,36 +18,31 @@ public class mainMenuController {
     public static int user_id;
 
     @FXML
-    private JFXButton logoutButton;
+    private JFXButton mainMenuPlayButton;
 
     @FXML
-    private Label identifyUser;
+    private JFXButton mainMenuSettingsButtin;
+
+    @FXML
+    private JFXButton mainMenuStatsButton;
+
+    @FXML
+    private JFXButton mainMenuGameInfoButton;
+
+    @FXML
+    private JFXButton mainMenuExitButton;
+
+    @FXML
+    private Label mainMenuLoggedInAsLabel;
 
     @FXML
     void initialize() {
-        identifyUser.setText("User ID = " + user_id);
+        mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
         Login log = new Login();
 
-        logoutButton.setOnAction(event -> {
+        mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
             changeScene("/sample/View/login.fxml");
         });
     }
-
-    public static void changeScene(String fxmldir){
-        FXMLLoader loader = new FXMLLoader();
-        Class currentClass = new Object() { }.getClass().getEnclosingClass();
-        loader.setLocation(currentClass.getResource(fxmldir));
-        try{
-            loader.load();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-        Parent root = loader.getRoot();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-
 }
