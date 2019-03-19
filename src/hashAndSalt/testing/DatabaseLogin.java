@@ -61,7 +61,7 @@ public class DatabaseLogin extends Application {
         layout3.getChildren().addAll(notice2,su_username,su_password,su_email,add);
 
         add.setOnAction(event -> {
-            if (db.signUp(su_username.getText(),su_password.getText(),su_email.getText())) {
+            if (db.signUp(su_username.getText(),su_password.getText(),su_email.getText())>0) {
                 window.setScene(scene1);
                 notice.setText("User added");
             } else {
