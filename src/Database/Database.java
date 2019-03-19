@@ -54,6 +54,33 @@ public class Database {
         }
     }
 
+    public int getMatch_id_createGame(int playerId){
+        int match_id=0;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "select * from Matches where player1=? and match_started=0;";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1,playerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                match_id = resultSet.getInt("match_id");
+            }
+            if(match_id>0){
+                connectionPool.releaseConnection(myConn);
+                return match_id;
+            } else{
+                connectionPool.releaseConnection(myConn);
+                return -1;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+            return -1;
+        }
+    }
+
     public boolean joinGame(int match_id, int player2){
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
@@ -76,6 +103,7 @@ public class Database {
     }
 
     public int createGame(int player_id){
+        int match_id =-1;
         Connection myConn = connectionPool.getConnection();
         String sqlSetning= "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
         try {
@@ -84,9 +112,17 @@ public class Database {
             int result = preparedStatement.executeUpdate();
             if(result>0) {
                 System.out.println("Created Game");
+                String getMatchIdQuery="select * from Matches where player1=? and game_started=0";
+                PreparedStatement ps = myConn.prepareStatement(getMatchIdQuery);
+                ps.setInt(1,player_id);
+                ResultSet match_id_result = ps.executeQuery();
+                        while(match_id_result.next()){
+                            match_id = match_id_result.getInt("match_id");
+                        }
+
             }
             connectionPool.releaseConnection(myConn);
-            return result;
+            return match_id;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,14 +140,18 @@ public class Database {
             preparedStatement.setInt(1,match_id);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()){
-                gameStarted = result.getInt(4);
+                gameStarted = result.getInt("game_started");
             }
             if(gameStarted == 1){
                 connectionPool.releaseConnection(myConn);
+
                 return true;
+            } else{
+                System.out.println(match_id);
+                connectionPool.releaseConnection(myConn);
+                return false;
             }
-            connectionPool.releaseConnection(myConn);
-            return false;
+
 
 
         } catch (SQLException e) {
@@ -119,6 +159,27 @@ public class Database {
             connectionPool.releaseConnection(myConn);
             return false;
         }
+    }
+
+    public boolean abortMatch(int player_id){
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "delete from Matches where player1=?;";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1,player_id);
+            int result = preparedStatement.executeUpdate();
+            if(result>0){
+                connectionPool.releaseConnection(myConn);
+                return true;
+            } else{
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+            return false;
+        }
+
     }
 
     public void test(){
