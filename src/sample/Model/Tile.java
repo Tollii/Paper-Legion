@@ -1,6 +1,6 @@
 package sample.Model;
 
-import dragAndDrop.Piece;
+import dragAndDrop.Unit;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -11,14 +11,13 @@ public class Tile {
     double posY = tile.getY();
     double distanceFromPiece;
     boolean pieceOnTile;
-    Piece currenPiece;
+    Unit currenPiece;
 
     public Tile(int sizeX, int sizeY){
         this.tile = new Rectangle(sizeX,sizeY);
         tile.setFill(Color.WHITE);
         tile.setStrokeType(StrokeType.OUTSIDE);
         tile.setStroke(Color.BLACK);
-
     }
 
     public void setTranslateX(double a){

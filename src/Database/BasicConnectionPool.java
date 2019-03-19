@@ -162,8 +162,6 @@ public class BasicConnectionPool {
 //            rs2.close();
 
 
-
-
             pool.shutdown();
             System.out.println("Shutdown");
 
