@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static sample.Controller.controllerHelper.*;
 import static sample.Main.db;
 
 public class loginController {
@@ -61,20 +62,6 @@ public class loginController {
         });
     }
 
-    public static void changeScene(String fxmldir){
-        FXMLLoader loader = new FXMLLoader();
-        Class currentClass = new Object() { }.getClass().getEnclosingClass();
-        loader.setLocation(currentClass.getResource(fxmldir));
-        try{
-            loader.load();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-        Parent root = loader.getRoot();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
 
     public void setUser_id(int user_id) {
         mainMenuController.user_id = user_id;
