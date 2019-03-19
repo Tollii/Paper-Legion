@@ -3,7 +3,6 @@ package sample.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import hashAndSalt.SignUp;
 import javafx.fxml.FXML;
 import java.awt.*;
 import java.net.URL;
@@ -52,7 +51,8 @@ public class signUpController {
             //Checks if both password fields are the same.
             if (passwordInput.getText().equals(confirmPasswordInput.getText())) {
                 // Tries to register user in database.
-                if (db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText())) {
+                int signup = db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText());
+                if (signup > 0) {
                     changeScene("/sample/View/login.fxml");
                 }
             } else {

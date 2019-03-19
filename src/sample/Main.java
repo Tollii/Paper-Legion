@@ -9,11 +9,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    static public Database db = new Database();
+    public static Database db = new Database();
+    public static Stage window;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        window = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("/sample/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 600, 400));

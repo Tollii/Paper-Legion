@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+           prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="sample.Test.Controller1">
+    <children>
+        <VBox alignment="CENTER" prefHeight="309.0" prefWidth="198.0" spacing="30.0">
+            <children>
+                <Label fx:id="change" text="Scene 1">
+                    <font>
+                        <Font size="22.0"/>
+                    </font>
+                </Label>
+                <JFXButton fx:id="scenechanger" maxHeight="30.0" minHeight="30.0" prefHeight="30.0"
+                           style="-fx-background-color: #e3e4e5#e3e4e5;" text="Go to scene 2"/>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

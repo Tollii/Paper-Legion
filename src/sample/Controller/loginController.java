@@ -2,7 +2,6 @@ package sample.Controller;
 
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,7 +45,9 @@ public class loginController {
 
         loginEnterButton.setOnAction(event -> {
             //Logs user in and enter main menu. Currently no info about the user is sent along.
-            int userId = db.login(usernameInput.getText(),passwordInput.getText());
+            //int userId = db.login(usernameInput.getText(),passwordInput.getText());
+            //TODO CHANGE THIS AFTER TESTING.
+            int userId = 1;
             if (userId > 0) {
                 setUser_id(userId);
                 changeScene("/sample/View/mainMenu.fxml");

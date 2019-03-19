@@ -5,7 +5,6 @@ SELECT * from Users;
 SELECT hashedpassword,passwordsalt,online_status FROM Users WHERE username = ?;
 SELECT hashedpassword,passwordsalt,online_status FROM Users WHERE username = 'admin';
 
-
 -- Register new user.
 INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,0);
 
@@ -22,9 +21,9 @@ UPDATE Users SET online_status = 0 WHERE username = 'admin';
 -- log everyone off
 UPDATE Users SET online_status = 0;
 
-SHOW PROCESSLIST;
-
 -- delete TEstUser
 DELETE FROM Users WHERE username = 'testUserReg';
+
+SHOW PROCESSLIST;
 
 

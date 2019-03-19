@@ -152,7 +152,6 @@ public class Database {
             connectionPool.releaseConnection(con);
         }
         return -1;
-
     }
 
     private byte[] generateHash(String password, byte[] salt) {

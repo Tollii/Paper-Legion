@@ -4,7 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import hashAndSalt.Login;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import static sample.Controller.controllerHelper.*;
+
+import static sample.Controller.controllerHelper.changeScene;
 import static sample.Main.db;
 
 public class mainMenuController {
@@ -32,7 +33,6 @@ public class mainMenuController {
     @FXML
     void initialize() {
         mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
-        Login log = new Login();
 
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
