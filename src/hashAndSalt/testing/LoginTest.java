@@ -32,7 +32,7 @@ public class LoginTest {
     @Test
     public void testLogin(){
         System.out.println("testLogin()");
-        boolean result = instance.login("admin","admin");
+        boolean result = instance.login("testUser","testPassword");
         boolean expResult = true;
         assertEquals(expResult,result);
     }
