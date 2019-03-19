@@ -13,31 +13,53 @@ import javafx.scene.text.TextAlignment;
 
 public class Unit extends Rectangle {
     private Label healthbar;
-    private UnitType type;
+
     private double oldPosX;
     private double oldPosY;
+
+
+    ////UNIT INFO////
+    private UnitType type;
     private double hp;
-    private double damageMultiplier;
-    private int range;
+    private int attack;
+    private int abilityCooldown;
+    private double defenceMultiplier;
+    private int minAttackRange;
+    private int maxAttackRange;
+    private int movementRange;
+    private String description;
+    private String descriptionTag;
+
+
+    ////UTILITIES////
+    private final int LOW_HP_THRESHOLD = 20;
     private boolean enemy;
-    GridPane a =  new GridPane();
+    private GridPane pieceAvatar =  new GridPane();
 
 
     public Unit(double row, double column, boolean enemy, UnitType type){
         super.setWidth(Main.tileSize);
         super.setHeight(Main.tileSize);
         this.enemy = enemy;
+
+        ///SETS UNIT INFO////
         this.type = type;
-        this.damageMultiplier = type.getAttackMultiplier();
         this.hp = type.getHp();
-        this.range = type.getRange();
+        attack = type.getAttack();
+        abilityCooldown = type.getAbilityCooldown();
+        this.defenceMultiplier = type.getDefenceMultiplier();
+        minAttackRange = type.getMinAttackRange();
+        maxAttackRange = type.getMaxAttackRange();
+        this.movementRange = type.getMovementRange();
+        description = type.getDescription();
+        descriptionTag = type.getDescriptionTag();
 
         setPositionArray(column,row);
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
-        StackPane sp = new StackPane();
-        sp.getChildren().addAll(this, healthbar);
-        a.getChildren().add(sp);
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(this, healthbar);
+        pieceAvatar.getChildren().add(stackPane);
         healthbar.setPrefWidth(Main.tileSize);
         healthbar.setAlignment(Pos.CENTER);
 
@@ -50,26 +72,28 @@ public class Unit extends Rectangle {
         healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
 
 
+        ///SETS UNIT IMAGE////
+        switch (type.getType()){
 
+            case "Archer":
+                if(enemy){
+                    Image archerGold = new Image("/dragAndDrop/assets/archer_gold.png");
+                    this.setFill(new ImagePattern(archerGold));
+                } else{
+                    Image archerBlue = new Image("/dragAndDrop/assets/archer_blue.png");
+                    this.setFill(new ImagePattern(archerBlue));
+                }
+                break;
 
-        if(type.getType().equalsIgnoreCase("Archer")){
-            if(enemy){
-                Image archerGold = new Image("/dragAndDrop/assets/archer_gold.png");
-                this.setFill(new ImagePattern(archerGold));
-            } else{
-                Image archerBlue = new Image("/dragAndDrop/assets/archer_blue.png");
-                this.setFill(new ImagePattern(archerBlue));
-            }
-        }
-        if(type.getType().equalsIgnoreCase("Swordsman")){
-            if(enemy){
-                Image swordsmanGold = new Image("/dragAndDrop/assets/sword_gold.png");
-                this.setFill(new ImagePattern(swordsmanGold));
-            } else{
-                Image swordsmanBlue = new Image("/dragAndDrop/assets/sword_blue.png");
-                this.setFill(new ImagePattern(swordsmanBlue));
-            }
-
+            case "Swordsman":
+                if(enemy){
+                    Image swordsmanGold = new Image("/dragAndDrop/assets/sword_gold.png");
+                    this.setFill(new ImagePattern(swordsmanGold));
+                } else{
+                    Image swordsmanBlue = new Image("/dragAndDrop/assets/sword_blue.png");
+                    this.setFill(new ImagePattern(swordsmanBlue));
+                }
+                break;
         }
     }
 
@@ -88,6 +112,10 @@ public class Unit extends Rectangle {
         return oldPosY;
     }
 
+    public GridPane getPieceAvatar(){
+        return pieceAvatar;
+    }
+
     public void setPositionArray(double x, double y){
         super.setTranslateX(x);
         super.setTranslateY(y);
@@ -104,59 +132,56 @@ public class Unit extends Rectangle {
         return enemy;
     }
 
-    public void takeDamage(double damageDealt){
-        this.hp -= 20*damageDealt;
-        healthbar.setText(String.valueOf(hp));
-
-        if(hp<=20){
-            healthbar.setStyle("-fx-background-color: Red");
-        }
+    public String getType(){
+        return type.getType();
     }
 
     public double getHp(){
         return hp;
     }
-
-    public int getRange() {
-        return range;
+    public int getAttack(){
+        return attack;
     }
 
-    public double getDamageMultiplier() {
-        return damageMultiplier;
+    public int getAbilityCooldown() {
+        return abilityCooldown;
+    }
+
+    public double getDefenceMultiplier() {
+        return defenceMultiplier;
+    }
+
+    public int getMinAttackRange() {
+        return minAttackRange;
+    }
+
+    public int getMaxAttackRange() {
+        return maxAttackRange;
+    }
+
+    public int getMovementRange() {
+        return movementRange;
     }
 
     public String getDescription(){
 
-        //DUMMY TEXT, HAVE TO INTEGRATE THIS DECRIPTION INTO UNIT TYPE INSTEAD.
-        if(type.getType().equalsIgnoreCase("Swordsman")){
-            String description =
-                    "Legendary Swordsman\n" +
-                            "\nHp: " + getHp()
-                            +"\nRange: " + getRange() +
-                            "\nAttack: " + getDamageMultiplier() + "x\n" +
-                            "\nBecause he failed to get into clown college,\n" +
-                            "he was so distraught that he wowed to get stronger and faster,\n" +
-                            "but incidentally he was now better suited to be a legendary swordsman. \n" +
-                            "Has an Attack 2.5x, which can slay even the most dangerous of foes.";
-            return description;
-        }
-        if(type.getType().equalsIgnoreCase("Archer")){
-            String description =
-                    "Heroic Archer\n" +
-                            "\nHp: " + getHp()
-                            +"\nRange: " + getRange() +
-                            "\nAttack: " + getDamageMultiplier() + "x\n" +
-                    "\nHe has mastered his Sodoku in such a ingenious way,\n"+
-                            "he is now considered godlike amongst his peers.\n"+
-                            "Too bad this doesn't help him in battle though.\n"+
-                            "Because of his bow, he has a longer range than others.";
-            return description;
-        }
-        return null;
+        return descriptionTag + "\n" +
+                "\nHp: " + hp +
+                "\nMovement Range: " + movementRange +
+                "\nAttack: " + attack + "x\n" + "\n" + description;
     }
 
-    public String getType(){
-        return type.getType();
+
+    public void takeDamage(double damageDealt){
+
+        this.hp -= damageDealt / defenceMultiplier;
+
+        healthbar.setText(String.valueOf(hp));
+
+        ////CHANGES THE COLOUR OF THE HP-BAR////
+        if(hp <= LOW_HP_THRESHOLD){
+            healthbar.setStyle("-fx-background-color: Red");
+        }
     }
 
 }
