@@ -1,11 +1,8 @@
 package Database;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+import dragAndDrop.ProtoUnitType;
+import dragAndDrop.UnitType;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +13,8 @@ public class Database {
 
     //Class variables
 
-    BasicConnectionPool connectionPool = null;
+    static BasicConnectionPool connectionPool = null;
+    static private Cleaner cleaner = new Cleaner();
 
     public Database() {
 
@@ -27,6 +25,63 @@ public class Database {
             //Prints out the error
             e.printStackTrace();
         }
+
+    }
+
+    public static ProtoUnitType importUnitType(String unitNameInput){
+
+        String sqlString = "SELECT * FROM Unit_types WHERE unit_name =" + "'"+unitNameInput+"'";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        ////UNIT INFO////
+        String type;
+        double hp;
+        int attack;
+        int abilityCooldown;
+        double defenceMultiplier;
+        int minAttackRange;
+        int maxAttackRange;
+        int movementRange;
+
+        try{
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            System.out.println("Executing statement");
+            resultSet = preparedStatement.executeQuery();
+            System.out.println("Statement executed");
+
+            resultSet.next();
+            type = resultSet.getString("unit_name");
+            System.out.println(type);
+            hp = (double)resultSet.getFloat("max_health");
+            System.out.println(hp);
+            attack = resultSet.getInt("attack");
+            System.out.println(attack);
+            abilityCooldown = resultSet.getInt("ability_cooldown");
+            System.out.println(abilityCooldown);
+            defenceMultiplier = resultSet.getDouble("defence_multiplier");
+            System.out.println(defenceMultiplier);
+            minAttackRange = resultSet.getInt("min_attack_range");
+            System.out.println(minAttackRange);
+            maxAttackRange = resultSet.getInt("max_attack_range");
+            System.out.println(maxAttackRange);
+            movementRange = resultSet.getInt("movement_range");
+            System.out.println(movementRange);
+
+            cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
+
+        }catch (SQLException e){
+
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+
+            return null;
+        }
+
+        return new ProtoUnitType(type, hp,attack,abilityCooldown,defenceMultiplier,minAttackRange,maxAttackRange, movementRange, "", "" );
     }
 
     public void test() {
@@ -187,6 +242,8 @@ public class Database {
         Database database = new Database();
 
         database.test();
+
+        database.importUnitType("swordsman");
 
         database.close();
     }
