@@ -13,7 +13,7 @@ public class controllerHelper {
         FXMLLoader loader = new FXMLLoader();
         Class currentClass = new Object() { }.getClass().getEnclosingClass();
         loader.setLocation(currentClass.getResource(fxmlDir));
-        try{
+        try {
             loader.load();
         } catch(IOException e){
             e.printStackTrace();

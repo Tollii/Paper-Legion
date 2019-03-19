@@ -3,11 +3,7 @@ package sample.Controller;
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -45,7 +41,6 @@ public class loginController {
 
         newUserButton.setOnAction(event -> {
             newUserButton.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
             changeScene("/sample/View/signUp.fxml");
         });
 
@@ -56,14 +51,13 @@ public class loginController {
                 setUser_id(userId);
                 changeScene("/sample/View/mainMenu.fxml");
             } else {
-                //If the user is not logged in this error is shown. More speficity to what went wrong, can be implemented.
+                //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
                 alertField.setText("Error occured while logging in");
             }
         });
     }
 
-
-    public void setUser_id(int user_id) {
+    private void setUser_id(int user_id) {
         mainMenuController.user_id = user_id;
     }
 }

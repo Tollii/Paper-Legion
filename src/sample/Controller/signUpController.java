@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static sample.Controller.controllerHelper.*;
+import static sample.Main.db;
 
 public class signUpController {
 
@@ -47,12 +48,11 @@ public class signUpController {
             changeScene("/sample/View/login.fxml");
         });
 
-        SignUp su = new SignUp();
         signUpButton.setOnAction(event -> {
             //Checks if both password fields are the same.
             if (passwordInput.getText().equals(confirmPasswordInput.getText())) {
                 // Tries to register user in database.
-                if (su.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText())) {
+                if (db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText())) {
                     changeScene("/sample/View/login.fxml");
                 }
             } else {
