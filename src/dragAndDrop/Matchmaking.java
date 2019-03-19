@@ -7,8 +7,8 @@ import static sample.Controller.mainMenuController.user_id;
 
 import static sample.Main.db;
 public class Matchmaking extends Thread {
-    private int player_id =2;
     private static boolean gameStarted=false;
+    private int player_id =user_id;
     private int match_id;
 
     public void run(){
@@ -21,7 +21,7 @@ public class Matchmaking extends Thread {
             match_id = db.createGame(player_id);
         }
 
-        ////wait for other players to join
+        //wait for other players to join
         while(!gameStarted){
             try {
                 Thread.currentThread().sleep(2000); //Polling only every 2 seconds.
@@ -45,7 +45,6 @@ public class Matchmaking extends Thread {
     }
 
     public void abortGame(int player_id){
-        Database database = new Database();
-        database.abortMatch(player_id);
+        db.abortMatch(player_id);
     }
 }
