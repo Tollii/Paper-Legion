@@ -136,7 +136,7 @@ public class Main extends Application {
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
-                    sp.getChildren().add(unitListe[i][j].a);
+                    sp.getChildren().add(unitListe[i][j].getPieceAvatar());
                 }
             }
         }
@@ -207,7 +207,7 @@ public class Main extends Application {
                     if (unitListe[nyPosY][nyPosX] != null) {
                         if(attackRange(nyPosX,nyPosY)){
                             if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
-                                unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getDamageMultiplier());
+                                unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getAttack());
                                 attackCount++;
                                 System.out.println(unitListe[nyPosY][nyPosX].getHp());
                                 if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
@@ -219,7 +219,7 @@ public class Main extends Application {
                                 }
 
                                 if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX].a);
+                                    sp.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
                                     unitListe[nyPosY][nyPosX] = null;
                                 }
                             }
@@ -263,7 +263,7 @@ public class Main extends Application {
     private void highlightPossibleMoves(){
         int posX = selectedPosX;
         int posY = selectedPosY;
-        int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getRange();
+        int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getMovementRange();
 
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
@@ -307,7 +307,7 @@ public class Main extends Application {
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE////////////////////////////
-        if(unitListe[selectedPosY][selectedPosX].getRange()>1){
+        if(unitListe[selectedPosY][selectedPosX].getMovementRange()>1){
 
             if(selectedPosX-maxPossibleMoves>=0){
                 testGrid.liste[posY][posX-maxPossibleMoves].setFill(Color.DARKRED);
@@ -346,7 +346,7 @@ public class Main extends Application {
     private boolean attackRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
-        if (unitListe[selectedPosY][selectedPosX].getRange()<2){
+        if (unitListe[selectedPosY][selectedPosX].getMovementRange()<2){
             if((Math.abs(nyPosX-unitListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- unitListe[selectedPosY][selectedPosX].getOldPosY())<2)){
                 return true;
             } else{
@@ -358,7 +358,7 @@ public class Main extends Application {
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
 
-           if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getRange()){ //Beautiful math skills in progress.
+           if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()){ //Beautiful math skills in progress.
                return true;
            }
 
@@ -391,6 +391,10 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+
         launch(args);
     }
 

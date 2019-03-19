@@ -11,8 +11,9 @@ public class Archer implements UnitType {
     private final int maxAttackRange;
     private final int movementRange;
     private final String description;
+    private final String descriptionTag;
 
-    public Archer(String type, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description){
+    public Archer(String type, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description, String descriptionTag){
         this.type = type;
         this.hp = hp;
         this.attack = attack;
@@ -22,6 +23,7 @@ public class Archer implements UnitType {
         this.maxAttackRange = maxAttackRange;
         this.movementRange = movementRage;
         this.description = description;
+        this.descriptionTag = descriptionTag;
     }
 
     @Override
@@ -67,5 +69,10 @@ public class Archer implements UnitType {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getDescriptionTag() {
+        return descriptionTag;
     }
 }
