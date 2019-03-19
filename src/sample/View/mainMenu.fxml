@@ -11,6 +11,7 @@
          <font>
             <Font size="56.0" />
          </font></Label>
-      <JFXButton fx:id="logoutButton" layoutX="271.0" layoutY="187.0" mnemonicParsing="false" text="Logout" />
+      <JFXButton fx:id="logoutButton" layoutX="270.0" layoutY="318.0" mnemonicParsing="false" text="Logout" />
+      <Label fx:id="identifyUser" layoutX="269.0" layoutY="192.0" text="No user id" textAlignment="CENTER" />
    </children>
 </AnchorPane>

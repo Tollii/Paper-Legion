@@ -1,17 +1,17 @@
 package sample.Controller;
 
 import com.jfoenix.controls.*;
-import hashAndSalt.Login;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static sample.Main.db;
 
 public class loginController {
     @FXML
@@ -48,11 +48,11 @@ public class loginController {
             changeScene("/sample/View/signUp.fxml");
         });
 
-        Login user = new Login();
-
         loginEnterButton.setOnAction(event -> {
             //Logs user in and enter main menu. Currently no info about the user is sent along.
-            if (user.login(usernameInput.getText(),passwordInput.getText())) {
+            int userId = db.login(usernameInput.getText(),passwordInput.getText());
+            if (userId > 0) {
+                setUser_id(userId);
                 changeScene("/sample/View/mainMenu.fxml");
             } else {
                 //If the user is not logged in this error is shown. More speficity to what went wrong, can be implemented.
@@ -74,5 +74,9 @@ public class loginController {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    public void setUser_id(int user_id) {
+        mainMenuController.user_id = user_id;
     }
 }

@@ -9,16 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
-
-public class LoginTest {
+public class SignUpTest {
     private SignUp instance;
     private SignUp loginInstance;
-
-
-    public LoginTest() {
-
-    }
 
     @BeforeClass
     public static void setUpClass() {
@@ -33,12 +26,12 @@ public class LoginTest {
     @Before
     public void setUp() {
         //lager nytt objekt for hver test
-        instance = new Login();
+        instance = new SignUp();
     }
 
     @After
     public void tearDown() {
-        instance.logout();
+        //instance.logout();
     }
 
 // TODO catch sql unique hentes exception, test at det som lages kan logges inn i med login. Lag en User.
