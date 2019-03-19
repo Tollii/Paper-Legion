@@ -18,18 +18,18 @@ public class Database {
 
     BasicConnectionPool connectionPool = null;
 
-    public Database(){
+    public Database() {
 
-        try{
+        try {
             System.out.println("Creating pool");
             connectionPool = BasicConnectionPool.create();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             //Prints out the error
             e.printStackTrace();
         }
     }
 
-    public void test(){
+    public void test() {
 
         System.out.println("Test begun");
         String sqlString = "SELECT username FROM Users";
@@ -37,20 +37,20 @@ public class Database {
         PreparedStatement preparedQuery = null;
         ResultSet resultSet = null;
 
-        try{
+        try {
             preparedQuery = myConn.prepareStatement(sqlString);
 
             System.out.println("Executing statement");
             resultSet = preparedQuery.executeQuery();
             System.out.println("Statement executed");
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
 
                 System.out.println(resultSet.getString("username"));
             }
 
             connectionPool.releaseConnection(myConn);
-        }catch (SQLException e){
+        } catch (SQLException e) {
 
             e.printStackTrace();
             connectionPool.releaseConnection(myConn);
@@ -85,11 +85,14 @@ public class Database {
                 preparedUpdate = myConn.prepareStatement(stmt2);
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
-                connectionPool.releaseConnection(myConn);
                 return userId;
             }
         } catch (SQLException e) {
             //e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedQuery);
+            Cleaner.closeStatement(preparedUpdate);
+            Cleaner.closeResSet(rs);
             connectionPool.releaseConnection(myConn);
         }
         return -1;
@@ -99,21 +102,22 @@ public class Database {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
         String stmt = "UPDATE Users SET online_status = 0 WHERE user_id = ?";
+        PreparedStatement preparedQuery = null;
         try {
-            PreparedStatement preparedQuery = myConn.prepareStatement(stmt);
+            preparedQuery = myConn.prepareStatement(stmt);
             preparedQuery.setInt(1, userId);
-
             preparedQuery.executeUpdate();
-            connectionPool.releaseConnection(myConn);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedQuery);
+            connectionPool.releaseConnection(myConn);
         }
-        connectionPool.releaseConnection(myConn);
         return false;
     }
 
-    public boolean signUp(String user, String password,String email) {
+    public boolean signUp(String user, String password, String email) {
 
         //TODO Check if user is not already registered, or username is taken.
 
@@ -122,12 +126,12 @@ public class Database {
         SecureRandom random = new SecureRandom();
         random.nextBytes(salt);
 
-        byte[] hash = generateHash(password,salt);
+        byte[] hash = generateHash(password, salt);
 
-        return addUserToDatabase(user,email,hash,salt);
+        return addUserToDatabase(user, email, hash, salt);
     }
 
-    private byte[] generateHash(String password,byte[] salt) {
+    private byte[] generateHash(String password, byte[] salt) {
         try {
             //PBKDF is used to create the hashed password. The salt is used as parameter.
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -156,8 +160,9 @@ public class Database {
     private boolean addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
             preparedStatement.setBytes(2, hash);
             preparedStatement.setBytes(3, salt);
@@ -166,16 +171,18 @@ public class Database {
             return (preparedStatement.executeUpdate() > 0);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
         }
         return false;
     }
 
-    public void close() throws SQLException{
+    public void close() throws SQLException {
         connectionPool.shutdown();
-
     }
 
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args) throws SQLException {
 
         Database database = new Database();
 

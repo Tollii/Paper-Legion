@@ -2,13 +2,11 @@ package sample.Controller;
 
 import com.jfoenix.controls.*;
 import hashAndSalt.Login;
-import hashAndSalt.SignUp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;

@@ -5,14 +5,13 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import hashAndSalt.SignUp;
 import javafx.fxml.FXML;
-
 import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import static sample.Controller.loginController.changeScene;
 
 public class signUpController {
+
     @FXML
     private ResourceBundle resources;
 
@@ -45,7 +44,6 @@ public class signUpController {
         goBackButton.setOnAction(event -> {
             goBackButton.getScene().getWindow().hide();
             changeScene("/sample/View/login.fxml");
-
         });
 
         SignUp su = new SignUp();
