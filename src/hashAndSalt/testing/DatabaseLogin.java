@@ -1,7 +1,6 @@
 package hashAndSalt.testing;
 
-import hashAndSalt.Login;
-import hashAndSalt.SignUp;
+import Database.Database;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,12 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 
-public class Main extends Application {
+import java.sql.SQLException;
 
-    //Test av login med bruk av Login klassen.
+public class DatabaseLogin extends Application {
+
+    //Test av login med bruk av Database klassen.
 
     private Scene scene1,scene2,scene3;
-    Login log;
+    private int userId;
+    Database db = new Database();
 
     @Override
     public void start(Stage primaryStage) {
@@ -37,9 +39,9 @@ public class Main extends Application {
         layout.getChildren().addAll(notice,username,password,buttons);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
-        log = new Login();
         enter.setOnAction(event -> {
-            if (log.login(username.getText(),password.getText())) {
+            userId = db.login(username.getText(),password.getText());
+            if (userId > 0) {
                 window.setScene(scene2);
             } else {
                 notice.setText("Error logging in");
@@ -58,9 +60,8 @@ public class Main extends Application {
         Button add = new Button("Sign up");
         layout3.getChildren().addAll(notice2,su_username,su_password,su_email,add);
 
-        SignUp su = new SignUp();
         add.setOnAction(event -> {
-            if (su.signUp(su_username.getText(),su_password.getText(),su_email.getText())) {
+            if (db.signUp(su_username.getText(),su_password.getText(),su_email.getText())) {
                 window.setScene(scene1);
                 notice.setText("User added");
             } else {
@@ -75,7 +76,7 @@ public class Main extends Application {
         layout2.getChildren().addAll(text,logout);
 
         logout.setOnAction(event -> {
-            log.logout();
+            db.logout(userId);
             window.setScene(scene1);
         });
         layout.setAlignment(Pos.CENTER);
@@ -91,9 +92,10 @@ public class Main extends Application {
     }
 
     @Override
-    public void stop() {
+    public void stop() throws SQLException {
         // executed when the application shuts down
-        log.logout();
+        db.logout(userId);
+        db.close();
     }
 
     public static void main(String[] args) {

@@ -2,17 +2,17 @@ package hashAndSalt;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.xml.transform.Result;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.*;
 import java.util.Arrays;
-
 import Database.BasicConnectionPool;
 import Database.Cleaner;
 
 public class Login {
+
+    //Planen atm er å flytte hel login inn i database og aksessere sql statements
 
     public static BasicConnectionPool pool;
     public static Connection myConn;
@@ -58,7 +58,7 @@ public class Login {
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
             Cleaner.closeStatement(preparedStatement2);
@@ -88,12 +88,16 @@ public class Login {
             preparedStatement.setString(1, username);
 
             preparedStatement.executeUpdate();
-            preparedStatement.close();
+            Cleaner.closeStatement(preparedStatement);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
 }
