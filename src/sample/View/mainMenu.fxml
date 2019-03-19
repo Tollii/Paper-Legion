@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.mainMenuController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainMenuController">
    <children>
-      <Label layoutX="156.0" layoutY="89.0" text="Main Menu">
-         <font>
-            <Font size="56.0" />
-         </font></Label>
-      <JFXButton fx:id="logoutButton" layoutX="270.0" layoutY="318.0" mnemonicParsing="false" text="Logout" />
-      <Label fx:id="identifyUser" layoutX="269.0" layoutY="192.0" text="No user id" textAlignment="CENTER" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <BorderPane prefHeight="91.0" prefWidth="600.0" style="-fx-background-color: #424242;" BorderPane.alignment="CENTER">
+               <center>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Binary Warfare" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Text>
+               </center>
+            </BorderPane>
+         </top>
+         <center>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                  <VBox alignment="CENTER" prefHeight="309.0" prefWidth="198.0" spacing="30.0">
+                     <children>
+                        <Label fx:id="mainMenuLoggedInAsLabel" text="Logged in as ">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="mainMenuPlayButton" maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play" />
+                        <JFXButton fx:id="mainMenuSettingsButtin" maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Settings" />
+                        <JFXButton fx:id="mainMenuStatsButton" maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Stats" />
+                        <JFXButton fx:id="mainMenuGameInfoButton" maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Game Info" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                  <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <JFXButton fx:id="mainMenuExitButton" alignment="CENTER" style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Exit" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" right="10.0" />
+                     </padding></VBox>
+               </children>
+            </HBox>
+         </center>
+      </BorderPane>
    </children>
-</AnchorPane>
+</StackPane>
