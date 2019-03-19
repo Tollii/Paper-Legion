@@ -5,25 +5,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.layout.*;
 
-
-public class Tile extends Rectangle {
-    // Vet ikke om disse attributtene er nødvendige.
-    double oldPosX;
-    double oldPosY;
-
+public class Tile extends StackPane { //hver rute er en stackpane omkapslet rundt et rektangel
 
     public Tile(int sizeX, int sizeY){
-        super(sizeX,sizeY,Color.WHITE);
-        super.setStrokeType(StrokeType.INSIDE);
-        super.setStroke(Color.BLACK);
-        //Image tile = new Image("/dragAndDrop/assets/tile.jpg");
-        //this.setFill(new ImagePattern(tile));
-    }
+      Rectangle rect = new Rectangle(sizeX, sizeY, Color.WHITE);
+      rect.setStrokeType(StrokeType.INSIDE);
+      rect.setStroke(Color.BLACK);
 
-    public void setPos(double posX, double posY){
-        this.oldPosX = posX;
-        this.oldPosY = posY;
+      this.getChildren().add(rect);
     }
 }
-//
