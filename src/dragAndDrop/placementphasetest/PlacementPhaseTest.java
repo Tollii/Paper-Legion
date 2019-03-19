@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import java.util.ArrayList;
+import javafx.geometry.Orientation;
 
 public class PlacementPhaseTest extends Application {
   final int boardSize = 7;
@@ -12,8 +14,8 @@ public class PlacementPhaseTest extends Application {
 
   @Override
   public void start(Stage stage) {
-    FlowPane root = new FlowPane();
-    Scene scene = new Scene(root, 1280, 720);
+    Pane root = new Pane();
+    Scene scene = new Scene(root, 1920, 1080);
 
     //lager de ulike ui-komponentene, og returnerer panes som kan styles
     Pane grid = createGrid(root);
@@ -24,24 +26,32 @@ public class PlacementPhaseTest extends Application {
     stage.show();
   }
 
-  public Pane createGrid(FlowPane root) { //lager spillbrettet
+  public Pane createGrid(Pane root) { //lager spillbrettet
     Pane grid = new Pane();
 
     grid.getChildren().add(gp.gp);
+
+    grid.setLayoutX(300);
+    grid.setLayoutY(100);
     root.getChildren().add(grid);
 
     return grid;
   }
 
-  public Pane createUnitPane(FlowPane root) { //lager unitselectoren
+  public Pane createUnitPane(Pane root) { //lager unitselectoren
     Pane unitPane = new Pane();
-    HBox units = new HBox(5);
+    FlowPane units = new FlowPane(Orientation.HORIZONTAL, 5, 5);
 
-    Tile swordman = new Tile(100, 100);
-    Tile bowman = new Tile(100, 100);
+    units.setMinWidth(520);
 
-    units.getChildren().addAll(swordman, bowman);
+    for (int i = 0; i < 7; i++) {
+      Tile tile = new Tile(100, 100);
+      units.getChildren().add(tile);
+    }
     unitPane.getChildren().add(units);
+
+    unitPane.setLayoutX(1150);
+    unitPane.setLayoutY(150);
     root.getChildren().add(unitPane);
 
     return unitPane;
