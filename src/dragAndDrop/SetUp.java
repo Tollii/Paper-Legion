@@ -2,22 +2,28 @@ package dragAndDrop;
 
 import Database.Database;
 
+import java.util.ArrayList;
+
+import static sample.Main.db;
+
 public class SetUp {
 
-    Database database = new Database();
+    protected static ArrayList<String> unitTypeList;
 
-    public SetUp(){}
+    public SetUp(){
+
+        unitTypeList = db.fetchUnitTypeList();
+    }
 
     public void importUnitTypes(){
 
-        ProtoUnitType[] unitTypeArray = new ProtoUnitType[2];
+        ProtoUnitType[] unitTypeArray = new ProtoUnitType[unitTypeList.size()];
 
-        unitTypeArray[0] = Database.importUnitType("swordsman");
-        unitTypeArray[1] = Database.importUnitType("archer");
+        for (int i = 0; i < unitTypeList.size(); i++) {
 
+            unitTypeArray[i] = db.importUnitType(unitTypeList.get(i));
+        }
 
         UnitGenerator unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1]);
-
-
     }
 }

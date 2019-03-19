@@ -44,7 +44,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 
-public class Main extends Application {
+public class GameLogic extends Application {
     private static final int boardSize = 7; // 7x7 for example
     public static final int tileSize = 100; //
     static Unit[][] unitListe = new Unit[boardSize][boardSize];

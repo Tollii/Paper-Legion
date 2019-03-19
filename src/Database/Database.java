@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Database {
@@ -32,7 +33,7 @@ public class Database {
 
     }
 
-    public static ProtoUnitType importUnitType(String unitNameInput){
+    public ProtoUnitType importUnitType(String unitNameInput){
 
         String sqlString = "SELECT * FROM Unit_types WHERE unit_name =" + "'"+unitNameInput+"'";
         Connection myConn = connectionPool.getConnection();
@@ -52,27 +53,17 @@ public class Database {
         try{
             preparedStatement = myConn.prepareStatement(sqlString);
 
-            System.out.println("Executing statement");
             resultSet = preparedStatement.executeQuery();
-            System.out.println("Statement executed");
 
             resultSet.next();
             type = resultSet.getString("unit_name");
-            System.out.println(type);
             hp = (double)resultSet.getFloat("max_health");
-            System.out.println(hp);
             attack = resultSet.getInt("attack");
-            System.out.println(attack);
             abilityCooldown = resultSet.getInt("ability_cooldown");
-            System.out.println(abilityCooldown);
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
-            System.out.println(defenceMultiplier);
             minAttackRange = resultSet.getInt("min_attack_range");
-            System.out.println(minAttackRange);
             maxAttackRange = resultSet.getInt("max_attack_range");
-            System.out.println(maxAttackRange);
             movementRange = resultSet.getInt("movement_range");
-            System.out.println(movementRange);
 
             cleaner.closeResSet(resultSet);
             connectionPool.releaseConnection(myConn);
@@ -87,6 +78,58 @@ public class Database {
 
         return new ProtoUnitType(type, hp,attack,abilityCooldown,defenceMultiplier,minAttackRange,maxAttackRange, movementRange, "", "" );
     }
+
+    public ArrayList<String> fetchUnitTypeList(){
+
+        ArrayList<String> outputList = new ArrayList<>();
+
+        String sqlString = "SELECT unit_name FROM Unit_types";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try{
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+
+                outputList.add(resultSet.getString("unit_name"));
+            }
+
+            cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+            return null;
+        }
+
+        return outputList;
+    }
+
+    //TODO
+    public boolean exportMoveList(){
+        return false;
+    }
+
+    //TODO
+    public boolean exportAttackList(){
+        return false;
+    }
+
+    //TODO
+    public boolean importMoveList(){
+        return false;
+    }
+
+    //TODO
+    public boolean importAttackList(){
+        return false;
+    }
+
 
     public void test() {
 
@@ -251,6 +294,4 @@ public class Database {
 
         database.close();
     }
-
-
 }
