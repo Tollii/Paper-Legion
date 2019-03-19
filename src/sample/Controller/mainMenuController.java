@@ -1,6 +1,5 @@
 package sample.Controller;
 
-import Database.Database;
 import com.jfoenix.controls.JFXButton;
 import hashAndSalt.Login;
 import javafx.fxml.FXML;
@@ -29,7 +28,7 @@ public class mainMenuController {
         Login log = new Login();
 
         logoutButton.setOnAction(event -> {
-            db.logout(1);
+            db.logout(user_id);
             changeScene("/sample/View/login.fxml");
         });
     }
