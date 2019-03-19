@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class Controller2 {
+public class Controller2 extends Controller {
 
     @FXML
     private Button scenechanger;
@@ -13,7 +13,7 @@ public class Controller2 {
     @FXML
     void initialize() {
         scenechanger.setOnAction( event -> {
-            sceneChanger.changeScene("fxml1.fxml");
+            changeSceneI("fxml1.fxml");
         });
     }
 }

@@ -3,7 +3,7 @@ package sample.Test;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class Controller1 {
+public class Controller1 extends Controller {
 
     @FXML
     private Button scenechanger;
@@ -11,8 +11,8 @@ public class Controller1 {
     @FXML
     void initialize() {
         scenechanger.setOnAction( event -> {
-            sceneChanger.changeScene("");
+            changeSceneI("fxml2.fxml");
         });
-
     }
+
 }

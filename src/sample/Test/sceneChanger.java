@@ -14,6 +14,6 @@ public class sceneChanger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        MainControlTest.window.setScene(new Scene(root));
+        //MainControlTest.window.setScene(new Scene(root));
     }
 }

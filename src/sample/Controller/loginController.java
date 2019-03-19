@@ -2,7 +2,15 @@ package sample.Controller;
 
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import sample.Main;
+import sample.Test.sceneChanger;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

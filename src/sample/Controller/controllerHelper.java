@@ -4,20 +4,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Main;
+
 import java.io.IOException;
+
+import static com.apple.eio.FileManager.getResource;
 
 public class controllerHelper {
 
     public static void changeScene(String fxmlDir){
         FXMLLoader loader = new FXMLLoader();
 
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         Class currentClass = new Object() { }.getClass().getEnclosingClass();
 
         loader.setLocation(currentClass.getResource(fxmlDir));
         try {
             loader.load();
-        } catch(IOException e){
+        } catch(IOException  e){
             e.printStackTrace();
         }
         Parent root = loader.getRoot();
@@ -37,15 +40,15 @@ public class controllerHelper {
 //    }
 
 //    public static void changeScene(String fxmlDir) {
-//        FXMLLoader loader = new FXMLLoader();
-//        Class currentClass = new Object() {}.getClass().getEnclosingClass();
-//        loader.setLocation(currentClass.getResource(fxmlDir));
+//
+//        Stage window =
+//        Parent root = null;
+//        Class currentClass = new Object() { }.getClass().getEnclosingClass();
 //        try {
-//            loader.load();
-//        } catch (IOException e ) {
+//            FXMLLoader.load(currentClass.getResource(fxmlDir));
+//        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//        Parent root = loader.getRoot();
 //        Main.window.setScene(new Scene(root));
 //    }
 
