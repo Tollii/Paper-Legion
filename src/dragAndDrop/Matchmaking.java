@@ -3,22 +3,22 @@ package dragAndDrop;
 import Database.Database;
 
 import java.sql.ResultSet;
-import java.util.concurrent.Callable;
+import static sample.Controller.mainMenuController.user_id;
 
+import static sample.Main.db;
 public class Matchmaking extends Thread {
-    static int player_id = 2;
-    private Database con = new Database();
+    private int player_id =2;
     private static boolean gameStarted=false;
     private int match_id;
 
     public void run(){
-        System.out.println("Thread Running!");
+
         //Click to search for games and join if available
-        match_id = con.matchMaking_search(player_id);
+        match_id = db.matchMaking_search(player_id);
 
         //if none available create own game
         if(match_id<0){
-            match_id = con.createGame(player_id);
+            match_id = db.createGame(player_id);
         }
 
         ////wait for other players to join
@@ -28,12 +28,8 @@ public class Matchmaking extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            gameStarted = con.pollGameStarted(match_id);
+            gameStarted = db.pollGameStarted(match_id);
             if(gameStarted){
-
-                //when player join enter game
-                //switch scenes.
                 enterGame(match_id, player_id);
                 System.out.println("Game started");
             }
