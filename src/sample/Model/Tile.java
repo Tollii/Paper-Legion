@@ -18,7 +18,6 @@ public class Tile {
         tile.setFill(Color.WHITE);
         tile.setStrokeType(StrokeType.OUTSIDE);
         tile.setStroke(Color.BLACK);
-
     }
 
     public void setTranslateX(double a){
