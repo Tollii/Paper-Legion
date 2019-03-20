@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static sample.Main.db;
+
 public class loginController extends Controller {
 
     @FXML
@@ -43,9 +45,7 @@ public class loginController extends Controller {
 
         loginEnterButton.setOnAction(event -> {
             //Logs user in and enter main menu. Currently no info about the user is sent along.
-            //int userId = db.login(usernameInput.getText(),passwordInput.getText());
-            //TODO CHANGE THIS AFTER TESTING.
-            int userId = 1;
+            int userId = db.login(usernameInput.getText(),passwordInput.getText());
             if (userId > 0) {
                 setUser_id(userId);
                 changeScene("/sample/View/mainMenu.fxml");
