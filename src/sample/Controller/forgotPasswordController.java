@@ -1,4 +1,4 @@
 package sample.Controller;
 
-public class forgotPasswordController {
+public class forgotPasswordController extends Controller {
 }

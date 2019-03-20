@@ -1,4 +1,4 @@
 package sample.Controller;
 
-public class findGameController {
+public class findGameController extends Controller {
 }
