@@ -4,10 +4,15 @@ import com.jfoenix.controls.JFXButton;
 import dragAndDrop.GameLogic;
 import dragAndDrop.Matchmaking;
 import dragAndDrop.SetUp;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import sample.Main;
+
+import java.util.concurrent.CountDownLatch;
 
 import static Database.Variables.db;
 import static Database.Variables.user_id;
@@ -19,6 +24,7 @@ public class mainMenuController extends Controller{
     private boolean findGameClicked=false;
     Thread thread;
     public static boolean shutDownThread = false;
+    public static boolean startGame = false;
 
 
 
@@ -64,6 +70,7 @@ public class mainMenuController extends Controller{
                 db.abortMatch(user_id);
 
 
+
             } else{
                 thread = new Matchmaking();
                 thread.start();
@@ -74,7 +81,42 @@ public class mainMenuController extends Controller{
 
 
         });
+
+
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        //Background work
+                        final CountDownLatch latch = new CountDownLatch(1);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    //FX Stuff done here
+                                    System.out.println("test");
+                                }finally{
+                                    latch.countDown();
+                                }
+                            }
+                        });
+                        latch.await();
+                        //Keep with the background work
+                        return null;
+                    }
+                };
+            }
+        };
+        //service.start();
     }
+
+    public void refresh(){
+
+
+    }
+
 
     public static void enterGame() throws Exception{
         SetUp setUp = new SetUp();

@@ -22,7 +22,6 @@ public class Matchmaking extends Thread {
 
 
     public void run(){
-
         //Click to search for games and join if available
         match_id = db.matchMaking_search(player_id);
 
@@ -41,7 +40,11 @@ public class Matchmaking extends Thread {
             }
             gameStarted = db.pollGameStarted(match_id);
             if(gameStarted){
-                enterGame(match_id, player_id);
+                try {
+                    mainMenuController.startGame = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 System.out.println("Game started");
             }
 
@@ -53,15 +56,6 @@ public class Matchmaking extends Thread {
 
     public int getMatch_id(){
         return match_id;
-    }
-
-    public void enterGame(int match_id, int player_id){
-        try {
-            mainMenuController.enterGame();
-
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
     }
 
     public void abortGame(int player_id){
