@@ -1,10 +1,12 @@
 package sample;
 
+import Database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Controller.mainMenuController;
 import java.sql.SQLException;
 import static Database.Variables.db;
 import static Database.Variables.user_id;
@@ -16,6 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
+        db = new Database();
         Parent root = FXMLLoader.load(getClass().getResource("/sample/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 600, 400));
