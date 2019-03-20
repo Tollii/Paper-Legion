@@ -13,6 +13,7 @@ import static Database.Variables.user_id;
 public class mainMenuController extends Controller{
     private boolean findGameClicked=false;
     Thread thread = new Matchmaking();
+    public static boolean shutDownThread = false;
 
 
     @FXML
@@ -48,6 +49,7 @@ public class mainMenuController extends Controller{
             if(findGameClicked){
                 mainMenuPlayButton.setText("Find game");
                 findGameClicked=false;
+                shutDownThread = true;
                 db.abortMatch(user_id);
 
 
@@ -60,4 +62,5 @@ public class mainMenuController extends Controller{
 
         });
     }
+
 }

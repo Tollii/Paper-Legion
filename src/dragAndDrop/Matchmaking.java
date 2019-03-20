@@ -6,11 +6,17 @@ import java.sql.ResultSet;
 import static Database.Variables.user_id;
 import static Database.Variables.match_id;
 import static Database.Variables.db;
+import static sample.Controller.mainMenuController.shutDownThread;
 
 
 public class Matchmaking extends Thread {
     private static boolean gameStarted=false;
     private int player_id =user_id;
+
+
+    public void shutDown(){
+        gameStarted = true;
+    }
 
 
     public void run(){
@@ -25,6 +31,7 @@ public class Matchmaking extends Thread {
 
         //wait for other players to join
         while(!gameStarted){
+
             try {
                 Thread.currentThread().sleep(2000); //Polling only every 2 seconds.
             } catch (InterruptedException e) {
@@ -34,6 +41,10 @@ public class Matchmaking extends Thread {
             if(gameStarted){
                 enterGame(match_id, player_id);
                 System.out.println("Game started");
+            }
+
+            if(shutDownThread){
+                gameStarted=true;
             }
         }
     }
