@@ -42,7 +42,6 @@ public class signUpController extends Controller {
     @FXML
     void initialize() {
         goBackButton.setOnAction(event -> {
-            //goBackButton.getScene().getWindow().hide();
             changeScene("/sample/View/login.fxml");
         });
 
