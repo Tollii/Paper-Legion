@@ -10,7 +10,7 @@ import javafx.geometry.Orientation;
 public class PlacementPhaseTest extends Application {
   final int boardSize = 7;
   final Grid gp = new Grid(boardSize, boardSize);
-  Piece[][] pieces = new Piece[boardSize][boardSize];
+  Unit[][] pieces = new Unit[boardSize][boardSize];
 
   @Override
   public void start(Stage stage) {
