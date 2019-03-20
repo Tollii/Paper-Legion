@@ -28,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
@@ -38,30 +39,38 @@ public class GameLogic extends Application {
     static Unit[][] unitListe = new Unit[boardSize][boardSize];
     public static final int offsetX = 100;
     public static final int offsetY = 100;
-    public final int initialWindowSizeX = 1024;
-    public final int initialWindowSizeY = 768;
+    private final int initialWindowSizeX = 1024;
+    private final int initialWindowSizeY = 768;
 
 
-
-    Scene scene;                //Scene for second and third phase of the game
-    HBox root = new HBox();     //Root container
-    StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
-    VBox rSidePanel = new VBox(); //Sidepanel for unit description and End turn button
-    Label description = new Label();
-    JFXButton endTurnButton = new JFXButton("end turn");
-
-    private int selectedPosX; //Holds the X position to the selected piece.
-    private int selectedPosY; //Holds the Y position to the selected piece.
-    private boolean selected = false; // True or false for selected piece.
-    private Pane board = new Pane(); // Holds all the tiles.
+    ////SCENE ELEMENTS////
+    private Scene scene;                                //Scene for second and third phase of the game
+    private HBox root = new HBox();                     //Root container
+    private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
+    private VBox rSidePanel = new VBox();               //Sidepanel for unit description and End turn button
+    private Label description = new Label();
+    private JFXButton endTurnButton = new JFXButton("end turn");
+    private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private int moveCounter = 0; // Counter for movement phase.
-    private int attackCount = 0; // Counter for attack phase.
 
+    ////GAME CONTROL VARIABLES////
+    private int selectedPosX;                           //Holds the X position to the selected piece.
+    private int selectedPosY;                           //Holds the Y position to the selected piece.
+    private int moveCounter = 0;                        // Counter for movement phase.
+    private int attackCount = 0;                        // Counter for attack phase.
+    private boolean selected = false;                   // True or false for selected piece.
+    private boolean movementPhase = true;               //Controls if the player is in movement or attack phase
+    private UnitGenerator unitGenerator = new UnitGenerator();
+
+    ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
     private AudioClip bow = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/arrow.wav").toString());
 
-    private UnitGenerator unitGenerator = new UnitGenerator();
+    ////COLORS////
+    private Paint movementHighlightColor = Color.GREENYELLOW;
+    private Paint attackHighlightColor = Color.DARKRED;
+
+
 
 
 
@@ -90,7 +99,7 @@ public class GameLogic extends Application {
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
         unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
         unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
-        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newArcher());
+        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -114,7 +123,7 @@ public class GameLogic extends Application {
 
             /////////////////////////////////MOVE/////////////////////////////////////////////////
             if (event.getClickCount() == 1) {
-                if (selected && event.getButton() == MouseButton.PRIMARY) {
+                if (selected && movementPhase && event.getButton() == MouseButton.PRIMARY) {
                     move(event);
                 }
             }
@@ -122,31 +131,9 @@ public class GameLogic extends Application {
 
             /////////////////////////////////ATTACK///////////////////////////////////////////////
             if(event.getClickCount() == 2){
-                if(selected){
+                if(selected && !movementPhase){
 
-                    int nyPosX = getPosXFromEvent(event);
-                    int nyPosY = getPosYFromEvent(event);
-                    if (unitListe[nyPosY][nyPosX] != null) {
-                        if(attackRange(nyPosX,nyPosY)){
-                            if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
-                                unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getAttack());
-                                attackCount++;
-                                System.out.println(unitListe[nyPosY][nyPosX].getHp());
-                                if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
-                                    sword.play();
-                                }
-
-                                else if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
-                                    bow.play();
-                                }
-
-                                if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    pieceContainer.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
-                                    unitListe[nyPosY][nyPosX] = null;
-                                }
-                            }
-                        }
-                    }
+                    attack(event);
 
                 }
             }
@@ -154,6 +141,7 @@ public class GameLogic extends Application {
 
             //////////////////////////////DESELECT/////////////////////////////////////////////
             if(event.getButton() == MouseButton.SECONDARY){
+
                 deSelect(rSidePanel, description);
             }
             //////////////////////////DESELECT END/////////////////////////////////////////////
@@ -227,6 +215,7 @@ public class GameLogic extends Application {
     private void deSelect(VBox sidePanel, Label description){
 
         for (int i = 0; i < unitListe.length; i++) {
+
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
                     unitListe[i][j].setStroke(Color.TRANSPARENT);
@@ -256,6 +245,38 @@ public class GameLogic extends Application {
                 unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
                 moveCounter++;
                 highlightPossibleMoves();
+
+                movementPhase = false;
+                clearHighlight();
+                highlightPossibleAttacks();
+            }
+        }
+    }
+
+    private void attack(MouseEvent event){
+
+        int nyPosX = getPosXFromEvent(event);
+        int nyPosY = getPosYFromEvent(event);
+        if (unitListe[nyPosY][nyPosX] != null) {
+            if(attackRange(nyPosX,nyPosY)){
+                if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
+                    unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getAttack());
+                    attackCount++;
+                    System.out.println(unitListe[nyPosY][nyPosX].getHp());
+
+                    if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
+                        sword.play();
+                    }
+
+                    else if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
+                        bow.play();
+                    }
+
+                    if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
+                        pieceContainer.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
+                        unitListe[nyPosY][nyPosX] = null;
+                    }
+                }
             }
         }
     }
@@ -264,7 +285,7 @@ public class GameLogic extends Application {
     private void highlightPossibleMoves() {
         int posX = selectedPosX;
         int posY = selectedPosY;
-        int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getMovementRange();
+        int movementRange = unitListe[selectedPosY][selectedPosX].getMovementRange();
 
         System.out.println(selectedPosX + "SelectposX");
         System.out.println("PosX+1: " + (posX + 2));
@@ -274,19 +295,19 @@ public class GameLogic extends Application {
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if (selectedPosX - 1 >= 0) {
-            grid.liste[posY][posX - 1].setFill(Color.DARKRED);
+            grid.liste[posY][posX - 1].setFill(movementHighlightColor);
         }
 
         if (selectedPosX + 1 < boardSize) {
-            grid.liste[posY][posX + 1].setFill(Color.DARKRED);
+            grid.liste[posY][posX + 1].setFill(movementHighlightColor);
         }
 
         if (selectedPosY - 1 >= 0) {
-            grid.liste[posY - 1][posX].setFill(Color.DARKRED);
+            grid.liste[posY - 1][posX].setFill(movementHighlightColor);
         }
 
         if (selectedPosY + 1 < boardSize) {
-            grid.liste[posY + 1][posX].setFill(Color.DARKRED);
+            grid.liste[posY + 1][posX].setFill(movementHighlightColor);
         }
 
         //////////////////////////////////////////////////////////////////////
@@ -295,46 +316,73 @@ public class GameLogic extends Application {
         ////////////////////////////CORNERS///////////////////////////////////
 
         if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
-            grid.liste[posY + 1][posX + 1].setFill(Color.DARKRED);
+            grid.liste[posY + 1][posX + 1].setFill(movementHighlightColor);
         }
 
         if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
-            grid.liste[posY - 1][posX - 1].setFill(Color.DARKRED);
+            grid.liste[posY - 1][posX - 1].setFill(movementHighlightColor);
         }
 
         if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
-            grid.liste[posY + 1][posX - 1].setFill(Color.DARKRED);
+            grid.liste[posY + 1][posX - 1].setFill(movementHighlightColor);
         }
 
         if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
-            grid.liste[posY - 1][posX + 1].setFill(Color.DARKRED);
+            grid.liste[posY - 1][posX + 1].setFill(movementHighlightColor);
 
         }
         ////////////////////////////////////////////////////////////////////
 
-        //////////////IF PIECE HAS LONGER RANGE////////////////////////////
-        if(unitListe[selectedPosY][selectedPosX].getMovementRange()>1){
+        //////////////IF PIECE HAS LONGER RANGE THAN 1////////////////////////////
+        if(unitListe[selectedPosY][selectedPosX].getMovementRange() > 1){
 
-            if (selectedPosX - maxPossibleMoves >= 0) {
-                grid.liste[posY][posX - maxPossibleMoves].setFill(Color.DARKRED);
+            if (selectedPosX - movementRange >= 0) {
+                grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
             }
 
-            if (selectedPosX + maxPossibleMoves < boardSize) {
-                grid.liste[posY][posX + maxPossibleMoves].setFill(Color.DARKRED);
+            if (selectedPosX + movementRange < boardSize) {
+                grid.liste[posY][posX + movementRange].setFill(movementHighlightColor);
             }
 
-            if (selectedPosY - maxPossibleMoves >= 0) {
-                grid.liste[posY - maxPossibleMoves][posX].setFill(Color.DARKRED);
+            if (selectedPosY - movementRange >= 0) {
+                grid.liste[posY - movementRange][posX].setFill(movementHighlightColor);
             }
 
-            if (selectedPosY + maxPossibleMoves < boardSize) {
-                grid.liste[posY + maxPossibleMoves][posX].setFill(Color.DARKRED);
+            if (selectedPosY + movementRange < boardSize) {
+                grid.liste[posY + movementRange][posX].setFill(movementHighlightColor);
             }
 
 
         }
 
         ///////////////////////////////////////////////////////////////////
+    }
+
+    private void highlightPossibleAttacks(){
+
+//        System.out.println(Math.abs(selectedPosX * 100 - unitListe[0][1].getTranslateX())/100);
+  //      System.out.println(Math.abs(selectedPosY * 100 - unitListe[0][1].getTranslateY())/100);
+//        System.out.println(unitListe[selectedPosY][selectedPosX].getMinAttackRange());
+  //      System.out.println(unitListe[selectedPosY][selectedPosX].getMaxAttackRange());
+
+        for(int i=0; i<unitListe.length; i++){
+            for(int j=0; j<unitListe[i].length; j++){
+                if (unitListe[i][j] != null && unitListe[i][j] != unitListe[selectedPosY][selectedPosX]) {
+
+
+                    if (Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateX())/100 <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()
+                            && Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateX())/100 >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()
+                            && Math.abs(selectedPosY * 100 - unitListe[i][j].getTranslateY())/100 <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()
+                            && Math.abs(selectedPosY * 100 - unitListe[i][j].getTranslateY())/100 >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()){
+
+                        System.out.println(Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateX()));
+                        System.out.println(Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateY()));
+
+                        grid.liste[i][j].setFill(attackHighlightColor);
+                    }
+                }
+            }
+        }
     }
 
     private void clearHighlight() {
@@ -368,9 +416,6 @@ public class GameLogic extends Application {
            }
 
 
-
-
-
 //        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
 //                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
 //            return true;
@@ -402,5 +447,4 @@ public class GameLogic extends Application {
 
         launch(args);
     }
-
 }
