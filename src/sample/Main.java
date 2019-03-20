@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Controller.mainMenuController;
 
 public class Main extends Application {
 
@@ -25,4 +26,11 @@ public class Main extends Application {
         launch(args);
     }
 
+    @Override
+    public void stop() {
+        // executed when the application shuts down
+        if (mainMenuController.user_id > 0) {
+            db.logout(mainMenuController.user_id);
+        }
+    }
 }

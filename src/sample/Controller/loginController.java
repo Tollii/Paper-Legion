@@ -61,7 +61,7 @@ public class loginController {
                 changeScene("/sample/View/mainMenu.fxml");
             } else {
                 //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
-                alertField.setText("Error occured while logging in");
+                alertField.setText("Login Failed");
             }
         });
     }
