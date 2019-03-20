@@ -53,8 +53,8 @@ public class Matchmaking extends Thread {
         return match_id;
     }
 
-    public boolean enterGame(int match_id, int player_id){
-        return true;
+    public void enterGame(int match_id, int player_id){
+        GameLogic.launch();
     }
 
     public void abortGame(int player_id){
