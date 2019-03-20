@@ -1,11 +1,11 @@
 package dragAndDrop;
 
-import Database.Database;
+
 
 import java.sql.ResultSet;
-import static sample.Controller.mainMenuController.user_id;
+import static Database.Variables.user_id;
 
-import static sample.Main.db;
+import static Database.Variables.db;
 public class Matchmaking extends Thread {
     private static boolean gameStarted=false;
     private int player_id =user_id;

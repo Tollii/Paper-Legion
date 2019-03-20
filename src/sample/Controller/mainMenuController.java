@@ -12,13 +12,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static sample.Controller.controllerHelper.*;
-import static sample.Main.db;
+import static Database.Variables.db;
+import static Database.Variables.user_id;
 
 
 public class mainMenuController {
     private boolean findGameClicked=false;
 
-    public static int user_id;
 
     @FXML
     private JFXButton mainMenuPlayButton;

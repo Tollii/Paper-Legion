@@ -1,5 +1,6 @@
 package sample.Controller;
 
+import Database.Database;
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static sample.Controller.controllerHelper.*;
-import static sample.Main.db;
+import static Database.Variables.db;
+import static Database.Variables.user_id;
 
 public class loginController {
     @FXML
@@ -63,7 +65,7 @@ public class loginController {
     }
 
 
-    public void setUser_id(int user_id) {
-        mainMenuController.user_id = user_id;
+    public void setUser_id(int user_id_fromLogin) {
+        user_id = user_id_fromLogin;
     }
 }

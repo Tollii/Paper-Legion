@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    static public Database db = new Database();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
