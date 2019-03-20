@@ -6,11 +6,11 @@ import javafx.scene.control.Button;
 public class Controller1 extends Controller {
 
     @FXML
-    private Button scenechanger;
+    private Button btn_change;
 
     @FXML
     void initialize() {
-        scenechanger.setOnAction( event -> {
+        btn_change.setOnAction( event -> {
             changeSceneI("fxml2.fxml");
         });
     }

@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.Controller.mainMenuController;
 
+import java.sql.SQLException;
+
 public class Main extends Application {
 
     public static Database db = new Database();
@@ -31,6 +33,11 @@ public class Main extends Application {
         // executed when the application shuts down
         if (mainMenuController.user_id > 0) {
             db.logout(mainMenuController.user_id);
+        }
+        try {
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

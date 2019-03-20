@@ -17,7 +17,7 @@
                         <Font size="22.0"/>
                     </font>
                 </Label>
-                <JFXButton fx:id="scenechanger" maxHeight="30.0" minHeight="30.0" prefHeight="30.0"
+                <JFXButton fx:id="btn_change" maxHeight="30.0" minHeight="30.0" prefHeight="30.0"
                            style="-fx-background-color: #e3e4e5#e3e4e5;" text="Go to scene 2"/>
             </children>
         </VBox>

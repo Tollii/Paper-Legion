@@ -1,15 +1,13 @@
-package sample.Test;
+package sample.Controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import sample.Main;
 
 import java.io.IOException;
 
 public class Controller {
-
-    Stage window = new Stage();
 
     public void changeSceneI(String fxmlDir) {
         Parent root = null;
@@ -17,17 +15,14 @@ public class Controller {
 //        }.getClass().getEnclosingClass();
 
         Class currentClass = this.getClass();
-
         try {
             root = FXMLLoader.load(currentClass.getResource(fxmlDir));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (root == null) {
-            System.out.println("root is null");
-        } else {
-            MainControlTest.window.setScene(new Scene(root));
+        if (root != null) {
+            Main.window.setScene(new Scene(root));
         }
     }
 }

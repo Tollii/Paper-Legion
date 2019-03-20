@@ -8,11 +8,11 @@ import java.io.IOException;
 public class Controller2 extends Controller {
 
     @FXML
-    private Button scenechanger;
+    private Button btn_change;
 
     @FXML
     void initialize() {
-        scenechanger.setOnAction( event -> {
+        btn_change.setOnAction( event -> {
             changeSceneI("fxml1.fxml");
         });
     }

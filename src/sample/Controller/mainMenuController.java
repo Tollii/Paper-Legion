@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import static sample.Controller.controllerHelper.changeScene;
 import static sample.Main.db;
 
-public class mainMenuController {
+public class mainMenuController extends Controller {
 
     public static int user_id;
 
@@ -36,7 +36,7 @@ public class mainMenuController {
 
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
-            changeScene("/sample/View/login.fxml");
+            changeSceneI("/sample/View/login.fxml");
         });
     }
 }

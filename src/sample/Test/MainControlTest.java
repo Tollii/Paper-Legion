@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class MainControlTest extends Application {
 
-        public Stage window;
+        public static Stage window;
 
         //Just a test folder I used to try out some scene switching. -Joakim
 
