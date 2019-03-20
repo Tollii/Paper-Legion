@@ -18,30 +18,18 @@
 package dragAndDrop;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
-
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
 
 
 public class GameLogic extends Application {
@@ -50,13 +38,24 @@ public class GameLogic extends Application {
     static Unit[][] unitListe = new Unit[boardSize][boardSize];
     public static final int offsetX = 100;
     public static final int offsetY = 100;
-    private Label description = new Label();
+    public final int initialWindowSizeX = 1024;
+    public final int initialWindowSizeY = 768;
+
+
+
+    Scene scene;                //Scene for second and third phase of the game
+    HBox root = new HBox();     //Root container
+    StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
+    VBox rSidePanel = new VBox(); //Sidepanel for unit description and End turn button
+    Label description = new Label();
+    JFXButton endTurnButton = new JFXButton("end turn");
+
     private int selectedPosX; //Holds the X position to the selected piece.
     private int selectedPosY; //Holds the Y position to the selected piece.
     private boolean selected = false; // True or false for selected piece.
-    private GridPane ins = new GridPane(); // Holds all the tiles.
-    private Grid testGrid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private int moveCounter =0; // Counter for movement phase.
+    private Pane board = new Pane(); // Holds all the tiles.
+    private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
+    private int moveCounter = 0; // Counter for movement phase.
     private int attackCount = 0; // Counter for attack phase.
 
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
@@ -83,43 +82,9 @@ public class GameLogic extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //////////////////////////SCENE AND CONTAINER SETUP///////////////////////////////////////
         Stage window = primaryStage; // Program window
-        Scene scene1;                //Scene for second and third phase of the game
-        StackPane stackPane = new StackPane();
-        stackPane.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
-        ins.getChildren().add(testGrid.gp); //Insert grid from Grid class.
-        stackPane.getChildren().add(ins);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        //BorderPane bp = new BorderPane();
-        VBox rSidePanel = new VBox();
-        JFXButton endturn = new JFXButton("end turn");
-        HBox hbox = new HBox();
-        hbox.getChildren().add(stackPane);
-        hbox.getChildren().add(rSidePanel);
-        hbox.setSpacing(150);
-        stackPane.setPrefWidth(900);
-        description.setStyle("-fx-font-family: 'Arial Black'");
-        rSidePanel.setPrefWidth(250);
-        endturn.setPrefWidth(150);
-        endturn.setPrefHeight(75);
-        endturn.setTextFill(Color.WHITE);
-        endturn.setStyle("-fx-background-color: #000000");
-        rSidePanel.getChildren().add(endturn);
-        rSidePanel.setPrefWidth(650);
-        description.setPadding(new Insets(0,0,350,0));
-        rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
-        hbox.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
-
-
-
-        // IF INSERTS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
-//window.widthProperty().addListener();
-
-
-        scene1 = new Scene(hbox, 1024, 768);
-
-        ///////////////////////////////////SETUP END/////////////////////////////////////////////
+        sceneSetUp();
 
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
@@ -133,7 +98,7 @@ public class GameLogic extends Application {
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null) {
-                    stackPane.getChildren().add(unitListe[i][j].getPieceAvatar());
+                    pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
                 }
             }
         }
@@ -141,33 +106,16 @@ public class GameLogic extends Application {
 
 
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
-        scene1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (!selected) {
-               select(event, rSidePanel);
+               select(event, rSidePanel, description);
             }
             ////////////////////////////SELECTION END/////////////////////////////////////////////
 
             /////////////////////////////////MOVE/////////////////////////////////////////////////
             if (event.getClickCount() == 1) {
                 if (selected && event.getButton() == MouseButton.PRIMARY) {
-                    int nyPosX = getPosXFromEvent(event);
-                    int nyPosY = getPosYFromEvent(event);
-                    if(attackRange(nyPosX,nyPosY)){
-                        if (unitListe[nyPosY][nyPosX] == null) {
-                            unitListe[selectedPosY][selectedPosX].setTranslate(nyPosX, nyPosY);
-                           // unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
-                            //unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
-                            clearHighlight();
-                            unitListe[nyPosY][nyPosX] = unitListe[selectedPosY][selectedPosX];
-                            unitListe[selectedPosY][selectedPosX] = null;
-                            selectedPosX = nyPosX;
-                            selectedPosY = nyPosY;
-                            unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
-                            moveCounter++;
-                            highlightPossibleMoves();
-                        }
-                    }
-
+                    move(event);
                 }
             }
             ///////////////////////////////MOVE END///////////////////////////////////////////////
@@ -193,7 +141,7 @@ public class GameLogic extends Application {
                                 }
 
                                 if (unitListe[nyPosY][nyPosX].getHp() <= 0) {
-                                    stackPane.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
+                                    pieceContainer.getChildren().removeAll(unitListe[nyPosY][nyPosX].getPieceAvatar());
                                     unitListe[nyPosY][nyPosX] = null;
                                 }
                             }
@@ -206,7 +154,7 @@ public class GameLogic extends Application {
 
             //////////////////////////////DESELECT/////////////////////////////////////////////
             if(event.getButton() == MouseButton.SECONDARY){
-                deSelect(event, rSidePanel);
+                deSelect(rSidePanel, description);
             }
             //////////////////////////DESELECT END/////////////////////////////////////////////
 
@@ -216,11 +164,43 @@ public class GameLogic extends Application {
 
 
         window.setTitle("BINARY WARFARE");
-        window.setScene(scene1);
+        window.setScene(scene);
         window.show();
     }
 
-    private void select(MouseEvent event, VBox vBox){
+    private void sceneSetUp() {
+        root.getChildren().add(pieceContainer);
+        root.getChildren().add(rSidePanel);
+        root.setSpacing(150);
+        root.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
+
+        pieceContainer.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
+        pieceContainer.setPrefWidth(900);
+
+        board.getChildren().add(grid.gp); //Insert grid from Grid class.
+        pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
+
+
+        endTurnButton.setPrefWidth(150);
+        endTurnButton.setPrefHeight(75);
+        endTurnButton.setTextFill(Color.WHITE);
+        endTurnButton.setStyle("-fx-background-color: #000000");
+
+        description.setStyle("-fx-font-family: 'Arial Black'");
+        description.setPadding(new Insets(0,0,350,0));
+
+        rSidePanel.setPrefWidth(250);
+        rSidePanel.getChildren().add(endTurnButton);
+        rSidePanel.setPrefWidth(650);
+        rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
+
+        // IF INSERTS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
+        //window.widthProperty().addListener();
+
+        scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
+    }
+
+    private void select(MouseEvent event, VBox vBox, Label description){
         if (!(event.getButton() == MouseButton.SECONDARY)) {
             int posX = getPosXFromEvent(event);
             int posY = getPosYFromEvent(event);
@@ -244,7 +224,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private void deSelect(Event event, VBox sidePanel){
+    private void deSelect(VBox sidePanel, Label description){
 
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
@@ -258,6 +238,26 @@ public class GameLogic extends Application {
         selected = false;
         clearHighlight();
 
+    }
+
+    private void move(MouseEvent event){
+        int nyPosX = getPosXFromEvent(event);
+        int nyPosY = getPosYFromEvent(event);
+        if(attackRange(nyPosX,nyPosY)){
+            if (unitListe[nyPosY][nyPosX] == null) {
+                unitListe[selectedPosY][selectedPosX].setTranslate(nyPosX, nyPosY);
+                // unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
+                //unitListe[selectedPosY][selectedPosX].setTranslateY(nyPosY*100);
+                clearHighlight();
+                unitListe[nyPosY][nyPosX] = unitListe[selectedPosY][selectedPosX];
+                unitListe[selectedPosY][selectedPosX] = null;
+                selectedPosX = nyPosX;
+                selectedPosY = nyPosY;
+                unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                moveCounter++;
+                highlightPossibleMoves();
+            }
+        }
     }
 
 
@@ -274,19 +274,19 @@ public class GameLogic extends Application {
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if (selectedPosX - 1 >= 0) {
-            testGrid.liste[posY][posX - 1].setFill(Color.DARKRED);
+            grid.liste[posY][posX - 1].setFill(Color.DARKRED);
         }
 
         if (selectedPosX + 1 < boardSize) {
-            testGrid.liste[posY][posX + 1].setFill(Color.DARKRED);
+            grid.liste[posY][posX + 1].setFill(Color.DARKRED);
         }
 
         if (selectedPosY - 1 >= 0) {
-            testGrid.liste[posY - 1][posX].setFill(Color.DARKRED);
+            grid.liste[posY - 1][posX].setFill(Color.DARKRED);
         }
 
         if (selectedPosY + 1 < boardSize) {
-            testGrid.liste[posY + 1][posX].setFill(Color.DARKRED);
+            grid.liste[posY + 1][posX].setFill(Color.DARKRED);
         }
 
         //////////////////////////////////////////////////////////////////////
@@ -295,19 +295,19 @@ public class GameLogic extends Application {
         ////////////////////////////CORNERS///////////////////////////////////
 
         if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
-            testGrid.liste[posY + 1][posX + 1].setFill(Color.DARKRED);
+            grid.liste[posY + 1][posX + 1].setFill(Color.DARKRED);
         }
 
         if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
-            testGrid.liste[posY - 1][posX - 1].setFill(Color.DARKRED);
+            grid.liste[posY - 1][posX - 1].setFill(Color.DARKRED);
         }
 
         if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
-            testGrid.liste[posY + 1][posX - 1].setFill(Color.DARKRED);
+            grid.liste[posY + 1][posX - 1].setFill(Color.DARKRED);
         }
 
         if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
-            testGrid.liste[posY - 1][posX + 1].setFill(Color.DARKRED);
+            grid.liste[posY - 1][posX + 1].setFill(Color.DARKRED);
 
         }
         ////////////////////////////////////////////////////////////////////
@@ -316,19 +316,19 @@ public class GameLogic extends Application {
         if(unitListe[selectedPosY][selectedPosX].getMovementRange()>1){
 
             if (selectedPosX - maxPossibleMoves >= 0) {
-                testGrid.liste[posY][posX - maxPossibleMoves].setFill(Color.DARKRED);
+                grid.liste[posY][posX - maxPossibleMoves].setFill(Color.DARKRED);
             }
 
             if (selectedPosX + maxPossibleMoves < boardSize) {
-                testGrid.liste[posY][posX + maxPossibleMoves].setFill(Color.DARKRED);
+                grid.liste[posY][posX + maxPossibleMoves].setFill(Color.DARKRED);
             }
 
             if (selectedPosY - maxPossibleMoves >= 0) {
-                testGrid.liste[posY - maxPossibleMoves][posX].setFill(Color.DARKRED);
+                grid.liste[posY - maxPossibleMoves][posX].setFill(Color.DARKRED);
             }
 
             if (selectedPosY + maxPossibleMoves < boardSize) {
-                testGrid.liste[posY + maxPossibleMoves][posX].setFill(Color.DARKRED);
+                grid.liste[posY + maxPossibleMoves][posX].setFill(Color.DARKRED);
             }
 
 
@@ -338,9 +338,9 @@ public class GameLogic extends Application {
     }
 
     private void clearHighlight() {
-        for (int i = 0; i < testGrid.liste.length; i++) {
-            for (int j = 0; j < testGrid.liste[i].length; j++) {
-                testGrid.liste[i][j].setFill(Color.TRANSPARENT);
+        for (int i = 0; i < grid.liste.length; i++) {
+            for (int j = 0; j < grid.liste[i].length; j++) {
+                grid.liste[i][j].setFill(Color.TRANSPARENT);
 
             }
         }
