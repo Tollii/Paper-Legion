@@ -53,8 +53,8 @@ public class Matchmaking extends Thread {
         return match_id;
     }
 
-    public void enterGame(int match_id, int player_id){
-        System.out.println("switch scenes");
+    public boolean enterGame(int match_id, int player_id){
+        return true;
     }
 
     public void abortGame(int player_id){
