@@ -12,7 +12,12 @@ public class SetUp {
 
     public SetUp(){
 
+        if(db == null){
+            db = new Database();
+        }
+
         unitTypeList = db.fetchUnitTypeList();
+        //Test
     }
 
     public void importUnitTypes(){
