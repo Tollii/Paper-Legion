@@ -17,7 +17,6 @@ import java.util.Arrays;
 public class Database {
 
     //Class variables
-
     static BasicConnectionPool connectionPool = null;
     static private Cleaner cleaner = new Cleaner();
 
@@ -246,16 +245,16 @@ public class Database {
     public void test() {
 
         System.out.println("Test begun");
-        String sqlString = "SELECT username FROM Users";
+        String sqlString = "SELECT username FROM Useresult";
         Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedQuery = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            preparedQuery = myConn.prepareStatement(sqlString);
+            preparedStatement = myConn.prepareStatement(sqlString);
 
             System.out.println("Executing statement");
-            resultSet = preparedQuery.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             System.out.println("Statement executed");
 
             while (resultSet.next()) {
@@ -277,36 +276,34 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
 
         //SELECT statement finds hashed password and salt from the entered user.
-        String stmt = "SELECT user_id,hashedpassword,passwordsalt,online_status FROM Users WHERE username = ?";
-        String stmt2 = "UPDATE Users SET online_status = 1 WHERE user_id = ?";
+        String stmt = "SELECT user_id,hashedpassword,passwordsalt,online_status FROM Useresult WHERE username = ?";
+        String stmt2 = "UPDATE Useresult SET online_status = 1 WHERE user_id = ?";
 
-        PreparedStatement preparedQuery = null;
-        PreparedStatement preparedUpdate = null;
-        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet result = null;
         try {
-            preparedQuery = myConn.prepareStatement(stmt);
-            preparedQuery.setString(1, username);
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setString(1, username);
 
-            rs = preparedQuery.executeQuery();
-            rs.next();
-            int userId = rs.getInt("user_id");
-            byte[] hash = rs.getBytes("hashedpassword");
-            byte[] salt = rs.getBytes("passwordsalt");
-            int loginStatus = rs.getInt("online_status");
+            result = preparedStatement.executeQuery();
+            result.next();
+            int userId = result.getInt("user_id");
+            byte[] hash = result.getBytes("hashedpassword");
+            byte[] salt = result.getBytes("passwordsalt");
+            int loginStatus = result.getInt("online_status");
 
             //Checks if the user is already logged in. If not the user is logged in.
             if (verifyPassword(password, hash, salt) && loginStatus == 0) {
-                preparedUpdate = myConn.prepareStatement(stmt2);
-                preparedUpdate.setInt(1, userId);
-                preparedUpdate.executeUpdate();
+                preparedStatement = myConn.prepareStatement(stmt2);
+                preparedStatement.setInt(1, userId);
+                preparedStatement.executeUpdate();
                 return userId;
             }
         } catch (SQLException e) {
             //e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(preparedQuery);
-            Cleaner.closeStatement(preparedUpdate);
-            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(result);
             connectionPool.releaseConnection(myConn);
         }
         return -1;
@@ -315,17 +312,17 @@ public class Database {
     public boolean logout(int userId) {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
-        String stmt = "UPDATE Users SET online_status = 0 WHERE user_id = ?";
-        PreparedStatement preparedQuery = null;
+        String stmt = "UPDATE Useresult SET online_status = 0 WHERE user_id = ?";
+        PreparedStatement preparedStatement = null;
         try {
-            preparedQuery = myConn.prepareStatement(stmt);
-            preparedQuery.setInt(1, userId);
-            preparedQuery.executeUpdate();
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(preparedQuery);
+            Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
         return false;
@@ -336,14 +333,14 @@ public class Database {
         //TODO Check if user is not already registered, or username is taken.
 
         Connection con = connectionPool.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet result = null;
         try {
-            ps = con.prepareStatement("SELECT username FROM Users WHERE username = ?");
-            ps.setString(1, user);
-            rs = ps.executeQuery();
+            preparedStatement = con.prepareStatement("SELECT username FROM Useresult WHERE username = ?");
+            preparedStatement.setString(1, user);
+            result = preparedStatement.executeQuery();
 
-            if (rs.next()) {
+            if (result.next()) {
                 return 0;
                 // Brukeren finnes
             } else {
@@ -362,8 +359,8 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(ps);
-            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(result);
             connectionPool.releaseConnection(con);
         }
         return -1;
@@ -396,7 +393,7 @@ public class Database {
     }
 
     private int addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
-        String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
+        String stmt = "INSERT INTO Useresult (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         try {
