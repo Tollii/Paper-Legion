@@ -1,7 +1,6 @@
 package Database;
 
 import dragAndDrop.ProtoUnitType;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -12,15 +11,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Database {
 
     //Class variables
+
     static BasicConnectionPool connectionPool = null;
     static private Cleaner cleaner = new Cleaner();
 
     public Database() {
+
         try {
             System.out.println("Creating pool");
             connectionPool = BasicConnectionPool.create();
@@ -206,12 +208,10 @@ public class Database {
         int maxAttackRange;
         int movementRange;
 
-        try {
+        try{
             preparedStatement = myConn.prepareStatement(sqlString);
 
-            System.out.println("Executing statement");
             resultSet = preparedStatement.executeQuery();
-            System.out.println("Statement executed");
 
             resultSet.next();
             type = resultSet.getString("unit_name");
@@ -219,17 +219,11 @@ public class Database {
             hp = (double) resultSet.getFloat("max_health");
             System.out.println(hp);
             attack = resultSet.getInt("attack");
-            System.out.println(attack);
             abilityCooldown = resultSet.getInt("ability_cooldown");
-            System.out.println(abilityCooldown);
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
-            System.out.println(defenceMultiplier);
             minAttackRange = resultSet.getInt("min_attack_range");
-            System.out.println(minAttackRange);
             maxAttackRange = resultSet.getInt("max_attack_range");
-            System.out.println(maxAttackRange);
             movementRange = resultSet.getInt("movement_range");
-            System.out.println(movementRange);
 
             cleaner.closeResSet(resultSet);
             connectionPool.releaseConnection(myConn);
@@ -237,15 +231,69 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
             connectionPool.releaseConnection(myConn);
+
             return null;
         }
-        return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
+
+        return new ProtoUnitType(type, hp,attack,abilityCooldown,defenceMultiplier,minAttackRange,maxAttackRange, movementRange, "", "" );
     }
+
+    public ArrayList<String> fetchUnitTypeList(){
+
+        ArrayList<String> outputList = new ArrayList<>();
+
+        String sqlString = "SELECT unit_name FROM Unit_types";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try{
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+
+                outputList.add(resultSet.getString("unit_name"));
+            }
+
+            cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            connectionPool.releaseConnection(myConn);
+            return null;
+        }
+
+        return outputList;
+    }
+
+    //TODO
+    public boolean exportMoveList(){
+        return false;
+    }
+
+    //TODO
+    public boolean exportAttackList(){
+        return false;
+    }
+
+    //TODO
+    public boolean importMoveList(){
+        return false;
+    }
+
+    //TODO
+    public boolean importAttackList(){
+        return false;
+    }
+
 
     public void test() {
 
         System.out.println("Test begun");
-        String sqlString = "SELECT username FROM Useresult";
+        String sqlString = "SELECT username FROM Users";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -270,40 +318,42 @@ public class Database {
         }
     }
 
-    //-------------Sign in methods-------------------------------------------------------------------------------------------
+    //Should probably return more than a boolean so we can identify who is logged in.
     public int login(String username, String password) {
 
         Connection myConn = connectionPool.getConnection();
 
         //SELECT statement finds hashed password and salt from the entered user.
-        String stmt = "SELECT user_id,hashedpassword,passwordsalt,online_status FROM Useresult WHERE username = ?";
-        String stmt2 = "UPDATE Useresult SET online_status = 1 WHERE user_id = ?";
+        String stmt = "SELECT user_id,hashedpassword,passwordsalt,online_status FROM Users WHERE username = ?";
+        String stmt2 = "UPDATE Users SET online_status = 1 WHERE user_id = ?";
 
-        PreparedStatement preparedStatement = null;
-        ResultSet result = null;
+        PreparedStatement preparedQuery = null;
+        PreparedStatement preparedUpdate = null;
+        ResultSet rs = null;
         try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setString(1, username);
+            preparedQuery = myConn.prepareStatement(stmt);
+            preparedQuery.setString(1, username);
 
-            result = preparedStatement.executeQuery();
-            result.next();
-            int userId = result.getInt("user_id");
-            byte[] hash = result.getBytes("hashedpassword");
-            byte[] salt = result.getBytes("passwordsalt");
-            int loginStatus = result.getInt("online_status");
+            rs = preparedQuery.executeQuery();
+            rs.next();
+            int userId = rs.getInt("user_id");
+            byte[] hash = rs.getBytes("hashedpassword");
+            byte[] salt = rs.getBytes("passwordsalt");
+            int loginStatus = rs.getInt("online_status");
 
             //Checks if the user is already logged in. If not the user is logged in.
             if (verifyPassword(password, hash, salt) && loginStatus == 0) {
-                preparedStatement = myConn.prepareStatement(stmt2);
-                preparedStatement.setInt(1, userId);
-                preparedStatement.executeUpdate();
+                preparedUpdate = myConn.prepareStatement(stmt2);
+                preparedUpdate.setInt(1, userId);
+                preparedUpdate.executeUpdate();
                 return userId;
             }
         } catch (SQLException e) {
             //e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(preparedQuery);
+            Cleaner.closeStatement(preparedUpdate);
+            Cleaner.closeResSet(rs);
             connectionPool.releaseConnection(myConn);
         }
         return -1;
@@ -312,17 +362,17 @@ public class Database {
     public boolean logout(int userId) {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
-        String stmt = "UPDATE Useresult SET online_status = 0 WHERE user_id = ?";
-        PreparedStatement preparedStatement = null;
+        String stmt = "UPDATE Users SET online_status = 0 WHERE user_id = ?";
+        PreparedStatement preparedQuery = null;
         try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
+            preparedQuery = myConn.prepareStatement(stmt);
+            preparedQuery.setInt(1, userId);
+            preparedQuery.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeStatement(preparedQuery);
             connectionPool.releaseConnection(myConn);
         }
         return false;
@@ -393,7 +443,7 @@ public class Database {
     }
 
     private int addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
-        String stmt = "INSERT INTO Useresult (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
+        String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         try {
@@ -403,9 +453,10 @@ public class Database {
             preparedStatement.setBytes(3, salt);
             preparedStatement.setString(4, email);
             preparedStatement.setInt(5, 0);
-            if (preparedStatement.executeUpdate() > 0) {
+            if(preparedStatement.executeUpdate() > 0){
                 return 1;
-            } else {
+            }
+            else {
                 return -1;
             }
         } catch (SQLException e) {
@@ -416,7 +467,6 @@ public class Database {
         }
         return -1;
     }
-    //--------------------------------------------------------------------------------------------------------
 
     public void close() throws SQLException {
         connectionPool.shutdown();
@@ -432,6 +482,4 @@ public class Database {
 
         database.close();
     }
-
-
 }

@@ -1,15 +1,12 @@
 package dragAndDrop;
 
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 
 public class Unit extends Rectangle {
     private Label healthbar;
@@ -38,8 +35,8 @@ public class Unit extends Rectangle {
 
 
     public Unit(double row, double column, boolean enemy, UnitType type){
-        super.setWidth(Main.tileSize);
-        super.setHeight(Main.tileSize);
+        super.setWidth(GameLogic.tileSize);
+        super.setHeight(GameLogic.tileSize);
         this.enemy = enemy;
 
         ///SETS UNIT INFO////
@@ -60,7 +57,7 @@ public class Unit extends Rectangle {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(this, healthbar);
         pieceAvatar.getChildren().add(stackPane);
-        healthbar.setPrefWidth(Main.tileSize);
+        healthbar.setPrefWidth(GameLogic.tileSize);
         healthbar.setAlignment(Pos.CENTER);
 
 
@@ -132,6 +129,7 @@ public class Unit extends Rectangle {
         return enemy;
     }
 
+    ////GET UNIT INFO////
     public String getType(){
         return type.getType();
     }
@@ -139,6 +137,7 @@ public class Unit extends Rectangle {
     public double getHp(){
         return hp;
     }
+
     public int getAttack(){
         return attack;
     }
