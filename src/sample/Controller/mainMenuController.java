@@ -1,12 +1,19 @@
 package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import dragAndDrop.Matchmaking;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import static Database.Variables.db;
 import static Database.Variables.user_id;
 
-public class mainMenuController extends Controller {
+
+
+
+public class mainMenuController extends Controller{
+    private boolean findGameClicked=false;
+    Thread thread = new Matchmaking();
+
 
     @FXML
     private JFXButton mainMenuPlayButton;
@@ -33,6 +40,24 @@ public class mainMenuController extends Controller {
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
             changeScene("/sample/View/login.fxml");
+
+
+        });
+
+        mainMenuPlayButton.setOnAction(event -> {
+            if(findGameClicked){
+                mainMenuPlayButton.setText("Find game");
+                findGameClicked=false;
+                db.abortMatch(user_id);
+
+
+            } else{
+                thread.start();
+                mainMenuPlayButton.setText("Abort");
+                findGameClicked = true;
+            }
+
+
         });
     }
 }
