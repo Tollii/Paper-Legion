@@ -1,18 +1,16 @@
 package sample;
 
-import Database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.Controller.mainMenuController;
-
 import java.sql.SQLException;
+import static Database.Variables.db;
 
 public class Main extends Application {
 
-    public static Database db = new Database();
     public static Stage window;
 
     @Override

@@ -19,7 +19,6 @@ public class Database {
 
     static BasicConnectionPool connectionPool = null;
     static private Cleaner cleaner = new Cleaner();
-    private String username;
 
     public Database() {
 
@@ -303,7 +302,6 @@ public class Database {
                 preparedUpdate = myConn.prepareStatement(stmt2);
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
-                this.username = username; //La inn denne for test metoden, kan hende den ikke skal være her
                 return userId;
             }
         } catch (SQLException e) {

@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static sample.Main.db;
+import static Database.Variables.db;
 
 public class loginController extends Controller {
 
