@@ -27,5 +27,3 @@ DELETE FROM Users WHERE username = 'testUserReg';
 
 -- Shows current process to the database. Close your stuff.
 SHOW PROCESSLIST;
-
-

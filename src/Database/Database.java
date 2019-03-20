@@ -182,7 +182,6 @@ public class Database {
             return result > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            connectionPool.releaseConnection(myConn);
             return false;
         } finally {
             Cleaner.closeStatement(preparedStatement);
@@ -228,6 +227,7 @@ public class Database {
             e.printStackTrace();
             return null;
         } finally {
+            Cleaner.closeStatement(preparedStatement);
             Cleaner.closeResSet(resultSet);
             connectionPool.releaseConnection(myConn);
         }
