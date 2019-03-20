@@ -295,14 +295,14 @@ public class Database {
         System.out.println("Test begun");
         String sqlString = "SELECT username FROM Users";
         Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedQuery = null;
         ResultSet resultSet = null;
 
         try {
-            preparedStatement = myConn.prepareStatement(sqlString);
+            preparedQuery = myConn.prepareStatement(sqlString);
 
             System.out.println("Executing statement");
-            resultSet = preparedStatement.executeQuery();
+            resultSet = preparedQuery.executeQuery();
             System.out.println("Statement executed");
 
             while (resultSet.next()) {
@@ -383,14 +383,14 @@ public class Database {
         //TODO Check if user is not already registered, or username is taken.
 
         Connection con = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet result = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            preparedStatement = con.prepareStatement("SELECT username FROM Useresult WHERE username = ?");
-            preparedStatement.setString(1, user);
-            result = preparedStatement.executeQuery();
+            ps = con.prepareStatement("SELECT username FROM Users WHERE username = ?");
+            ps.setString(1, user);
+            rs = ps.executeQuery();
 
-            if (result.next()) {
+            if (rs.next()) {
                 return 0;
                 // Brukeren finnes
             } else {
@@ -409,8 +409,8 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(ps);
+            Cleaner.closeResSet(rs);
             connectionPool.releaseConnection(con);
         }
         return -1;

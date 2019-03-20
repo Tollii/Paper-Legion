@@ -6,13 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Controller.mainMenuController;
 import java.sql.SQLException;
-import static Database.Variables.*;
+import static Database.Variables.db;
+import static Database.Variables.user_id;
 
 public class Main extends Application {
 
     public static Stage window;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
