@@ -2,17 +2,9 @@ package sample.Controller;
 
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static sample.Controller.controllerHelper.*;
-import static sample.Main.db;
 
 public class loginController extends Controller {
 
@@ -46,7 +38,7 @@ public class loginController extends Controller {
 
         newUserButton.setOnAction(event -> {
             //newUserButton.getScene().getWindow().hide();
-            changeSceneI("/sample/View/signUp.fxml");
+            changeScene("/sample/View/signUp.fxml");
         });
 
         loginEnterButton.setOnAction(event -> {
@@ -56,7 +48,8 @@ public class loginController extends Controller {
             int userId = 1;
             if (userId > 0) {
                 setUser_id(userId);
-                changeSceneI("/sample/View/mainMenu.fxml");
+                changeScene("/sample/View/mainMenu.fxml");
+                System.out.println("Change scene");
             } else {
                 //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
                 alertField.setText("Login Failed");

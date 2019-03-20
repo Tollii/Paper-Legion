@@ -9,20 +9,18 @@ import java.io.IOException;
 
 public class Controller {
 
-    public void changeSceneI(String fxmlDir) {
-        Parent root = null;
-//        Class currentClass = new Object() {
-//        }.getClass().getEnclosingClass();
-
+    public void changeScene(String fxmlDir) {
         Class currentClass = this.getClass();
-        try {
-            root = FXMLLoader.load(currentClass.getResource(fxmlDir));
 
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(currentClass.getResource(fxmlDir));
+
+        try {
+            loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (root != null) {
-            Main.window.setScene(new Scene(root));
-        }
+        Parent root = loader.getRoot();
+        Main.window.setScene(new Scene(root));
     }
 }

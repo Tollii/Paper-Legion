@@ -4,14 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
-import java.awt.*;
+import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static sample.Controller.controllerHelper.*;
 import static sample.Main.db;
 
-public class signUpController {
+public class signUpController extends Controller {
 
     @FXML
     private ResourceBundle resources;
@@ -43,7 +42,7 @@ public class signUpController {
     @FXML
     void initialize() {
         goBackButton.setOnAction(event -> {
-            goBackButton.getScene().getWindow().hide();
+            //goBackButton.getScene().getWindow().hide();
             changeScene("/sample/View/login.fxml");
         });
 

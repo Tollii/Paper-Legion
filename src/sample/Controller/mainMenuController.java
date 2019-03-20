@@ -1,11 +1,8 @@
 package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import hashAndSalt.Login;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-
-import static sample.Controller.controllerHelper.changeScene;
 import static sample.Main.db;
 
 public class mainMenuController extends Controller {
@@ -36,7 +33,7 @@ public class mainMenuController extends Controller {
 
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
-            changeSceneI("/sample/View/login.fxml");
+            changeScene("/sample/View/login.fxml");
         });
     }
 }
