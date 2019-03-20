@@ -13,7 +13,6 @@ public class Main extends Application {
 
     public static Stage window;
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
