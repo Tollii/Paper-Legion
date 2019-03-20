@@ -4,7 +4,7 @@ import Database.Database;
 
 import java.util.ArrayList;
 
-import static sample.Main.db;
+import static Database.Variables.db;
 
 public class SetUp {
 
