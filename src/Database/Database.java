@@ -19,6 +19,7 @@ public class Database {
 
     static BasicConnectionPool connectionPool = null;
     static private Cleaner cleaner = new Cleaner();
+    private String username;
 
     public Database() {
 
@@ -144,6 +145,7 @@ public class Database {
                 preparedUpdate = myConn.prepareStatement(stmt2);
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
+                this.username = username; //La inn denne for test metoden, kan hende den ikke skal være her
                 return userId;
             }
         } catch (SQLException e) {
@@ -176,18 +178,41 @@ public class Database {
         return false;
     }
 
-    public boolean signUp(String user, String password, String email) {
+    public int signUp(String user, String password, String email) {
 
         //TODO Check if user is not already registered, or username is taken.
 
-        //random is used to generate salt by creating a unique set of bytes.
-        byte[] salt = new byte[16];
-        SecureRandom random = new SecureRandom();
-        random.nextBytes(salt);
+        Connection con = connectionPool.getConnection();
+        PreparedStatement ps = null;
+        try {
+            ps =con.prepareStatement("SELECT username FROM Users WHERE username = ?");
+            ps.setString(1, user);
+            ResultSet rs = ps.executeQuery();
 
-        byte[] hash = generateHash(password, salt);
+            if (rs.next()) {
+                return 0;
+                // Brukeren finnes
+            } else {
+                //random is used to generate salt by creating a unique set of bytes.
+                byte[] salt = new byte[16];
+                SecureRandom random = new SecureRandom();
+                random.nextBytes(salt);
 
-        return addUserToDatabase(user, email, hash, salt);
+                byte[] hash = generateHash(password, salt);
+
+                addUserToDatabase(user, email, hash, salt);
+                return 1;
+                //-1 feil
+                //1 registrering godkjent
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(ps);
+            connectionPool.releaseConnection(con);
+        }
+        return -1;
     }
 
     private byte[] generateHash(String password, byte[] salt) {
@@ -216,7 +241,7 @@ public class Database {
         return Arrays.equals(enteredPassword, hash);
     }
 
-    private boolean addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
+    private int addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -227,14 +252,19 @@ public class Database {
             preparedStatement.setBytes(3, salt);
             preparedStatement.setString(4, email);
             preparedStatement.setInt(5, 0);
-            return (preparedStatement.executeUpdate() > 0);
+            if(preparedStatement.executeUpdate() > 0){
+                return 1;
+            }
+            else {
+                return -1;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
+        return -1;
     }
 
     public void close() throws SQLException {

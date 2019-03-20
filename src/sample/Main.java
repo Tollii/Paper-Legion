@@ -6,13 +6,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Controller.mainMenuController;
+
+import java.sql.SQLException;
 
 public class Main extends Application {
 
-    static public Database db = new Database();
+    public static Database db = new Database();
+    public static Stage window;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        window = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("/sample/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 600, 400));
@@ -21,5 +26,18 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() {
+        // executed when the application shuts down
+        if (mainMenuController.user_id > 0) {
+            db.logout(mainMenuController.user_id);
+        }
+        try {
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

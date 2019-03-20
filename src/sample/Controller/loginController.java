@@ -2,19 +2,14 @@ package sample.Controller;
 
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static sample.Controller.controllerHelper.*;
 import static sample.Main.db;
 
-public class loginController {
+public class loginController extends Controller {
+
     @FXML
     private ResourceBundle resources;
 
@@ -44,8 +39,7 @@ public class loginController {
     void initialize() {
 
         newUserButton.setOnAction(event -> {
-            newUserButton.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
+            //newUserButton.getScene().getWindow().hide();
             changeScene("/sample/View/signUp.fxml");
         });
 
@@ -55,15 +49,14 @@ public class loginController {
             if (userId > 0) {
                 setUser_id(userId);
                 changeScene("/sample/View/mainMenu.fxml");
+                System.out.println("Change scene");
             } else {
-                //If the user is not logged in this error is shown. More speficity to what went wrong, can be implemented.
-                alertField.setText("Error occured while logging in");
+                //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
+                alertField.setText("Login Failed");
             }
         });
     }
-
-
-    public void setUser_id(int user_id) {
+    private void setUser_id(int user_id) {
         mainMenuController.user_id = user_id;
     }
 }

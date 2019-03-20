@@ -1,4 +1,5 @@
 package sample.Controller;
 
-public class showInfoController {
+public class showInfoController extends Controller {
+
 }
