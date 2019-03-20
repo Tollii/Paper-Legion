@@ -17,6 +17,7 @@ public class SetUp {
         }
 
         unitTypeList = db.fetchUnitTypeList();
+        //Test
     }
 
     public void importUnitTypes(){
