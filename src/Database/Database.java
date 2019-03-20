@@ -1,6 +1,7 @@
 package Database;
 
 import dragAndDrop.ProtoUnitType;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -18,8 +19,7 @@ public class Database {
 
     //Class variables
 
-    static BasicConnectionPool connectionPool = null;
-    static private Cleaner cleaner = new Cleaner();
+    private static BasicConnectionPool connectionPool = null;
 
     public Database() {
 
@@ -79,7 +79,6 @@ public class Database {
             } else {
                 return -1;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
@@ -105,6 +104,7 @@ public class Database {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -188,13 +188,12 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-
     }
 
-
     public static ProtoUnitType importUnitType(String unitNameInput) {
-        String sqlString = "SELECT * FROM Unit_types WHERE unit_name =" + "'" + unitNameInput + "'";
+        String sqlString = "SELECT * FROM Unit_types WHERE unit_name = ?";
         Connection myConn = connectionPool.getConnection();
+
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
@@ -208,8 +207,9 @@ public class Database {
         int maxAttackRange;
         int movementRange;
 
-        try{
+        try {
             preparedStatement = myConn.prepareStatement(sqlString);
+            preparedStatement.setString(1, unitNameInput);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -224,21 +224,17 @@ public class Database {
             minAttackRange = resultSet.getInt("min_attack_range");
             maxAttackRange = resultSet.getInt("max_attack_range");
             movementRange = resultSet.getInt("movement_range");
-
-            cleaner.closeResSet(resultSet);
-            connectionPool.releaseConnection(myConn);
-
         } catch (SQLException e) {
             e.printStackTrace();
-            connectionPool.releaseConnection(myConn);
-
             return null;
+        } finally {
+            Cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
         }
-
-        return new ProtoUnitType(type, hp,attack,abilityCooldown,defenceMultiplier,minAttackRange,maxAttackRange, movementRange, "", "" );
+        return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
     }
 
-    public ArrayList<String> fetchUnitTypeList(){
+    public ArrayList<String> fetchUnitTypeList() {
 
         ArrayList<String> outputList = new ArrayList<>();
 
@@ -247,45 +243,41 @@ public class Database {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
-        try{
+        try {
             preparedStatement = myConn.prepareStatement(sqlString);
-
             resultSet = preparedStatement.executeQuery();
-
-            while(resultSet.next()){
-
+            while (resultSet.next()) {
                 outputList.add(resultSet.getString("unit_name"));
             }
 
-            cleaner.closeResSet(resultSet);
-            connectionPool.releaseConnection(myConn);
-
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-            connectionPool.releaseConnection(myConn);
             return null;
+        } finally {
+            Cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
         }
 
         return outputList;
     }
 
     //TODO
-    public boolean exportMoveList(){
+    public boolean exportMoveList() {
         return false;
     }
 
     //TODO
-    public boolean exportAttackList(){
+    public boolean exportAttackList() {
         return false;
     }
 
     //TODO
-    public boolean importMoveList(){
+    public boolean importMoveList() {
         return false;
     }
 
     //TODO
-    public boolean importAttackList(){
+    public boolean importAttackList() {
         return false;
     }
 
@@ -453,10 +445,9 @@ public class Database {
             preparedStatement.setBytes(3, salt);
             preparedStatement.setString(4, email);
             preparedStatement.setInt(5, 0);
-            if(preparedStatement.executeUpdate() > 0){
+            if (preparedStatement.executeUpdate() > 0) {
                 return 1;
-            }
-            else {
+            } else {
                 return -1;
             }
         } catch (SQLException e) {
