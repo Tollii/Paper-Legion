@@ -4,10 +4,9 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import static Database.Variables.db;
+import static Database.Variables.user_id;
 
 public class mainMenuController extends Controller {
-
-    public static int user_id;
 
     @FXML
     private JFXButton mainMenuPlayButton;

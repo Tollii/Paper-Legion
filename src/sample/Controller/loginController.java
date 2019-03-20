@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static Database.Variables.db;
+import static Database.Variables.user_id;
 
 public class loginController extends Controller {
 
@@ -56,7 +57,7 @@ public class loginController extends Controller {
             }
         });
     }
-    private void setUser_id(int user_id) {
-        mainMenuController.user_id = user_id;
+    private void setUser_id(int userIDFromLogin) {
+        user_id = userIDFromLogin;
     }
 }
