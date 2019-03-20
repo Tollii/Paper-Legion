@@ -2,6 +2,8 @@ package dragAndDrop;
 
 
 
+import sample.Controller.mainMenuController;
+
 import java.sql.ResultSet;
 import static Database.Variables.user_id;
 import static Database.Variables.match_id;
@@ -54,7 +56,12 @@ public class Matchmaking extends Thread {
     }
 
     public void enterGame(int match_id, int player_id){
-        GameLogic.launch();
+        try {
+            mainMenuController.enterGame();
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public void abortGame(int player_id){

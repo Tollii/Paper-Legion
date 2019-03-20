@@ -1,9 +1,14 @@
 package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import dragAndDrop.GameLogic;
 import dragAndDrop.Matchmaking;
+import dragAndDrop.SetUp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import sample.Main;
+
 import static Database.Variables.db;
 import static Database.Variables.user_id;
 
@@ -47,6 +52,10 @@ public class mainMenuController extends Controller{
 
         });
 
+        mainMenuGameInfoButton.setOnAction(e ->{
+        });
+
+
         mainMenuPlayButton.setOnAction(event -> {
             if(findGameClicked){
                 mainMenuPlayButton.setText("Play");
@@ -67,4 +76,10 @@ public class mainMenuController extends Controller{
         });
     }
 
+    public static void enterGame() throws Exception{
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+        GameLogic game = new GameLogic();
+        game.start(Main.window);
+    }
 }
