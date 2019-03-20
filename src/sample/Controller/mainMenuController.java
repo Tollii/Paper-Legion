@@ -12,7 +12,7 @@ import static Database.Variables.user_id;
 
 public class mainMenuController extends Controller{
     private boolean findGameClicked=false;
-    Thread thread = new Matchmaking();
+    Thread thread;
     public static boolean shutDownThread = false;
 
 
@@ -49,16 +49,18 @@ public class mainMenuController extends Controller{
 
         mainMenuPlayButton.setOnAction(event -> {
             if(findGameClicked){
-                mainMenuPlayButton.setText("Find game");
+                mainMenuPlayButton.setText("Play");
                 findGameClicked=false;
                 shutDownThread = true;
                 db.abortMatch(user_id);
 
 
             } else{
+                thread = new Matchmaking();
                 thread.start();
                 mainMenuPlayButton.setText("Abort");
                 findGameClicked = true;
+                shutDownThread=false;
             }
 
 
