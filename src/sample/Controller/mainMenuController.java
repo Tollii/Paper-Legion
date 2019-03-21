@@ -46,7 +46,7 @@ public class mainMenuController extends Controller {
         // Logs out the current user.
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
-            changeScene("/sample/View/login.fxml");
+            changeScene("login.fxml");
         });
 
         //Displays Stats and tutorial information.

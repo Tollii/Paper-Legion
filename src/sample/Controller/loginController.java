@@ -41,7 +41,7 @@ public class loginController extends Controller {
 
         newUserButton.setOnAction(event -> {
             //newUserButton.getScene().getWindow().hide();
-            changeScene("/sample/View/signUp.fxml");
+            changeScene("signUp.fxml");
         });
 
         loginEnterButton.setOnAction(event -> {
@@ -49,7 +49,7 @@ public class loginController extends Controller {
             int userId = db.login(usernameInput.getText(),passwordInput.getText());
             if (userId > 0) {
                 setUser_id(userId);
-                changeScene("/sample/View/mainMenu.fxml");
+                changeScene("mainMenu.fxml");
             } else {
                 //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
                 alertField.setText("Login Failed");
