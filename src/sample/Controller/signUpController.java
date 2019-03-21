@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static sample.Main.db;
+import static Database.Variables.db;
 
 public class signUpController extends Controller {
 
@@ -42,7 +42,6 @@ public class signUpController extends Controller {
     @FXML
     void initialize() {
         goBackButton.setOnAction(event -> {
-            //goBackButton.getScene().getWindow().hide();
             changeScene("/sample/View/login.fxml");
         });
 

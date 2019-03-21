@@ -1,8 +1,6 @@
 package dragAndDrop;
 
-import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 public class Grid extends Rectangle {
@@ -19,9 +17,9 @@ public class Grid extends Rectangle {
         this.liste = new Tile[rows][columns];
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
-                Tile tile2 = new Tile(Main.tileSize,Main.tileSize);
-                tile2.setTranslateX(j *Main.tileSize);
-                tile2.setTranslateY(i *Main.tileSize);
+                Tile tile2 = new Tile(GameLogic.tileSize, GameLogic.tileSize);
+                tile2.setTranslateX(j * GameLogic.tileSize);
+                tile2.setTranslateY(i * GameLogic.tileSize);
                 this.liste[i][j] = tile2;
                 gp.getChildren().add(tile2);
             }

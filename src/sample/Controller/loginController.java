@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static Database.Variables.db;
 import static Database.Variables.user_id;
 
 public class loginController extends Controller {
@@ -39,6 +40,7 @@ public class loginController extends Controller {
     void initialize() {
 
         newUserButton.setOnAction(event -> {
+            //newUserButton.getScene().getWindow().hide();
             changeScene("/sample/View/signUp.fxml");
         });
 
@@ -55,8 +57,7 @@ public class loginController extends Controller {
             }
         });
     }
-
-    public void setUser_id(int user_id_fromLogin) {
-        user_id = user_id_fromLogin;
+    private void setUser_id(int userIDFromLogin) {
+        user_id = userIDFromLogin;
     }
 }
