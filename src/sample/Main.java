@@ -6,9 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Controller.Controller;
+
 import java.sql.SQLException;
 import static Database.Variables.db;
 import static Database.Variables.user_id;
+import static sample.Controller.mainMenuController.refresh;
 
 public class Main extends Application {
 
@@ -24,6 +27,8 @@ public class Main extends Application {
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
+        refresh();
+
     }
 
     public static void main(String[] args) {
