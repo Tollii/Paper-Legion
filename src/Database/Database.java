@@ -339,6 +339,8 @@ public class Database {
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
                 return userId;
+            } else {
+                System.out.println("User is already logged in");
             }
         } catch (SQLException e) {
             //e.printStackTrace();

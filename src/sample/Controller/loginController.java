@@ -50,7 +50,6 @@ public class loginController extends Controller {
             if (userId > 0) {
                 setUser_id(userId);
                 changeScene("/sample/View/mainMenu.fxml");
-                System.out.println("Change scene");
             } else {
                 //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
                 alertField.setText("Login Failed");
