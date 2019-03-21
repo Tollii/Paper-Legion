@@ -26,7 +26,7 @@ public class mainMenuController extends Controller {
     private JFXButton mainMenuPlayButton;
 
     @FXML
-    private JFXButton mainMenuSettingsButtin;
+    private JFXButton mainMenuSettingsButton;
 
     @FXML
     private JFXButton mainMenuStatsButton;
@@ -47,7 +47,7 @@ public class mainMenuController extends Controller {
         // Logs out the current user.
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
-            changeScene("/sample/View/login.fxml");
+            changeScene("login.fxml");
         });
 
         //Displays Stats and tutorial information.
@@ -128,7 +128,6 @@ public class mainMenuController extends Controller {
         };
         service.start();
     }
-
 
     public static void enterGame() throws Exception {
         SetUp setUp = new SetUp();

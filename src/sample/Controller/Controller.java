@@ -9,9 +9,10 @@ import java.io.IOException;
 
 public class Controller {
 
-    public void changeScene(String fxmlDir) {
+    public void changeScene(String fxml) {
         Class currentClass = this.getClass();
 
+        String fxmlDir = "/sample/View/"+fxml;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(currentClass.getResource(fxmlDir));
 
