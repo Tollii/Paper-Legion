@@ -1,6 +1,7 @@
 package Database;
 
 import dragAndDrop.ProtoUnitType;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -11,14 +12,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Database {
 
     //Class variables
 
-    static BasicConnectionPool connectionPool = null;
-    static private Cleaner cleaner = new Cleaner();
+    private static BasicConnectionPool connectionPool = null;
 
     public Database() {
 
@@ -29,13 +30,169 @@ public class Database {
             //Prints out the error
             e.printStackTrace();
         }
-
     }
 
-    public static ProtoUnitType importUnitType(String unitNameInput){
-
-        String sqlString = "SELECT * FROM Unit_types WHERE unit_name =" + "'"+unitNameInput+"'";
+    public int matchMaking_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
+        String sqlString = "SELECT * FROM Matches where game_started=0";
+        ResultSet results = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlString);
+            results = preparedStatement.executeQuery();
+            int match_id = -1;
+            while (results.next()) {
+                match_id = results.getInt(1);
+            }
+            if (match_id > 0) {
+                System.out.println("Match Found: " + match_id);
+                joinGame(match_id, player_id);
+                return match_id;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(results);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public int getMatch_id_createGame(int playerId) {
+        int match_id = 0;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "SELECT * FROM Matches WHERE player1=? AND match_started=0;";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, playerId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                match_id = resultSet.getInt("match_id");
+            }
+            if (match_id > 0) {
+                return match_id;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public boolean joinGame(int match_id, int player2) {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, player2);
+            preparedStatement.setInt(2, match_id);
+            int resultSet = preparedStatement.executeUpdate();
+            if (resultSet == 1) {
+                System.out.println("Joined game");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
+
+    public int createGame(int player_id) {
+        int match_id = -1;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, player_id);
+            int result = preparedStatement.executeUpdate();
+            if (result > 0) {
+                System.out.println("Created Game");
+                String getMatchIdQuery = "select * from Matches where player1=? and game_started=0";
+                preparedStatement = myConn.prepareStatement(getMatchIdQuery);
+                preparedStatement.setInt(1, player_id);
+                ResultSet match_id_result = preparedStatement.executeQuery();
+                while (match_id_result.next()) {
+                    match_id = match_id_result.getInt("match_id");
+                }
+            }
+            return match_id;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public boolean pollGameStarted(int match_id) {
+        int gameStarted = 0;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "select * from Matches where match_id=? and game_started=1";
+        PreparedStatement preparedStatement = null;
+        ResultSet result = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, match_id);
+            result = preparedStatement.executeQuery();
+            while (result.next()) {
+                gameStarted = result.getInt("game_started");
+            }
+            if (gameStarted == 1) {
+                return true;
+            } else {
+                System.out.println(match_id);
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(result);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public boolean abortMatch(int player_id) {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "delete from Matches where player1=?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, player_id);
+            int result = preparedStatement.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public static ProtoUnitType importUnitType(String unitNameInput) {
+        String sqlString = "SELECT * FROM Unit_types WHERE unit_name = ?";
+        Connection myConn = connectionPool.getConnection();
+
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
@@ -49,44 +206,81 @@ public class Database {
         int maxAttackRange;
         int movementRange;
 
-        try{
+        try {
             preparedStatement = myConn.prepareStatement(sqlString);
+            preparedStatement.setString(1, unitNameInput);
 
-            System.out.println("Executing statement");
             resultSet = preparedStatement.executeQuery();
-            System.out.println("Statement executed");
 
             resultSet.next();
             type = resultSet.getString("unit_name");
             System.out.println(type);
-            hp = (double)resultSet.getFloat("max_health");
+            hp = (double) resultSet.getFloat("max_health");
             System.out.println(hp);
             attack = resultSet.getInt("attack");
-            System.out.println(attack);
             abilityCooldown = resultSet.getInt("ability_cooldown");
-            System.out.println(abilityCooldown);
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
-            System.out.println(defenceMultiplier);
             minAttackRange = resultSet.getInt("min_attack_range");
-            System.out.println(minAttackRange);
             maxAttackRange = resultSet.getInt("max_attack_range");
-            System.out.println(maxAttackRange);
             movementRange = resultSet.getInt("movement_range");
-            System.out.println(movementRange);
-
-            cleaner.closeResSet(resultSet);
-            connectionPool.releaseConnection(myConn);
-
-        }catch (SQLException e){
-
+        } catch (SQLException e) {
             e.printStackTrace();
-            connectionPool.releaseConnection(myConn);
-
             return null;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
+        }
+        return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
+    }
+
+    public ArrayList<String> fetchUnitTypeList() {
+
+        ArrayList<String> outputList = new ArrayList<>();
+
+        String sqlString = "SELECT unit_name FROM Unit_types";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = myConn.prepareStatement(sqlString);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                outputList.add(resultSet.getString("unit_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            Cleaner.closeResSet(resultSet);
+            connectionPool.releaseConnection(myConn);
         }
 
-        return new ProtoUnitType(type, hp,attack,abilityCooldown,defenceMultiplier,minAttackRange,maxAttackRange, movementRange, "", "" );
+        return outputList;
     }
+
+    //TODO
+    public boolean exportMoveList() {
+        return false;
+    }
+
+    //TODO
+    public boolean exportAttackList() {
+        return false;
+    }
+
+    //TODO
+    public boolean importMoveList() {
+        return false;
+    }
+
+    //TODO
+    public boolean importAttackList() {
+        return false;
+    }
+
 
     public void test() {
 
@@ -176,18 +370,42 @@ public class Database {
         return false;
     }
 
-    public boolean signUp(String user, String password, String email) {
+    public int signUp(String user, String password, String email) {
 
         //TODO Check if user is not already registered, or username is taken.
 
-        //random is used to generate salt by creating a unique set of bytes.
-        byte[] salt = new byte[16];
-        SecureRandom random = new SecureRandom();
-        random.nextBytes(salt);
+        Connection con = connectionPool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = con.prepareStatement("SELECT username FROM Users WHERE username = ?");
+            ps.setString(1, user);
+            rs = ps.executeQuery();
 
-        byte[] hash = generateHash(password, salt);
+            if (rs.next()) {
+                return 0;
+                // Brukeren finnes
+            } else {
+                //random is used to generate salt by creating a unique set of bytes.
+                byte[] salt = new byte[16];
+                SecureRandom random = new SecureRandom();
+                random.nextBytes(salt);
 
-        return addUserToDatabase(user, email, hash, salt);
+                byte[] hash = generateHash(password, salt);
+
+                addUserToDatabase(user, email, hash, salt);
+                return 1;
+                //-1 feil
+                //1 registrering godkjent
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(ps);
+            Cleaner.closeResSet(rs);
+            connectionPool.releaseConnection(con);
+        }
+        return -1;
     }
 
     private byte[] generateHash(String password, byte[] salt) {
@@ -216,7 +434,7 @@ public class Database {
         return Arrays.equals(enteredPassword, hash);
     }
 
-    private boolean addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
+    private int addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -227,14 +445,18 @@ public class Database {
             preparedStatement.setBytes(3, salt);
             preparedStatement.setString(4, email);
             preparedStatement.setInt(5, 0);
-            return (preparedStatement.executeUpdate() > 0);
+            if (preparedStatement.executeUpdate() > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
+        return -1;
     }
 
     public void close() throws SQLException {
@@ -251,6 +473,4 @@ public class Database {
 
         database.close();
     }
-
-
 }

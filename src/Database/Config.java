@@ -25,6 +25,7 @@ public class Config {
         DB_DRIVER = "com.mysql.cj.jdbc.Driver";
         DB_MAX_CONNECTIONS = 10;
     }
+    //jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo/confluence?autoReconnect=true
 
     public static Config getInstance(){
         return config;

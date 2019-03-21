@@ -18,7 +18,6 @@ public class SignUp {
 
     public boolean signUp(String user, String password,String email) {
 
-        //TODO Check if user is not already registered, or username is taken.
 
         //random is used to generate salt by creating a unique set of bytes.
         byte[] salt = new byte[16];

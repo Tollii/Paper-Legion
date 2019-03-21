@@ -1,21 +1,33 @@
 package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import hashAndSalt.Login;
+import dragAndDrop.GameLogic;
+import dragAndDrop.Matchmaking;
+import dragAndDrop.SetUp;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import java.io.IOException;
+import sample.Main;
 
-import static sample.Controller.controllerHelper.*;
-import static sample.Main.db;
+import java.util.concurrent.CountDownLatch;
 
-public class mainMenuController {
+import static Database.Variables.db;
+import static Database.Variables.user_id;
 
-    public static int user_id;
+
+
+
+public class mainMenuController extends Controller{
+    private boolean findGameClicked=false;
+    Thread thread;
+    public static boolean shutDownThread = false;
+    public static boolean startGame = false;
+
+
+
 
     @FXML
     private JFXButton mainMenuPlayButton;
@@ -38,11 +50,78 @@ public class mainMenuController {
     @FXML
     void initialize() {
         mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
-        Login log = new Login();
 
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
             changeScene("/sample/View/login.fxml");
+
+
         });
+
+        mainMenuGameInfoButton.setOnAction(e ->{
+        });
+
+
+        mainMenuPlayButton.setOnAction(event -> {
+            if(findGameClicked){
+                mainMenuPlayButton.setText("Play");
+                findGameClicked=false;
+                shutDownThread = true;
+                db.abortMatch(user_id);
+
+
+
+            } else{
+                thread = new Matchmaking();
+                thread.start();
+                mainMenuPlayButton.setText("Abort");
+                findGameClicked = true;
+                shutDownThread=false;
+            }
+
+
+        });
+
+
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        //Background work
+                        final CountDownLatch latch = new CountDownLatch(1);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    //FX Stuff done here
+                                    System.out.println("test");
+                                }finally{
+                                    latch.countDown();
+                                }
+                            }
+                        });
+                        latch.await();
+                        //Keep with the background work
+                        return null;
+                    }
+                };
+            }
+        };
+        //service.start();
+    }
+
+    public void refresh(){
+
+
+    }
+
+
+    public static void enterGame() throws Exception{
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+        GameLogic game = new GameLogic();
+        game.start(Main.window);
     }
 }

@@ -3,25 +3,24 @@ package sample.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import sample.Main;
 
 import java.io.IOException;
 
-public class controllerHelper {
+public class Controller {
 
-    public static void changeScene(String fxmlDir){
+    public void changeScene(String fxmlDir) {
+        Class currentClass = this.getClass();
+
         FXMLLoader loader = new FXMLLoader();
-        Class currentClass = new Object() { }.getClass().getEnclosingClass();
         loader.setLocation(currentClass.getResource(fxmlDir));
-        try{
+
+        try {
             loader.load();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Parent root = loader.getRoot();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
+        Main.window.setScene(new Scene(root));
     }
-
 }
