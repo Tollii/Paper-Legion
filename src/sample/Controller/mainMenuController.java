@@ -21,6 +21,7 @@ public class mainMenuController extends Controller {
     private static boolean findGameClicked = false;
     public static boolean startGame = false;
     public static Timer timer = new Timer(true);
+    public static boolean gameEntered = false;
 
     @FXML
     private JFXButton mainMenuPlayButton;
@@ -89,21 +90,26 @@ public class mainMenuController extends Controller {
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        if(findGameClicked){
-                            //Click to search for games and join if available
-                            match_id = db.matchMaking_search(user_id);
-                            if(match_id>0){
-                                startGame = true;
-                            }
+                        if(!gameEntered){
+                            if(findGameClicked){
+                                //Click to search for games and join if available
+                                match_id = db.matchMaking_search(user_id);
+                                if(match_id>0){
+                                    startGame = true;
+                                }
 
-                            //if none available create own game
-                            if (match_id < 0) {
-                                match_id = db.createGame(user_id);
-                                while (!startGame) {
-                                    startGame = db.pollGameStarted(match_id);
+                                //if none available create own game
+                                if (match_id < 0) {
+                                    match_id = db.createGame(user_id);
+                                    while (!startGame) {
+                                        if(!gameEntered){
+                                            startGame = db.pollGameStarted(match_id);
+                                        }
+                                    }
                                 }
                             }
                         }
+
                         final CountDownLatch latch = new CountDownLatch(1);
                         Platform.runLater(new Runnable() {
                             @Override
@@ -111,6 +117,7 @@ public class mainMenuController extends Controller {
                                 try {
                                     if(startGame){
                                         enterGame();
+                                        gameEntered = true;
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
