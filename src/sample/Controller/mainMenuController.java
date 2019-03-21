@@ -9,7 +9,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import sample.Main;
 
 import java.util.concurrent.CountDownLatch;
@@ -17,17 +16,11 @@ import java.util.concurrent.CountDownLatch;
 import static Database.Variables.db;
 import static Database.Variables.user_id;
 
-
-
-
-public class mainMenuController extends Controller{
-    private boolean findGameClicked=false;
+public class mainMenuController extends Controller {
+    private boolean findGameClicked = false;
     Thread thread;
     public static boolean shutDownThread = false;
     public static boolean startGame = false;
-
-
-
 
     @FXML
     private JFXButton mainMenuPlayButton;
@@ -58,30 +51,24 @@ public class mainMenuController extends Controller{
 
         });
 
-        mainMenuGameInfoButton.setOnAction(e ->{
+        mainMenuGameInfoButton.setOnAction(e -> {
         });
 
 
         mainMenuPlayButton.setOnAction(event -> {
-            if(findGameClicked){
+            if (findGameClicked) {
                 mainMenuPlayButton.setText("Play");
-                findGameClicked=false;
+                findGameClicked = false;
                 shutDownThread = true;
                 db.abortMatch(user_id);
-
-
-
-            } else{
+            } else {
                 thread = new Matchmaking();
                 thread.start();
                 mainMenuPlayButton.setText("Abort");
                 findGameClicked = true;
-                shutDownThread=false;
+                shutDownThread = false;
             }
-
-
         });
-
 
         Service<Void> service = new Service<Void>() {
             @Override
@@ -94,10 +81,10 @@ public class mainMenuController extends Controller{
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                try{
+                                try {
                                     //FX Stuff done here
                                     System.out.println("test");
-                                }finally{
+                                } finally {
                                     latch.countDown();
                                 }
                             }
@@ -112,13 +99,12 @@ public class mainMenuController extends Controller{
         //service.start();
     }
 
-    public void refresh(){
-
+    public void refresh() {
 
     }
 
 
-    public static void enterGame() throws Exception{
+    public static void enterGame() throws Exception {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
         GameLogic game = new GameLogic();
