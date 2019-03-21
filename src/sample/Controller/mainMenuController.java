@@ -44,31 +44,36 @@ public class mainMenuController extends Controller {
     void initialize() {
         mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
 
+        // Logs out the current user.
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
             changeScene("/sample/View/login.fxml");
-
-
         });
 
+        //Displays Stats and tutorial information.
         mainMenuGameInfoButton.setOnAction(e -> {
         });
 
 
         mainMenuPlayButton.setOnAction(event -> {
+            // If user clicks the button while searching for game the matchmaking thread is shut down.
             if (findGameClicked) {
                 mainMenuPlayButton.setText("Play");
                 findGameClicked = false;
                 shutDownThread = true;
                 db.abortMatch(user_id);
             } else {
+                // User clicks play button and the application starts Matchmaking and then starts game once players are found.
                 thread = new Matchmaking();
                 thread.start();
                 mainMenuPlayButton.setText("Abort");
                 findGameClicked = true;
                 shutDownThread = false;
+
+                //Start game and go to game screen would go here.
             }
         });
+
 
         Service<Void> service = new Service<Void>() {
             @Override
