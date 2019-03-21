@@ -10,7 +10,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import sample.Main;
-
 import java.util.concurrent.CountDownLatch;
 
 import static Database.Variables.db;
@@ -26,7 +25,7 @@ public class mainMenuController extends Controller {
     private JFXButton mainMenuPlayButton;
 
     @FXML
-    private JFXButton mainMenuSettingsButtin;
+    private JFXButton mainMenuSettingsButton;
 
     @FXML
     private JFXButton mainMenuStatsButton;
@@ -54,7 +53,6 @@ public class mainMenuController extends Controller {
         mainMenuGameInfoButton.setOnAction(e -> {
         });
 
-
         mainMenuPlayButton.setOnAction(event -> {
             // If user clicks the button while searching for game the matchmaking thread is shut down.
             if (findGameClicked) {
@@ -73,7 +71,6 @@ public class mainMenuController extends Controller {
                 //Start game and go to game screen would go here.
             }
         });
-
 
         Service<Void> service = new Service<Void>() {
             @Override
@@ -101,13 +98,12 @@ public class mainMenuController extends Controller {
                 };
             }
         };
-        //service.start();
+        service.start();
     }
 
     public void refresh() {
 
     }
-
 
     public static void enterGame() throws Exception {
         SetUp setUp = new SetUp();
