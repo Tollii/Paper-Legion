@@ -21,6 +21,7 @@ public class PlacementPhaseTest extends Application {
     createGrid(root);
     createUnitPane(root);
 
+
     stage.setTitle("Placement Phase Test Application");
     stage.setScene(scene);
     stage.show();
