@@ -75,8 +75,12 @@ public class mainMenuController extends Controller {
                         }
                     });
                     thread.start();
-                    if(gameEntered){
-                        thread.stop();
+                    try{
+                        if(gameEntered){
+                            thread.stop();
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
                 }
                 mainMenuPlayButton.setText("Abort");
