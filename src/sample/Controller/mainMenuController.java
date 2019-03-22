@@ -63,24 +63,30 @@ public class mainMenuController extends Controller {
                 findGameClicked = false;
                 db.abortMatch(user_id);
             } else {
-                mainMenuPlayButton.setText("Abort");
                 findGameClicked = true;
+                match_id = db.matchMaking_search(user_id);
+                if(match_id > 0){
+                    startGame = true;
+                }
+                //if none available create own game
+                if (match_id < 0) {
+                    match_id = db.createGame(user_id);
+                }
+
+                mainMenuPlayButton.setText("Abort");
+
             }
         });
 
-
-
-
     }
 
-
     public static void refresh(){
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                service();
-            }
-        }, 5000,5000);
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    service();
+                }
+            }, 5000, 5000);
     }
 
     public static void service() {
@@ -92,15 +98,6 @@ public class mainMenuController extends Controller {
                     protected Void call() throws Exception {
                         if(!gameEntered){
                             if(findGameClicked){
-                                //Click to search for games and join if available
-                                match_id = db.matchMaking_search(user_id);
-                                if(match_id>0){
-                                    startGame = true;
-                                }
-
-                                //if none available create own game
-                                if (match_id < 0) {
-                                    match_id = db.createGame(user_id);
                                     while (!startGame) {
                                         if(!gameEntered){
                                             startGame = db.pollGameStarted(match_id);
@@ -108,8 +105,6 @@ public class mainMenuController extends Controller {
                                     }
                                 }
                             }
-                        }
-
                         final CountDownLatch latch = new CountDownLatch(1);
                         Platform.runLater(new Runnable() {
                             @Override
