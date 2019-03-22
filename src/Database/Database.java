@@ -42,10 +42,11 @@ public class Database {
             results = preparedStatement.executeQuery();
             int match_id = -1;
             while (results.next()) {
-                match_id = results.getInt("game_started");
+                match_id = results.getInt("match_id");
             }
             if (match_id > 0) {
                 System.out.println("Match Found: " + match_id);
+                //Returns a boolean that does nothing
                 joinGame(match_id, player_id);
                 return match_id;
             } else {
@@ -97,8 +98,8 @@ public class Database {
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player2);
             preparedStatement.setInt(2, match_id);
-            int resultSet = preparedStatement.executeUpdate();
-            if (resultSet == 1) {
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
                 System.out.println("Joined game");
                 return true;
             }

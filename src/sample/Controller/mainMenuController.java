@@ -1,19 +1,13 @@
 package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import dragAndDrop.GameLogic;
 import dragAndDrop.SetUp;
 import javafx.application.Platform;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import sample.Main;
 
+import java.sql.SQLOutput;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
-
 import static Database.Variables.*;
 import static Database.Variables.match_id;
 
@@ -22,7 +16,7 @@ public class mainMenuController extends Controller {
     public static boolean startGame = false;
     public static Timer timer = new Timer(true);
     public static boolean gameEntered = false;
-
+    private Thread thread;
     @FXML
     private JFXButton mainMenuPlayButton;
 
@@ -43,6 +37,12 @@ public class mainMenuController extends Controller {
 
     @FXML
     void initialize() {
+
+
+
+
+
+
         mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
 
         // Logs out the current user.
@@ -55,92 +55,63 @@ public class mainMenuController extends Controller {
         mainMenuGameInfoButton.setOnAction(e -> {
         });
 
-
         mainMenuPlayButton.setOnAction(event -> {
             // If user clicks the button while searching for game the matchmaking thread is shut down.
             if (findGameClicked) {
                 mainMenuPlayButton.setText("Play");
                 findGameClicked = false;
                 db.abortMatch(user_id);
+                thread.stop();
             } else {
-                mainMenuPlayButton.setText("Abort");
                 findGameClicked = true;
-            }
-        });
-
-
-
-
-    }
-
-
-    public static void refresh(){
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                service();
-            }
-        }, 5000,5000);
-    }
-
-    public static void service() {
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        if(!gameEntered){
-                            if(findGameClicked){
-                                //Click to search for games and join if available
-                                match_id = db.matchMaking_search(user_id);
-                                if(match_id>0){
-                                    startGame = true;
+                match_id = db.matchMaking_search(user_id);
+                if(match_id > 0){
+                    startGame = true;
+                }
+                //if none available create own game
+                if (match_id < 0) {
+                    match_id = db.createGame(user_id);
+                    thread = new Thread(() -> {
+                        try {
+                            while(!gameEntered){
+                                Thread.sleep(3000);
+                                gameEntered = db.pollGameStarted(match_id);
+                                if(gameEntered){
+                                    Platform.runLater(
+                                            () ->{
+                                                thread.stop();
+                                                changeScene("signUp.fxml");
+                                            }
+                                    );
                                 }
 
-                                //if none available create own game
-                                if (match_id < 0) {
-                                    match_id = db.createGame(user_id);
-                                    while (!startGame) {
-                                        if(!gameEntered){
-                                            startGame = db.pollGameStarted(match_id);
-                                        }
-                                    }
-                                }
                             }
+                        } catch (InterruptedException e){
+                            e.printStackTrace();
                         }
+                    });
+                    thread.start();
+                }
 
-                        final CountDownLatch latch = new CountDownLatch(1);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if(startGame){
-                                        enterGame();
-                                        gameEntered = true;
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    latch.countDown();
-                                }
-                            }
-                        });
-                        latch.await();
-                        //Keep with the background work
-                        return null;
-                    }
-                };
+                mainMenuPlayButton.setText("Abort");
+
             }
-        };
-        service.start();
+
+
+        });
     }
+
 
     public static void enterGame() throws Exception {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
         //GameLogic game = new GameLogic();
-        System.out.println("Succsess!!!!");
         //game.start(Main.window);
+        System.out.println("Succsess!!!!");
     }
+
+
+
+
+
 }
