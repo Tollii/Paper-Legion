@@ -2,6 +2,7 @@ package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import dragAndDrop.SetUp;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -36,6 +37,12 @@ public class mainMenuController extends Controller {
 
     @FXML
     void initialize() {
+
+
+
+
+
+
         mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
 
         // Logs out the current user.
@@ -69,22 +76,28 @@ public class mainMenuController extends Controller {
                             while(!gameEntered){
                                 Thread.sleep(3000);
                                 gameEntered = db.pollGameStarted(match_id);
+                                if(gameEntered){
+                                    Platform.runLater(
+                                            () ->{
+                                                thread.stop();
+                                                changeScene("signUp.fxml");
+                                            }
+                                    );
+                                }
+
                             }
                         } catch (InterruptedException e){
                             e.printStackTrace();
                         }
                     });
                     thread.start();
-                    try{
-                        if(gameEntered){
-                            thread.stop();
-                        }
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
                 }
+
                 mainMenuPlayButton.setText("Abort");
+
             }
+
+
         });
     }
 
@@ -93,7 +106,12 @@ public class mainMenuController extends Controller {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
         //GameLogic game = new GameLogic();
-        System.out.println("Succsess!!!!");
         //game.start(Main.window);
+        System.out.println("Succsess!!!!");
     }
+
+
+
+
+
 }
