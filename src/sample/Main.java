@@ -6,8 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.Controller.Controller;
-
 import java.sql.SQLException;
 import static Database.Variables.db;
 import static Database.Variables.user_id;
