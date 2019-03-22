@@ -69,6 +69,7 @@ public class mainMenuController extends Controller {
                 match_id = db.matchMaking_search(user_id);
                 if(match_id > 0){
                     startGame = true;
+                    enterGame();
                 }
                 //if none available create own game
                 if (match_id < 0) {
@@ -82,11 +83,7 @@ public class mainMenuController extends Controller {
                                     Platform.runLater(
                                             () ->{
                                                 thread.stop();
-                                                try {
-                                                    enterGame();
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
+                                                enterGame();
                                             }
                                     );
                                 }
@@ -108,12 +105,16 @@ public class mainMenuController extends Controller {
     }
 
 
-    public static void enterGame() throws Exception {
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-        GameLogic game = new GameLogic();
-        game.start(Main.window);
-        System.out.println("Succsess!!!!");
+    public static void enterGame(){
+        try{
+            SetUp setUp = new SetUp();
+            setUp.importUnitTypes();
+            GameLogic game = new GameLogic();
+            game.start(Main.window);
+            System.out.println("Succsess!!!!");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
