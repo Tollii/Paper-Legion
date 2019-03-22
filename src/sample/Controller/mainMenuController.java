@@ -54,6 +54,7 @@ public class mainMenuController extends Controller {
                 mainMenuPlayButton.setText("Play");
                 findGameClicked = false;
                 db.abortMatch(user_id);
+                thread.stop();
             } else {
                 findGameClicked = true;
                 match_id = db.matchMaking_search(user_id);
@@ -74,6 +75,9 @@ public class mainMenuController extends Controller {
                         }
                     });
                     thread.start();
+                    if(gameEntered){
+                        thread.stop();
+                    }
                 }
                 mainMenuPlayButton.setText("Abort");
             }
