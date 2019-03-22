@@ -372,7 +372,7 @@ public class GameLogic extends Application {
 
                     if (Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateX())/100 <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()
                             && Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateX())/100 >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()
-                            && Math.abs(selectedPosY * 100 - unitListe[i][j].getTranslateY())/100 <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()
+                            || Math.abs(selectedPosY * 100 - unitListe[i][j].getTranslateY())/100 <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()
                             && Math.abs(selectedPosY * 100 - unitListe[i][j].getTranslateY())/100 >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()){
 
                         System.out.println(Math.abs(selectedPosX * 100 - unitListe[i][j].getTranslateX()));
