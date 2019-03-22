@@ -40,8 +40,8 @@ public class Tile extends StackPane { //hver rute er en stackpane omkapslet rund
 
         boolean success = false;
         if (db.hasImage() && db.hasString()) {
-          Unit newUnit = newUnit(false, db.getString()); //skaper ny unit og legger den på tilen
-          setUnit(newUnit);
+          //Unit newUnit = newUnit(false, db.getString()); //skaper ny unit og legger den på tilen
+          //setUnit(newUnit);
           success = true;
         }
         event.setDropCompleted(success);

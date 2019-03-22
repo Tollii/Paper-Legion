@@ -1,3 +1,4 @@
+
 //  ██████╗ ██╗███╗   ██╗ █████╗ ██████╗ ██╗   ██╗    ██╗    ██╗ █████╗ ██████╗ ███████╗ █████╗ ██████╗ ███████╗  //
 //  ██╔══██╗██║████╗  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║    ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝  //
 //  ██████╔╝██║██╔██╗ ██║███████║██████╔╝ ╚████╔╝     ██║ █╗ ██║███████║██████╔╝█████╗  ███████║██████╔╝█████╗    //
@@ -33,7 +34,7 @@ import javafx.stage.Stage;
 
 
 public class GameLogic extends Application {
-    private static final int boardSize = 7; // 7x7 for example
+   private static final int boardSize = 7; // 7x7 for example
     public static final int tileSize = 100; //
     static Unit[][] unitListe = new Unit[boardSize][boardSize];
     public static final int offsetX = 100;
@@ -262,7 +263,7 @@ public class GameLogic extends Application {
 
 
     private void highlightPossibleMoves() {
-        int posX = selectedPosX;
+ /*       int posX = selectedPosX;
         int posY = selectedPosY;
         int maxPossibleMoves = unitListe[selectedPosY][selectedPosX].getMovementRange();
 
@@ -333,14 +334,14 @@ public class GameLogic extends Application {
 
 
         }
-
+*/
         ///////////////////////////////////////////////////////////////////
     }
 
     private void clearHighlight() {
         for (int i = 0; i < grid.liste.length; i++) {
             for (int j = 0; j < grid.liste[i].length; j++) {
-                grid.liste[i][j].setFill(Color.TRANSPARENT);
+                //grid.liste[i][j].setFill(Color.TRANSPARENT);
 
             }
         }
@@ -404,3 +405,4 @@ public class GameLogic extends Application {
     }
 
 }
+

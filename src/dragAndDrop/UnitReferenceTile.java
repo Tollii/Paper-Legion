@@ -30,7 +30,7 @@ public class UnitReferenceTile extends StackPane{ //hver rute er en stackpane om
 
       ClipboardContent content = new ClipboardContent();
 
-      content.putImage(unit.getImage());
+      //content.putImage(unit.getImage());
       content.putString(unit.getType());
 
       db.setContent(content);
