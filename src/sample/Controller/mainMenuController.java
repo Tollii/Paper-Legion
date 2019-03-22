@@ -1,10 +1,12 @@
 package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import dragAndDrop.GameLogic;
 import dragAndDrop.SetUp;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import sample.Main;
 
 import java.sql.SQLOutput;
 import java.util.Timer;
@@ -80,7 +82,11 @@ public class mainMenuController extends Controller {
                                     Platform.runLater(
                                             () ->{
                                                 thread.stop();
-                                                changeScene("signUp.fxml");
+                                                try {
+                                                    enterGame();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                     );
                                 }
@@ -105,8 +111,8 @@ public class mainMenuController extends Controller {
     public static void enterGame() throws Exception {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
-        //GameLogic game = new GameLogic();
-        //game.start(Main.window);
+        GameLogic game = new GameLogic();
+        game.start(Main.window);
         System.out.println("Succsess!!!!");
     }
 
