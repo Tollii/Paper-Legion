@@ -63,24 +63,21 @@ public class mainMenuController extends Controller {
                 //if none available create own game
                 if (match_id < 0) {
                     match_id = db.createGame(user_id);
-                    thread = new Thread() {
-                        public void run(){
-                            try {
-                                while(!gameEntered){
-                                    Thread.sleep(3000);
-                                    gameEntered = db.pollGameStarted(match_id);
-                                }
-                            } catch (InterruptedException e){
-                                e.printStackTrace();
+                    thread = new Thread(() -> {
+                        try {
+                            while(!gameEntered){
+                                Thread.sleep(3000);
+                                gameEntered = db.pollGameStarted(match_id);
                             }
+                        } catch (InterruptedException e){
+                            e.printStackTrace();
                         }
-                    };
+                    });
                     thread.start();
                 }
                 mainMenuPlayButton.setText("Abort");
             }
         });
-
     }
 
 
