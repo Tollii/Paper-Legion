@@ -27,3 +27,7 @@ DELETE FROM Users WHERE username = 'testUserReg';
 
 -- Shows current process to the database. Close your stuff.
 SHOW PROCESSLIST;
+
+UPDATE Users SET online_status = 0 WHERE username = 'tolnes';
+UPDATE Matches SET player2 = 1 WHERE player1 = 21;
+UPDATE Matches SET game_started = 1 WHERE player1 = 21;

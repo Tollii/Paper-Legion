@@ -119,7 +119,7 @@ public class GameLogic extends Application {
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (!selected) {
-               select(event, rSidePanel, description);
+                select(event, rSidePanel, description);
             }
             ////////////////////////////SELECTION END/////////////////////////////////////////////
 
@@ -363,9 +363,9 @@ public class GameLogic extends Application {
     private void highlightPossibleAttacks(){
 
 //        System.out.println(Math.abs(selectedPosX * 100 - unitListe[0][1].getTranslateX())/100);
-  //      System.out.println(Math.abs(selectedPosY * 100 - unitListe[0][1].getTranslateY())/100);
+        //      System.out.println(Math.abs(selectedPosY * 100 - unitListe[0][1].getTranslateY())/100);
 //        System.out.println(unitListe[selectedPosY][selectedPosX].getMinAttackRange());
-  //      System.out.println(unitListe[selectedPosY][selectedPosX].getMaxAttackRange());
+        //      System.out.println(unitListe[selectedPosY][selectedPosX].getMaxAttackRange());
 
         for(int i=0; i<unitListe.length; i++){
             for(int j=0; j<unitListe[i].length; j++){
@@ -413,9 +413,9 @@ public class GameLogic extends Application {
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
 
-           if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()){ //Beautiful math skills in progress.
-               return true;
-           }
+        if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()){ //Beautiful math skills in progress.
+            return true;
+        }
 
 
 //        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&

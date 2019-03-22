@@ -42,10 +42,11 @@ public class Database {
             results = preparedStatement.executeQuery();
             int match_id = -1;
             while (results.next()) {
-                match_id = results.getInt(1);
+                match_id = results.getInt("match_id");
             }
             if (match_id > 0) {
                 System.out.println("Match Found: " + match_id);
+                //Returns a boolean that does nothing
                 joinGame(match_id, player_id);
                 return match_id;
             } else {
@@ -97,8 +98,8 @@ public class Database {
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player2);
             preparedStatement.setInt(2, match_id);
-            int resultSet = preparedStatement.executeUpdate();
-            if (resultSet == 1) {
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
                 System.out.println("Joined game");
                 return true;
             }
@@ -117,6 +118,7 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
         PreparedStatement preparedStatement = null;
+        ResultSet match_id_result = null;
         try {
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player_id);
@@ -126,7 +128,7 @@ public class Database {
                 String getMatchIdQuery = "select * from Matches where player1=? and game_started=0";
                 preparedStatement = myConn.prepareStatement(getMatchIdQuery);
                 preparedStatement.setInt(1, player_id);
-                ResultSet match_id_result = preparedStatement.executeQuery();
+                match_id_result = preparedStatement.executeQuery();
                 while (match_id_result.next()) {
                     match_id = match_id_result.getInt("match_id");
                 }
@@ -138,6 +140,7 @@ public class Database {
             return -1;
         } finally {
             Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(match_id_result);
             connectionPool.releaseConnection(myConn);
         }
     }
@@ -339,6 +342,8 @@ public class Database {
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
                 return userId;
+            } else {
+                System.out.println("User is already logged in");
             }
         } catch (SQLException e) {
             //e.printStackTrace();
