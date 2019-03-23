@@ -31,8 +31,8 @@ public class StatsController extends Controller{
         });
         statsUsernameLabel.setText("Username: " + db.getMyName(user_id));
         statsEmailLabel.setText("E-mail: " + db.getMyEmail(user_id));
-        statsGamesPlayedLabel.setText("Games played: " + "");
-        statsGamesWonLabel.setText("Games won: " + "");
+        statsGamesPlayedLabel.setText("Games played: " + db.getGamesPlayed(user_id));
+        statsGamesWonLabel.setText("Games won: " + db.getGamesWon(user_id));
 
 
     }

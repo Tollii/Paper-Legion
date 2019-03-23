@@ -37,8 +37,6 @@ public class Database {
         }
     }
 
-
-
     public int matchMaking_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlString = "SELECT * FROM Matches where game_started=0";
@@ -408,6 +406,11 @@ public class Database {
                 byte[] hash = generateHash(password, salt);
 
                 addUserToDatabase(user, email, hash, salt);
+
+                ps = con.prepareStatement("SELECT user_id FROM Users ORDER BY user_id DESC LIMIT 1;");
+                rs = ps.executeQuery();
+                rs.next();
+                addUserToStatistics(rs.getInt("user_id"));
                 return 1;
                 //-1 feil
                 //1 registrering godkjent
@@ -459,11 +462,9 @@ public class Database {
             preparedStatement.setBytes(3, salt);
             preparedStatement.setString(4, email);
             preparedStatement.setInt(5, 0);
-            if (preparedStatement.executeUpdate() > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
+            if (preparedStatement.executeUpdate() > 0) return 1;
+            else return -1;
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -558,8 +559,63 @@ public class Database {
         return "error";
     }
 
+    public String getGamesPlayed(int user_id){
+        Connection myConn = connectionPool.getConnection();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        String value = "";
+        String stmt = "SELECT games_played FROM Statistics WHERE user_id = ?;";
+        try{
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, user_id);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+            value += rs.getInt("games_played");
+            return value;
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        }
+        return "error";
+    }
 
 
+    public String getGamesWon(int user_id){
+        Connection myConn = connectionPool.getConnection();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        String value = "";
+        String stmt = "SELECT games_won FROM Statistics WHERE user_id = ?;";
+        try{
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, user_id);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+            value += rs.getInt("games_won");
+            return value;
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        }
+        return "error";
+    }
+
+    public int addUserToStatistics(int user_id){
+
+        String stmt;
+        PreparedStatement preparedStatement = null;
+        Connection myConn = connectionPool.getConnection();
+        stmt = "INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, user_id);
+            preparedStatement.setInt(2, 0);
+            preparedStatement.setInt(3, 0);
+            if(preparedStatement.executeUpdate() > 0) return 1;
+            else return -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
     public void close() throws SQLException {
         connectionPool.shutdown();
