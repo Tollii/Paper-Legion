@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static Database.Variables.match_id;
+
 public class Database {
 
     //Class variables
@@ -438,12 +440,34 @@ public class Database {
         return -1;
     }
 
-    public void sendTurn() {
+    public int sendTurn() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "PUT IT HERE JON";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,match_id);
+            if (preparedStatement.executeUpdate() > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
+    public boolean waitForTurn() {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        String stmt = "PUT IT HERE JON";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,match_id);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -451,6 +475,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
+        return false;
     }
 
     public void close() throws SQLException {
