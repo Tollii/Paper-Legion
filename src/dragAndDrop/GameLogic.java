@@ -106,11 +106,12 @@ public class GameLogic extends Application {
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
             waitForTurn();
+        } else {
+            db.sendTurn(turn);
         }
 
         endTurnButton.setOnAction(event -> {
             if(yourTurn) {
-                db.sendTurn(turn);
                 turn++;
                 turnCounter.setText(String.valueOf(turn));
                 yourTurn = false;
@@ -498,8 +499,9 @@ public class GameLogic extends Application {
         thread = new Thread(() -> {
             try {
                 while (!yourTurn) {
-                    Thread.sleep(3000);
+                    Thread.sleep(5000);
                     //When player in database matches your own user_id it is your turn again.
+                    System.out.println("Whose turn is it? "+db.getTurnPlayer());
                     if (db.getTurnPlayer() == user_id) {
                         yourTurn = true;
                     }
@@ -510,6 +512,9 @@ public class GameLogic extends Application {
                                     //What will happen when it is your turn again.
                                     turn++;
                                     turnCounter.setText(String.valueOf(turn));
+
+
+
                                 });
                     }
                 }
