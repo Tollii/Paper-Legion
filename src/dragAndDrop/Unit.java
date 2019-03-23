@@ -33,6 +33,7 @@ public class Unit extends Rectangle {
     private int pieceID; //Same as pieceID in the Database
     private boolean enemy;
     private boolean hasAttackedThisTurn;
+    private boolean hasBeenAttackedThisTurn;
     private GridPane pieceAvatar =  new GridPane();
 
 
@@ -40,6 +41,7 @@ public class Unit extends Rectangle {
         super.setWidth(GameLogic.tileSize);
         super.setHeight(GameLogic.tileSize);
         this.enemy = enemy;
+        this.hasBeenAttackedThisTurn = false;
 
         ///SETS UNIT INFO////
         this.type = type;
@@ -182,6 +184,10 @@ public class Unit extends Rectangle {
 
     public int getMovementRange() {
         return movementRange;
+    }
+
+    public boolean getHasBeenAttackedThisTurn() {
+        return hasBeenAttackedThisTurn;
     }
 
     public String getDescription(){
