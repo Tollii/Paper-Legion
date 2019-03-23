@@ -64,7 +64,7 @@ CREATE TABLE Obstacles(
 CREATE TABLE Units(
   piece_id int NOT NULL,
   match_id int NOT NULL,
-  current_health int NOT NULL,
+  current_health double NOT NULL,
   current_attack int NOT NULL,
   current_attack_range int NOT NULL,
   current_ability_cooldown int,

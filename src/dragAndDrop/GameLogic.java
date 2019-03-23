@@ -346,6 +346,7 @@ public class GameLogic extends Application {
                     }
 
                     if (unitListe[attackPosY][attackPosX].getHp() <= 0) {
+                        //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                         pieceContainer.getChildren().removeAll(unitListe[attackPosY][attackPosX].getPieceAvatar());
                         unitListe[attackPosY][attackPosX] = null;
                     }
@@ -577,7 +578,7 @@ public class GameLogic extends Application {
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
 
-                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN
+                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, make sure dead units dissapear
 
                                 });
                     }
