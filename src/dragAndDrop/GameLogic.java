@@ -47,7 +47,6 @@ public class GameLogic extends Application {
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
     private Thread thread;
-    private int turn = 1;
 
 
     ////SCENE ELEMENTS////
@@ -113,6 +112,7 @@ public class GameLogic extends Application {
         endTurnButton.setOnAction(event -> {
             if(yourTurn) {
                 turn++;
+                db.sendTurn(turn);
                 turnCounter.setText(String.valueOf(turn));
                 yourTurn = false;
 
