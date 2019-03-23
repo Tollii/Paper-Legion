@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static Database.Variables.match_id;
+import static Database.Variables.user_id;
 
 public class Database {
 
@@ -438,13 +439,15 @@ public class Database {
         return -1;
     }
 
-    public int sendTurn() {
+    public int sendTurn(int turn) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        String stmt = "";
+        String stmt = "INSERT INTO Turns(turn_id,match_id, player) VALUES (?,?,?);";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,match_id);
+            preparedStatement.setInt(1,turn);
+            preparedStatement.setInt(2,match_id);
+            preparedStatement.setInt(3,user_id);
             if (preparedStatement.executeUpdate() > 0) {
                 return 1;
             } else {
@@ -459,21 +462,23 @@ public class Database {
         return -1;
     }
 
-    public boolean waitForTurn() {
+    public int waitForTurn() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT = 1;";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1,match_id);
-
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return rs.getInt("player");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
+        return -1;
     }
 
     public void close() throws SQLException {

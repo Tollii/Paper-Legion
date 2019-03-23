@@ -67,13 +67,15 @@ public class mainMenuController extends Controller {
             } else {
                 findGameClicked = true;
                 match_id = db.matchMaking_search(user_id);
-                if(match_id > 0){
+                if(match_id > 0) {
+                    yourTurn = false;
                     startGame = true;
                     enterGame();
                 }
                 //if none available create own game
                 if (match_id < 0) {
                     match_id = db.createGame(user_id);
+                    yourTurn = true;
                     thread = new Thread(() -> {
                         try {
                             while(!gameEntered){

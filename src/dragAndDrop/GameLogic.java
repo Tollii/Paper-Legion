@@ -21,6 +21,7 @@ package dragAndDrop;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,8 +35,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
-import static Database.Variables.db;
-import static Database.Variables.user_id;
+import static Database.Variables.*;
 
 
 public class GameLogic extends Application {
@@ -47,6 +47,7 @@ public class GameLogic extends Application {
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
     private Thread thread;
+    private int turn = 1;
 
 
     ////SCENE ELEMENTS////
@@ -103,37 +104,32 @@ public class GameLogic extends Application {
 
 
         endTurnButton.setOnAction(event -> {
-//            thread = new Thread(() -> {
-//            try {
-//                /*while(!gameEntered){
-//                    Thread.sleep(3000);
-//                    gameEntered = db.pollGameStarted(match_id);
-//                    if(gameEntered){
-//                        Platform.runLater(
-//                                () ->{
-//                                    thread.stop();
-//                                    enterGame();
-//                                }
-//                        );
-//                    }
-//
-//                }*/
-//
-//
-//
-//            } catch (InterruptedException e){
-//                e.printStackTrace();
-//            }
-//        });
-//        thread.start();
+            db.sendTurn(turn);
+            turn++;
 
-            //TODO Update database with last turn.
-            db.sendTurn();
-
-
-            //TODO Poll for your next turn
-            db.waitForTurn();
-
+            //Wait for you next turn
+            thread = new Thread(() -> {
+                try {
+                    while (!yourTurn) {
+                        Thread.sleep(3000);
+                        if(db.waitForTurn() == user_id) {
+                            yourTurn = true;
+                        }
+                        if(yourTurn){
+                            Platform.runLater(
+                                    () ->{
+                                        thread.stop();
+                                        //What will happen when it is your turn again.
+                                        turn++;
+                                    }
+                            );
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
             });
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
