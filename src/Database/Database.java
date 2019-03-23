@@ -496,6 +496,46 @@ public class Database {
         return -1;
     }
 
+    public int sendTurnOtherPlayer(int turn) {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        ResultSet rs = null;
+        int nextPlayer = 0;
+        String stmt = "INSERT INTO Turns(turn_id,match_id, player) VALUES (?,?,?);";
+        String stmt2 = "SELECT player1, player2 FROM Matches WHERE match_id = ?";
+
+
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement2 = myConn.prepareStatement(stmt2);
+            preparedStatement2.setInt(1,match_id);
+            rs = preparedStatement2.executeQuery();
+            if(rs.getInt("player1") == user_id){
+                nextPlayer = rs.getInt("player2");
+            }
+            else{
+                nextPlayer = rs.getInt("player1");
+            }
+            preparedStatement.setInt(1,turn);
+            preparedStatement.setInt(2,match_id);
+            preparedStatement.setInt(3,nextPlayer);
+            if (preparedStatement.executeUpdate() > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeStatement(preparedStatement2);
+            Cleaner.closeResSet(rs);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
         String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
