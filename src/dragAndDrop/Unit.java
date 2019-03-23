@@ -11,8 +11,8 @@ import javafx.scene.shape.Rectangle;
 public class Unit extends Rectangle {
     private Label healthbar;
 
-    private double positionX;
-    private double positionY;
+    private int positionX;
+    private int positionY;
 
 
     ////UNIT INFO////
@@ -98,18 +98,18 @@ public class Unit extends Rectangle {
         }
     }
 
-    public void setPosition(double newPositionX, double newPositionY){
+    public void setPosition(int newPositionX, int newPositionY){
         this.positionX = newPositionX;
         this.positionY = newPositionY;
         healthbar.setTranslateX(this.getTranslateX());
         healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
-    public double getPositionX(){
+    public int getPositionX(){
         return positionX;
     }
 
-    public double getPositionY(){
+    public int getPositionY(){
         return positionY;
     }
 

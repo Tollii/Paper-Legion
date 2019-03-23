@@ -67,13 +67,14 @@ public class GameLogic extends Application {
     private Label turnCounter = new Label(String.valueOf("TURN: " + turn));            //Describes what turn it is.
 
     ////GAME CONTROL VARIABLES////
-    private int selectedPosX;                           //Holds the X position to the selected piece.
-    private int selectedPosY;                           //Holds the Y position to the selected piece.
-    private int moveCounter = 0;                        // Counter for movement phase.
-    private int attackCount = 0;                        // Counter for attack phase.
-    private Unit selectedUnit;                          //Reference to the selected unit. Used for move, attack, etc.
-    private boolean selected = false;                   // True or false for selected piece.
-    private boolean movementPhase = true;               //Controls if the player is in movement or attack phase
+    private int selectedPosX;                                   //Holds the X position to the selected piece.
+    private int selectedPosY;                                   //Holds the Y position to the selected piece.
+    private int moveCounter = 0;                                // Counter for movement phase.
+    private int attackCount = 0;                                // Counter for attack phase.
+    private Unit selectedUnit;                                  //Reference to the selected unit. Used for move, attack, etc.
+    private boolean selected = false;                           // True or false for selected piece.
+    private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
+    private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
 
     ////AUDIO ELEMENTS////
@@ -111,6 +112,7 @@ public class GameLogic extends Application {
             db.sendTurn(turn);
         }
 
+        ////END TURN HANDLER////
         endTurnButton.setOnAction(event -> {
             if (yourTurn) {
                 //Increments turn. Opponents Turn.
@@ -118,6 +120,11 @@ public class GameLogic extends Application {
 
                 //Add the next turn into the database.
                 db.sendTurn(turn);
+
+                ////SEND MOVEMENT////
+
+                db.exportMoveList(movementList);
+                movementList = new ArrayList<>(); //Resets the movementList.
 
                 //TODO SEND UNIT MOVEMENT AND HEALTH VALUES TO DATABASE
 
@@ -154,9 +161,6 @@ public class GameLogic extends Application {
                 unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
 
             }
-
-
-//Test
 
         }
 //
@@ -260,7 +264,7 @@ public class GameLogic extends Application {
 
         if ((unitListe[posY][posX] != null) && !unitListe[posY][posX].getEnemy()) {
 
-            unitListe[posY][posX].setPosition(unitListe[posY][posX].getTranslateX() / tileSize, unitListe[posY][posX].getTranslateY() / tileSize);
+            unitListe[posY][posX].setPosition((int)(unitListe[posY][posX].getTranslateX() / tileSize), (int)(unitListe[posY][posX].getTranslateY() / tileSize));
             unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
             unitListe[posY][posX].setStrokeWidth(3);
             unitListe[posY][posX].setStroke(Color.RED);
@@ -312,6 +316,10 @@ public class GameLogic extends Application {
                 selectedUnit.setTranslate(nyPosX, nyPosY);
                 clearHighlight();
 
+                ////ADDS A NEW MOVE TO THE MOVE LIST////
+                movementList.add(new Move(turn, selectedUnit.getPieceID(), match_id, selectedUnit.getPositionX(), selectedUnit.getPositionY(), nyPosX, nyPosY));
+
+                ////EXECUTES THE MOVE////
                 unitListe[nyPosY][nyPosX] = selectedUnit;
                 unitListe[selectedPosY][selectedPosX] = null;
 
@@ -320,8 +328,10 @@ public class GameLogic extends Application {
 
                 selectedUnit.setPosition(nyPosX,nyPosY);
 
+
                 moveCounter++;
 
+                ////CHANGES PHASE////
                 movementPhase = false;
                 clearHighlight();
                 highlightPossibleAttacks();
