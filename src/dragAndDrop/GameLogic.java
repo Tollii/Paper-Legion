@@ -17,6 +17,8 @@
 
 package dragAndDrop;
 
+//TEST
+
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -36,6 +38,10 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 
 import static Database.Variables.*;
+import java.util.ArrayList;
+
+import static Database.Variables.db;
+import static Database.Variables.user_id;
 
 
 public class GameLogic extends Application {
@@ -97,7 +103,7 @@ public class GameLogic extends Application {
         sceneSetUp();
 
         //If you are player 2. Start polling the database for next turn.
-        if (!yourTurn) {
+        if(!yourTurn) {
             waitForTurn();
         } else {
             //Enters turn 1 into database.
@@ -117,11 +123,42 @@ public class GameLogic extends Application {
             }
         });
 
-        //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        unitListe[0][1] = new Unit(0 * tileSize, 1 * tileSize, true, unitGenerator.newArcher());
-        unitListe[0][2] = new Unit(0 * tileSize, 2 * tileSize, true, unitGenerator.newSwordsMan());
-        unitListe[1][4] = new Unit(1 * tileSize, 4 * tileSize, false, unitGenerator.newSwordsMan());
-        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
+        for(int i=0; i<setupPieces.size(); i++){
+            int pieceId = setupPieces.get(i).getPieceId();
+            int matchId = setupPieces.get(i).getMatchId();
+            int playerId = setupPieces.get(i).getPlayerId();
+            int positionX = setupPieces.get(i).getPositionX();
+            int positionY = setupPieces.get(i).getPositionY();
+            int unitType_id = setupPieces.get(i).getUnit_type_id();
+
+            boolean enemyStatus=false;
+            if(playerId == user_id){
+                enemyStatus = false;
+            } else{
+                enemyStatus = true;
+            }
+
+
+            if(unitType_id == 1){
+                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newSwordsMan());
+
+            } else if(unitType_id == 2){
+                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
+
+            }
+
+
+
+
+        }
+//
+//        //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
+//        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
+//        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
+//        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
+//        ///////////////////////////////////////////////////////////////////////////////////////////
 
 
         ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
@@ -260,8 +297,8 @@ public class GameLogic extends Application {
                 unitListe[selectedPosY][selectedPosX] = null;
                 selectedPosX = nyPosX;
                 selectedPosY = nyPosY;
-                unitListe[nyPosY][nyPosX].setOldPos(nyPosX, nyPosY);
-                //moveCounter++;
+                unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                moveCounter++;
                 highlightPossibleMoves();
 
                 movementPhase = false;
