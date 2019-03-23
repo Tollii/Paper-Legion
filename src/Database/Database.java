@@ -730,7 +730,7 @@ public class Database {
         String stmt;
         PreparedStatement preparedStatement = null;
         Connection myConn = connectionPool.getConnection();
-        String stmt = "INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);";
+        stmt = "INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
