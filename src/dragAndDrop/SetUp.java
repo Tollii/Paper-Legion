@@ -8,7 +8,9 @@ import static Database.Variables.db;
 
 public class SetUp {
 
-    protected static ArrayList<String> unitTypeList;
+    protected static UnitGenerator unitGenerator;
+
+    protected static ArrayList<Integer> unitTypeList;
 
     public SetUp(){
 
@@ -29,6 +31,6 @@ public class SetUp {
             unitTypeArray[i] = db.importUnitType(unitTypeList.get(i));
         }
 
-        UnitGenerator unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1]);
+        unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1]);
     }
 }
