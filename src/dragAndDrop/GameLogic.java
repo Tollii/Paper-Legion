@@ -102,34 +102,17 @@ public class GameLogic extends Application {
 
         sceneSetUp();
 
+        //If you are player 2. Start polling the database for next turn.
+        if(!yourTurn) {
+            waitForTurn();
+        }
 
         endTurnButton.setOnAction(event -> {
             db.sendTurn(turn);
             turn++;
 
             //Wait for you next turn
-            thread = new Thread(() -> {
-                try {
-                    while (!yourTurn) {
-                        Thread.sleep(3000);
-                        if(db.waitForTurn() == user_id) {
-                            yourTurn = true;
-                        }
-                        if(yourTurn){
-                            Platform.runLater(
-                                    () ->{
-                                        thread.stop();
-                                        //What will happen when it is your turn again.
-                                        turn++;
-                                    }
-                            );
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            waitForTurn();
             });
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
@@ -482,5 +465,30 @@ public class GameLogic extends Application {
         setUp.importUnitTypes();
 
         launch(args);
+    }
+
+    private void waitForTurn() {
+        thread = new Thread(() -> {
+            try {
+                while (!yourTurn) {
+                    Thread.sleep(3000);
+                    //When player in database matches your own user_id it is your turn again.
+                    if (db.getTurnPlayer() == user_id) {
+                        yourTurn = true;
+                    }
+                    if (yourTurn) {
+                        Platform.runLater(
+                                () -> {
+                                    thread.stop();
+                                    //What will happen when it is your turn again.
+                                    turn++;
+                                });
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 }

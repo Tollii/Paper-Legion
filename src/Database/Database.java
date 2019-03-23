@@ -496,7 +496,7 @@ public class Database {
         return -1;
     }
 
-    public int waitForTurn() {
+    public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT = 1;";
