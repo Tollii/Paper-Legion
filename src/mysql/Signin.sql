@@ -33,8 +33,8 @@ UPDATE Matches SET player2 = 1 WHERE player1 = 21;
 UPDATE Matches SET game_started = 1 WHERE player1 = 21;
 
 -- For polling during opponents turn
--- SELECT player FROM Turns ORDER BY turn_id DESC LIMIT = 1 WHERE match_id = ?;
-SELECT player FROM Turns ORDER BY turn_id DESC LIMIT = 1 WHERE match_id = 1;
+-- SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT = 1;
+SELECT player FROM Turns  WHERE match_id = 1 ORDER BY turn_id DESC LIMIT = 1;
 INSERT INTO Turns (turn_id,match_id,player) VALUES (1,1,1);
 INSERT INTO Turns (turn_id,match_id,player) VALUES (2,1,2);
 

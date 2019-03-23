@@ -353,8 +353,6 @@ public class Database {
 
     public int signUp(String user, String password, String email) {
 
-        //TODO Check if user is not already registered, or username is taken.
-
         Connection con = connectionPool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -464,7 +462,7 @@ public class Database {
     public boolean waitForTurn() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        String stmt = "PUT IT HERE JON";
+        String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT = 1;";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1,match_id);

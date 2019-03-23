@@ -53,9 +53,13 @@ public class signUpController extends Controller {
                 if (signup > 0) {
                     changeScene("login.fxml");
                 }
-            } else {
-                alertField.setText("Error while signing up.");
+                else if(signup == 0){
+                    alertField.setText("User already exists");
+                }
+
             }
+            alertField.setText("Error while signing up.");
+
         });
     }
 
