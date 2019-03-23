@@ -263,9 +263,7 @@ public class Database {
     }
 
     public void getPlayers(){
-        int opponentId;
-        int player1DB=0;
-        int player2DB=0;
+
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
         try {
@@ -327,8 +325,12 @@ public class Database {
                 }
             }
 
-            player1_insert.executeUpdate();
-            player2_insert.executeUpdate();
+            System.out.println(player1);
+            System.out.println(player2);
+            System.out.println(match_id);
+            System.out.println("");
+            System.out.println(player1_insert.executeUpdate());
+            System.out.println(player2_insert.executeUpdate());
 
         } catch (SQLException e) {
             e.printStackTrace();
