@@ -17,8 +17,6 @@
 
 package dragAndDrop;
 
-//TEST
-
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -60,7 +58,7 @@ public class GameLogic extends Application {
     private JFXButton endTurnButton = new JFXButton("end turn");
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private Label turnCounter = new Label(String.valueOf(turn));            //Describes what turn it is.
+    private Label turnCounter = new Label(String.valueOf("TURN: " + turn));            //Describes what turn it is.
 
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                           //Holds the X position to the selected piece.
@@ -80,9 +78,6 @@ public class GameLogic extends Application {
     private Paint attackHighlightColor = Color.DARKRED;
 
 
-
-
-
     //////////////////////////GAME INFO FROM MYSQL//////////////////////////////////////////////////////////////////////////////////
     //Match: player1, player2, match id, game_started                                                                             //
     //Attacks: turn_id, attacker, receiever, match_id, damage_dealt                                                               //
@@ -94,9 +89,6 @@ public class GameLogic extends Application {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -105,7 +97,7 @@ public class GameLogic extends Application {
         sceneSetUp();
 
         //If you are player 2. Start polling the database for next turn.
-        if(!yourTurn) {
+        if (!yourTurn) {
             waitForTurn();
         } else {
             //Enters turn 1 into database.
@@ -113,22 +105,22 @@ public class GameLogic extends Application {
         }
 
         endTurnButton.setOnAction(event -> {
-            if(yourTurn) {
+            if (yourTurn) {
                 turn++;
                 //Enters opponents turn into the database.
                 db.sendTurn(turn);
-                turnCounter.setText(String.valueOf(turn));
+                turnCounter.setText("TURN: " + turn);
                 yourTurn = false;
 
                 //Wait for you next turn
                 waitForTurn();
             }
-            });
+        });
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
-        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
-        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
+        unitListe[0][1] = new Unit(0 * tileSize, 1 * tileSize, true, unitGenerator.newArcher());
+        unitListe[0][2] = new Unit(0 * tileSize, 2 * tileSize, true, unitGenerator.newSwordsMan());
+        unitListe[1][4] = new Unit(1 * tileSize, 4 * tileSize, false, unitGenerator.newSwordsMan());
         ///////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -159,8 +151,8 @@ public class GameLogic extends Application {
             ///////////////////////////////MOVE END///////////////////////////////////////////////
 
             /////////////////////////////////ATTACK///////////////////////////////////////////////
-            if(event.getClickCount() == 2){
-                if(selected && !movementPhase){
+            if (event.getClickCount() == 2) {
+                if (selected && !movementPhase) {
 
                     attack(event);
 
@@ -169,7 +161,7 @@ public class GameLogic extends Application {
             //////////////////////////////ATTACK END////////////////////////////////////////////
 
             //////////////////////////////DESELECT/////////////////////////////////////////////
-            if(event.getButton() == MouseButton.SECONDARY){
+            if (event.getButton() == MouseButton.SECONDARY) {
 
                 deSelect(rSidePanel, description);
             }
@@ -189,7 +181,7 @@ public class GameLogic extends Application {
         root.getChildren().add(pieceContainer);
         root.getChildren().add(rSidePanel);
         root.setSpacing(150);
-        root.setPadding(new Insets(offsetY,offsetX,offsetY,offsetX));
+        root.setPadding(new Insets(offsetY, offsetX, offsetY, offsetX));
 
         pieceContainer.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         pieceContainer.setPrefWidth(900);
@@ -205,10 +197,10 @@ public class GameLogic extends Application {
         endTurnButton.setStyle("-fx-background-color: #000000");
 
         description.setStyle("-fx-font-family: 'Arial Black'");
-        description.setPadding(new Insets(0,0,350,0));
+        description.setPadding(new Insets(0, 0, 350, 0));
 
         rSidePanel.setPrefWidth(250);
-        rSidePanel.getChildren().addAll(turnCounter,endTurnButton);
+        rSidePanel.getChildren().addAll(turnCounter, endTurnButton);
         rSidePanel.setPrefWidth(650);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -218,7 +210,7 @@ public class GameLogic extends Application {
         scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
     }
 
-    private void select(MouseEvent event, VBox vBox, Label description){
+    private void select(MouseEvent event, VBox vBox, Label description) {
         int posX = getPosXFromEvent(event);
         int posY = getPosYFromEvent(event);
 
@@ -238,7 +230,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private void deSelect(VBox sidePanel, Label description){
+    private void deSelect(VBox sidePanel, Label description) {
 
         for (int i = 0; i < unitListe.length; i++) {
 
@@ -255,10 +247,10 @@ public class GameLogic extends Application {
 
     }
 
-    private void move(MouseEvent event){
+    private void move(MouseEvent event) {
         int nyPosX = getPosXFromEvent(event);
         int nyPosY = getPosYFromEvent(event);
-        if(movementRange(nyPosX,nyPosY)){
+        if (movementRange(nyPosX, nyPosY)) {
             if (unitListe[nyPosY][nyPosX] == null) {
                 unitListe[selectedPosY][selectedPosX].setTranslate(nyPosX, nyPosY);
                 // unitListe[selectedPosY][selectedPosX].setTranslateX(nyPosX*100);
@@ -268,7 +260,7 @@ public class GameLogic extends Application {
                 unitListe[selectedPosY][selectedPosX] = null;
                 selectedPosX = nyPosX;
                 selectedPosY = nyPosY;
-                unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
+                unitListe[nyPosY][nyPosX].setOldPos(nyPosX, nyPosY);
                 //moveCounter++;
                 highlightPossibleMoves();
 
@@ -279,22 +271,20 @@ public class GameLogic extends Application {
         }
     }
 
-    private void attack(MouseEvent event){
+    private void attack(MouseEvent event) {
 
         int nyPosX = getPosXFromEvent(event);
         int nyPosY = getPosYFromEvent(event);
         if (unitListe[nyPosY][nyPosX] != null) {
-            if(attackRange(nyPosX, nyPosY)) {
-                if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
+            if (attackRange(nyPosX, nyPosY)) {
+                if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]) {
                     unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getAttack());
                     attackCount++;
                     System.out.println(unitListe[nyPosY][nyPosX].getHp());
 
-                    if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")){
+                    if (unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Swordsman")) {
                         sword.play();
-                    }
-
-                    else if(unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")){
+                    } else if (unitListe[selectedPosY][selectedPosX].getType().equalsIgnoreCase("Archer")) {
                         bow.play();
                     }
 
@@ -360,7 +350,7 @@ public class GameLogic extends Application {
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE THAN 1////////////////////////////
-        if(unitListe[selectedPosY][selectedPosX].getMovementRange() > 1){
+        if (unitListe[selectedPosY][selectedPosX].getMovementRange() > 1) {
 
             if (selectedPosX - movementRange >= 0) {
                 grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
@@ -384,17 +374,17 @@ public class GameLogic extends Application {
         ///////////////////////////////////////////////////////////////////
     }
 
-    private void highlightPossibleAttacks(){
+    private void highlightPossibleAttacks() {
 
-        for(int i=0; i<unitListe.length; i++){
-            for(int j=0; j<unitListe[i].length; j++){
+        for (int i = 0; i < unitListe.length; i++) {
+            for (int j = 0; j < unitListe[i].length; j++) {
                 if (unitListe[i][j] != null && unitListe[i][j] != unitListe[selectedPosY][selectedPosX]) {
 
 
-                    if ((((Math.abs(selectedPosX - unitListe[i][j].getTranslateX() /tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY()/tileSize)) <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange())
-                        && ((Math.abs(selectedPosX - unitListe[i][j].getTranslateX()/tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY()/tileSize)) >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()){
+                    if ((((Math.abs(selectedPosX - unitListe[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY() / tileSize)) <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange())
+                            && ((Math.abs(selectedPosX - unitListe[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY() / tileSize)) >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()) {
 
-                        if(unitListe[i][j].getEnemy()) {
+                        if (unitListe[i][j].getEnemy()) {
                             grid.liste[i][j].setFill(attackHighlightColor);
                         }
                     }
@@ -417,10 +407,10 @@ public class GameLogic extends Application {
     private boolean movementRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY MOVEMENT RANGE == 1//////////////////////
-        if (unitListe[selectedPosY][selectedPosX].getMovementRange()<2){
-            if((Math.abs(nyPosX-unitListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- unitListe[selectedPosY][selectedPosX].getOldPosY())<2)){
+        if (unitListe[selectedPosY][selectedPosX].getMovementRange() < 2) {
+            if ((Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) < 2) && (Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) < 2)) {
                 return true;
-            } else{
+            } else {
                 return false;
             }
         }
@@ -429,7 +419,7 @@ public class GameLogic extends Application {
 
         /////////////MOVEMENT RANGE> 1///////////////////////////////////////
 
-        if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()){ //Beautiful math skills in progress.
+        if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()) { //Beautiful math skills in progress.
             return true;
         }
 
@@ -446,10 +436,10 @@ public class GameLogic extends Application {
     private boolean attackRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
-        if (unitListe[selectedPosY][selectedPosX].getMaxAttackRange() <2){
-            if((Math.abs(nyPosX-unitListe[selectedPosY][selectedPosX].getOldPosX())<2) && (Math.abs(nyPosY- unitListe[selectedPosY][selectedPosX].getOldPosY())<2)){
+        if (unitListe[selectedPosY][selectedPosX].getMaxAttackRange() < 2) {
+            if ((Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) < 2) && (Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) < 2)) {
                 return true;
-            } else{
+            } else {
                 return false;
             }
         }
@@ -458,7 +448,7 @@ public class GameLogic extends Application {
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
 
-        if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()){ //Beautiful math skills in progress.
+        if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange()) { //Beautiful math skills in progress.
             return true;
         }
 
@@ -473,14 +463,14 @@ public class GameLogic extends Application {
     }
 
     private int getPosXFromEvent(MouseEvent event2) {
-        double rectPosX1 = tileSize+offsetX;
+        double rectPosX1 = tileSize + offsetX;
         double posX1 = event2.getSceneX();
         double movementX1 = posX1 - rectPosX1;
         return (int) (Math.ceil(movementX1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
     private int getPosYFromEvent(MouseEvent event2) {
-        double rectPosY1 = tileSize+offsetY;
+        double rectPosY1 = tileSize + offsetY;
         double posY1 = event2.getSceneY();
         double movementY1 = posY1 - rectPosY1;
         return (int) (Math.ceil(movementY1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
@@ -501,7 +491,7 @@ public class GameLogic extends Application {
                 while (!yourTurn) {
                     Thread.sleep(5000);
                     //When player in database matches your own user_id it is your turn again.
-                    System.out.println("Whose turn is it? "+db.getTurnPlayer());
+                    System.out.println("Whose turn is it? " + db.getTurnPlayer());
                     if (db.getTurnPlayer() == user_id) {
                         yourTurn = true;
                     }
@@ -511,10 +501,7 @@ public class GameLogic extends Application {
                                     thread.stop();
                                     //What will happen when it is your turn again.
                                     turn++;
-                                    turnCounter.setText(String.valueOf(turn));
-
-
-
+                                    turnCounter.setText("TURN: " + turn);
                                 });
                     }
                 }
