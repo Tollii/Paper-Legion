@@ -113,6 +113,7 @@ public class GameLogic extends Application {
                 db.sendTurn(turn);
                 turn++;
                 turnCounter.setText(String.valueOf(turn));
+                yourTurn = false;
 
                 //Wait for you next turn
                 waitForTurn();

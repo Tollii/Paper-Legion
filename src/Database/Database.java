@@ -504,7 +504,7 @@ public class Database {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1,match_id);
             ResultSet rs = preparedStatement.executeQuery();
-            rs.next();
+            //rs.next();
             return rs.getInt("player");
         } catch (SQLException e) {
             e.printStackTrace();
