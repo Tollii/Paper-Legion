@@ -117,32 +117,29 @@ public class GameLogic extends Application {
             if (yourTurn) {
                 //Increments turn. Opponents Turn.
                 turn++;
-                endTurnButton.setText("Waiting for other player");
 
                 //Add the next turn into the database.
                 db.sendTurn(turn);
+
+                turnCounter.setText("TURN: " + turn);
+                endTurnButton.setText("Waiting for other player");
+                yourTurn = false;
 
                 ////SEND MOVEMENT////
 
                 db.exportMoveList(movementList);
                 movementList = new ArrayList<>(); //Resets the movementList.
+                //TODO Having a attackList just like movementList. Alternative solution below.
 
-                //TODO SEND UNIT MOVEMENT AND HEALTH VALUES TO DATABASE
-
-
+                // Alternative solution to creating a List of attacks in the future.
+                // Finds every enemy unit that was damaged and sends their new info the database.
                 for(int i = 0; i < unitListe.length; i++) {
                     for (int j = 0; j < unitListe[i].length; j++) {
-                        // Finds every enemy unit that was damaged and sends their new info the database.
                         if(unitListe[i][j] != null && unitListe[i][j].getEnemy() && unitListe[i][j].getHasBeenAttackedThisTurn()) {
                             db.sendHealthInfo(unitListe[i][j].getPieceID(),unitListe[i][j].getHp());
                         }
                     }
                 }
-
-                ///
-                turnCounter.setText("TURN: " + turn);
-                yourTurn = false;
-
                 //Wait for you next turn
                 waitForTurn();
             }
@@ -608,7 +605,7 @@ public class GameLogic extends Application {
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
 
-                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, make sure dead units dissapear
+                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
 
                                 });
                     }
@@ -619,6 +616,7 @@ public class GameLogic extends Application {
         });
         thread.start();
     }
+
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
