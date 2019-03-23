@@ -287,28 +287,28 @@ public class Database {
         boolean one= true;
         getPlayers();
         Connection myConn = connectionPool.getConnection();
-        String sqlPlayer1 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,0);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,0);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,0);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,1);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (6,?,?, 60, 50, 2,3,1,2);\n";
+        String sqlPlayer1 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,0);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,0);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,0);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,1);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (6,?,?, 60, 50, 2,3,1,2);";
 
-        String sqlPlayer2 ="insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,6);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,6);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,6);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,5);\n" +
-                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,5);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);\n" +
-                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);\n" +
+        String sqlPlayer2 ="insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,6);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,6);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,6);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,5);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,5);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);" +
                 "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (6,?,?, 60, 50, 2,3,1,2);";
         try {
             PreparedStatement player1_insert = myConn.prepareStatement(sqlPlayer1);
@@ -318,6 +318,7 @@ public class Database {
                 if(one){
                     player1_insert.setInt(1, match_id);
                     player2_insert.setInt(1,match_id);
+
                     one = false;
                 } else{
                     player1_insert.setInt(2, player1);
