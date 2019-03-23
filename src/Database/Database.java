@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static Database.Variables.match_id;
 import static Database.Variables.user_id;
+import static Database.Variables.player1;
+import static Database.Variables.player2;
+
 
 public class Database {
 
@@ -259,29 +262,112 @@ public class Database {
         return false;
     }
 
+    public void getPlayers(){
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "select * from Matches where match_id=?";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1,match_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                player1 = resultSet.getInt("player1");
+                player2 = resultSet.getInt("player2");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void insertPieces(){
+        boolean one= true;
+        getPlayers();
+        Connection myConn = connectionPool.getConnection();
+        String sqlPlayer1 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,0);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,0);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,0);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,1);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (6,?,?, 60, 50, 2,3,1,2);";
+
+        String sqlPlayer2 ="insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,6);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,6);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,6);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,5);" +
+                "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,5);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);" +
+                "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (6,?,?, 60, 50, 2,3,1,2);";
+        try {
+            PreparedStatement player1_insert = myConn.prepareStatement(sqlPlayer1);
+            PreparedStatement player2_insert = myConn.prepareStatement(sqlPlayer2);
+
+            for(int i=0; i<20; i++){
+                if(one){
+                    player1_insert.setInt(1, match_id);
+                    player2_insert.setInt(1,match_id);
+
+                    one = false;
+                } else{
+                    player1_insert.setInt(2, player1);
+                    player2_insert.setInt(2,player2);
+                    one = true;
+                }
+            }
+
+            System.out.println(player1);
+            System.out.println(player2);
+            System.out.println(match_id);
+            System.out.println("");
+            System.out.println(player1_insert.executeUpdate());
+            System.out.println(player2_insert.executeUpdate());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     public ArrayList<PieceSetup> importPlacementPieces(){
+        insertPieces();
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
         int pieceId;
-        int match_id;
+        int match_idDB;
         int player_id;
         int positionX;
         int positionY;
+        int unit_type_id;
 
         Connection myConn = connectionPool.getConnection();
-        String sqlsetning = "select * from Pieces where match_id=?";
+        String sqlsetning = "select Pieces.piece_id, Pieces.match_id, Pieces.player_id," +
+                " position_x, position_y, unit_type_id from Pieces left join Units U " +
+                "on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id " +
+                "where Pieces.match_id=?;";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(sqlsetning);
-            //preparedStatement.setInt(1,match_id); //This is the correct one
-            preparedStatement.setInt(1,250); //for test purposes;
+            preparedStatement.setInt(1, match_id); //This is the correct one
+           // preparedStatement.setInt(1,250); //for test purposes;
             ResultSet result = preparedStatement.executeQuery();
             while(result.next()){
                 pieceId = result.getInt("piece_id");
-                match_id = result.getInt("match_id");
+                match_idDB = match_id;
                 player_id = result.getInt("player_id");
                 positionX = result.getInt("position_x");
                 positionY = result.getInt("position_y");
+                unit_type_id = result.getInt("unit_type_id");
 
-                PieceSetup piece = new PieceSetup(pieceId,match_id,player_id,positionX,positionY);
+                PieceSetup piece = new PieceSetup(pieceId,match_id,player_id,positionX,positionY, unit_type_id);
                 piecesImport.add(piece);
             }
 
@@ -292,6 +378,7 @@ public class Database {
         return null;
     }
 
+    //test
     public void test() {
 
         System.out.println("Test begun");

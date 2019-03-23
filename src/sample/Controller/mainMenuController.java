@@ -116,7 +116,7 @@ public class mainMenuController extends Controller {
             setUp.importUnitTypes();
             GameLogic game = new GameLogic();
             game.start(Main.window);
-            System.out.println("Succsess!!!!");
+            System.out.println("Success!!!!");
         } catch(Exception e){
             e.printStackTrace();
         }
