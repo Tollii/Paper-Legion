@@ -35,6 +35,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 import static Database.Variables.*;
 
 
@@ -524,4 +526,18 @@ public class GameLogic extends Application {
         });
         thread.start();
     }
+
+    @Override
+    public void stop() {
+        // Executed when the application shuts down. User is logged out and database connection is closed.
+        if (user_id > 0) {
+            db.logout(user_id);
+        }
+        try {
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
