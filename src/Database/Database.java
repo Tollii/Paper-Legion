@@ -171,8 +171,8 @@ public class Database {
         }
     }
 
-    public static ProtoUnitType importUnitType(String unitNameInput) {
-        String sqlString = "SELECT * FROM Unit_types WHERE unit_name = ?";
+    public static ProtoUnitType importUnitType(int unitIdInput) {
+        String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
         Connection myConn = connectionPool.getConnection();
 
         PreparedStatement preparedStatement = null;
@@ -190,7 +190,7 @@ public class Database {
 
         try {
             preparedStatement = myConn.prepareStatement(sqlString);
-            preparedStatement.setString(1, unitNameInput);
+            preparedStatement.setInt(1, unitIdInput);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -216,11 +216,11 @@ public class Database {
         return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
     }
 
-    public ArrayList<String> fetchUnitTypeList() {
+    public ArrayList<Integer> fetchUnitTypeList() {
 
-        ArrayList<String> outputList = new ArrayList<>();
+        ArrayList<Integer> outputList = new ArrayList<>();
 
-        String sqlString = "SELECT unit_name FROM Unit_types";
+        String sqlString = "SELECT unit_type_id FROM Unit_types";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -229,7 +229,7 @@ public class Database {
             preparedStatement = myConn.prepareStatement(sqlString);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                outputList.add(resultSet.getString("unit_name"));
+                outputList.add(resultSet.getInt("unit_type_id"));
             }
 
         } catch (SQLException e) {
@@ -563,16 +563,5 @@ public class Database {
 
     public void close() throws SQLException {
         connectionPool.shutdown();
-    }
-
-    public static void main(String[] args) throws SQLException {
-
-        Database database = new Database();
-
-        database.test();
-
-        database.importUnitType("swordsman");
-
-        database.close();
     }
 }

@@ -18,8 +18,7 @@ public class SetUp {
             db = new Database();
         }
 
-        //unitTypeList = db.fetchUnitTypeList();
-        //Test
+        unitTypeList = db.fetchUnitTypeList();
     }
 
     public void importUnitTypes(){
@@ -28,7 +27,7 @@ public class SetUp {
 
         for (int i = 0; i < unitTypeList.size(); i++) {
 
-          //  unitTypeArray[i] = db.importUnitType(unitTypeList.get(i));
+           unitTypeArray[i] = db.importUnitType(unitTypeList.get(i));
         }
 
         unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1]);
