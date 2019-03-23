@@ -16,8 +16,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static Database.Variables.match_id;
-
-import static Database.Variables.match_id;
 import static Database.Variables.user_id;
 
 public class Database {
