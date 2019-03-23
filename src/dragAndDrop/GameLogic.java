@@ -109,11 +109,14 @@ public class GameLogic extends Application {
         }
 
         endTurnButton.setOnAction(event -> {
-            db.sendTurn(turn);
-            turn++;
+            if(yourTurn) {
+                db.sendTurn(turn);
+                turn++;
+                turnCounter.setText(String.valueOf(turn));
 
-            //Wait for you next turn
-            waitForTurn();
+                //Wait for you next turn
+                waitForTurn();
+            }
             });
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
@@ -504,8 +507,8 @@ public class GameLogic extends Application {
                                 () -> {
                                     thread.stop();
                                     //What will happen when it is your turn again.
-
                                     turn++;
+                                    turnCounter.setText(String.valueOf(turn));
                                 });
                     }
                 }
