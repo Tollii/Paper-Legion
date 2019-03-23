@@ -59,7 +59,7 @@ public class GameLogic extends Application {
     private JFXButton endTurnButton = new JFXButton("end turn");
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private Label turnCounter = new Label();            //Describes what turn it is.
+    private Label turnCounter = new Label(String.valueOf(turn));            //Describes what turn it is.
 
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                           //Holds the X position to the selected piece.
@@ -198,6 +198,7 @@ public class GameLogic extends Application {
 
         rSidePanel.setPrefWidth(250);
         rSidePanel.getChildren().add(endTurnButton);
+        rSidePanel.getChildren().add(turnCounter);
         rSidePanel.setPrefWidth(650);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
