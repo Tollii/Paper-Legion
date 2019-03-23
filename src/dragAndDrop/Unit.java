@@ -32,6 +32,7 @@ public class Unit extends Rectangle {
     private final int LOW_HP_THRESHOLD = 20;
     private int pieceID; //Same as pieceID in the Database
     private boolean enemy;
+    private boolean hasAttackedThisTurn;
     private GridPane pieceAvatar =  new GridPane();
 
 
@@ -95,18 +96,18 @@ public class Unit extends Rectangle {
         }
     }
 
-    public void setOldPos(double oldPosX, double oldPosY){
-        this.positionX = oldPosX;
-        this.positionY = oldPosY;
+    public void setPosition(double newPositionX, double newPositionY){
+        this.positionX = newPositionX;
+        this.positionY = newPositionY;
         healthbar.setTranslateX(this.getTranslateX());
         healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
-    public double getOldPosX(){
+    public double getPositionX(){
         return positionX;
     }
 
-    public double getOldPosY(){
+    public double getPositionY(){
         return positionY;
     }
 
@@ -130,12 +131,24 @@ public class Unit extends Rectangle {
         return enemy;
     }
 
+    public void setEnemy(boolean enemy){
+        this.enemy = enemy;
+    }
+
     public int getPieceID() {
         return pieceID;
     }
 
     public void setPieceID(int pieceID) {
         this.pieceID = pieceID;
+    }
+
+    public boolean getHasAttackedThisTurn() {
+        return hasAttackedThisTurn;
+    }
+
+    public void setHasAttackedThisTurn(boolean hasAttackedThisTurn) {
+        this.hasAttackedThisTurn = hasAttackedThisTurn;
     }
 
     ////GET UNIT INFO////
@@ -191,6 +204,5 @@ public class Unit extends Rectangle {
             healthbar.setStyle("-fx-background-color: Red");
         }
     }
-
 
 }
