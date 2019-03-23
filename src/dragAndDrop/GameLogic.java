@@ -34,6 +34,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+import static Database.Variables.db;
+import static Database.Variables.user_id;
+
 
 public class GameLogic extends Application {
     private static final int boardSize = 7; // 7x7 for example
@@ -43,6 +46,7 @@ public class GameLogic extends Application {
     public static final int offsetY = 100;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
+    private Thread thread;
 
 
     ////SCENE ELEMENTS////
@@ -97,6 +101,39 @@ public class GameLogic extends Application {
 
         sceneSetUp();
 
+
+        endTurnButton.setOnAction(event -> {
+//            thread = new Thread(() -> {
+//            try {
+//                /*while(!gameEntered){
+//                    Thread.sleep(3000);
+//                    gameEntered = db.pollGameStarted(match_id);
+//                    if(gameEntered){
+//                        Platform.runLater(
+//                                () ->{
+//                                    thread.stop();
+//                                    enterGame();
+//                                }
+//                        );
+//                    }
+//
+//                }*/
+//
+//
+//
+//            } catch (InterruptedException e){
+//                e.printStackTrace();
+//            }
+//        });
+//        thread.start();
+
+            //TODO Update database with last turn.
+            db.sendTurn();
+
+
+            //TODO Poll for your next turn
+
+            });
 
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
         unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
