@@ -1,5 +1,6 @@
 package Database;
 
+import dragAndDrop.PieceSetup;
 import dragAndDrop.ProtoUnitType;
 
 import javax.crypto.SecretKeyFactory;
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import static Database.Variables.match_id;
 
 public class Database {
 
@@ -281,6 +283,38 @@ public class Database {
         return false;
     }
 
+    public ArrayList<PieceSetup> importPlacementPieces(){
+        ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
+        int pieceId;
+        int match_id;
+        int player_id;
+        int positionX;
+        int positionY;
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlsetning = "select * from Pieces where match_id=?";
+        try {
+            PreparedStatement preparedStatement = myConn.prepareStatement(sqlsetning);
+            //preparedStatement.setInt(1,match_id); //This is the correct one
+            preparedStatement.setInt(1,250); //for test purposes;
+            ResultSet result = preparedStatement.executeQuery();
+            while(result.next()){
+                pieceId = result.getInt("piece_id");
+                match_id = result.getInt("match_id");
+                player_id = result.getInt("player_id");
+                positionX = result.getInt("position_x");
+                positionY = result.getInt("position_y");
+
+                PieceSetup piece = new PieceSetup(pieceId,match_id,player_id,positionX,positionY);
+                piecesImport.add(piece);
+            }
+
+            return piecesImport;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void test() {
 
