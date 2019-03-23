@@ -113,9 +113,14 @@ public class GameLogic extends Application {
 
         endTurnButton.setOnAction(event -> {
             if (yourTurn) {
+                //Increments turn. Opponents Turn.
                 turn++;
-                //Enters opponents turn into the database.
+
+                //Add the next turn into the database.
                 db.sendTurn(turn);
+
+                //TODO SEND UNIT MOVEMENT AND HEALTH VALUES TO DATABASE
+
                 turnCounter.setText("TURN: " + turn);
                 yourTurn = false;
 
@@ -565,9 +570,15 @@ public class GameLogic extends Application {
                         Platform.runLater(
                                 () -> {
                                     thread.stop();
+
                                     //What will happen when it is your turn again.
+
+                                    //Increments turn. Back to your turn.
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
+
+                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN
+
                                 });
                     }
                 }
