@@ -11,7 +11,6 @@ import sample.Main;
 import java.sql.SQLOutput;
 import java.util.Timer;
 import static Database.Variables.*;
-import static Database.Variables.match_id;
 
 public class mainMenuController extends Controller {
     private static boolean findGameClicked = false;
@@ -40,12 +39,7 @@ public class mainMenuController extends Controller {
     @FXML
     void initialize() {
 
-
-
-
-
-
-        mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
+        mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
 
         // Logs out the current user.
         mainMenuExitButton.setOnAction(event -> {
@@ -102,8 +96,17 @@ public class mainMenuController extends Controller {
 
             }
 
+        });
+
+        mainMenuGameInfoButton.setOnAction( event -> {
+            changeScene("gameInfo.fxml");
 
         });
+
+        mainMenuStatsButton.setOnAction(event -> {
+            changeScene("stats.fxml");
+        });
+
     }
 
 

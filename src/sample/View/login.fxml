@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.loginController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller.loginController">
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0" StackPane.alignment="CENTER">
             <StackPane.margin>
@@ -63,7 +63,7 @@
                 </BorderPane>
             </bottom>
             <top>
-                <BorderPane prefHeight="100.0" prefWidth="600.0" style="-fx-background-color: #424242;" BorderPane.alignment="CENTER">
+                <BorderPane prefHeight="91.0" prefWidth="600.0" style="-fx-background-color: #424242;" BorderPane.alignment="CENTER">
                     <center>
                         <Label fx:id="alertField" text="Binary Warfare" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
                             <font>

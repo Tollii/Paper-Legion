@@ -104,8 +104,8 @@ public class GameLogic extends Application {
         sceneSetUp();
 
         //If you are player 2. Start polling the database for next turn.
-        if(!yourTurn) {
-            waitForTurn();
+            if(!yourTurn) {
+                waitForTurn();
         }
 
         endTurnButton.setOnAction(event -> {
