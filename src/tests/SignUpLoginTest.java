@@ -1,4 +1,4 @@
-package hashAndSalt.testing;
+package tests;
 
 import Database.Database;
 import org.junit.*;
@@ -13,7 +13,7 @@ import Database.Cleaner;
 import org.junit.runners.MethodSorters;
 
 //@FixMethodOrder(MethodSorters.DEFAULT)
-public class SignUpTest {
+public class SignUpLoginTest {
     private Database instance;
     BasicConnectionPool connectionPool = null;
     int userId = 0;
@@ -52,6 +52,7 @@ public class SignUpTest {
     @After
     public void tearDown() {
         instance.logout(userId);
+        instance.logout(3);
     }
 
     @Test
@@ -67,6 +68,38 @@ public class SignUpTest {
         System.out.println("testSignUp()");
         int result = instance.signUp("testUser", "testPassword", "Email");
         int expResult = 0;
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testLogin(){
+        System.out.println("testLogin()");
+        int result = instance.login("testUser","testPassword");
+        int expResult = 3;
+        assertEquals(expResult,result);
+    }
+
+    @Test
+    public void testLoginFailedPassword(){
+        System.out.println("testLogin()");
+        int result = instance.login("testUser","admong");
+        int expResult = -1;
+        assertEquals(expResult,result);
+    }
+
+    @Test
+    public void testLoginWrongUsername(){
+        System.out.println("testLogin()");
+        int result = instance.login("testUser2","admin");
+        int expResult = -1;
+        assertEquals(expResult,result);
+    }
+
+    @Test
+    public void testLogout(){
+        System.out.println("testLogout()");
+        instance.login("testUser","testPassword");
+        boolean expResult = true;
+        boolean result = instance.logout(3);
         assertEquals(expResult, result);
     }
 

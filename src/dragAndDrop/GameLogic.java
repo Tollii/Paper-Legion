@@ -34,6 +34,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+import static Database.Variables.db;
+import static Database.Variables.user_id;
+
 
 public class GameLogic extends Application {
     private static final int boardSize = 7; // 7x7 for example
@@ -43,6 +46,7 @@ public class GameLogic extends Application {
     public static final int offsetY = 100;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
+    private Thread thread;
 
 
     ////SCENE ELEMENTS////
@@ -98,6 +102,40 @@ public class GameLogic extends Application {
         sceneSetUp();
 
 
+        endTurnButton.setOnAction(event -> {
+//            thread = new Thread(() -> {
+//            try {
+//                /*while(!gameEntered){
+//                    Thread.sleep(3000);
+//                    gameEntered = db.pollGameStarted(match_id);
+//                    if(gameEntered){
+//                        Platform.runLater(
+//                                () ->{
+//                                    thread.stop();
+//                                    enterGame();
+//                                }
+//                        );
+//                    }
+//
+//                }*/
+//
+//
+//
+//            } catch (InterruptedException e){
+//                e.printStackTrace();
+//            }
+//        });
+//        thread.start();
+
+            //TODO Update database with last turn.
+            db.sendTurn();
+
+
+            //TODO Poll for your next turn
+            db.waitForTurn();
+
+            });
+
         //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
         unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
         unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
@@ -119,7 +157,7 @@ public class GameLogic extends Application {
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (!selected) {
-               select(event, rSidePanel, description);
+                select(event, rSidePanel, description);
             }
             ////////////////////////////SELECTION END/////////////////////////////////////////////
 
@@ -363,9 +401,9 @@ public class GameLogic extends Application {
     private void highlightPossibleAttacks(){
 
 //        System.out.println(Math.abs(selectedPosX * 100 - unitListe[0][1].getTranslateX())/100);
-  //      System.out.println(Math.abs(selectedPosY * 100 - unitListe[0][1].getTranslateY())/100);
+        //      System.out.println(Math.abs(selectedPosY * 100 - unitListe[0][1].getTranslateY())/100);
 //        System.out.println(unitListe[selectedPosY][selectedPosX].getMinAttackRange());
-  //      System.out.println(unitListe[selectedPosY][selectedPosX].getMaxAttackRange());
+        //      System.out.println(unitListe[selectedPosY][selectedPosX].getMaxAttackRange());
 
         for(int i=0; i<unitListe.length; i++){
             for(int j=0; j<unitListe[i].length; j++){
@@ -413,9 +451,9 @@ public class GameLogic extends Application {
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
 
-           if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()){ //Beautiful math skills in progress.
-               return true;
-           }
+        if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= unitListe[selectedPosY][selectedPosX].getMovementRange()){ //Beautiful math skills in progress.
+            return true;
+        }
 
 
 //        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&

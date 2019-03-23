@@ -2,38 +2,28 @@ package sample.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import dragAndDrop.GameLogic;
-import dragAndDrop.Matchmaking;
 import dragAndDrop.SetUp;
 import javafx.application.Platform;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import sample.Main;
 
-import java.util.concurrent.CountDownLatch;
+import java.sql.SQLOutput;
+import java.util.Timer;
+import static Database.Variables.*;
+import static Database.Variables.match_id;
 
-import static Database.Variables.db;
-import static Database.Variables.user_id;
-
-
-
-
-public class mainMenuController extends Controller{
-    private boolean findGameClicked=false;
-    Thread thread;
-    public static boolean shutDownThread = false;
+public class mainMenuController extends Controller {
+    private static boolean findGameClicked = false;
     public static boolean startGame = false;
-
-
-
-
+    public static Timer timer = new Timer(true);
+    public static boolean gameEntered = false;
+    private Thread thread;
     @FXML
     private JFXButton mainMenuPlayButton;
 
     @FXML
-    private JFXButton mainMenuSettingsButtin;
+    private JFXButton mainMenuSettingsButton;
 
     @FXML
     private JFXButton mainMenuStatsButton;
@@ -49,79 +39,86 @@ public class mainMenuController extends Controller{
 
     @FXML
     void initialize() {
+
+
+
+
+
+
         mainMenuLoggedInAsLabel.setText("Logged in as " + user_id);
 
+        // Logs out the current user.
         mainMenuExitButton.setOnAction(event -> {
             db.logout(user_id);
-            changeScene("/sample/View/login.fxml");
-
-
+            changeScene("login.fxml");
         });
 
-        mainMenuGameInfoButton.setOnAction(e ->{
+        //Displays Stats and tutorial information.
+        mainMenuGameInfoButton.setOnAction(e -> {
         });
-
 
         mainMenuPlayButton.setOnAction(event -> {
-            if(findGameClicked){
+            // If user clicks the button while searching for game the matchmaking thread is shut down.
+            if (findGameClicked) {
                 mainMenuPlayButton.setText("Play");
-                findGameClicked=false;
-                shutDownThread = true;
+                findGameClicked = false;
                 db.abortMatch(user_id);
-
-
-
-            } else{
-                thread = new Matchmaking();
-                thread.start();
-                mainMenuPlayButton.setText("Abort");
+                thread.stop();
+            } else {
                 findGameClicked = true;
-                shutDownThread=false;
+                match_id = db.matchMaking_search(user_id);
+                if(match_id > 0){
+                    startGame = true;
+                    enterGame();
+                }
+                //if none available create own game
+                if (match_id < 0) {
+                    match_id = db.createGame(user_id);
+                    thread = new Thread(() -> {
+                        try {
+                            while(!gameEntered){
+                                Thread.sleep(3000);
+                                gameEntered = db.pollGameStarted(match_id);
+                                if(gameEntered){
+                                    Platform.runLater(
+                                            () ->{
+                                                thread.stop();
+                                                enterGame();
+                                            }
+                                    );
+                                }
+
+                            }
+                        } catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                    });
+                    thread.start();
+                }
+
+                mainMenuPlayButton.setText("Abort");
+
             }
 
 
         });
-
-
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        //Background work
-                        final CountDownLatch latch = new CountDownLatch(1);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                try{
-                                    //FX Stuff done here
-                                    System.out.println("test");
-                                }finally{
-                                    latch.countDown();
-                                }
-                            }
-                        });
-                        latch.await();
-                        //Keep with the background work
-                        return null;
-                    }
-                };
-            }
-        };
-        //service.start();
-    }
-
-    public void refresh(){
-
-
     }
 
 
-    public static void enterGame() throws Exception{
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-        GameLogic game = new GameLogic();
-        game.start(Main.window);
+    public static void enterGame(){
+        try{
+            SetUp setUp = new SetUp();
+            setUp.importUnitTypes();
+            GameLogic game = new GameLogic();
+            game.start(Main.window);
+            System.out.println("Succsess!!!!");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
+
+
+
+
+
 }

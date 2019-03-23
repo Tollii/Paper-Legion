@@ -42,6 +42,7 @@ CREATE TABLE Turns(
   player int NOT NULL,
   PRIMARY KEY(turn_id, match_id, player),
   FOREIGN KEY(match_id) REFERENCES Matches(match_id) ON DELETE CASCADE
+  FOREIGN KEY(player) REFERENCES Users(user_id);
 );
 
 CREATE TABLE Pieces(

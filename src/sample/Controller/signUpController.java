@@ -42,7 +42,7 @@ public class signUpController extends Controller {
     @FXML
     void initialize() {
         goBackButton.setOnAction(event -> {
-            changeScene("/sample/View/login.fxml");
+            changeScene("login.fxml");
         });
 
         signUpButton.setOnAction(event -> {
@@ -51,11 +51,15 @@ public class signUpController extends Controller {
                 // Tries to register user in database.
                 int signup = db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText());
                 if (signup > 0) {
-                    changeScene("/sample/View/login.fxml");
+                    changeScene("login.fxml");
                 }
-            } else {
-                alertField.setText("Error while signing up.");
+                else if(signup == 0){
+                    alertField.setText("User already exists");
+                }
+
             }
+            alertField.setText("Error while signing up.");
+
         });
     }
 

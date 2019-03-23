@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static Database.Variables.match_id;
 
+import static Database.Variables.match_id;
+
 public class Database {
 
     //Class variables
@@ -34,6 +36,8 @@ public class Database {
         }
     }
 
+
+
     public int matchMaking_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlString = "SELECT * FROM Matches where game_started=0";
@@ -44,10 +48,11 @@ public class Database {
             results = preparedStatement.executeQuery();
             int match_id = -1;
             while (results.next()) {
-                match_id = results.getInt(1);
+                match_id = results.getInt("match_id");
             }
             if (match_id > 0) {
                 System.out.println("Match Found: " + match_id);
+                //Returns a boolean that does nothing
                 joinGame(match_id, player_id);
                 return match_id;
             } else {
@@ -63,34 +68,6 @@ public class Database {
         }
     }
 
-    public int getMatch_id_createGame(int playerId) {
-        int match_id = 0;
-        Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "SELECT * FROM Matches WHERE player1=? AND match_started=0;";
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1, playerId);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                match_id = resultSet.getInt("match_id");
-            }
-            if (match_id > 0) {
-                return match_id;
-            } else {
-                return -1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(resultSet);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-
     public boolean joinGame(int match_id, int player2) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
@@ -99,8 +76,8 @@ public class Database {
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player2);
             preparedStatement.setInt(2, match_id);
-            int resultSet = preparedStatement.executeUpdate();
-            if (resultSet == 1) {
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
                 System.out.println("Joined game");
                 return true;
             }
@@ -119,6 +96,7 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
         PreparedStatement preparedStatement = null;
+        ResultSet match_id_result = null;
         try {
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player_id);
@@ -128,7 +106,7 @@ public class Database {
                 String getMatchIdQuery = "select * from Matches where player1=? and game_started=0";
                 preparedStatement = myConn.prepareStatement(getMatchIdQuery);
                 preparedStatement.setInt(1, player_id);
-                ResultSet match_id_result = preparedStatement.executeQuery();
+                match_id_result = preparedStatement.executeQuery();
                 while (match_id_result.next()) {
                     match_id = match_id_result.getInt("match_id");
                 }
@@ -140,6 +118,7 @@ public class Database {
             return -1;
         } finally {
             Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(match_id_result);
             connectionPool.releaseConnection(myConn);
         }
     }
@@ -373,6 +352,8 @@ public class Database {
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
                 return userId;
+            } else {
+                System.out.println("User is already logged in");
             }
         } catch (SQLException e) {
             //e.printStackTrace();
@@ -405,8 +386,6 @@ public class Database {
     }
 
     public int signUp(String user, String password, String email) {
-
-        //TODO Check if user is not already registered, or username is taken.
 
         Connection con = connectionPool.getConnection();
         PreparedStatement ps = null;
@@ -491,6 +470,44 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
         return -1;
+    }
+
+    public int sendTurn() {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        String stmt = "";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,match_id);
+            if (preparedStatement.executeUpdate() > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
+    public boolean waitForTurn() {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT = 1;";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,match_id);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
     }
 
     public void close() throws SQLException {

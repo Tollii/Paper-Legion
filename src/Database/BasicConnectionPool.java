@@ -62,6 +62,7 @@ public class BasicConnectionPool {
 
         Connection con = connectionPool.remove(connectionPool.size() - 1);
         usedConnections.add(con);
+        System.out.println("Connection opened");
         return con;
     }
 
