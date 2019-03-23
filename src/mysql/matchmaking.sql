@@ -12,4 +12,3 @@ set player2=?, game_started=1 where match_id=?;
 delete from Matches where player1=2;
 
 
-
