@@ -117,6 +117,7 @@ public class GameLogic extends Application {
             if (yourTurn) {
                 //Increments turn. Opponents Turn.
                 turn++;
+                endTurnButton.setText("Waiting for other player");
 
                 //Add the next turn into the database.
                 db.sendTurn(turn);
@@ -128,6 +129,17 @@ public class GameLogic extends Application {
 
                 //TODO SEND UNIT MOVEMENT AND HEALTH VALUES TO DATABASE
 
+
+                for(int i = 0; i < unitListe.length; i++) {
+                    for (int j = 0; j < unitListe[i].length; j++) {
+                        // Finds every enemy unit that was damaged and sends their new info the database.
+                        if(unitListe[i][j] != null && unitListe[i][j].getEnemy() && unitListe[i][j].getHasBeenAttackedThisTurn()) {
+                            db.sendHealthInfo(unitListe[i][j].getPieceID(),unitListe[i][j].getHp());
+                        }
+                    }
+                }
+
+                ///
                 turnCounter.setText("TURN: " + turn);
                 yourTurn = false;
 
@@ -343,18 +355,26 @@ public class GameLogic extends Application {
 
         int attackPosX = getPosXFromEvent(event);
         int attackPosY = getPosYFromEvent(event);
+
+        // If there is a unit on the selected tile.
         if (unitListe[attackPosY][attackPosX] != null) {
+            // If within attack range.
             if(attackRange(attackPosX, attackPosY)){
+                // If attacked unit is not itself.
                 if (selectedUnit != unitListe[attackPosY][attackPosX]){
+                    // Attack is executed and unit takes damage.
                     unitListe[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
+
                     attackCount++;
 
-                    if(selectedUnit.getType().equalsIgnoreCase("Swordsman")){
+                    //Plays audio cue for each type.
+                    if (selectedUnit.getType().equalsIgnoreCase("Swordsman")){
                         sword.play();
-                    }else if(selectedUnit.getType().equalsIgnoreCase("Archer")){
+                    } else if(selectedUnit.getType().equalsIgnoreCase("Archer")){
                         bow.play();
                     }
 
+                    //If units health is zero. Remove it from the board.
                     if (unitListe[attackPosY][attackPosX].getHp() <= 0) {
                         //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                         pieceContainer.getChildren().removeAll(unitListe[attackPosY][attackPosX].getPieceAvatar());
@@ -507,7 +527,7 @@ public class GameLogic extends Application {
     private boolean attackRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
-        if (selectedUnit.getMaxAttackRange() <2){
+        if (selectedUnit.getMaxAttackRange() < 2){
             if((Math.abs(nyPosX - selectedUnit.getPositionX())<2) && (Math.abs(nyPosY - selectedUnit.getPositionY())<2)){
                 return true;
             } else {

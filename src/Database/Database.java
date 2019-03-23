@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import static Database.Variables.match_id;
 import static Database.Variables.user_id;
 import static Database.Variables.player1;
@@ -263,15 +264,15 @@ public class Database {
         return false;
     }
 
-    public void getPlayers(){
+    public void getPlayers() {
 
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1,match_id);
+            preparedStatement.setInt(1, match_id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 player1 = resultSet.getInt("player1");
                 player2 = resultSet.getInt("player2");
             }
@@ -282,8 +283,8 @@ public class Database {
 
     }
 
-    public void insertPieces(){
-        boolean one= true;
+    public void insertPieces() {
+        boolean one = true;
         getPlayers();
         Connection myConn = connectionPool.getConnection();
         String sqlPlayer1 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,0);" +
@@ -298,7 +299,7 @@ public class Database {
                 "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);" +
                 "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (6,?,?, 60, 50, 2,3,1,2);";
 
-        String sqlPlayer2 ="insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,6);" +
+        String sqlPlayer2 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,6);" +
                 "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,6);" +
                 "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,6);" +
                 "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,5);" +
@@ -313,15 +314,15 @@ public class Database {
             PreparedStatement player1_insert = myConn.prepareStatement(sqlPlayer1);
             PreparedStatement player2_insert = myConn.prepareStatement(sqlPlayer2);
 
-            for(int i=0; i<20; i++){
-                if(one){
+            for (int i = 0; i < 20; i++) {
+                if (one) {
                     player1_insert.setInt(1, match_id);
-                    player2_insert.setInt(1,match_id);
+                    player2_insert.setInt(1, match_id);
 
                     one = false;
-                } else{
+                } else {
                     player1_insert.setInt(2, player1);
-                    player2_insert.setInt(2,player2);
+                    player2_insert.setInt(2, player2);
                     one = true;
                 }
             }
@@ -340,7 +341,7 @@ public class Database {
 
     }
 
-    public ArrayList<PieceSetup> importPlacementPieces(){
+    public ArrayList<PieceSetup> importPlacementPieces() {
         insertPieces();
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
         int pieceId;
@@ -358,9 +359,9 @@ public class Database {
         try {
             PreparedStatement preparedStatement = myConn.prepareStatement(sqlsetning);
             preparedStatement.setInt(1, match_id); //This is the correct one
-           // preparedStatement.setInt(1,250); //for test purposes;
+            // preparedStatement.setInt(1,250); //for test purposes;
             ResultSet result = preparedStatement.executeQuery();
-            while(result.next()){
+            while (result.next()) {
                 pieceId = result.getInt("piece_id");
                 match_idDB = match_id;
                 player_id = result.getInt("player_id");
@@ -368,7 +369,7 @@ public class Database {
                 positionY = result.getInt("position_y");
                 unit_type_id = result.getInt("unit_type_id");
 
-                PieceSetup piece = new PieceSetup(pieceId,match_id,player_id,positionX,positionY, unit_type_id);
+                PieceSetup piece = new PieceSetup(pieceId, match_id, player_id, positionX, positionY, unit_type_id);
                 piecesImport.add(piece);
             }
 
@@ -570,23 +571,22 @@ public class Database {
 
         try {
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,match_id);
+            preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
             rs.next();
             if (turn == 1) {
                 otherPlayer = user_id;
-            }
-            else {
-                if(rs.getInt("player1") == user_id) {
+            } else {
+                if (rs.getInt("player1") == user_id) {
                     otherPlayer = rs.getInt("player2");
                 } else {
                     otherPlayer = rs.getInt("player1");
                 }
             }
             preparedStatement = myConn.prepareStatement(stmt2);
-            preparedStatement.setInt(1,turn);
-            preparedStatement.setInt(2,match_id);
-            preparedStatement.setInt(3,otherPlayer);
+            preparedStatement.setInt(1, turn);
+            preparedStatement.setInt(2, match_id);
+            preparedStatement.setInt(3, otherPlayer);
             if (preparedStatement.executeUpdate() > 0) {
                 return 1;
             } else {
@@ -608,7 +608,7 @@ public class Database {
         String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,match_id);
+            preparedStatement.setInt(1, match_id);
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             return rs.getInt("player");
@@ -622,14 +622,14 @@ public class Database {
     }
 
 
-    public String getMyName(int used_id){
+    public String getMyName(int used_id) {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT username FROM Users WHERE user_id = ?;";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,user_id);
+            preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
             rs.next();
             return rs.getString("username");
@@ -643,14 +643,14 @@ public class Database {
         return "error";
     }
 
-    public String getMyEmail(int used_id){
+    public String getMyEmail(int used_id) {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT email FROM Users WHERE user_id = ?;";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,user_id);
+            preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
             rs.next();
             return rs.getString("email");
@@ -664,62 +664,91 @@ public class Database {
         return "error";
     }
 
-    public String getGamesPlayed(int user_id){
+    public String getGamesPlayed(int user_id) {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         String value = "";
         String stmt = "SELECT games_played FROM Statistics WHERE user_id = ?;";
-        try{
+        try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
             rs.next();
             value += rs.getInt("games_played");
             return value;
-        } catch (SQLException sqle){
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
         return "error";
     }
 
 
-    public String getGamesWon(int user_id){
+    public String getGamesWon(int user_id) {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         String value = "";
         String stmt = "SELECT games_won FROM Statistics WHERE user_id = ?;";
-        try{
+        try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
             rs.next();
             value += rs.getInt("games_won");
             return value;
-        } catch (SQLException sqle){
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
         return "error";
     }
 
-    public int addUserToStatistics(int user_id){
+    public int addUserToStatistics(int user_id) {
 
-        String stmt;
         PreparedStatement preparedStatement = null;
         Connection myConn = connectionPool.getConnection();
-        stmt = "INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);";
+        String stmt = "INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             preparedStatement.setInt(2, 0);
             preparedStatement.setInt(3, 0);
-            if(preparedStatement.executeUpdate() > 0) return 1;
+            if (preparedStatement.executeUpdate() > 0) return 1;
             else return -1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public void sendHealthInfo(int pieceID, double currentHealth) {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        int opponent;
+        String stmt = "UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?";
+        try {
+
+            if (user_id == player1) {
+                opponent = player2;
+            } else {
+                opponent = player1;
+            }
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setDouble(1, currentHealth);
+            preparedStatement.setInt(2, pieceID);
+            preparedStatement.setInt(3, match_id);
+            preparedStatement.setInt(4, opponent);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+
     }
 
     public void close() throws SQLException {
