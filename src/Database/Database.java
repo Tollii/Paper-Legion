@@ -484,6 +484,7 @@ public class Database {
 
         try {
             preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,match_id);
             rs = preparedStatement.executeQuery();
             rs.next();
             if (turn == 1) {
