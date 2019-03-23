@@ -515,6 +515,52 @@ public class Database {
         return -1;
     }
 
+
+    public String getMyName(int used_id){
+        Connection myConn = connectionPool.getConnection();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        String stmt = "SELECT username FROM Users WHERE user_id = ?;";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,user_id);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+            return rs.getString("username");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return "error";
+    }
+
+    public String getMyEmail(int used_id){
+        Connection myConn = connectionPool.getConnection();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        String stmt = "SELECT email FROM Users WHERE user_id = ?;";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1,user_id);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+            return rs.getString("email");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return "error";
+    }
+
+
+
+
     public void close() throws SQLException {
         connectionPool.shutdown();
     }
