@@ -313,6 +313,7 @@ public class Database {
     }
 
     public ArrayList<PieceSetup> importPlacementPieces(){
+        insertPieces();
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
         int pieceId;
         int match_idDB;
