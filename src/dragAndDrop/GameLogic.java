@@ -522,4 +522,16 @@ public class GameLogic extends Application {
         });
         thread.start();
     }
+    @Override
+    public void stop() {
+        // Executed when the application shuts down. User is logged out and database connection is closed.
+        if (user_id > 0) {
+            db.logout(user_id);
+        }
+        try {
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
