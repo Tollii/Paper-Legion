@@ -189,7 +189,7 @@ public class GameLogic extends Application {
         board.getChildren().add(grid.gp); //Insert grid from Grid class.
         pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        turnCounter.setStyle("-fx-font-size:14px;");
+        turnCounter.setStyle("-fx-font-size:32px;");
 
         endTurnButton.setPrefWidth(150);
         endTurnButton.setPrefHeight(75);
@@ -478,6 +478,17 @@ public class GameLogic extends Application {
 
 
     public static void main(String[] args) {
+        //Shutdown hook. CLoses stuff when program exits.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (user_id > 0) {
+                db.logout(user_id);
+            }
+            try {
+                db.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
 
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
@@ -511,18 +522,4 @@ public class GameLogic extends Application {
         });
         thread.start();
     }
-
-    @Override
-    public void stop() {
-        // Executed when the application shuts down. User is logged out and database connection is closed.
-        if (user_id > 0) {
-            db.logout(user_id);
-        }
-        try {
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
