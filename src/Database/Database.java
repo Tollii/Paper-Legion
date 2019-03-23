@@ -443,7 +443,7 @@ public class Database {
     public int sendTurn() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        String stmt = "PUT IT HERE JON";
+        String stmt = "";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1,match_id);
