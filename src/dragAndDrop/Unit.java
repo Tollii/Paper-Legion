@@ -11,8 +11,8 @@ import javafx.scene.shape.Rectangle;
 public class Unit extends Rectangle {
     private Label healthbar;
 
-    private double oldPosX;
-    private double oldPosY;
+    private double positionX;
+    private double positionY;
 
 
     ////UNIT INFO////
@@ -30,6 +30,7 @@ public class Unit extends Rectangle {
 
     ////UTILITIES////
     private final int LOW_HP_THRESHOLD = 20;
+    private int pieceID; //Same as pieceID in the Database
     private boolean enemy;
     private GridPane pieceAvatar =  new GridPane();
 
@@ -95,18 +96,18 @@ public class Unit extends Rectangle {
     }
 
     public void setOldPos(double oldPosX, double oldPosY){
-        this.oldPosX = oldPosX;
-        this.oldPosY = oldPosY;
+        this.positionX = oldPosX;
+        this.positionY = oldPosY;
         healthbar.setTranslateX(this.getTranslateX());
         healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
     public double getOldPosX(){
-        return oldPosX;
+        return positionX;
     }
 
     public double getOldPosY(){
-        return oldPosY;
+        return positionY;
     }
 
     public GridPane getPieceAvatar(){
@@ -127,6 +128,14 @@ public class Unit extends Rectangle {
 
     public boolean getEnemy(){
         return enemy;
+    }
+
+    public int getPieceID() {
+        return pieceID;
+    }
+
+    public void setPieceID(int pieceID) {
+        this.pieceID = pieceID;
     }
 
     ////GET UNIT INFO////
@@ -182,5 +191,6 @@ public class Unit extends Rectangle {
             healthbar.setStyle("-fx-background-color: Red");
         }
     }
+
 
 }

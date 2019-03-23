@@ -216,26 +216,22 @@ public class GameLogic extends Application {
     }
 
     private void select(MouseEvent event, VBox vBox, Label description){
-        if (!(event.getButton() == MouseButton.SECONDARY)) {
-            int posX = getPosXFromEvent(event);
-            int posY = getPosYFromEvent(event);
+        int posX = getPosXFromEvent(event);
+        int posY = getPosYFromEvent(event);
 
-            if (unitListe[posY][posX] != null) {
-                if (!selected) {
-                    unitListe[posY][posX].setOldPos(unitListe[posY][posX].getTranslateX() / 100, unitListe[posY][posX].getTranslateY() / 100);
-                    unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
-                    unitListe[posY][posX].setStrokeWidth(3);
-                    unitListe[posY][posX].setStroke(Color.RED);
-                    selected = true;
-                    selectedPosX = posX;
-                    selectedPosY = posY;
-                    highlightPossibleMoves();
-                    description.setText(unitListe[selectedPosY][selectedPosX].getDescription());
-                    vBox.getChildren().add(description);
-                    description.toBack();
+        if (unitListe[posY][posX] != null) {
+            unitListe[posY][posX].setOldPos(unitListe[posY][posX].getTranslateX() / 100, unitListe[posY][posX].getTranslateY() / 100);
+            unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
+            unitListe[posY][posX].setStrokeWidth(3);
+            unitListe[posY][posX].setStroke(Color.RED);
+            selected = true;
+            selectedPosX = posX;
+            selectedPosY = posY;
+            highlightPossibleMoves();
+            description.setText(unitListe[selectedPosY][selectedPosX].getDescription());
+            vBox.getChildren().add(description);
+            description.toBack();
 
-                }
-            }
         }
     }
 
@@ -386,9 +382,6 @@ public class GameLogic extends Application {
     }
 
     private void highlightPossibleAttacks(){
-
-        System.out.println(unitListe[selectedPosY][selectedPosX].getMaxAttackRange());
-        System.out.println(unitListe[selectedPosY][selectedPosX].getMinAttackRange());
 
         for(int i=0; i<unitListe.length; i++){
             for(int j=0; j<unitListe[i].length; j++){
