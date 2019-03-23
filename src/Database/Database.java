@@ -498,18 +498,20 @@ public class Database {
 
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
         String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1,match_id);
-            ResultSet rs = preparedStatement.executeQuery();
-            //rs.next();
+            rs = preparedStatement.executeQuery();
+            rs.next();
             return rs.getInt("player");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(rs);
             connectionPool.releaseConnection(myConn);
         }
         return -1;
