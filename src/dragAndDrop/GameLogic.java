@@ -108,12 +108,14 @@ public class GameLogic extends Application {
         if(!yourTurn) {
             waitForTurn();
         } else {
+            //Enters turn 1 into database.
             db.sendTurn(turn);
         }
 
         endTurnButton.setOnAction(event -> {
             if(yourTurn) {
                 turn++;
+                //Enters opponents turn into the database.
                 db.sendTurn(turn);
                 turnCounter.setText(String.valueOf(turn));
                 yourTurn = false;
@@ -195,6 +197,8 @@ public class GameLogic extends Application {
         board.getChildren().add(grid.gp); //Insert grid from Grid class.
         pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
+        turnCounter.setStyle("-fx-font-size:14px;");
+
         endTurnButton.setPrefWidth(150);
         endTurnButton.setPrefHeight(75);
         endTurnButton.setTextFill(Color.WHITE);
@@ -204,8 +208,7 @@ public class GameLogic extends Application {
         description.setPadding(new Insets(0,0,350,0));
 
         rSidePanel.setPrefWidth(250);
-        rSidePanel.getChildren().add(endTurnButton);
-        rSidePanel.getChildren().add(turnCounter);
+        rSidePanel.getChildren().addAll(turnCounter,endTurnButton);
         rSidePanel.setPrefWidth(650);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -266,7 +269,7 @@ public class GameLogic extends Application {
                 selectedPosX = nyPosX;
                 selectedPosY = nyPosY;
                 unitListe[nyPosY][nyPosX].setOldPos(nyPosX,nyPosY);
-                moveCounter++;
+                //moveCounter++;
                 highlightPossibleMoves();
 
                 movementPhase = false;
@@ -281,7 +284,7 @@ public class GameLogic extends Application {
         int nyPosX = getPosXFromEvent(event);
         int nyPosY = getPosYFromEvent(event);
         if (unitListe[nyPosY][nyPosX] != null) {
-            if(attackRange(nyPosX, nyPosY)){
+            if(attackRange(nyPosX, nyPosY)) {
                 if (unitListe[selectedPosY][selectedPosX] != unitListe[nyPosY][nyPosX]){
                     unitListe[nyPosY][nyPosX].takeDamage(unitListe[selectedPosY][selectedPosX].getAttack());
                     attackCount++;
@@ -391,7 +394,9 @@ public class GameLogic extends Application {
                     if ((((Math.abs(selectedPosX - unitListe[i][j].getTranslateX() /tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY()/tileSize)) <= unitListe[selectedPosY][selectedPosX].getMaxAttackRange())
                         && ((Math.abs(selectedPosX - unitListe[i][j].getTranslateX()/tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY()/tileSize)) >= unitListe[selectedPosY][selectedPosX].getMinAttackRange()){
 
-                        grid.liste[i][j].setFill(attackHighlightColor);
+                        if(unitListe[i][j].getEnemy()) {
+                            grid.liste[i][j].setFill(attackHighlightColor);
+                        }
                     }
                 }
             }

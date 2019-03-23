@@ -476,12 +476,29 @@ public class Database {
     public int sendTurn(int turn) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        String stmt = "INSERT INTO Turns(turn_id,match_id, player) VALUES (?,?,?);";
+        ResultSet rs = null;
+        int otherPlayer;
+        String stmt = "SELECT player1,player2 FROM Matches WHERE match_id = ?";
+        String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
+
         try {
             preparedStatement = myConn.prepareStatement(stmt);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+            if (turn == 1) {
+                otherPlayer = user_id;
+            }
+            else {
+                if(rs.getInt("player1") == user_id) {
+                    otherPlayer = rs.getInt("player2");
+                } else {
+                    otherPlayer = rs.getInt("player1");
+                }
+            }
+            preparedStatement = myConn.prepareStatement(stmt2);
             preparedStatement.setInt(1,turn);
             preparedStatement.setInt(2,match_id);
-            preparedStatement.setInt(3,user_id);
+            preparedStatement.setInt(3,otherPlayer);
             if (preparedStatement.executeUpdate() > 0) {
                 return 1;
             } else {
@@ -491,6 +508,7 @@ public class Database {
             e.printStackTrace();
         } finally {
             Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(rs);
             connectionPool.releaseConnection(myConn);
         }
         return -1;
