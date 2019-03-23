@@ -132,6 +132,7 @@ public class GameLogic extends Application {
 
 
             //TODO Poll for your next turn
+            db.waitForTurn();
 
             });
 
