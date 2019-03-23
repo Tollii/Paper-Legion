@@ -499,7 +499,7 @@ public class Database {
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT = 1;";
+        String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
         try {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1,match_id);
