@@ -531,6 +531,7 @@ public class GameLogic extends Application {
         if (user_id > 0) {
             db.logout(user_id);
         }
+        yourTurn = true; //Midlertidig løsning for å stoppe at waitForTurn går etter programmet er lukket.
         try {
             db.close();
         } catch (SQLException e) {
