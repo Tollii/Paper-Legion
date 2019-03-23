@@ -35,6 +35,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 import static Database.Variables.*;
 
 
@@ -47,7 +49,6 @@ public class GameLogic extends Application {
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
     private Thread thread;
-    private int turn = 1;
 
 
     ////SCENE ELEMENTS////
@@ -104,15 +105,18 @@ public class GameLogic extends Application {
         sceneSetUp();
 
         //If you are player 2. Start polling the database for next turn.
-            if(!yourTurn) {
-                waitForTurn();
+        if(!yourTurn) {
+            waitForTurn();
+        } else {
+            db.sendTurn(turn);
         }
 
         endTurnButton.setOnAction(event -> {
             if(yourTurn) {
-                db.sendTurn(turn);
                 turn++;
+                db.sendTurn(turn);
                 turnCounter.setText(String.valueOf(turn));
+                yourTurn = false;
 
                 //Wait for you next turn
                 waitForTurn();
@@ -497,8 +501,9 @@ public class GameLogic extends Application {
         thread = new Thread(() -> {
             try {
                 while (!yourTurn) {
-                    Thread.sleep(3000);
+                    Thread.sleep(5000);
                     //When player in database matches your own user_id it is your turn again.
+                    System.out.println("Whose turn is it? "+db.getTurnPlayer());
                     if (db.getTurnPlayer() == user_id) {
                         yourTurn = true;
                     }
@@ -509,6 +514,9 @@ public class GameLogic extends Application {
                                     //What will happen when it is your turn again.
                                     turn++;
                                     turnCounter.setText(String.valueOf(turn));
+
+
+
                                 });
                     }
                 }
@@ -518,4 +526,18 @@ public class GameLogic extends Application {
         });
         thread.start();
     }
+
+    @Override
+    public void stop() {
+        // Executed when the application shuts down. User is logged out and database connection is closed.
+        if (user_id > 0) {
+            db.logout(user_id);
+        }
+        try {
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -519,51 +519,6 @@ public class Database {
         connectionPool.shutdown();
     }
 
-    // Fetches username for given user id
-    public String getMyName(int user_id){
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
-        String stmt = "SELECT username FROM Users WHERE user_id = ?;";
-        try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,user_id);
-            rs = preparedStatement.executeQuery();
-            rs.next();
-            return rs.getString("username");
-
-        } catch (SQLException sqle){
-            sqle.printStackTrace();
-        } finally {
-            Cleaner.closeResSet(rs);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-        return "error";
-    }
-
-    public String getMyEmail(int user_id){
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
-        String stmt = "SELECT email FROM Users WHERE user_id = ?;";
-        try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1,user_id);
-            rs = preparedStatement.executeQuery();
-            rs.next();
-            return rs.getString("email");
-
-        } catch (SQLException sqle){
-            sqle.printStackTrace();
-        } finally {
-            Cleaner.closeResSet(rs);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-        return "error";
-    }
-
     public static void main(String[] args) throws SQLException {
 
         Database database = new Database();
