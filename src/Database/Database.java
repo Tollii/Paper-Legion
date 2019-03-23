@@ -1,5 +1,6 @@
 package Database;
 
+import dragAndDrop.Move;
 import dragAndDrop.PieceSetup;
 import dragAndDrop.ProtoUnitType;
 
@@ -243,7 +244,7 @@ public class Database {
     }
 
     //TODO
-    public boolean exportMoveList() {
+    public boolean exportMoveList(ArrayList<Move> movementList) {
         return false;
     }
 
