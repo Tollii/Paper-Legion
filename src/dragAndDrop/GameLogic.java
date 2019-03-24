@@ -14,10 +14,7 @@
 //      ##    ##       ##     ## ##     ##       ##     ##         //
 //      ##    ######## ##     ## ##     ##     ######   ##         //
 
-
 package dragAndDrop;
-
-//TEST
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
@@ -279,24 +276,27 @@ public class GameLogic extends Application {
        ArrayList<PieceSetup> pieces = db.importPlacementPieces();
         int posX;
         int posY;
-        System.out.println(unitList.size());
-        for (int i = 0; i < unitList.size(); i++){
-            System.out.println("HP: " + unitList.get(i).getHp());
-        }
-        unitList.removeAll(Collections.singletonList(null));
-        System.out.println(unitList.size());
-        for (int i = 0; i < unitList.size(); i++){
-            System.out.println("HP: " + unitList.get(i).getHp());
-        }
-
-
 
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
                 if(unitList.get(i).getHp() > 0) {
+
+                    PieceSetup correspondingPiece = null;
+
+                    for (int j = 0; j < pieces.size(); j++) {
+                        if(unitList.get(i).getEnemy()){
+                            if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
+                                correspondingPiece = pieces.get(j);
+                            }
+                        }else{
+                            if(pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
+                                correspondingPiece = pieces.get(j);
+                            }
+                        }
+                    }
                     unitList.get(i).setHasAttackedThisTurn(false);
-                    unitList.get(i).setHp(pieces.get(i).getCurrent_health());
-                    unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
+                    unitList.get(i).setHp(correspondingPiece.getCurrent_health());
+                    unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
                     if (unitList.get(i).getHp() > 0) {
                         pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
                     }
@@ -658,6 +658,8 @@ public class GameLogic extends Application {
     }
 
     private void waitForTurn() {
+        //TODO make waitForTurn() it's own class and Interupt() and an AtomicBoolean as a control variable
+
         thread = new Thread(() -> {
             try {
                 while (!yourTurn) {
@@ -672,6 +674,7 @@ public class GameLogic extends Application {
                         Platform.runLater(
                                 () -> {
                                     thread.stop();
+
 
                                     //What will happen when it is your turn again.
 
