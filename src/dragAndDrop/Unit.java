@@ -102,6 +102,8 @@ public class Unit extends Rectangle {
     public void setPosition(int newPositionX, int newPositionY){
         this.positionX = newPositionX;
         this.positionY = newPositionY;
+        super.setTranslateX(newPositionX*100);
+        super.setTranslateY(newPositionY*100);
         healthbar.setTranslateX(this.getTranslateX());
         healthbar.setTranslateY(this.getTranslateY()+40);
     }
