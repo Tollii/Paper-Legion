@@ -150,7 +150,7 @@ public class GameLogic extends Application {
                 ////SEND MOVEMENT////
 
                 //db.exportMoveList(movementList); when we use movement table use this
-                if(movementList.size() != 0) {
+                if (movementList.size() != 0) {
                     db.exportPieceMoveList(movementList);
                     movementList = new ArrayList<>(); //Resets the movementList for the next turn.
                 }
@@ -339,6 +339,7 @@ public class GameLogic extends Application {
                         unitPosition[posY][posX] = unitList.get(i);
             }
             ///////////////////////////////////////////////////////////////////////////////////
+
     }
 
     public void deDrawUnits(){
