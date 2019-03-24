@@ -106,6 +106,10 @@ public class Unit extends Rectangle {
         healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
+    public void setHp(double hp){
+        this.hp = hp;
+    }
+
     public int getPositionX(){
         return positionX;
     }

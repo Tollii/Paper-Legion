@@ -385,10 +385,11 @@ public class Database {
         int positionX;
         int positionY;
         int unit_type_id;
+        double current_hp;
 
         Connection myConn = connectionPool.getConnection();
         String sqlsetning = "select Pieces.piece_id, Pieces.match_id, Pieces.player_id," +
-                " position_x, position_y, unit_type_id from Pieces left join Units U " +
+                " position_x, position_y, unit_type_id, current_health from Pieces left join Units U " +
                 "on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id " +
                 "where Pieces.match_id=?;";
         try {
@@ -403,8 +404,9 @@ public class Database {
                 positionX = result.getInt("position_x");
                 positionY = result.getInt("position_y");
                 unit_type_id = result.getInt("unit_type_id");
+                current_hp = result.getDouble("current_health");
 
-                PieceSetup piece = new PieceSetup(pieceId, match_id, player_id, positionX, positionY, unit_type_id);
+                PieceSetup piece = new PieceSetup(pieceId, match_id, player_id, positionX, positionY, unit_type_id, current_hp);
                 piecesImport.add(piece);
             }
 

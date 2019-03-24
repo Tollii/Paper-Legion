@@ -77,7 +77,7 @@ public class GameLogic extends Application {
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
-    ArrayList<Unit> unitListe;
+    ArrayList<Unit> unitList = new ArrayList<>();
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
@@ -297,14 +297,7 @@ public class GameLogic extends Application {
         scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
     }
 
-
-    private void drawUnits(){
-        setupPieces = null;
-        for (int i = 0; i < unitPosition.length; i++) {
-            for (int j = 0; j < unitPosition[i].length; j++) {
-                unitPosition[i][j] = null;
-            }
-        }
+    private void createUnits(){
         setupPieces = db.importPlacementPieces();
         for(int i=0; i<setupPieces.size(); i++) {
             int pieceId = setupPieces.get(i).getPieceId();
@@ -322,20 +315,26 @@ public class GameLogic extends Application {
             }
 
             if (unitType_id == 1) {
-                unitPosition[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newSwordsMan(), pieceId);
+                unitList.add(new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newSwordsMan(), pieceId));
 
             } else if (unitType_id == 2) {
-                unitPosition[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newArcher(), pieceId);
-
+                unitList.add(new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newArcher(), pieceId));
             }
         }
+    }
+
+
+    private void drawUnits(){
+       ArrayList<PieceSetup> pieces = db.importPlacementPieces();
+
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-            for (int i = 0; i < unitPosition.length; i++) {
-                for (int j = 0; j < unitPosition[i].length; j++) {
-                    if (unitPosition[i][j] != null) {
-                        pieceContainer.getChildren().add(unitPosition[i][j].getPieceAvatar());
-                    }
-                }
+            for (int i = 0; i < unitList.size(); i++) {
+                        unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
+                        unitList.get(i).setHp(pieces.get(i).getCurrent_health());
+                        if(unitList.get(i).getHp() >0) {
+                            pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                        }
+                        //TODO legg inn at når alle piecene dine er døde så taper du
             }
             ///////////////////////////////////////////////////////////////////////////////
 
