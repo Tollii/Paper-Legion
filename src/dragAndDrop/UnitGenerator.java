@@ -48,6 +48,8 @@ public class UnitGenerator {
         this.swordsmanMinAttackRange = swordsmanProto.getMinAttackRange();
         this.swordsmanMaxAttackRange = swordsmanProto.getMaxAttackRange();
         this.swordsmanMovementRange = swordsmanProto.getMovementRange();
+        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag);
+
 
         this.archerMaxHP = archerProto.getHp();
         this.archerAttack = archerProto.getAttack();
@@ -56,29 +58,10 @@ public class UnitGenerator {
         this.archerMinAttackRange = archerProto.getMinAttackRange();
         this.archerMaxAttackRange = archerProto.getMaxAttackRange();
         this.archerMovementRange = archerProto.getMovementRange();
-    }
-
-    public UnitGenerator(int swordsmanMaxHP, int swordsmanAttack, int swordsmanAbilityCooldown, double swordsmanDefenceMultiplier, int swordsmanMinAttackRange, int swordsmanMaxAttackRange, int swordsmanMovementRange,
-                         int archerMaxHP, int archerAttack, int archerAbilityCooldown, double archerDefenceMultiplier, int archerMinAttackRange, int archerMaxAttackRange, int archerMovementRange){
-
-        this.swordsmanMaxHP = swordsmanMaxHP;
-        this.swordsmanAttack = swordsmanAttack;
-        this.swordsmanAbilityCooldown = swordsmanAbilityCooldown;
-        this.swordsmanDefenceMultiplier = swordsmanDefenceMultiplier;
-        this.swordsmanMinAttackRange = swordsmanMinAttackRange;
-        this.swordsmanMaxAttackRange = swordsmanMaxAttackRange;
-        this.swordsmanMovementRange = swordsmanMovementRange;
-        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag);
-
-        this.archerMaxHP = archerMaxHP;
-        this.archerAttack = archerAttack;
-        this.archerAbilityCooldown = archerAbilityCooldown;
-        this.archerDefenceMultiplier = archerDefenceMultiplier;
-        this.archerMinAttackRange = archerMinAttackRange;
-        this.archerMaxAttackRange = archerMaxAttackRange;
-        this.archerMovementRange = archerMovementRange;
         archerUnitType = new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag);
+
     }
+
 
     public UnitType newArcher(){
 
