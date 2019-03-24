@@ -388,9 +388,8 @@ public class Database {
         double current_hp;
 
         Connection myConn = connectionPool.getConnection();
-        String sqlsetning = "select Pieces.piece_id, Pieces.match_id, Pieces.player_id," +
-                " position_x, position_y, unit_type_id, current_health from Pieces left join Units U " +
-                "on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id " +
+        String sqlsetning = "select Pieces.piece_id, Pieces.match_id, Pieces.player_id,position_x, position_y, unit_type_id, current_health from Pieces \n" +
+                "right join Units U on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id and Pieces.player_id = U.player_id\n" +
                 "where Pieces.match_id=?;";
         try {
             preparedStatement = myConn.prepareStatement(sqlsetning);
