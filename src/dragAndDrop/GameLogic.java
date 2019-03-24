@@ -113,7 +113,7 @@ public class GameLogic extends Application {
             db.insertPieces();
         }
         else {
-
+            Thread.sleep(5000); //Temp løsning
         }
 
         drawUnits();
