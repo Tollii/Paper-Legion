@@ -47,7 +47,7 @@ import static Database.Variables.user_id;
 public class GameLogic extends Application {
     private static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
-    private static Unit[][] unitListe = new Unit[boardSize][boardSize];
+    private static Unit[][] unitPosition = new Unit[boardSize][boardSize];
     private static final int offsetX = 100;
     private static final int offsetY = 100;
     private final int initialWindowSizeX = 1024;
@@ -77,6 +77,7 @@ public class GameLogic extends Application {
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
+    ArrayList<Unit> unitListe;
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
@@ -122,10 +123,19 @@ public class GameLogic extends Application {
         if(!yourTurn) {
             endTurnButton.setText("Waiting for players");
             waitForTurn();
-            System.out.println("Yourturn false");
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
+        }
+
+        ArrayList<Unit> unitListe = new ArrayList<>();
+        for(int i = 0; i < unitPosition.length; i++) {
+            for (int j = 0; j < unitPosition[i].length; j++) {
+                // If unit exists, is not an enemy and has been attacked. Send their new health info.
+                if(unitPosition[i][j] != null) {
+                   unitListe.add(unitPosition[i][j]);
+                }
+            }
         }
 
         ////END TURN HANDLER////
@@ -153,11 +163,11 @@ public class GameLogic extends Application {
 
                 // Alternative solution to creating a List of attacks in the future.
                 // Finds every enemy unit that was damaged and sends their new info the database.
-                for(int i = 0; i < unitListe.length; i++) {
-                    for (int j = 0; j < unitListe[i].length; j++) {
+                for(int i = 0; i < unitPosition.length; i++) {
+                    for (int j = 0; j < unitPosition[i].length; j++) {
                         // If unit exists, is not an enemy and has been attacked. Send their new health info.
-                        if(unitListe[i][j] != null && unitListe[i][j].getEnemy() && unitListe[i][j].getHasBeenAttackedThisTurn()) {
-                            db.sendHealthInfo(unitListe[i][j].getPieceID(),unitListe[i][j].getHp());
+                        if(unitPosition[i][j] != null && unitPosition[i][j].getEnemy() && unitPosition[i][j].getHasBeenAttackedThisTurn()) {
+                            db.sendHealthInfo(unitPosition[i][j].getPieceID(),unitPosition[i][j].getHp());
                         }
                     }
                 }
@@ -185,27 +195,27 @@ public class GameLogic extends Application {
 //
 //
 //            if(unitType_id == 1){
-//                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newSwordsMan());
+//                unitPosition[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newSwordsMan());
 //
 //            } else if(unitType_id == 2){
-//                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
+//                unitPosition[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
 //
 //            }
 //
 //        }
 ////
 ////        //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-////        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
-////        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
-////        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
+////        unitPosition[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
+////        unitPosition[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
+////        unitPosition[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
 ////        ///////////////////////////////////////////////////////////////////////////////////////////
 //
 //
 //        ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-//        for (int i = 0; i < unitListe.length; i++) {
-//            for (int j = 0; j < unitListe[i].length; j++) {
-//                if (unitListe[i][j] != null) {
-//                    pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
+//        for (int i = 0; i < unitPosition.length; i++) {
+//            for (int j = 0; j < unitPosition[i].length; j++) {
+//                if (unitPosition[i][j] != null) {
+//                    pieceContainer.getChildren().add(unitPosition[i][j].getPieceAvatar());
 //                }
 //            }
 //        }
@@ -290,9 +300,9 @@ public class GameLogic extends Application {
 
     private void drawUnits(){
         setupPieces = null;
-        for (int i = 0; i < unitListe.length; i++) {
-            for (int j = 0; j < unitListe[i].length; j++) {
-                unitListe[i][j] = null;
+        for (int i = 0; i < unitPosition.length; i++) {
+            for (int j = 0; j < unitPosition[i].length; j++) {
+                unitPosition[i][j] = null;
             }
         }
         setupPieces = db.importPlacementPieces();
@@ -312,18 +322,18 @@ public class GameLogic extends Application {
             }
 
             if (unitType_id == 1) {
-                unitListe[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newSwordsMan(), pieceId);
+                unitPosition[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newSwordsMan(), pieceId);
 
             } else if (unitType_id == 2) {
-                unitListe[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newArcher(), pieceId);
+                unitPosition[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newArcher(), pieceId);
 
             }
         }
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-            for (int i = 0; i < unitListe.length; i++) {
-                for (int j = 0; j < unitListe[i].length; j++) {
-                    if (unitListe[i][j] != null) {
-                        pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
+            for (int i = 0; i < unitPosition.length; i++) {
+                for (int j = 0; j < unitPosition[i].length; j++) {
+                    if (unitPosition[i][j] != null) {
+                        pieceContainer.getChildren().add(unitPosition[i][j].getPieceAvatar());
                     }
                 }
             }
@@ -332,10 +342,10 @@ public class GameLogic extends Application {
     }
 
     public void deDrawUnits(){
-        for (int i = 0; i < unitListe.length; i++) {
-            for (int j = 0; j < unitListe[i].length; j++) {
-                if (unitListe[i][j] != null) {
-                    pieceContainer.getChildren().remove(unitListe[i][j].getPieceAvatar());
+        for (int i = 0; i < unitPosition.length; i++) {
+            for (int j = 0; j < unitPosition[i].length; j++) {
+                if (unitPosition[i][j] != null) {
+                    pieceContainer.getChildren().remove(unitPosition[i][j].getPieceAvatar());
                 }
             }
         }
@@ -346,19 +356,19 @@ public class GameLogic extends Application {
         int posX = getPosXFromEvent(event);
         int posY = getPosYFromEvent(event);
 
-        if ((unitListe[posY][posX] != null) && !unitListe[posY][posX].getEnemy()) {
+        if ((unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy()) {
 
-            unitListe[posY][posX].setPosition((int)(unitListe[posY][posX].getTranslateX() / tileSize), (int)(unitListe[posY][posX].getTranslateY() / tileSize));
-            unitListe[posY][posX].setStrokeType(StrokeType.INSIDE);
-            unitListe[posY][posX].setStrokeWidth(3);
-            unitListe[posY][posX].setStroke(Color.RED);
+            unitPosition[posY][posX].setPosition((int)(unitPosition[posY][posX].getTranslateX() / tileSize), (int)(unitPosition[posY][posX].getTranslateY() / tileSize));
+            unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
+            unitPosition[posY][posX].setStrokeWidth(3);
+            unitPosition[posY][posX].setStroke(Color.RED);
 
             selected = true;
 
             selectedPosX = posX;
             selectedPosY = posY;
 
-            selectedUnit = unitListe[selectedPosY][selectedPosX];
+            selectedUnit = unitPosition[selectedPosY][selectedPosX];
 
             if(movementPhase){
                 highlightPossibleMoves();
@@ -375,11 +385,11 @@ public class GameLogic extends Application {
 
     private void deSelect(VBox sidePanel, Label description) {
 
-        for (int i = 0; i < unitListe.length; i++) {
+        for (int i = 0; i < unitPosition.length; i++) {
 
-            for (int j = 0; j < unitListe[i].length; j++) {
-                if (unitListe[i][j] != null) {
-                    unitListe[i][j].setStroke(Color.TRANSPARENT);
+            for (int j = 0; j < unitPosition[i].length; j++) {
+                if (unitPosition[i][j] != null) {
+                    unitPosition[i][j].setStroke(Color.TRANSPARENT);
                 }
             }
         }
@@ -396,7 +406,7 @@ public class GameLogic extends Application {
             int nyPosY = getPosYFromEvent(event);
 
             if (movementRange(nyPosX, nyPosY)) {
-                if (unitListe[nyPosY][nyPosX] == null) {
+                if (unitPosition[nyPosY][nyPosX] == null) {
                     selectedUnit.setTranslate(nyPosX, nyPosY);
                     clearHighlight();
 
@@ -404,8 +414,8 @@ public class GameLogic extends Application {
                     movementList.add(new Move(turn, selectedUnit.getPieceID(), match_id, selectedUnit.getPositionX(), selectedUnit.getPositionY(), nyPosX, nyPosY));
 
                     ////EXECUTES THE MOVE////
-                    unitListe[nyPosY][nyPosX] = selectedUnit;
-                    unitListe[selectedPosY][selectedPosX] = null;
+                    unitPosition[nyPosY][nyPosX] = selectedUnit;
+                    unitPosition[selectedPosY][selectedPosX] = null;
 
                     selectedPosX = nyPosX;
                     selectedPosY = nyPosY;
@@ -430,13 +440,13 @@ public class GameLogic extends Application {
         int attackPosY = getPosYFromEvent(event);
 
         // If there is a unit on the selected tile.
-        if (unitListe[attackPosY][attackPosX] != null) {
+        if (unitPosition[attackPosY][attackPosX] != null) {
             // If within attack range.
             if(attackRange(attackPosX, attackPosY)){
                 // If attacked unit is not itself.
-                if (selectedUnit != unitListe[attackPosY][attackPosX]){
+                if (selectedUnit != unitPosition[attackPosY][attackPosX]){
                     // Attack is executed and unit takes damage.
-                    unitListe[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
+                    unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
 
                     attackCount++;
 
@@ -448,10 +458,10 @@ public class GameLogic extends Application {
                     }
 
                     //If units health is zero. Remove it from the board.
-                    if (unitListe[attackPosY][attackPosX].getHp() <= 0) {
+                    if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
                         //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
-                        pieceContainer.getChildren().removeAll(unitListe[attackPosY][attackPosX].getPieceAvatar());
-                        unitListe[attackPosY][attackPosX] = null;
+                        pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
+                        unitPosition[attackPosY][attackPosX] = null;
                     }
 
                     selectedUnit.setHasAttackedThisTurn(true);
@@ -540,15 +550,15 @@ public class GameLogic extends Application {
 
     private void highlightPossibleAttacks() {
 
-        for(int i=0; i<unitListe.length; i++){
-            for(int j=0; j<unitListe[i].length; j++){
-                if (unitListe[i][j] != null && unitListe[i][j] != selectedUnit) {
+        for(int i=0; i<unitPosition.length; i++){
+            for(int j=0; j<unitPosition[i].length; j++){
+                if (unitPosition[i][j] != null && unitPosition[i][j] != selectedUnit) {
 
 
-                    if ((((Math.abs(selectedPosX - unitListe[i][j].getTranslateX() /tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY()/tileSize)) <= selectedUnit.getMaxAttackRange())
-                        && ((Math.abs(selectedPosX - unitListe[i][j].getTranslateX()/tileSize)) + Math.abs(selectedPosY - unitListe[i][j].getTranslateY()/tileSize)) >= selectedUnit.getMinAttackRange()){
+                    if ((((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() /tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY()/tileSize)) <= selectedUnit.getMaxAttackRange())
+                        && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX()/tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY()/tileSize)) >= selectedUnit.getMinAttackRange()){
 
-                        if (unitListe[i][j].getEnemy()) {
+                        if (unitPosition[i][j].getEnemy()) {
                             grid.liste[i][j].setFill(attackHighlightColor);
                         }
                     }
@@ -588,8 +598,8 @@ public class GameLogic extends Application {
         }
 
 
-//        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
-//                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
+//        if (!(Math.abs(nyPosX - unitPosition[selectedPosY][selectedPosX].getOldPosX()) > unitPosition[selectedPosY][selectedPosX].getRange()) &&
+//                (!(Math.abs(nyPosY - unitPosition[selectedPosY][selectedPosX].getOldPosY()) > unitPosition[selectedPosY][selectedPosX].getRange()))) {
 //            return true;
 //        }
 
@@ -617,8 +627,8 @@ public class GameLogic extends Application {
         }
 
 
-//        if (!(Math.abs(nyPosX - unitListe[selectedPosY][selectedPosX].getOldPosX()) > unitListe[selectedPosY][selectedPosX].getRange()) &&
-//                (!(Math.abs(nyPosY - unitListe[selectedPosY][selectedPosX].getOldPosY()) > unitListe[selectedPosY][selectedPosX].getRange()))) {
+//        if (!(Math.abs(nyPosX - unitPosition[selectedPosY][selectedPosX].getOldPosX()) > unitPosition[selectedPosY][selectedPosX].getRange()) &&
+//                (!(Math.abs(nyPosY - unitPosition[selectedPosY][selectedPosX].getOldPosY()) > unitPosition[selectedPosY][selectedPosX].getRange()))) {
 //            return true;
 //        }
 
