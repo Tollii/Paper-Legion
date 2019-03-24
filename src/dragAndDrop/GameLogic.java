@@ -321,6 +321,7 @@ public class GameLogic extends Application {
        ArrayList<PieceSetup> pieces = db.importPlacementPieces();
         int posX;
         int posY;
+        unitList.trimToSize();
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
                         unitList.get(i).setHp(pieces.get(i).getCurrent_health());
