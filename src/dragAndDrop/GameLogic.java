@@ -77,7 +77,7 @@ public class GameLogic extends Application {
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
-    ArrayList<Unit> unitList = new ArrayList<>();
+    ArrayList<Unit> unitList = new ArrayList<Unit>();
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
@@ -297,6 +297,7 @@ public class GameLogic extends Application {
     private void createUnits(){
         setupPieces = db.importPlacementPieces();
         for(int i=0; i<setupPieces.size(); i++) {
+
             int pieceId = setupPieces.get(i).getPieceId();
             int matchId = setupPieces.get(i).getMatchId();
             int playerId = setupPieces.get(i).getPlayerId();
@@ -696,7 +697,10 @@ public class GameLogic extends Application {
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
                                     endTurnButton.setText("End turn");
+
+                                    System.out.println("Dedraw");
                                     deDrawUnits();
+                                    System.out.println("Draw units");
                                     drawUnits();
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
 
