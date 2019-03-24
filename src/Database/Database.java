@@ -512,7 +512,7 @@ public class Database {
             }
 
             myConn.commit();
-            myConn.setAutoCommit(true);
+            Cleaner.setAutoCommit(myConn);
 
 
         } catch (SQLException e) {
