@@ -46,147 +46,6 @@ public class Database {
                                                          |___/
      */
 
-    public int matchMaking_search(int player_id) {
-        Connection myConn = connectionPool.getConnection();
-        String sqlString = "SELECT * FROM Matches where game_started=0";
-        ResultSet results = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = myConn.prepareStatement(sqlString);
-            results = preparedStatement.executeQuery();
-            int match_id = -1;
-            while (results.next()) {
-                match_id = results.getInt("match_id");
-            }
-            if (match_id > 0) {
-                System.out.println("Match Found: " + match_id);
-                //Returns a boolean that does nothing
-                joinGame(match_id, player_id);
-                return match_id;
-            } else {
-                return -1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(results);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-
-    public boolean joinGame(int match_id, int player2) {
-        Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1, player2);
-            preparedStatement.setInt(2, match_id);
-            int result = preparedStatement.executeUpdate();
-            if (result == 1) {
-                System.out.println("Joined game");
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-        return false;
-    }
-
-    public int createGame(int player_id) {
-        int match_id = -1;
-        Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
-        PreparedStatement preparedStatement = null;
-        ResultSet match_id_result = null;
-        try {
-            preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1, player_id);
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                System.out.println("Created Game");
-                String getMatchIdQuery = "select * from Matches where player1=? and game_started=0";
-                preparedStatement = myConn.prepareStatement(getMatchIdQuery);
-                preparedStatement.setInt(1, player_id);
-                match_id_result = preparedStatement.executeQuery();
-                while (match_id_result.next()) {
-                    match_id = match_id_result.getInt("match_id");
-                }
-            }
-            return match_id;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(match_id_result);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-
-    public boolean pollGameStarted(int match_id) {
-        int gameStarted = 0;
-        Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "select * from Matches where match_id=? and game_started=1";
-        PreparedStatement preparedStatement = null;
-        ResultSet result = null;
-        try {
-            preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1, match_id);
-            result = preparedStatement.executeQuery();
-            while (result.next()) {
-                gameStarted = result.getInt("game_started");
-            }
-            if (gameStarted == 1) {
-                return true;
-            } else {
-                System.out.println(match_id);
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(result);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-
-    public boolean abortMatch(int player_id) {
-        Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "delete from Matches where player1=?;";
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = myConn.prepareStatement(sqlSetning);
-            preparedStatement.setInt(1, player_id);
-            int result = preparedStatement.executeUpdate();
-            return result > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-
-    /*
-     __      _
-    / _\ ___| |_ _   _ _ __
-    \ \ / _ \ __| | | | '_ \
-    _\ \  __/ |_| |_| | |_) |
-    \__/\___|\__|\__,_| .__/
-                      |_|
-     */
-
     public static ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
         Connection myConn = connectionPool.getConnection();
@@ -205,11 +64,12 @@ public class Database {
         int movementRange;
 
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlString);
             preparedStatement.setInt(1, unitIdInput);
 
             resultSet = preparedStatement.executeQuery();
-
+            myConn.commit();
             resultSet.next();
             type = resultSet.getString("unit_name");
             System.out.println(type);
@@ -225,11 +85,170 @@ public class Database {
             e.printStackTrace();
             return null;
         } finally {
-            Cleaner.closeStatement(preparedStatement);
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
         return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
+    }
+
+    public int matchMaking_search(int player_id) {
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "SELECT * FROM Matches where game_started=0";
+        ResultSet results = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlString);
+            results = preparedStatement.executeQuery();
+            myConn.commit();
+            int match_id = -1;
+            while (results.next()) {
+                match_id = results.getInt("match_id");
+            }
+            if (match_id > 0) {
+                System.out.println("Match Found: " + match_id);
+                //Returns a boolean that does nothing
+                joinGame(match_id, player_id);
+                myConn.commit();
+                return match_id;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(results);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public boolean joinGame(int match_id, int player2) {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, player2);
+            preparedStatement.setInt(2, match_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result == 1) {
+                System.out.println("Joined game");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
+
+    public int createGame(int player_id) {
+        int match_id = -1;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
+        PreparedStatement preparedStatement = null;
+        ResultSet match_id_result = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, player_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result > 0) {
+                System.out.println("Created Game");
+                String getMatchIdQuery = "select * from Matches where player1=? and game_started=0";
+                preparedStatement = myConn.prepareStatement(getMatchIdQuery);
+                preparedStatement.setInt(1, player_id);
+                match_id_result = preparedStatement.executeQuery();
+                myConn.commit();
+                while (match_id_result.next()) {
+                    match_id = match_id_result.getInt("match_id");
+                }
+            }
+            return match_id;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(match_id_result);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public boolean pollGameStarted(int match_id) {
+        int gameStarted = 0;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "select * from Matches where match_id=? and game_started=1";
+        PreparedStatement preparedStatement = null;
+        ResultSet result = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, match_id);
+            myConn.commit();
+            result = preparedStatement.executeQuery();
+            while (result.next()) {
+                gameStarted = result.getInt("game_started");
+            }
+            if (gameStarted == 1) {
+                return true;
+            } else {
+                System.out.println(match_id);
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(result);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    /*
+     __      _
+    / _\ ___| |_ _   _ _ __
+    \ \ / _ \ __| | | | '_ \
+    _\ \  __/ |_| |_| | |_) |
+    \__/\___|\__|\__,_| .__/
+                      |_|
+     */
+
+    public boolean abortMatch(int player_id) {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "delete from Matches where player1=?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, player_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
     }
 
     public ArrayList<Integer> fetchUnitTypeList() {
@@ -242,16 +261,19 @@ public class Database {
         ResultSet resultSet = null;
 
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlString);
             resultSet = preparedStatement.executeQuery();
+            myConn.commit();
             while (resultSet.next()) {
                 outputList.add(resultSet.getInt("unit_type_id"));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
             Cleaner.closeResSet(resultSet);
             connectionPool.releaseConnection(myConn);
         }
@@ -266,9 +288,11 @@ public class Database {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, match_id);
             resultSet = preparedStatement.executeQuery();
+            myConn.commit();
             while (resultSet.next()) {
                 //Stores player 1 and 2 as variables.
                 player1 = resultSet.getInt("player1");
@@ -286,6 +310,7 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeResSet(resultSet);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -295,10 +320,12 @@ public class Database {
     //Inserts pieces into Database
     public void insertPieces() {
         Connection myConn = connectionPool.getConnection();
+        Connection myConn2 = connectionPool.getConnection();
         ArrayList<String> piecesPlayer1 = new ArrayList<String>();
         ArrayList<String> piecesPlayer2 = new ArrayList<String>();
         PreparedStatement playerInsert1 = null;
         PreparedStatement playerInsert2 = null;
+
 
 
         //Player 1
@@ -346,30 +373,36 @@ public class Database {
         piecesPlayer2.add(unit_player2_5);
 
         try {
-                for (int i = 0; i < piecesPlayer1.size(); i++) {
-                    playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
-                    playerInsert1.setInt(1, match_id);
-                    playerInsert1.setInt(2, player1);
+            myConn.setAutoCommit(false);
+            myConn2.setAutoCommit(false);
 
-                    playerInsert1.executeUpdate();
-                }
+            for (int i = 0; i < piecesPlayer1.size(); i++) {
+                playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
+                playerInsert1.setInt(1, match_id);
+                playerInsert1.setInt(2, player1);
+
+                playerInsert1.executeUpdate();
+            }
 
             for (int i = 0; i < piecesPlayer2.size(); i++) {
-                playerInsert2 = myConn.prepareStatement(piecesPlayer2.get(i));
+                playerInsert2 = myConn2.prepareStatement(piecesPlayer2.get(i));
                 playerInsert2.setInt(1, match_id);
                 playerInsert2.setInt(2, player2);
 
                 playerInsert2.executeUpdate();
             }
 
-
-
+            myConn.commit();
+            myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.setAutoCommit(myConn2);
             Cleaner.closeStatement(playerInsert1);
             Cleaner.closeStatement(playerInsert2);
             connectionPool.releaseConnection(myConn);
+            connectionPool.releaseConnection(myConn2);
         }
     }
 
@@ -391,10 +424,12 @@ public class Database {
                 "right join Units U on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id and Pieces.player_id = U.player_id\n" +
                 "where Pieces.match_id=?;";
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlsetning);
             preparedStatement.setInt(1, match_id); //This is the correct one
             // preparedStatement.setInt(1,250); //for test purposes;
             result = preparedStatement.executeQuery();
+            myConn.commit();
             while (result.next()) {
                 pieceId = result.getInt("piece_id");
                 player_id = result.getInt("player_id");
@@ -411,6 +446,7 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeResSet(result);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -434,9 +470,11 @@ public class Database {
         String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
 
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
+            myConn.commit();
             rs.next();
 
             preparedStatement = myConn.prepareStatement(stmt2);
@@ -451,6 +489,7 @@ public class Database {
                 preparedStatement.setInt(3, opponent_id);
             }
             if (preparedStatement.executeUpdate() > 0) {
+                myConn.commit();
                 return 1;
             } else {
                 return -1;
@@ -458,8 +497,9 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(preparedStatement);
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
         return -1;
@@ -469,15 +509,20 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
+        ResultSet rs = null;
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, match_id);
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
+            myConn.commit();
             rs.next();
             return rs.getInt("player");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(rs);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
@@ -489,8 +534,7 @@ public class Database {
         PreparedStatement preparedStatement = null;
         String stmt = "UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?";
         try {
-
-
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setDouble(1, currentHealth); //"Arrays begin at 1"
             preparedStatement.setInt(2, pieceID);
@@ -498,10 +542,12 @@ public class Database {
             preparedStatement.setInt(4, opponent_id);
 
             preparedStatement.executeUpdate();
+            myConn.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
@@ -516,10 +562,8 @@ public class Database {
 
         PreparedStatement preparedStatement = null;
         try {
-
-            preparedStatement = myConn.prepareStatement(sqlString);
-
             myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlString);
 
             for (int i = 0; i < movementList.size(); i++) {
                 preparedStatement.setInt(1, movementList.get(i).getEndPosX());
@@ -531,14 +575,13 @@ public class Database {
 
                 preparedStatement.executeUpdate();
             }
-
             myConn.commit();
-
         } catch (SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);
             return false;
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
             Cleaner.setAutoCommit(myConn);
@@ -604,10 +647,10 @@ public class Database {
         ResultSet resultSet = null;
 
         try {
-
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlString);
             resultSet = preparedStatement.executeQuery();
-
+            myConn.commit();
             while(resultSet.next()){
                 outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
                 resultSet.next();
@@ -618,6 +661,8 @@ public class Database {
             e.printStackTrace();
             return null;
         } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(resultSet);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
@@ -651,9 +696,10 @@ public class Database {
         PreparedStatement preparedUpdate = null;
         ResultSet rs = null;
         try {
+            myConn.setAutoCommit(false);
             preparedQuery = myConn.prepareStatement(stmt);
             preparedQuery.setString(1, username);
-
+            myConn.commit();
             rs = preparedQuery.executeQuery();
             rs.next();
             int userId = rs.getInt("user_id");
@@ -666,6 +712,7 @@ public class Database {
                 preparedUpdate = myConn.prepareStatement(stmt2);
                 preparedUpdate.setInt(1, userId);
                 preparedUpdate.executeUpdate();
+                myConn.commit();
                 return userId;
             } else {
                 System.out.println("User is already logged in");
@@ -673,6 +720,7 @@ public class Database {
         } catch (SQLException e) {
             //e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedQuery);
             Cleaner.closeStatement(preparedUpdate);
             Cleaner.closeResSet(rs);
@@ -687,13 +735,16 @@ public class Database {
         String stmt = "UPDATE Users SET online_status = 0 WHERE user_id = ?";
         PreparedStatement preparedQuery = null;
         try {
+            myConn.setAutoCommit(false);
             preparedQuery = myConn.prepareStatement(stmt);
             preparedQuery.setInt(1, userId);
             preparedQuery.executeUpdate();
+            myConn.commit();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedQuery);
             connectionPool.releaseConnection(myConn);
         }
@@ -706,9 +757,11 @@ public class Database {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
+            con.setAutoCommit(false);
             ps = con.prepareStatement("SELECT username FROM Users WHERE username = ?");
             ps.setString(1, user);
             rs = ps.executeQuery();
+            con.commit();
 
             if (rs.next()) {
                 return 0;
@@ -725,6 +778,7 @@ public class Database {
 
                 ps = con.prepareStatement("SELECT user_id FROM Users ORDER BY user_id DESC LIMIT 1;");
                 rs = ps.executeQuery();
+                con.commit();
                 rs.next();
                 addUserToStatistics(rs.getInt("user_id"));
                 return 1;
@@ -734,8 +788,9 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.closeStatement(ps);
+            Cleaner.setAutoCommit(con);
             Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(ps);
             connectionPool.releaseConnection(con);
         }
         return -1;
@@ -772,18 +827,23 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setString(1, username);
             preparedStatement.setBytes(2, hash);
             preparedStatement.setBytes(3, salt);
             preparedStatement.setString(4, email);
             preparedStatement.setInt(5, 0);
-            if (preparedStatement.executeUpdate() > 0) return 1;
+            if (preparedStatement.executeUpdate() > 0) {
+                myConn.commit();
+                return 1;
+            }
             else return -1;
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
@@ -797,14 +857,17 @@ public class Database {
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT username FROM Users WHERE user_id = ?;";
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
+            myConn.commit();
             rs.next();
             return rs.getString("username");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeResSet(rs);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -818,14 +881,17 @@ public class Database {
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT email FROM Users WHERE user_id = ?;";
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
+            myConn.commit();
             rs.next();
             return rs.getString("email");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeResSet(rs);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -848,14 +914,21 @@ public class Database {
         String value = "";
         String stmt = "SELECT games_played FROM Statistics WHERE user_id = ?;";
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
+            myConn.commit();
             rs.next();
             value += rs.getInt("games_played");
             return value;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
         }
         return "error";
     }
@@ -868,14 +941,21 @@ public class Database {
         String value = "";
         String stmt = "SELECT games_won FROM Statistics WHERE user_id = ?;";
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             rs = preparedStatement.executeQuery();
+            myConn.commit();
             rs.next();
             value += rs.getInt("games_won");
             return value;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
         }
         return "error";
     }
@@ -887,14 +967,22 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         stmt = "INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);";
         try {
+            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, user_id);
             preparedStatement.setInt(2, 0);
             preparedStatement.setInt(3, 0);
-            if (preparedStatement.executeUpdate() > 0) return 1;
+            if (preparedStatement.executeUpdate() > 0) {
+                myConn.commit();
+                return 1;
+            }
             else return -1;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
         }
         return -1;
     }
