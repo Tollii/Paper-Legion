@@ -466,6 +466,7 @@ public class GameLogic extends Application {
                         pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
                         unitPosition[attackPosY][attackPosX].setHp(0);
                         unitPosition[attackPosY][attackPosX] = null;
+                        unitList.trimToSize();
 
                     }
 
