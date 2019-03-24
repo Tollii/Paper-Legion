@@ -263,10 +263,12 @@ public class Database {
 
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, match_id);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 //Stores player 1 and 2 as variables.
                 player1 = resultSet.getInt("player1");
@@ -283,6 +285,10 @@ public class Database {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
         }
     }
 //Inserts pieces into Database
@@ -291,6 +297,8 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         ArrayList<String> piecesPlayer1 = new ArrayList<String>();
         ArrayList<String> piecesPlayer2 = new ArrayList<String>();
+        PreparedStatement playerInsert1 = null;
+        PreparedStatement playerInsert2 = null;
 
 
         //Player 1
@@ -339,7 +347,7 @@ public class Database {
 
         try {
             for (int i = 0; i < piecesPlayer1.size(); i++) {
-                PreparedStatement playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
+                playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
                 playerInsert1.setInt(1, match_id);
                 playerInsert1.setInt(2, player1);
 
@@ -347,7 +355,7 @@ public class Database {
             }
 
             for (int i = 0; i < piecesPlayer2.size(); i++) {
-                PreparedStatement playerInsert2 = myConn.prepareStatement(piecesPlayer2.get(i));
+                playerInsert2 = myConn.prepareStatement(piecesPlayer2.get(i));
                 playerInsert2.setInt(1, match_id);
                 playerInsert2.setInt(2, player2);
 
@@ -357,11 +365,17 @@ public class Database {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            Cleaner.closeStatement(playerInsert1);
+            Cleaner.closeStatement(playerInsert2);
+            connectionPool.releaseConnection(myConn);
         }
     }
 //puts the units from the database into an arraylist
     public ArrayList<PieceSetup> importPlacementPieces() {
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
+        ResultSet result = null;
+        PreparedStatement preparedStatement = null;
         int pieceId;
         int match_idDB;
         int player_id;
@@ -375,10 +389,10 @@ public class Database {
                 "on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id " +
                 "where Pieces.match_id=?;";
         try {
-            PreparedStatement preparedStatement = myConn.prepareStatement(sqlsetning);
+            preparedStatement = myConn.prepareStatement(sqlsetning);
             preparedStatement.setInt(1, match_id); //This is the correct one
             // preparedStatement.setInt(1,250); //for test purposes;
-            ResultSet result = preparedStatement.executeQuery();
+            result = preparedStatement.executeQuery();
             while (result.next()) {
                 pieceId = result.getInt("piece_id");
                 match_idDB = match_id;
@@ -394,6 +408,10 @@ public class Database {
             return piecesImport;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
         }
         return null;
     }
