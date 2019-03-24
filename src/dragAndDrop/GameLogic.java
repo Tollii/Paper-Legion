@@ -112,6 +112,9 @@ public class GameLogic extends Application {
         if (user_id == player2) {
             db.insertPieces();
         }
+        else {
+
+        }
 
         drawUnits();
         //If you are player 2. Start polling the database for next turn.

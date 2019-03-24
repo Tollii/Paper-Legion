@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import sample.Main;
+import Database.Database;
 
 import java.sql.SQLOutput;
 import java.util.Timer;
@@ -70,6 +71,7 @@ public class mainMenuController extends Controller {
                 //if none available create own game
                 if (match_id < 0) {
                     match_id = db.createGame(user_id);
+                    db.insertPieces(); //TEmp løsning
                     // If you create the game, you are player 1.
                     yourTurn = true;
                     thread = new Thread(() -> {
