@@ -109,6 +109,9 @@ public class GameLogic extends Application {
 
         sceneSetUp();
 
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
             db.insertPieces();
