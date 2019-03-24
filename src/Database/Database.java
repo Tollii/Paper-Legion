@@ -373,8 +373,8 @@ public class Database {
         piecesPlayer2.add(unit_player2_5);
 
         try {
-            myConn.setAutoCommit(false);
-            myConn2.setAutoCommit(false);
+//            myConn.setAutoCommit(false);
+//            myConn2.setAutoCommit(false);
 
             for (int i = 0; i < piecesPlayer1.size(); i++) {
                 playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
@@ -391,14 +391,14 @@ public class Database {
 
                 playerInsert2.executeUpdate();
             }
-
-            myConn.commit();
-            myConn2.commit();
+//
+//            myConn.commit();
+//            myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.setAutoCommit(myConn2);
+//            Cleaner.setAutoCommit(myConn);
+//            Cleaner.setAutoCommit(myConn2);
             Cleaner.closeStatement(playerInsert1);
             Cleaner.closeStatement(playerInsert2);
             connectionPool.releaseConnection(myConn);
