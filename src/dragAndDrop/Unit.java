@@ -37,7 +37,7 @@ public class Unit extends Rectangle {
     private GridPane pieceAvatar =  new GridPane();
 
 
-    public Unit(double row, double column, boolean enemy, UnitType type){
+    public Unit(double row, double column, boolean enemy, UnitType type, int pieceID){
         super.setWidth(GameLogic.tileSize);
         super.setHeight(GameLogic.tileSize);
         this.enemy = enemy;
@@ -54,6 +54,7 @@ public class Unit extends Rectangle {
         this.movementRange = type.getMovementRange();
         description = type.getDescription();
         descriptionTag = type.getDescriptionTag();
+        this.pieceID = pieceID;
 
         setPositionArray(column,row);
         String hpText = String.valueOf(hp);

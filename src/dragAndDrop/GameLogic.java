@@ -106,8 +106,8 @@ public class GameLogic extends Application {
         db.getPlayers();
 
         sceneSetUp();
-
-        //If you are player 2. Start polling the database for next turn. yourTurn is defined at game creation or joining game.
+        drawUnits();
+        //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
             waitForTurn();
         } else {
@@ -153,49 +153,49 @@ public class GameLogic extends Application {
         });
 
 
-        ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
-        for(int i=0; i<setupPieces.size(); i++){
-            int pieceId = setupPieces.get(i).getPieceId();
-            int matchId = setupPieces.get(i).getMatchId();
-            int playerId = setupPieces.get(i).getPlayerId();
-            int positionX = setupPieces.get(i).getPositionX();
-            int positionY = setupPieces.get(i).getPositionY();
-            int unitType_id = setupPieces.get(i).getUnit_type_id();
-
-            boolean enemyStatus=false;
-            if(playerId == user_id){
-                enemyStatus = false;
-            } else{
-                enemyStatus = true;
-            }
-
-
-            if(unitType_id == 1){
-                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newSwordsMan());
-
-            } else if(unitType_id == 2){
-                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
-
-            }
-
-        }
+//        ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
+//        for(int i=0; i<setupPieces.size(); i++){
+//            int pieceId = setupPieces.get(i).getPieceId();
+//            int matchId = setupPieces.get(i).getMatchId();
+//            int playerId = setupPieces.get(i).getPlayerId();
+//            int positionX = setupPieces.get(i).getPositionX();
+//            int positionY = setupPieces.get(i).getPositionY();
+//            int unitType_id = setupPieces.get(i).getUnit_type_id();
 //
-//        //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-//        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
-//        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
-//        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
-//        ///////////////////////////////////////////////////////////////////////////////////////////
-
-
-        ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-        for (int i = 0; i < unitListe.length; i++) {
-            for (int j = 0; j < unitListe[i].length; j++) {
-                if (unitListe[i][j] != null) {
-                    pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
-                }
-            }
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////
+//            boolean enemyStatus=false;
+//            if(playerId == user_id){
+//                enemyStatus = false;
+//            } else{
+//                enemyStatus = true;
+//            }
+//
+//
+//            if(unitType_id == 1){
+//                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newSwordsMan());
+//
+//            } else if(unitType_id == 2){
+//                unitListe[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
+//
+//            }
+//
+//        }
+////
+////        //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
+////        unitListe[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
+////        unitListe[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
+////        unitListe[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
+////        ///////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+//        ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
+//        for (int i = 0; i < unitListe.length; i++) {
+//            for (int j = 0; j < unitListe[i].length; j++) {
+//                if (unitListe[i][j] != null) {
+//                    pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
+//                }
+//            }
+//        }
+//        /////////////////////////////////////////////////////////////////////////////////////////
 
 
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
@@ -271,6 +271,50 @@ public class GameLogic extends Application {
         //window.widthProperty().addListener();
 
         scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
+    }
+
+
+    private void drawUnits(){
+        for (int i = 0; i < unitListe.length; i++) {
+            for (int j = 0; j < unitListe[i].length; j++) {
+                if (unitListe[i][j] != null) {
+                    pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
+                }
+            }
+        }
+        ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
+        for(int i=0; i<setupPieces.size(); i++) {
+            int pieceId = setupPieces.get(i).getPieceId();
+            int matchId = setupPieces.get(i).getMatchId();
+            int playerId = setupPieces.get(i).getPlayerId();
+            int positionX = setupPieces.get(i).getPositionX();
+            int positionY = setupPieces.get(i).getPositionY();
+            int unitType_id = setupPieces.get(i).getUnit_type_id();
+
+            boolean enemyStatus = false;
+            if (playerId == user_id) {
+                enemyStatus = false;
+            } else {
+                enemyStatus = true;
+            }
+
+            if (unitType_id == 1) {
+                unitListe[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newSwordsMan(), pieceId);
+
+            } else if (unitType_id == 2) {
+                unitListe[positionY][positionX] = new Unit(positionY * tileSize, positionX * tileSize, enemyStatus, unitGenerator.newArcher(), pieceId);
+
+            }
+        }
+            ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
+            for (int i = 0; i < unitListe.length; i++) {
+                for (int j = 0; j < unitListe[i].length; j++) {
+                    if (unitListe[i][j] != null) {
+                        pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
+                    }
+                }
+            }
+            ///////////////////////////////////////////////////////////////////////////////
     }
 
     private void select(MouseEvent event, VBox vBox, Label description){
@@ -611,7 +655,7 @@ public class GameLogic extends Application {
                                     //Increments turn. Back to your turn.
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
-
+                                    drawUnits();
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
 
                                 });
