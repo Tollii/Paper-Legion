@@ -488,20 +488,15 @@ public class Database {
     public void sendHealthInfo(int pieceID, double currentHealth) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        int opponent;
         String stmt = "UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?";
         try {
 
-            if (user_id == player1) {
-                opponent = player2;
-            } else {
-                opponent = player1;
-            }
+
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setDouble(1, currentHealth); //"Arrays begin at 1"
             preparedStatement.setInt(2, pieceID);
             preparedStatement.setInt(3, match_id);
-            preparedStatement.setInt(4, opponent);
+            preparedStatement.setInt(4, opponent_id);
 
             preparedStatement.executeUpdate();
 
