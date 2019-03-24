@@ -39,6 +39,7 @@ import java.sql.SQLException;
 
 import static Database.Variables.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static Database.Variables.db;
 import static Database.Variables.user_id;
@@ -321,7 +322,7 @@ public class GameLogic extends Application {
        ArrayList<PieceSetup> pieces = db.importPlacementPieces();
         int posX;
         int posY;
-        unitList.trimToSize();
+        unitList.removeAll(Collections.singletonList(null));
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
                         unitList.get(i).setHasAttackedThisTurn(false);
@@ -468,7 +469,7 @@ public class GameLogic extends Application {
                         pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
                         unitPosition[attackPosY][attackPosX].setHp(0);
                         unitPosition[attackPosY][attackPosX] = null;
-                        unitList.trimToSize();
+                        unitList.removeAll(Collections.singletonList(null));
 
                     }
 
