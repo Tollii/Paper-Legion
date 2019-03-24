@@ -149,8 +149,10 @@ public class GameLogic extends Application {
                 ////SEND MOVEMENT////
 
                 //db.exportMoveList(movementList); when we use movement table use this
-                db.exportPieceMoveList(movementList);
-                movementList = new ArrayList<>(); //Resets the movementList for the next turn.
+                if(movementList.size() != 0) {
+                    db.exportPieceMoveList(movementList);
+                    movementList = new ArrayList<>(); //Resets the movementList for the next turn.
+                }
 
 
                 /////SEND ATTACKS////
@@ -340,11 +342,14 @@ public class GameLogic extends Application {
     }
 
     public void deDrawUnits(){
+        for (int i = 0; i < unitList.size(); i++) {
+                    pieceContainer.getChildren().remove(unitList.get(i).getPieceAvatar());
+            }
+
+
         for (int i = 0; i < unitPosition.length; i++) {
             for (int j = 0; j < unitPosition[i].length; j++) {
-                if (unitPosition[i][j] != null) {
-                    pieceContainer.getChildren().remove(unitPosition[i][j].getPieceAvatar());
-                }
+                unitPosition[i][j] = null;
             }
         }
     }
