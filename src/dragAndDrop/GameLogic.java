@@ -143,7 +143,7 @@ public class GameLogic extends Application {
                 ////SEND MOVEMENT////
 
                 db.exportMoveList(movementList);
-                movementList = new ArrayList<>(); //Resets the movementList.
+                movementList = new ArrayList<>(); //Resets the movementList for the next turn.
 
 
                 /////SEND ATTACKS////
