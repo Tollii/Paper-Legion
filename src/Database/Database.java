@@ -437,10 +437,16 @@ public class Database {
             rs = preparedStatement.executeQuery();
             rs.next();
 
+
+
             preparedStatement = myConn.prepareStatement(stmt2);
             preparedStatement.setInt(1, turn);
             preparedStatement.setInt(2, match_id);
-            preparedStatement.setInt(3, opponent_id);
+            if (turn == 1) {
+                preparedStatement.setInt(3, user_id);
+            } else {
+                preparedStatement.setInt(3, opponent_id);
+            }
             if (preparedStatement.executeUpdate() > 0) {
                 return 1;
             } else {

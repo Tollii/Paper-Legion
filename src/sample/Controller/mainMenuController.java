@@ -62,6 +62,7 @@ public class mainMenuController extends Controller {
                 findGameClicked = true;
                 match_id = db.matchMaking_search(user_id);
                 if(match_id > 0) {
+                    // If you join a game, you are player 2.
                     yourTurn = false;
                     startGame = true;
                     enterGame();
@@ -69,6 +70,7 @@ public class mainMenuController extends Controller {
                 //if none available create own game
                 if (match_id < 0) {
                     match_id = db.createGame(user_id);
+                    // If you create the game, you are player 1.
                     yourTurn = true;
                     thread = new Thread(() -> {
                         try {
