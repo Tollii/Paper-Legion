@@ -107,7 +107,7 @@ public class GameLogic extends Application {
 
         sceneSetUp();
 
-        //If you are player 2. Start polling the database for next turn.
+        //If you are player 2. Start polling the database for next turn. yourTurn is defined at game creation or joining game.
         if(!yourTurn) {
             waitForTurn();
         } else {
@@ -132,6 +132,9 @@ public class GameLogic extends Application {
 
                 db.exportMoveList(movementList);
                 movementList = new ArrayList<>(); //Resets the movementList.
+
+
+                /////SEND ATTACKS////
                 //TODO Having a attackList just like movementList. Alternative solution below.
 
                 // Alternative solution to creating a List of attacks in the future.
