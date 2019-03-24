@@ -37,6 +37,15 @@ public class Database {
         }
     }
 
+    /*
+              _       _                     _    _
+  /\/\   __ _| |_ ___| |__  _ __ ___   __ _| | _(_)_ __   __ _
+ /    \ / _` | __/ __| '_ \| '_ ` _ \ / _` | |/ / | '_ \ / _` |
+/ /\/\ \ (_| | || (__| | | | | | | | | (_| |   <| | | | | (_| |
+\/    \/\__,_|\__\___|_| |_|_| |_| |_|\__,_|_|\_\_|_| |_|\__, |
+                                                         |___/
+     */
+
     public int matchMaking_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlString = "SELECT * FROM Matches where game_started=0";
@@ -169,6 +178,15 @@ public class Database {
         }
     }
 
+    /*
+     __      _
+    / _\ ___| |_ _   _ _ __
+    \ \ / _ \ __| | | | '_ \
+    _\ \  __/ |_| |_| | |_) |
+    \__/\___|\__|\__,_| .__/
+                      |_|
+     */
+
     public static ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
         Connection myConn = connectionPool.getConnection();
@@ -241,26 +259,6 @@ public class Database {
         return outputList;
     }
 
-    //TODO
-    public boolean exportMoveList(ArrayList<Move> movementList) {
-        return false;
-    }
-
-    //TODO
-    public boolean exportAttackList() {
-        return false;
-    }
-
-    //TODO
-    public boolean importMoveList() {
-        return false;
-    }
-
-    //TODO
-    public boolean importAttackList() {
-        return false;
-    }
-
     public void getPlayers() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
@@ -285,7 +283,6 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void insertPieces() {
@@ -339,7 +336,6 @@ public class Database {
         piecesPlayer2.add(unit_player2_4_);
         piecesPlayer2.add(unit_player2_5);
 
-
         try {
             for (int i = 0; i < piecesPlayer1.size(); i++) {
                 PreparedStatement playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
@@ -361,8 +357,6 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public ArrayList<PieceSetup> importPlacementPieces() {
@@ -432,6 +426,121 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+    /*
+       ___                           _
+      / _ \__ _ _ __ ___   ___ _ __ | | __ _ _   _
+     / /_\/ _` | '_ ` _ \ / _ \ '_ \| |/ _` | | | |
+    / /_\\ (_| | | | | | |  __/ |_) | | (_| | |_| |
+    \____/\__,_|_| |_| |_|\___| .__/|_|\__,_|\__, |
+                              |_|            |___/
+     */
+
+    public int sendTurn(int turn) {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        String stmt = "SELECT player1,player2 FROM Matches WHERE match_id = ?";
+        String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
+
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, match_id);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+
+            preparedStatement = myConn.prepareStatement(stmt2);
+            preparedStatement.setInt(1, turn);
+            preparedStatement.setInt(2, match_id);
+            preparedStatement.setInt(3, opponent_id);
+            if (preparedStatement.executeUpdate() > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeResSet(rs);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
+    public int getTurnPlayer() {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, match_id);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return rs.getInt("player");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
+    public void sendHealthInfo(int pieceID, double currentHealth) {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        int opponent;
+        String stmt = "UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?";
+        try {
+
+            if (user_id == player1) {
+                opponent = player2;
+            } else {
+                opponent = player1;
+            }
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setDouble(1, currentHealth);
+            preparedStatement.setInt(2, pieceID);
+            preparedStatement.setInt(3, match_id);
+            preparedStatement.setInt(4, opponent);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    //TODO
+    public boolean exportMoveList(ArrayList<Move> movementList) {
+        return false;
+    }
+
+    //TODO
+    public boolean exportAttackList() {
+        return false;
+    }
+
+    //TODO
+    public boolean importMoveList() {
+        return false;
+    }
+
+    //TODO
+    public boolean importAttackList() {
+        return false;
+    }
+    /*
+     __ _             _
+    / _(_) __ _ _ __ (_)_ __
+    \ \| |/ _` | '_ \| | '_ \
+    _\ \ | (_| | | | | | | | |
+    \__/_|\__, |_| |_|_|_| |_|
+          |___/
+     */
 
     //Should probably return more than a boolean so we can identify who is logged in.
     public int login(String username, String password) {
@@ -585,57 +694,6 @@ public class Database {
         return -1;
     }
 
-    public int sendTurn(int turn) {
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
-        String stmt = "SELECT player1,player2 FROM Matches WHERE match_id = ?";
-        String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
-
-        try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1, match_id);
-            rs = preparedStatement.executeQuery();
-            rs.next();
-
-            preparedStatement = myConn.prepareStatement(stmt2);
-            preparedStatement.setInt(1, turn);
-            preparedStatement.setInt(2, match_id);
-            preparedStatement.setInt(3, opponent_id);
-            if (preparedStatement.executeUpdate() > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            Cleaner.closeResSet(rs);
-            connectionPool.releaseConnection(myConn);
-        }
-        return -1;
-    }
-
-    public int getTurnPlayer() {
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        String stmt = "SELECT player FROM Turns WHERE match_id = ? ORDER BY turn_id DESC LIMIT 1;";
-        try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1, match_id);
-            ResultSet rs = preparedStatement.executeQuery();
-            rs.next();
-            return rs.getInt("player");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-        return -1;
-    }
-
 
     public String getMyName(int used_id) {
         Connection myConn = connectionPool.getConnection();
@@ -678,6 +736,14 @@ public class Database {
         }
         return "error";
     }
+
+    /*
+     __ _        _
+    / _\ |_ __ _| |_ ___
+    \ \| __/ _` | __/ __|
+    _\ \ || (_| | |_\__ \
+    \__/\__\__,_|\__|___/
+     */
 
     public String getGamesPlayed(int user_id) {
         Connection myConn = connectionPool.getConnection();
@@ -737,35 +803,13 @@ public class Database {
         return -1;
     }
 
-    public void sendHealthInfo(int pieceID, double currentHealth) {
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        int opponent;
-        String stmt = "UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?";
-        try {
-
-            if (user_id == player1) {
-                opponent = player2;
-            } else {
-                opponent = player1;
-            }
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setDouble(1, currentHealth);
-            preparedStatement.setInt(2, pieceID);
-            preparedStatement.setInt(3, match_id);
-            preparedStatement.setInt(4, opponent);
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-
-
-    }
+    /*
+     __ _           _      _
+    / _\ |__  _   _| |_ __| | _____      ___ __
+    \ \| '_ \| | | | __/ _` |/ _ \ \ /\ / / '_ \
+    _\ \ | | | |_| | || (_| | (_) \ V  V /| | | |
+    \__/_| |_|\__,_|\__\__,_|\___/ \_/\_/ |_| |_|
+     */
 
     public void close() throws SQLException {
         connectionPool.shutdown();
