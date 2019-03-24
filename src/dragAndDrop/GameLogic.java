@@ -333,7 +333,7 @@ public class GameLogic extends Application {
                         //TODO legg inn at når alle piecene dine er døde så taper du
                         posX = unitList.get(i).getPositionX();
                         posY = unitList.get(i).getPositionY();
-                        unitPosition[posX][posY] = unitList.get(i);
+                        unitPosition[posY][posX] = unitList.get(i);
             }
             ///////////////////////////////////////////////////////////////////////////////////
     }
