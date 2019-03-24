@@ -163,10 +163,6 @@ public class GameLogic extends Application {
 
                 // Alternative solution to creating a List of attacks in the future.
                 // Finds every enemy unit that was damaged and sends their new info the database.
-                for(int i = 0; i < unitList.size(); i++) {
-                        // If unit exists, is not an enemy and has been attacked. Send their new health info.
-                            db.sendHealthInfo(unitList.get(i).getPieceID(),unitList.get(i).getHp());
-                }
                 //Wait for you next turn
                 waitForTurn();
             }
@@ -461,12 +457,16 @@ public class GameLogic extends Application {
                     } else if(selectedUnit.getType().equalsIgnoreCase("Archer")){
                         bow.play();
                     }
+                    db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
+
 
                     //If units health is zero. Remove it from the board.
                     if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
                         //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                         pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
+                        unitPosition[attackPosY][attackPosX].setHp(0);
                         unitPosition[attackPosY][attackPosX] = null;
+
                     }
 
                     selectedUnit.setHasAttackedThisTurn(true);
