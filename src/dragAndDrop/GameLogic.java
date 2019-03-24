@@ -165,9 +165,7 @@ public class GameLogic extends Application {
                 // Finds every enemy unit that was damaged and sends their new info the database.
                 for(int i = 0; i < unitList.size(); i++) {
                         // If unit exists, is not an enemy and has been attacked. Send their new health info.
-                        if(unitList.get(i).getEnemy() && unitList.get(i).getHasBeenAttackedThisTurn()) {
                             db.sendHealthInfo(unitList.get(i).getPieceID(),unitList.get(i).getHp());
-                    }
                         unitList.get(i).setHasBeenAttackedThisTurn(false);
                 }
                 //Wait for you next turn
