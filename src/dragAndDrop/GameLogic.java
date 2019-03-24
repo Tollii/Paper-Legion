@@ -118,7 +118,9 @@ public class GameLogic extends Application {
             Thread.sleep(20000); //Temp løsning
         }
         createUnits();
+
         drawUnits();
+
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
             endTurnButton.setText("Waiting for other player");
@@ -126,15 +128,6 @@ public class GameLogic extends Application {
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
-        }
-
-        ArrayList<Unit> unitListe = new ArrayList<>();
-        for(int i = 0; i < unitPosition.length; i++) {
-            for (int j = 0; j < unitPosition[i].length; j++) {
-                if(unitPosition[i][j] != null) {
-                   unitListe.add(unitPosition[i][j]);
-                }
-            }
         }
 
         ////END TURN HANDLER////
@@ -306,7 +299,7 @@ public class GameLogic extends Application {
             int positionY = setupPieces.get(i).getPositionY();
             int unitType_id = setupPieces.get(i).getUnit_type_id();
 
-            boolean enemyStatus = false;
+            boolean enemyStatus;
             if (playerId == user_id) {
                 enemyStatus = false;
             } else {
@@ -687,6 +680,7 @@ public class GameLogic extends Application {
                                     //What will happen when it is your turn again.
 
                                     //Increments turn. Back to your turn.
+
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
                                     endTurnButton.setText("End turn");

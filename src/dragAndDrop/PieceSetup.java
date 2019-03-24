@@ -43,6 +43,7 @@ public class PieceSetup {
     public int getUnit_type_id(){
         return unit_type_id;
     }
+
     public double getCurrent_health(){
         return current_health;
     }

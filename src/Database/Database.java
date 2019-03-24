@@ -399,7 +399,6 @@ public class Database {
             result = preparedStatement.executeQuery();
             while (result.next()) {
                 pieceId = result.getInt("piece_id");
-                match_idDB = match_id;
                 player_id = result.getInt("player_id");
                 positionX = result.getInt("position_x");
                 positionY = result.getInt("position_y");
