@@ -3,6 +3,7 @@ package dragAndDrop;
 public class UnitGenerator {
 
     //Variables
+    private static UnitType swordsmanUnitType;
     private static double swordsmanMaxHP;
     private static int swordsmanAttack;
     private static int swordsmanAbilityCooldown;
@@ -18,6 +19,7 @@ public class UnitGenerator {
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
 
+    private static UnitType archerUnitType;
     private static double archerMaxHP;
     private static int archerAttack;
     private static int archerAbilityCooldown;
@@ -66,6 +68,7 @@ public class UnitGenerator {
         this.swordsmanMinAttackRange = swordsmanMinAttackRange;
         this.swordsmanMaxAttackRange = swordsmanMaxAttackRange;
         this.swordsmanMovementRange = swordsmanMovementRange;
+        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag);
 
         this.archerMaxHP = archerMaxHP;
         this.archerAttack = archerAttack;
@@ -74,17 +77,18 @@ public class UnitGenerator {
         this.archerMinAttackRange = archerMinAttackRange;
         this.archerMaxAttackRange = archerMaxAttackRange;
         this.archerMovementRange = archerMovementRange;
+        archerUnitType = new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag);
     }
 
     public UnitType newArcher(){
 
-        return new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag);
+        return archerUnitType;
 
     }
 
     public UnitType newSwordsMan(){
 
-        return new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag);
+        return swordsmanUnitType;
 
     }
 }
