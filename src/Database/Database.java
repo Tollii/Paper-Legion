@@ -512,7 +512,6 @@ public class Database {
         }
     }
 
-    //TODO
     public boolean exportMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
@@ -558,9 +557,36 @@ public class Database {
         return false;
     }
 
-    //TODO
-    public boolean importMoveList() {
-        return false;
+    public ArrayList<Move> importMoveList(int turnIDInput, int matchIdInput, int playerIdInput) {
+
+        ArrayList<Move> outputList = new ArrayList<>();
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "SELECT turn_id, Movements.piece_id, Movements.match_id, start_pos_x, start_pos_y, end_pos_x, end_pos_y FROM Movements JOIN Pieces ON Pieces.piece_id = Movements.piece_id WHERE player_id = playerIdInput AND Movements.match_id = matchIdInput AND turn_id = turnIdInput;";
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            preparedStatement = myConn.prepareStatement(sqlString);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
+                resultSet.next();
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return outputList;
     }
 
     //TODO
