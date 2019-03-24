@@ -158,8 +158,8 @@ public class Unit extends Rectangle {
         this.hasAttackedThisTurn = hasAttackedThisTurn;
     }
 
-    public boolean setHasBeenAttackedThisTurn() {
-        return hasBeenAttackedThisTurn;
+    public void setHasBeenAttackedThisTurn(boolean hasAttackedThisTurn) {
+        this.hasBeenAttackedThisTurn = hasBeenAttackedThisTurn;
     }
 
     ////GET UNIT INFO////
