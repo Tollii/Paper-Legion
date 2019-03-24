@@ -294,7 +294,6 @@ public class Database {
 
     //Inserts pieces into Database
     public void insertPieces() {
-        boolean one = true;
         Connection myConn = connectionPool.getConnection();
         ArrayList<String> piecesPlayer1 = new ArrayList<String>();
         ArrayList<String> piecesPlayer2 = new ArrayList<String>();
@@ -517,6 +516,7 @@ public class Database {
 
         PreparedStatement preparedStatement = null;
         try {
+
             preparedStatement = myConn.prepareStatement(sqlString);
 
             myConn.setAutoCommit(false);
@@ -531,15 +531,18 @@ public class Database {
 
                 preparedStatement.executeUpdate();
             }
+
             myConn.commit();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);
             return false;
         } finally {
-            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
+            Cleaner.setAutoCommit(myConn);
         }
         return true;
     }
