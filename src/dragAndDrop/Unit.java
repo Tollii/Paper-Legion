@@ -108,6 +108,13 @@ public class Unit extends Rectangle {
 
     public void setHp(double hp){
         this.hp = hp;
+
+        healthbar.setText(String.valueOf(hp));
+
+        ////CHANGES THE COLOUR OF THE HP-BAR////
+        if(hp <= LOW_HP_THRESHOLD){
+            healthbar.setStyle("-fx-background-color: Red");
+        }
     }
 
     public int getPositionX(){
@@ -165,6 +172,7 @@ public class Unit extends Rectangle {
 
     public double getHp(){
         return hp;
+
     }
 
     public int getAttack(){
