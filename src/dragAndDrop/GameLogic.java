@@ -106,6 +106,7 @@ public class GameLogic extends Application {
         db.getPlayers();
 
         sceneSetUp();
+        db.insertPieces(); //Inserts units into DB for game
         drawUnits();
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
@@ -313,6 +314,7 @@ public class GameLogic extends Application {
                 }
             }
             ///////////////////////////////////////////////////////////////////////////////
+        setupPieces = null;
     }
 
     private void select(MouseEvent event, VBox vBox, Label description){
