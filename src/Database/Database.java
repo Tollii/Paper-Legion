@@ -259,7 +259,7 @@ public class Database {
         return outputList;
     }
 
-    public void getPlayers(){
+    public void getPlayers() {
 
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
@@ -285,13 +285,14 @@ public class Database {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             Cleaner.closeResSet(resultSet);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
     }
-//Inserts pieces into Database
+
+    //Inserts pieces into Database
     public void insertPieces() {
         boolean one = true;
         Connection myConn = connectionPool.getConnection();
@@ -365,13 +366,14 @@ public class Database {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             Cleaner.closeStatement(playerInsert1);
             Cleaner.closeStatement(playerInsert2);
             connectionPool.releaseConnection(myConn);
         }
     }
-//puts the units from the database into an arraylist
+
+    //puts the units from the database into an arraylist
     public ArrayList<PieceSetup> importPlacementPieces() {
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
         ResultSet result = null;
@@ -408,7 +410,7 @@ public class Database {
             return piecesImport;
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             Cleaner.closeResSet(result);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -437,11 +439,11 @@ public class Database {
             rs = preparedStatement.executeQuery();
             rs.next();
 
-
-
             preparedStatement = myConn.prepareStatement(stmt2);
             preparedStatement.setInt(1, turn);
             preparedStatement.setInt(2, match_id);
+
+            //Exception case for turn 1. Has to add the first turn for player 1.
             if (turn == 1) {
                 preparedStatement.setInt(3, user_id);
             } else {
@@ -520,7 +522,7 @@ public class Database {
 
         PreparedStatement preparedStatement = null;
         try {
-            
+
             preparedStatement = myConn.prepareStatement(sqlString);
 
             myConn.setAutoCommit(false);
