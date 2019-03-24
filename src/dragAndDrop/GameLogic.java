@@ -452,6 +452,7 @@ public class GameLogic extends Application {
                 if (selectedUnit != unitPosition[attackPosY][attackPosX]){
                     // Attack is executed and unit takes damage.
                     unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
+                    unitPosition[attackPosY][attackPosX].setHasBeenAttackedThisTurn();
 
                     attackCount++;
 
@@ -705,7 +706,6 @@ public class GameLogic extends Application {
                                     //drawUnits();
                                     movementPhase = true;
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
-
                                 });
                     }
                 }

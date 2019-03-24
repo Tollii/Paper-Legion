@@ -534,7 +534,6 @@ public class Database {
 
             myConn.commit();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);

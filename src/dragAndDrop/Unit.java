@@ -158,6 +158,10 @@ public class Unit extends Rectangle {
         this.hasAttackedThisTurn = hasAttackedThisTurn;
     }
 
+    public boolean setHasBeenAttackedThisTurn() {
+        return hasBeenAttackedThisTurn;
+    }
+
     ////GET UNIT INFO////
     public String getType(){
         return type.getType();
