@@ -111,13 +111,13 @@ public class GameLogic extends Application {
 
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
-            createUnits();
+            db.insertPieces();
         }
         else {
 
-            Thread.sleep(10000); //Temp løsning
+            Thread.sleep(20000); //Temp løsning
         }
-
+        createUnits();
         drawUnits();
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
