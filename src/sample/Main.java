@@ -30,7 +30,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        //Shutdown hook. CLoses stuff when program exits.
+        //Shutdown hook. Closes stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (user_id > 0) {
                 db.logout(user_id);

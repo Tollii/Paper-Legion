@@ -8,5 +8,6 @@ public class Variables {
     public static int turn = 1;
     public static int player1;
     public static int player2;
+    public static int opponent_id;
 
 }

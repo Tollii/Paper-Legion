@@ -17,10 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static Database.Variables.match_id;
-import static Database.Variables.user_id;
-import static Database.Variables.player1;
-import static Database.Variables.player2;
+import static Database.Variables.*;
 
 
 public class Database {
@@ -265,7 +262,6 @@ public class Database {
     }
 
     public void getPlayers() {
-
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
         try {
@@ -273,8 +269,17 @@ public class Database {
             preparedStatement.setInt(1, match_id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                //Stores player 1 and 2 as variables.
                 player1 = resultSet.getInt("player1");
                 player2 = resultSet.getInt("player2");
+
+                //Stores opponent_id as variables.
+                if (player1 == user_id) {
+                    opponent_id = player2;
+                } else {
+                    opponent_id = player1;
+                }
+
             }
 
         } catch (SQLException e) {
@@ -285,7 +290,6 @@ public class Database {
 
     public void insertPieces() {
         boolean one = true;
-        getPlayers();
         Connection myConn = connectionPool.getConnection();
         ArrayList<String> piecesPlayer1 = new ArrayList<String>();
         ArrayList<String> piecesPlayer2 = new ArrayList<String>();
@@ -336,21 +340,19 @@ public class Database {
         piecesPlayer2.add(unit_player2_5);
 
 
-
-
         try {
-            for(int i=0; i<piecesPlayer1.size(); i++){
-             PreparedStatement playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
-                    playerInsert1.setInt(1,match_id);
-                    playerInsert1.setInt(2,player1);
+            for (int i = 0; i < piecesPlayer1.size(); i++) {
+                PreparedStatement playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
+                playerInsert1.setInt(1, match_id);
+                playerInsert1.setInt(2, player1);
 
-            playerInsert1.executeUpdate();
+                playerInsert1.executeUpdate();
             }
 
-            for(int i=0; i<piecesPlayer2.size(); i++){
+            for (int i = 0; i < piecesPlayer2.size(); i++) {
                 PreparedStatement playerInsert2 = myConn.prepareStatement(piecesPlayer2.get(i));
-                playerInsert2.setInt(1,match_id);
-                playerInsert2.setInt(2,player2);
+                playerInsert2.setInt(1, match_id);
+                playerInsert2.setInt(2, player2);
 
                 playerInsert2.executeUpdate();
             }
@@ -587,7 +589,6 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
-        int otherPlayer;
         String stmt = "SELECT player1,player2 FROM Matches WHERE match_id = ?";
         String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
 
@@ -596,19 +597,11 @@ public class Database {
             preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
             rs.next();
-            if (turn == 1) {
-                otherPlayer = user_id;
-            } else {
-                if (rs.getInt("player1") == user_id) {
-                    otherPlayer = rs.getInt("player2");
-                } else {
-                    otherPlayer = rs.getInt("player1");
-                }
-            }
+
             preparedStatement = myConn.prepareStatement(stmt2);
             preparedStatement.setInt(1, turn);
             preparedStatement.setInt(2, match_id);
-            preparedStatement.setInt(3, otherPlayer);
+            preparedStatement.setInt(3, opponent_id);
             if (preparedStatement.executeUpdate() > 0) {
                 return 1;
             } else {

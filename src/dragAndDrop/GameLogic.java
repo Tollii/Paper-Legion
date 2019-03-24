@@ -102,6 +102,9 @@ public class GameLogic extends Application {
 
         Stage window = primaryStage; // Program window
 
+        // Sets static variables for players and opponent id.
+        db.getPlayers();
+
         sceneSetUp();
 
         //If you are player 2. Start polling the database for next turn.
@@ -135,6 +138,7 @@ public class GameLogic extends Application {
                 // Finds every enemy unit that was damaged and sends their new info the database.
                 for(int i = 0; i < unitListe.length; i++) {
                     for (int j = 0; j < unitListe[i].length; j++) {
+                        // If unit exists, is not an enemy and has been attacked. Send their new health info.
                         if(unitListe[i][j] != null && unitListe[i][j].getEnemy() && unitListe[i][j].getHasBeenAttackedThisTurn()) {
                             db.sendHealthInfo(unitListe[i][j].getPieceID(),unitListe[i][j].getHp());
                         }
