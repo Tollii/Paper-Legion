@@ -109,7 +109,7 @@ public class GameLogic extends Application {
         sceneSetUp();
 
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
-        if (user_id == player1) {
+        if (user_id == player2) {
             db.insertPieces();
         }
 
