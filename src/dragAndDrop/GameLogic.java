@@ -321,7 +321,8 @@ public class GameLogic extends Application {
 
     private void drawUnits(){
        ArrayList<PieceSetup> pieces = db.importPlacementPieces();
-
+        int posX;
+        int posY;
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
                         unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
@@ -330,9 +331,11 @@ public class GameLogic extends Application {
                             pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
                         }
                         //TODO legg inn at når alle piecene dine er døde så taper du
+                        posX = unitList.get(i).getPositionX();
+                        posY = unitList.get(i).getPositionY();
+                        unitPosition[posX][posY] = unitList.get(i);
             }
-            ///////////////////////////////////////////////////////////////////////////////
-
+            ///////////////////////////////////////////////////////////////////////////////////
     }
 
     public void deDrawUnits(){
@@ -349,6 +352,7 @@ public class GameLogic extends Application {
 
         int posX = getPosXFromEvent(event);
         int posY = getPosYFromEvent(event);
+
 
         if ((unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy()) {
 
