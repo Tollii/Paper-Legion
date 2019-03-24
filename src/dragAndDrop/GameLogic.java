@@ -322,7 +322,16 @@ public class GameLogic extends Application {
        ArrayList<PieceSetup> pieces = db.importPlacementPieces();
         int posX;
         int posY;
+        System.out.println(unitList.size());
+        for (int i = 0; i < unitList.size(); i++){
+            System.out.println("HP: " + unitList.get(i).getHp());
+        }
         unitList.removeAll(Collections.singletonList(null));
+        System.out.println(unitList.size());
+        for (int i = 0; i < unitList.size(); i++){
+            System.out.println("HP: " + unitList.get(i).getHp());
+        }
+
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
                         unitList.get(i).setHasAttackedThisTurn(false);
