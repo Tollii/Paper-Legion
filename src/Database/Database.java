@@ -517,7 +517,6 @@ public class Database {
 
         PreparedStatement preparedStatement = null;
         try {
-
             preparedStatement = myConn.prepareStatement(sqlString);
 
             myConn.setAutoCommit(false);
@@ -532,16 +531,13 @@ public class Database {
 
                 preparedStatement.executeUpdate();
             }
-
             myConn.commit();
-            Cleaner.setAutoCommit(myConn);
-
-
         } catch (SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);
             return false;
         } finally {
+            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
