@@ -120,6 +120,7 @@ public class GameLogic extends Application {
         else {
             int number = 0;
             do {
+
                 number = db.pollForUnits();
             }while (number != 10);
         }
@@ -332,18 +333,25 @@ public class GameLogic extends Application {
             System.out.println("HP: " + unitList.get(i).getHp());
         }
 
+
+
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
-                        unitList.get(i).setHasAttackedThisTurn(false);
-                        unitList.get(i).setHp(pieces.get(i).getCurrent_health());
-                        unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
-                        if(unitList.get(i).getHp() >0) {
-                            pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
-                        }
-                        //TODO legg inn at når alle piecene dine er døde så taper du
-                        posX = unitList.get(i).getPositionX();
-                        posY = unitList.get(i).getPositionY();
-                        unitPosition[posY][posX] = unitList.get(i);
+                if(unitList.get(i).getHp() > 0) {
+                    unitList.get(i).setHasAttackedThisTurn(false);
+                    unitList.get(i).setHp(pieces.get(i).getCurrent_health());
+                    unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
+                    if (unitList.get(i).getHp() > 0) {
+                        pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                    }
+                    //TODO legg inn at når alle piecene dine er døde så taper du
+                    posX = unitList.get(i).getPositionX();
+                    posY = unitList.get(i).getPositionY();
+                    unitPosition[posY][posX] = unitList.get(i);
+                }
+                else{
+                    unitList.remove(i);
+                }
             }
             ///////////////////////////////////////////////////////////////////////////////////
 
@@ -451,7 +459,7 @@ public class GameLogic extends Application {
 
         int attackPosX = getPosXFromEvent(event);
         int attackPosY = getPosYFromEvent(event);
-
+        int id;
         // If there is a unit on the selected tile.
         if (unitPosition[attackPosY][attackPosX] != null) {
             // If within attack range.
@@ -477,6 +485,11 @@ public class GameLogic extends Application {
                         //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                         pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
                         unitPosition[attackPosY][attackPosX].setHp(0);
+                        for (int i = 0; i < unitList.size(); i++){
+                            if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()){
+                                unitList.remove(i);
+                            }
+                        }
                         unitPosition[attackPosY][attackPosX] = null;
                         unitList.removeAll(Collections.singletonList(null));
 
