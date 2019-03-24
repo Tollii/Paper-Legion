@@ -259,7 +259,8 @@ public class Database {
         return outputList;
     }
 
-    public void getPlayers() {
+    public void getPlayers(){
+
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "select * from Matches where match_id=?";
         try {
@@ -469,7 +470,7 @@ public class Database {
                 opponent = player1;
             }
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setDouble(1, currentHealth);
+            preparedStatement.setDouble(1, currentHealth); //"Arrays begin at 1"
             preparedStatement.setInt(2, pieceID);
             preparedStatement.setInt(3, match_id);
             preparedStatement.setInt(4, opponent);
@@ -486,7 +487,43 @@ public class Database {
 
     //TODO
     public boolean exportMoveList(ArrayList<Move> movementList) {
-        return false;
+
+        int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
+        int matchId = movementList.get(0).getTurnId();      //MatchID is the same for all entries in the list
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "INSERT INTO Movements VALUES (turn_id,?,match_id,?,?,?,?);";
+
+        PreparedStatement preparedStatement = null;
+        try {
+            
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            myConn.setAutoCommit(false);
+
+            for (int i = 0; i < movementList.size(); i++) {
+                preparedStatement.setInt(1, movementList.get(i).getPieceId()); //"Arrays begin at 1"
+                preparedStatement.setInt(2, movementList.get(i).getStartPosX());
+                preparedStatement.setInt(3, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(4, movementList.get(i).getEndPosX());
+                preparedStatement.setInt(5, movementList.get(i).getStartPosY());
+
+                preparedStatement.executeUpdate();
+            }
+
+            myConn.commit();
+            myConn.setAutoCommit(true);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Cleaner.rollBack(myConn);
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return true;
     }
 
     //TODO

@@ -47,7 +47,7 @@ public class Cleaner {
         }
     }
 
-    public static void setAutCommit(Connection con){
+    public static void setAutoCommit(Connection con){
         try{
             if(con != null && !con.getAutoCommit()){
             con.setAutoCommit(true);
