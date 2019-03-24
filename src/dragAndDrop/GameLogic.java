@@ -170,51 +170,6 @@ public class GameLogic extends Application {
         });
 
 
-//        ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
-//        for(int i=0; i<setupPieces.size(); i++){
-//            int pieceId = setupPieces.get(i).getPieceId();
-//            int matchId = setupPieces.get(i).getMatchId();
-//            int playerId = setupPieces.get(i).getPlayerId();
-//            int positionX = setupPieces.get(i).getPositionX();
-//            int positionY = setupPieces.get(i).getPositionY();
-//            int unitType_id = setupPieces.get(i).getUnit_type_id();
-//
-//            boolean enemyStatus=false;
-//            if(playerId == user_id){
-//                enemyStatus = false;
-//            } else{
-//                enemyStatus = true;
-//            }
-//
-//
-//            if(unitType_id == 1){
-//                unitPosition[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newSwordsMan());
-//
-//            } else if(unitType_id == 2){
-//                unitPosition[positionY][positionX] = new Unit(positionY*tileSize, positionX*tileSize, enemyStatus, unitGenerator.newArcher());
-//
-//            }
-//
-//        }
-////
-////        //////////////////////ADD ENEMY TO ARRAY; TEST SAMPLE /////////////////////////////////////
-////        unitPosition[0][1] = new Unit( 0*tileSize, 1*tileSize,  true, unitGenerator.newArcher());
-////        unitPosition[0][2] = new Unit( 0*tileSize, 2*tileSize,  true, unitGenerator.newSwordsMan());
-////        unitPosition[1][4] = new Unit( 1*tileSize, 4*tileSize,  false, unitGenerator.newSwordsMan());
-////        ///////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//        ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-//        for (int i = 0; i < unitPosition.length; i++) {
-//            for (int j = 0; j < unitPosition[i].length; j++) {
-//                if (unitPosition[i][j] != null) {
-//                    pieceContainer.getChildren().add(unitPosition[i][j].getPieceAvatar());
-//                }
-//            }
-//        }
-//        /////////////////////////////////////////////////////////////////////////////////////////
-
-
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (!selected) {
