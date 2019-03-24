@@ -55,6 +55,8 @@ public class loginController extends Controller {
                 alertField.setText("Login Failed");
             }
         });
+
+        loginEnterButton.setDefaultButton(true);
     }
     private void setUser_id(int userIDFromLogin) {
         user_id = userIDFromLogin;
