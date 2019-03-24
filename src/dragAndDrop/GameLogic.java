@@ -64,7 +64,7 @@ public class GameLogic extends Application {
     private JFXButton endTurnButton = new JFXButton("end turn");
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
-    private Label turnCounter = new Label(String.valueOf("TURN: " + turn));            //Describes what turn it is.
+    private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
 
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                                   //Holds the X position to the selected piece.
@@ -107,7 +107,12 @@ public class GameLogic extends Application {
         db.getPlayers();
 
         sceneSetUp();
-        db.insertPieces(); //Inserts units into DB for game
+
+        ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
+        if (user_id == player1) {
+            db.insertPieces();
+        }
+
         drawUnits();
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
