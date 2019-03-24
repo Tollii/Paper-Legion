@@ -146,6 +146,7 @@ public class GameLogic extends Application {
                 endTurnButton.setText("Waiting for other player");
                 yourTurn = false;
 
+
                 ////SEND MOVEMENT////
 
                 //db.exportMoveList(movementList); when we use movement table use this
@@ -701,7 +702,8 @@ public class GameLogic extends Application {
                                     System.out.println("Dedraw");
                                     deDrawUnits();
                                     System.out.println("Draw units");
-                                    drawUnits();
+                                    //drawUnits();
+                                    movementPhase = true;
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
 
                                 });
