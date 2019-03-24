@@ -277,9 +277,7 @@ public class GameLogic extends Application {
     private void drawUnits(){
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
-                if (unitListe[i][j] != null) {
-                    pieceContainer.getChildren().add(unitListe[i][j].getPieceAvatar());
-                }
+                unitListe[i][j] = null;
             }
         }
         ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
