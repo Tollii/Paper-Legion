@@ -367,34 +367,35 @@ public class GameLogic extends Application {
     }
 
     private void move(MouseEvent event){
+        if (yourTurn) {
+            int nyPosX = getPosXFromEvent(event);
+            int nyPosY = getPosYFromEvent(event);
 
-        int nyPosX = getPosXFromEvent(event);
-        int nyPosY = getPosYFromEvent(event);
+            if (movementRange(nyPosX, nyPosY)) {
+                if (unitListe[nyPosY][nyPosX] == null) {
+                    selectedUnit.setTranslate(nyPosX, nyPosY);
+                    clearHighlight();
 
-        if(movementRange(nyPosX,nyPosY)){
-            if (unitListe[nyPosY][nyPosX] == null) {
-                selectedUnit.setTranslate(nyPosX, nyPosY);
-                clearHighlight();
+                    ////ADDS A NEW MOVE TO THE MOVE LIST////
+                    movementList.add(new Move(turn, selectedUnit.getPieceID(), match_id, selectedUnit.getPositionX(), selectedUnit.getPositionY(), nyPosX, nyPosY));
 
-                ////ADDS A NEW MOVE TO THE MOVE LIST////
-                movementList.add(new Move(turn, selectedUnit.getPieceID(), match_id, selectedUnit.getPositionX(), selectedUnit.getPositionY(), nyPosX, nyPosY));
+                    ////EXECUTES THE MOVE////
+                    unitListe[nyPosY][nyPosX] = selectedUnit;
+                    unitListe[selectedPosY][selectedPosX] = null;
 
-                ////EXECUTES THE MOVE////
-                unitListe[nyPosY][nyPosX] = selectedUnit;
-                unitListe[selectedPosY][selectedPosX] = null;
+                    selectedPosX = nyPosX;
+                    selectedPosY = nyPosY;
 
-                selectedPosX = nyPosX;
-                selectedPosY = nyPosY;
-
-                selectedUnit.setPosition(nyPosX,nyPosY);
+                    selectedUnit.setPosition(nyPosX, nyPosY);
 
 
-                moveCounter++;
+                    moveCounter++;
 
-                ////CHANGES PHASE////
-                movementPhase = false;
-                clearHighlight();
-                highlightPossibleAttacks();
+                    ////CHANGES PHASE////
+                    movementPhase = false;
+                    clearHighlight();
+                    highlightPossibleAttacks();
+                }
             }
         }
     }
