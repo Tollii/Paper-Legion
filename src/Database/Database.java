@@ -524,7 +524,7 @@ public class Database {
 
             for (int i = 0; i < movementList.size(); i++) {
                 preparedStatement.setInt(1, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(2, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(2, movementList.get(i).getEndPosY());
                 preparedStatement.setInt(3, matchId);
                 preparedStatement.setInt(4, movementList.get(i).getPieceId());
                 preparedStatement.setInt(5, user_id);
