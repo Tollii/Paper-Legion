@@ -76,6 +76,7 @@ public class GameLogic extends Application {
     private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
+    ArrayList<PieceSetup> setupPieces;
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
@@ -276,12 +277,13 @@ public class GameLogic extends Application {
 
 
     private void drawUnits(){
+        setupPieces = null;
         for (int i = 0; i < unitListe.length; i++) {
             for (int j = 0; j < unitListe[i].length; j++) {
                 unitListe[i][j] = null;
             }
         }
-        ArrayList<PieceSetup> setupPieces = db.importPlacementPieces();
+        setupPieces = db.importPlacementPieces();
         for(int i=0; i<setupPieces.size(); i++) {
             int pieceId = setupPieces.get(i).getPieceId();
             int matchId = setupPieces.get(i).getMatchId();
@@ -314,7 +316,17 @@ public class GameLogic extends Application {
                 }
             }
             ///////////////////////////////////////////////////////////////////////////////
-        setupPieces = null;
+
+    }
+
+    public void deDrawUnits(){
+        for (int i = 0; i < unitListe.length; i++) {
+            for (int j = 0; j < unitListe[i].length; j++) {
+                if (unitListe[i][j] != null) {
+                    pieceContainer.getChildren().remove(unitListe[i][j].getPieceAvatar());
+                }
+            }
+        }
     }
 
     private void select(MouseEvent event, VBox vBox, Label description){
@@ -656,6 +668,7 @@ public class GameLogic extends Application {
                                     //Increments turn. Back to your turn.
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
+                                    deDrawUnits();
                                     drawUnits();
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
 
