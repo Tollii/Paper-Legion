@@ -122,6 +122,7 @@ public class GameLogic extends Application {
             do {
 
                 number = db.pollForUnits();
+                thread.sleep(5000);
             }while (number != 10);
         }
         createUnits();
