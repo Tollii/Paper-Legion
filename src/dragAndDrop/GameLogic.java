@@ -691,7 +691,10 @@ public class GameLogic extends Application {
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
                                     endTurnButton.setText("End turn");
+
+                                    System.out.println("Dedraw");
                                     deDrawUnits();
+                                    System.out.println("Draw units");
                                     drawUnits();
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
 
