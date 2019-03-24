@@ -117,6 +117,7 @@ public class GameLogic extends Application {
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
             waitForTurn();
+            System.out.println("Yourturn false");
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -661,6 +662,7 @@ public class GameLogic extends Application {
                     //When player in database matches your own user_id it is your turn again.
                     System.out.println("Whose turn is it? " + db.getTurnPlayer());
                     if (db.getTurnPlayer() == user_id) {
+                        System.out.println("yourTurn endres");
                         yourTurn = true;
                     }
                     if (yourTurn) {

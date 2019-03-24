@@ -347,20 +347,23 @@ public class Database {
         piecesPlayer2.add(unit_player2_5);
 
         try {
-            for (int i = 0; i < piecesPlayer1.size(); i++) {
-                playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
-                playerInsert1.setInt(1, match_id);
-                playerInsert1.setInt(2, player1);
+            if(user_id == player1) {
+                for (int i = 0; i < piecesPlayer1.size(); i++) {
+                    playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
+                    playerInsert1.setInt(1, match_id);
+                    playerInsert1.setInt(2, player1);
 
-                playerInsert1.executeUpdate();
+                    playerInsert1.executeUpdate();
+                }
             }
-
+            else {
             for (int i = 0; i < piecesPlayer2.size(); i++) {
                 playerInsert2 = myConn.prepareStatement(piecesPlayer2.get(i));
                 playerInsert2.setInt(1, match_id);
                 playerInsert2.setInt(2, player2);
 
                 playerInsert2.executeUpdate();
+            }
             }
 
 
