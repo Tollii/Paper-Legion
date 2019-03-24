@@ -119,6 +119,7 @@ public class GameLogic extends Application {
         drawUnits();
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
+            endTurnButton.setText("Waiting for players");
             waitForTurn();
             System.out.println("Yourturn false");
         } else {

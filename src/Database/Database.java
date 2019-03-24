@@ -333,7 +333,7 @@ public class Database {
         String unit_player2_1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
         String unit_player2_2 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);";
         String unit_player2_3 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);";
-        String unit_player2_4_ = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);";
+        String unit_player2_4 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);";
         String unit_player2_5 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);";
         piecesPlayer2.add(sqlPlayer2piece);
         piecesPlayer2.add(sqlPlayer2piece2);
@@ -343,7 +343,7 @@ public class Database {
         piecesPlayer2.add(unit_player2_1);
         piecesPlayer2.add(unit_player2_2);
         piecesPlayer2.add(unit_player2_3);
-        piecesPlayer2.add(unit_player2_4_);
+        piecesPlayer2.add(unit_player2_4);
         piecesPlayer2.add(unit_player2_5);
 
         try {
@@ -441,7 +441,8 @@ public class Database {
             rs.next();
 
             preparedStatement = myConn.prepareStatement(stmt2);
-            preparedStatement.setInt(1, turn);
+            preparedStatement.setInt(
+                    1, turn);
             preparedStatement.setInt(2, match_id);
 
             //Exception case for turn 1. Has to add the first turn for player 1.
