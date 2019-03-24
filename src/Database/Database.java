@@ -511,14 +511,13 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
-
-    public boolean exportMoveList(ArrayList<Move> movementList) {
+    public boolean exportPieceMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
-        int matchId = movementList.get(0).getTurnId();      //MatchID is the same for all entries in the list
+        int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
 
         Connection myConn = connectionPool.getConnection();
-        String sqlString = "INSERT INTO Movements VALUES (turn_id,?,match_id,?,?,?,?);";
+        String sqlString = "UPDATE Pieces SET position_x = ?, position_y = ?  WHERE match_id=? AND piece_id = ? AND player_id = ? ;";
 
         PreparedStatement preparedStatement = null;
         try {
@@ -528,11 +527,12 @@ public class Database {
             myConn.setAutoCommit(false);
 
             for (int i = 0; i < movementList.size(); i++) {
-                preparedStatement.setInt(1, movementList.get(i).getPieceId()); //"Arrays begin at 1"
-                preparedStatement.setInt(2, movementList.get(i).getStartPosX());
-                preparedStatement.setInt(3, movementList.get(i).getStartPosY());
-                preparedStatement.setInt(4, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(5, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(1, movementList.get(i).getEndPosX());
+                preparedStatement.setInt(2, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(3, matchId);
+                preparedStatement.setInt(4, movementList.get(i).getPieceId());
+                preparedStatement.setInt(5, user_id);
+
 
                 preparedStatement.executeUpdate();
             }
@@ -551,6 +551,48 @@ public class Database {
         }
         return true;
     }
+
+    /*public boolean exportMoveList(ArrayList<Move> movementList) {
+
+        int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
+        int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "INSERT INTO Movements VALUES (?,?,?,?,?,?,?);";
+
+        PreparedStatement preparedStatement = null;
+        try {
+
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            myConn.setAutoCommit(false);
+
+            for (int i = 0; i < movementList.size(); i++) {
+                preparedStatement.setInt(1, turnId); //"Arrays begin at 1"
+                preparedStatement.setInt(2, movementList.get(i).getPieceId());
+                preparedStatement.setInt(3, matchId);
+                preparedStatement.setInt(4, movementList.get(i).getStartPosX());
+                preparedStatement.setInt(5, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(6, movementList.get(i).getEndPosX());
+                preparedStatement.setInt(7, movementList.get(i).getStartPosY());
+
+                preparedStatement.executeUpdate();
+            }
+
+            myConn.commit();
+            Cleaner.setAutoCommit(myConn);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Cleaner.rollBack(myConn);
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return true;
+    }*/
 
     //TODO
     public boolean exportAttackList() {

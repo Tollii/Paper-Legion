@@ -141,7 +141,8 @@ public class GameLogic extends Application {
 
                 ////SEND MOVEMENT////
 
-                db.exportMoveList(movementList);
+                //db.exportMoveList(movementList); when we use movement table use this
+                db.exportPieceMoveList(movementList);
                 movementList = new ArrayList<>(); //Resets the movementList for the next turn.
 
 
