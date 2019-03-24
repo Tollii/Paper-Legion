@@ -121,7 +121,7 @@ public class GameLogic extends Application {
         drawUnits();
         //If you are player 2. Start polling the database for next turn.
         if(!yourTurn) {
-            endTurnButton.setText("Waiting for players");
+            endTurnButton.setText("Waiting for other player");
             waitForTurn();
         } else {
             //Enters turn 1 into database.
@@ -131,7 +131,6 @@ public class GameLogic extends Application {
         ArrayList<Unit> unitListe = new ArrayList<>();
         for(int i = 0; i < unitPosition.length; i++) {
             for (int j = 0; j < unitPosition[i].length; j++) {
-                // If unit exists, is not an enemy and has been attacked. Send their new health info.
                 if(unitPosition[i][j] != null) {
                    unitListe.add(unitPosition[i][j]);
                 }
@@ -690,6 +689,7 @@ public class GameLogic extends Application {
                                     //Increments turn. Back to your turn.
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
+                                    endTurnButton.setText("End turn");
                                     deDrawUnits();
                                     drawUnits();
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
