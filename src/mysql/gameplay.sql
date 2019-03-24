@@ -12,10 +12,5 @@ INSERT INTO Turns (turn_id,match_id,player) VALUES (2,1,2);
 -- Update units health
 UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?;
 
-
-select Pieces.piece_id, Pieces.match_id, Pieces.player_id, position_x, position_y, unit_type_id,
-current_health from Pieces left join Units U on
- Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id where Pieces.match_id=;
-
-
-UPDATE Pieces SET position_x = 50, position_y = 50 WHERE match_id=324 AND piece_id = 2 AND player_id = 31
+-- Update unit position
+UPDATE Pieces SET position_x = ?, position_y = ? WHERE match_id=? AND piece_id = ? AND player_id = ?;

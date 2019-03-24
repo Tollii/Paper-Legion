@@ -166,7 +166,6 @@ public class GameLogic extends Application {
                 for(int i = 0; i < unitList.size(); i++) {
                         // If unit exists, is not an enemy and has been attacked. Send their new health info.
                             db.sendHealthInfo(unitList.get(i).getPieceID(),unitList.get(i).getHp());
-                        unitList.get(i).setHasBeenAttackedThisTurn(false);
                 }
                 //Wait for you next turn
                 waitForTurn();
@@ -453,7 +452,6 @@ public class GameLogic extends Application {
                 if (selectedUnit != unitPosition[attackPosY][attackPosX]){
                     // Attack is executed and unit takes damage.
                     unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
-                    unitPosition[attackPosY][attackPosX].setHasBeenAttackedThisTurn(true);
 
                     attackCount++;
 
@@ -701,10 +699,9 @@ public class GameLogic extends Application {
                                     turnCounter.setText("TURN: " + turn);
                                     endTurnButton.setText("End turn");
 
-                                    System.out.println("Dedraw");
                                     deDrawUnits();
-                                    System.out.println("Draw units");
                                     drawUnits();
+
                                     movementPhase = true;
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
                                 });
