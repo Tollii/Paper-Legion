@@ -284,7 +284,7 @@ public class Database {
             e.printStackTrace();
         }
     }
-
+//Inserts pieces into Database
     public void insertPieces() {
         boolean one = true;
         Connection myConn = connectionPool.getConnection();
@@ -358,9 +358,8 @@ public class Database {
             e.printStackTrace();
         }
     }
-
+//puts the units from the database into an arraylist
     public ArrayList<PieceSetup> importPlacementPieces() {
-        insertPieces();
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
         int pieceId;
         int match_idDB;
@@ -396,35 +395,6 @@ public class Database {
             e.printStackTrace();
         }
         return null;
-    }
-
-    //test
-    public void test() {
-
-        System.out.println("Test begun");
-        String sqlString = "SELECT username FROM Users";
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedQuery = null;
-        ResultSet resultSet = null;
-
-        try {
-            preparedQuery = myConn.prepareStatement(sqlString);
-
-            System.out.println("Executing statement");
-            resultSet = preparedQuery.executeQuery();
-            System.out.println("Statement executed");
-
-            while (resultSet.next()) {
-
-                System.out.println(resultSet.getString("username"));
-            }
-
-            connectionPool.releaseConnection(myConn);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-            connectionPool.releaseConnection(myConn);
-        }
     }
     /*
        ___                           _
