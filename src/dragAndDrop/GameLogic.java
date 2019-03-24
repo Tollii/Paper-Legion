@@ -324,6 +324,7 @@ public class GameLogic extends Application {
         unitList.trimToSize();
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
+                        unitList.get(i).setHasAttackedThisTurn(false);
                         unitList.get(i).setHp(pieces.get(i).getCurrent_health());
                         unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
                         if(unitList.get(i).getHp() >0) {
