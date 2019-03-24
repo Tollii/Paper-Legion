@@ -117,8 +117,10 @@ public class GameLogic extends Application {
             db.insertPieces();
         }
         else {
-
-            Thread.sleep(20000); //Temp løsning
+            int number = 0;
+            do {
+                number = db.pollForUnits();
+            }while (number != 10);
         }
         createUnits();
 
@@ -328,8 +330,8 @@ public class GameLogic extends Application {
         int posY;
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
-                        unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
                         unitList.get(i).setHp(pieces.get(i).getCurrent_health());
+                        unitList.get(i).setPosition(pieces.get(i).getPositionX(), pieces.get(i).getPositionY());
                         if(unitList.get(i).getHp() >0) {
                             pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
                         }
@@ -353,6 +355,7 @@ public class GameLogic extends Application {
                 unitPosition[i][j] = null;
             }
         }
+        System.out.println(pieceContainer.getChildren().size());
     }
 
     private void select(MouseEvent event, VBox vBox, Label description){

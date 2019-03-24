@@ -530,6 +530,28 @@ public class Database {
         return -1;
     }
 
+    public int pollForUnits() { //Midlertidig metode for auto generert units
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        String stmt = "SELECT COUNT(*) AS counter FROM Units WHERE match_id = ?;";
+        ResultSet rs = null;
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, match_id);
+            rs = preparedStatement.executeQuery();
+            rs.next();
+            return rs.getInt("counter");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
     public void sendHealthInfo(int pieceID, double currentHealth) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
