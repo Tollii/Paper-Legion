@@ -161,13 +161,12 @@ public class GameLogic extends Application {
 
                 // Alternative solution to creating a List of attacks in the future.
                 // Finds every enemy unit that was damaged and sends their new info the database.
-                for(int i = 0; i < unitPosition.length; i++) {
-                    for (int j = 0; j < unitPosition[i].length; j++) {
+                for(int i = 0; i < unitList.size(); i++) {
                         // If unit exists, is not an enemy and has been attacked. Send their new health info.
-                        if(unitPosition[i][j] != null && unitPosition[i][j].getEnemy() && unitPosition[i][j].getHasBeenAttackedThisTurn()) {
-                            db.sendHealthInfo(unitPosition[i][j].getPieceID(),unitPosition[i][j].getHp());
-                        }
+                        if(unitList.get(i).getEnemy() && unitList.get(i).getHasBeenAttackedThisTurn()) {
+                            db.sendHealthInfo(unitList.get(i).getPieceID(),unitList.get(i).getHp());
                     }
+                        unitList.get(i).setHasBeenAttackedThisTurn(false);
                 }
                 //Wait for you next turn
                 waitForTurn();
@@ -452,7 +451,7 @@ public class GameLogic extends Application {
                 if (selectedUnit != unitPosition[attackPosY][attackPosX]){
                     // Attack is executed and unit takes damage.
                     unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
-                    unitPosition[attackPosY][attackPosX].setHasBeenAttackedThisTurn();
+                    unitPosition[attackPosY][attackPosX].setHasBeenAttackedThisTurn(true);
 
                     attackCount++;
 
@@ -703,7 +702,7 @@ public class GameLogic extends Application {
                                     System.out.println("Dedraw");
                                     deDrawUnits();
                                     System.out.println("Draw units");
-                                    //drawUnits();
+                                    drawUnits();
                                     movementPhase = true;
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
                                 });
