@@ -282,56 +282,52 @@ public class GameLogic extends Application {
         int posY;
 
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-            for (int j = 0; j < pieces.size(); j++) {
-                System.out.println(j + " playerid: " + pieces.get(j).getPlayerId() + " pos X: " + pieces.get(j).getPositionX() + " pos y: "
-                        + pieces.get(j).getPositionY() + " hp: " + pieces.get(j).getCurrent_health() + " piece id: "
-                + pieces.get(j).getPieceId());
+            for (int i = 0; i < unitList.size(); i++) {
+                System.out.println(i + " playerid: " + pieces.get(i).getPlayerId() + " pos X: " + pieces.get(i).getPositionX() + " pos y: "
+                        + pieces.get(i).getPositionY() + " hp: " + pieces.get(i).getCurrent_health() + " piece id: "
+                + pieces.get(i).getPieceId());
+                if(unitList.get(i).getHp() > 0) {
 
-
+                    PieceSetup correspondingPiece = null;
 
                     //TODO review this for-loop
-                    for (int i = 0; i < unitList.size(); i++) {
-                        PieceSetup correspondingPiece = null;
-                        if (unitList.get(i).getEnemy()) {
-                            if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
+                    for (int j = 0; j < pieces.size(); j++) {
+                        if(unitList.get(i).getEnemy()){
+                            if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
                                 correspondingPiece = pieces.get(j);
-                                System.out.println(i + " is enemy " + j + " in this position in Pieces");
+                                System.out.println(i + " is enemy " + j +  " in this position in Pieces");
 
                             }
                         } else {
                             if (pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
-                                System.out.println(i + " is friendly " + j + " in this position in Pieces");
+                                System.out.println(i + " is friendly " + j +  " in this position in Pieces");
                             }
                         }
-                        if (correspondingPiece != null) {
-
-                            unitList.get(i).setHasAttackedThisTurn(false);
-                            unitList.get(i).setHp(correspondingPiece.getCurrent_health());
-                            unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
-                            if (unitList.get(i).getHp() > 0) {
-                                pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
-                            }
-                            //TODO legg inn at når alle piecene dine er døde så taper du
-                            posX = unitList.get(i).getPositionX();
-                            posY = unitList.get(i).getPositionY();
-                            unitPosition[posY][posX] = unitList.get(i);
-                            System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
-                                    + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
-                                    + unitList.get(i).getPieceID());
-                        } else {
-                            unitList.remove(i);
-                            System.out.println(i + " removed");
-                        }
-
-
-
                     }
 
+                    if (correspondingPiece != null) {
+
+                        unitList.get(i).setHasAttackedThisTurn(false);
+                        unitList.get(i).setHp(correspondingPiece.getCurrent_health());
+                        unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
+                        if (unitList.get(i).getHp() > 0) {
+                            pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                        }
+                        //TODO legg inn at når alle piecene dine er døde så taper du
+                        posX = unitList.get(i).getPositionX();
+                        posY = unitList.get(i).getPositionY();
+                        unitPosition[posY][posX] = unitList.get(i);
+                    }
                 }
-
-
-
+                else{
+                    unitList.remove(i);
+                    System.out.println(i + " removed");
+                }
+                System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
+                        + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
+                        + unitList.get(i).getPieceID());
+            }
             ///////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -354,34 +350,31 @@ public class GameLogic extends Application {
         int posX = getPosXFromEvent(event);
         int posY = getPosYFromEvent(event);
 
-        if(!(posX > boardSize || posY > boardSize)) {
 
+        if (!(posX > boardSize || posY > boardSize) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy()) {
 
-            if ((unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy()) {
+            unitPosition[posY][posX].setPosition((int)(unitPosition[posY][posX].getTranslateX() / tileSize), (int)(unitPosition[posY][posX].getTranslateY() / tileSize));
+            unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
+            unitPosition[posY][posX].setStrokeWidth(3);
+            unitPosition[posY][posX].setStroke(Color.RED);
 
-                unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
-                unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
-                unitPosition[posY][posX].setStrokeWidth(3);
-                unitPosition[posY][posX].setStroke(Color.RED);
+            selected = true;
 
-                selected = true;
+            selectedPosX = posX;
+            selectedPosY = posY;
 
-                selectedPosX = posX;
-                selectedPosY = posY;
+            selectedUnit = unitPosition[selectedPosY][selectedPosX];
 
-                selectedUnit = unitPosition[selectedPosY][selectedPosX];
-
-                if (movementPhase) {
-                    highlightPossibleMoves();
-                } else if (!selectedUnit.getHasAttackedThisTurn()) {
-                    highlightPossibleAttacks();
-                }
-
-                description.setText(selectedUnit.getDescription());
-                vBox.getChildren().add(description);
-                description.toBack();
-
+            if(movementPhase){
+                highlightPossibleMoves();
+            }else if(!selectedUnit.getHasAttackedThisTurn()){
+                highlightPossibleAttacks();
             }
+
+            description.setText(selectedUnit.getDescription());
+            vBox.getChildren().add(description);
+            description.toBack();
+
         }
     }
 
@@ -469,7 +462,7 @@ public class GameLogic extends Application {
                             unitPosition[attackPosY][attackPosX].setHp(0);
                             for (int i = 0; i < unitList.size(); i++) {
                                 if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()) {
-                                    unitList.remove(i);
+                                    //unitList.remove(i);
                                 }
                             }
                             unitPosition[attackPosY][attackPosX] = null;
@@ -654,14 +647,14 @@ public class GameLogic extends Application {
         double rectPosX1 = tileSize + offsetX;
         double posX1 = event2.getSceneX();
         double movementX1 = posX1 - rectPosX1;
-        return (int) (Math.ceil(movementX1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+        return (int) (Math.ceil(movementX1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
     private int getPosYFromEvent(MouseEvent event2) {
         double rectPosY1 = tileSize + offsetY;
         double posY1 = event2.getSceneY();
         double movementY1 = posY1 - rectPosY1;
-        return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+        return (int) (Math.ceil(movementY1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
 
