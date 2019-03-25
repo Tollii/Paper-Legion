@@ -352,31 +352,34 @@ public class GameLogic extends Application {
         int posX = getPosXFromEvent(event);
         int posY = getPosYFromEvent(event);
 
+        if(!(posX > boardSize || posY > boardSize)) {
 
-        if (!(posX > boardSize || posY > boardSize) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy()) {
 
-            unitPosition[posY][posX].setPosition((int)(unitPosition[posY][posX].getTranslateX() / tileSize), (int)(unitPosition[posY][posX].getTranslateY() / tileSize));
-            unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
-            unitPosition[posY][posX].setStrokeWidth(3);
-            unitPosition[posY][posX].setStroke(Color.RED);
+            if ((unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy()) {
 
-            selected = true;
+                unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
+                unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
+                unitPosition[posY][posX].setStrokeWidth(3);
+                unitPosition[posY][posX].setStroke(Color.RED);
 
-            selectedPosX = posX;
-            selectedPosY = posY;
+                selected = true;
 
-            selectedUnit = unitPosition[selectedPosY][selectedPosX];
+                selectedPosX = posX;
+                selectedPosY = posY;
 
-            if(movementPhase){
-                highlightPossibleMoves();
-            }else if(!selectedUnit.getHasAttackedThisTurn()){
-                highlightPossibleAttacks();
+                selectedUnit = unitPosition[selectedPosY][selectedPosX];
+
+                if (movementPhase) {
+                    highlightPossibleMoves();
+                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                    highlightPossibleAttacks();
+                }
+
+                description.setText(selectedUnit.getDescription());
+                vBox.getChildren().add(description);
+                description.toBack();
+
             }
-
-            description.setText(selectedUnit.getDescription());
-            vBox.getChildren().add(description);
-            description.toBack();
-
         }
     }
 
@@ -649,14 +652,14 @@ public class GameLogic extends Application {
         double rectPosX1 = tileSize + offsetX;
         double posX1 = event2.getSceneX();
         double movementX1 = posX1 - rectPosX1;
-        return (int) (Math.ceil(movementX1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+        return (int) (Math.ceil(movementX1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
     private int getPosYFromEvent(MouseEvent event2) {
         double rectPosY1 = tileSize + offsetY;
         double posY1 = event2.getSceneY();
         double movementY1 = posY1 - rectPosY1;
-        return (int) (Math.ceil(movementY1 / 100.0)); // Runder til nærmeste 100 for snap to grid funksjonalitet
+        return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
 
