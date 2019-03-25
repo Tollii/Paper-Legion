@@ -37,6 +37,7 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 
 import static Database.Variables.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -115,21 +116,20 @@ public class GameLogic extends Application {
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
             db.insertPieces();
-        }
-        else {
+        } else {
             int number = 0;
             do {
 
                 number = db.pollForUnits();
                 thread.sleep(5000);
-            }while (number != 10);
+            } while (number != 10);
         }
         createUnits();
 
         drawUnits();
 
         //If you are player 2. Start polling the database for next turn.
-        if(!yourTurn) {
+        if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
         } else {
@@ -144,7 +144,6 @@ public class GameLogic extends Application {
                 turn++;
 
 
-
                 turnCounter.setText("TURN: " + turn);
                 endTurnButton.setText("Waiting for other player");
                 yourTurn = false;
@@ -157,8 +156,6 @@ public class GameLogic extends Application {
                     db.exportPieceMoveList(movementList);
                     movementList = new ArrayList<>(); //Resets the movementList for the next turn.
                 }
-
-
 
 
                 /////SEND ATTACKS////
@@ -193,8 +190,8 @@ public class GameLogic extends Application {
             ///////////////////////////////MOVE END///////////////////////////////////////////////
 
             /////////////////////////////////ATTACK///////////////////////////////////////////////
-            if(event.getClickCount() == 2){
-                if(selected && !movementPhase && !selectedUnit.getHasAttackedThisTurn()){
+            if (event.getClickCount() == 2) {
+                if (selected && !movementPhase && !selectedUnit.getHasAttackedThisTurn()) {
 
                     attack(event);
 
@@ -252,9 +249,9 @@ public class GameLogic extends Application {
         scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
     }
 
-    private void createUnits(){
+    private void createUnits() {
         setupPieces = db.importPlacementPieces();
-        for(int i=0; i<setupPieces.size(); i++) {
+        for (int i = 0; i < setupPieces.size(); i++) {
 
             int pieceId = setupPieces.get(i).getPieceId();
             int matchId = setupPieces.get(i).getMatchId();
@@ -280,63 +277,62 @@ public class GameLogic extends Application {
     }
 
 
-    private void drawUnits(){
-       ArrayList<PieceSetup> pieces = db.importPlacementPieces();
+    private void drawUnits() {
+        ArrayList<PieceSetup> pieces = db.importPlacementPieces();
         int posX;
         int posY;
 
-            ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-            for (int i = 0; i < unitList.size(); i++) {
-                System.out.println(i + " playerid: " + pieces.get(i).getPlayerId() + " pos X: " + pieces.get(i).getPositionX() + " pos y: "
-                        + pieces.get(i).getPositionY() + " hp: " + pieces.get(i).getCurrent_health() + " piece id: "
-                + pieces.get(i).getPieceId());
-                if(unitList.get(i).getHp() > 0) {
+        ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
+        for (int i = 0; i < unitList.size(); i++) {
+            System.out.println(i + " playerid: " + pieces.get(i).getPlayerId() + " pos X: " + pieces.get(i).getPositionX() + " pos y: "
+                    + pieces.get(i).getPositionY() + " hp: " + pieces.get(i).getCurrent_health() + " piece id: "
+                    + pieces.get(i).getPieceId());
+            if (unitList.get(i).getHp() > 0) {
 
-                    PieceSetup correspondingPiece = null;
+                PieceSetup correspondingPiece = null;
 
-                    //TODO review this for-loop
-                    for (int j = 0; j < pieces.size(); j++) {
-                        if(unitList.get(i).getEnemy()){
-                            if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
-                                correspondingPiece = pieces.get(j);
-                                System.out.println(i + " is enemy " + j +  " in this position in Pieces");
+                //TODO review this for-loop
+                for (int j = 0; j < pieces.size(); j++) {
+                    if (unitList.get(i).getEnemy()) {
+                        if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
+                            correspondingPiece = pieces.get(j);
+                            System.out.println(i + " is enemy " + j + " in this position in Pieces");
 
-                            }
-                        } else {
-                            if (pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
-                                correspondingPiece = pieces.get(j);
-                                System.out.println(i + " is friendly " + j +  " in this position in Pieces");
-                            }
+                        }
+                    } else {
+                        if (pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
+                            correspondingPiece = pieces.get(j);
+                            System.out.println(i + " is friendly " + j + " in this position in Pieces");
                         }
                     }
+                }
 
-                    if (correspondingPiece != null) {
+                if (correspondingPiece != null) {
 
-                        unitList.get(i).setHasAttackedThisTurn(false);
-                        unitList.get(i).setHp(correspondingPiece.getCurrent_health());
-                        unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
-                        if (unitList.get(i).getHp() > 0) {
-                            pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
-                            posX = unitList.get(i).getPositionX();
-                            posY = unitList.get(i).getPositionY();
-                            unitPosition[posY][posX] = unitList.get(i);
-                        }
-
+                    unitList.get(i).setHasAttackedThisTurn(false);
+                    unitList.get(i).setHp(correspondingPiece.getCurrent_health());
+                    unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
+                    if (unitList.get(i).getHp() > 0) {
+                        pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                        posX = unitList.get(i).getPositionX();
+                        posY = unitList.get(i).getPositionY();
+                        unitPosition[posY][posX] = unitList.get(i);
                     }
+
                 }
-                else{
-                }
-                System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
-                        + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
-                        + unitList.get(i).getPieceID());
+            } else {
             }
-            ///////////////////////////////////////////////////////////////////////////////////
+            System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
+                    + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
+                    + unitList.get(i).getPieceID());
+        }
+        ///////////////////////////////////////////////////////////////////////////////////
     }
 
-    public void deDrawUnits(){
+    public void deDrawUnits() {
         for (int i = 0; i < unitList.size(); i++) {
-                    pieceContainer.getChildren().remove(unitList.get(i).getPieceAvatar());
-            }
+            pieceContainer.getChildren().remove(unitList.get(i).getPieceAvatar());
+        }
 
 
         for (int i = 0; i < unitPosition.length; i++) {
@@ -347,15 +343,15 @@ public class GameLogic extends Application {
         System.out.println(pieceContainer.getChildren().size());
     }
 
-    private void select(MouseEvent event, VBox vBox, Label description){
+    private void select(MouseEvent event, VBox vBox, Label description) {
 
         int posX = getPosXFromEvent(event);
         int posY = getPosYFromEvent(event);
 
 
-         if (!(posX > boardSize || posY > boardSize || posX < 0 || posY < 0 ) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy() && unitPosition[posY][posX].getHp() > 0) {
+        if (!(posX > boardSize || posY > boardSize || posX < 0 || posY < 0) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy() && unitPosition[posY][posX].getHp() > 0) {
 
-            unitPosition[posY][posX].setPosition((int)(unitPosition[posY][posX].getTranslateX() / tileSize), (int)(unitPosition[posY][posX].getTranslateY() / tileSize));
+            unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
             unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
             unitPosition[posY][posX].setStrokeWidth(3);
             unitPosition[posY][posX].setStroke(Color.RED);
@@ -367,9 +363,9 @@ public class GameLogic extends Application {
 
             selectedUnit = unitPosition[selectedPosY][selectedPosX];
 
-            if(movementPhase){
+            if (movementPhase) {
                 highlightPossibleMoves();
-            }else if(!selectedUnit.getHasAttackedThisTurn()){
+            } else if (!selectedUnit.getHasAttackedThisTurn()) {
                 highlightPossibleAttacks();
             }
 
@@ -397,7 +393,7 @@ public class GameLogic extends Application {
         clearHighlight();
     }
 
-    private void move(MouseEvent event){
+    private void move(MouseEvent event) {
         if (yourTurn) {
             int nyPosX = getPosXFromEvent(event);
             int nyPosY = getPosYFromEvent(event);
@@ -437,7 +433,7 @@ public class GameLogic extends Application {
         int attackPosY = getPosYFromEvent(event);
         int id;
         // If there is a unit on the selected tile.
-        if(yourTurn) {
+        if (yourTurn) {
             if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosY][attackPosX].getHp() > 0) {
                 // If within attack range.
                 if (attackRange(attackPosX, attackPosY)) {
@@ -533,7 +529,7 @@ public class GameLogic extends Application {
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE THAN 1////////////////////////////
-        if(selectedUnit.getMovementRange() > 1){
+        if (selectedUnit.getMovementRange() > 1) {
 
             if (selectedPosX - movementRange >= 0) {
                 grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
@@ -559,13 +555,13 @@ public class GameLogic extends Application {
 
     private void highlightPossibleAttacks() {
 
-        for(int i=0; i<unitPosition.length; i++){
-            for(int j=0; j<unitPosition[i].length; j++){
+        for (int i = 0; i < unitPosition.length; i++) {
+            for (int j = 0; j < unitPosition[i].length; j++) {
                 if (unitPosition[i][j] != null && unitPosition[i][j] != selectedUnit) {
 
                     // Currently shows swordsman attack range wrong.
-                    if ((((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() /tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY()/tileSize)) <= selectedUnit.getMaxAttackRange())
-                        && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX()/tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY()/tileSize)) >= selectedUnit.getMinAttackRange()){
+                    if ((((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) <= selectedUnit.getMaxAttackRange())
+                            && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) >= selectedUnit.getMinAttackRange()) {
 
                         if (unitPosition[i][j].getEnemy()) {
                             grid.liste[i][j].setFill(attackHighlightColor);
@@ -590,8 +586,8 @@ public class GameLogic extends Application {
     private boolean movementRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY MOVEMENT RANGE == 1//////////////////////
-        if (selectedUnit.getMovementRange()<2){
-            if((Math.abs(nyPosX - selectedUnit.getPositionX())<2) && (Math.abs(nyPosY- selectedUnit.getPositionY())<2)){
+        if (selectedUnit.getMovementRange() < 2) {
+            if ((Math.abs(nyPosX - selectedUnit.getPositionX()) < 2) && (Math.abs(nyPosY - selectedUnit.getPositionY()) < 2)) {
                 return true;
             } else {
                 return false;
@@ -602,7 +598,7 @@ public class GameLogic extends Application {
 
         /////////////MOVEMENT RANGE> 1///////////////////////////////////////
 
-        if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= selectedUnit.getMovementRange()){ //Beautiful math skills in progress.
+        if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= selectedUnit.getMovementRange()) { //Beautiful math skills in progress.
             return true;
         }
 
@@ -619,8 +615,8 @@ public class GameLogic extends Application {
     private boolean attackRange(int nyPosX, int nyPosY) {
 
         ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
-        if (selectedUnit.getMaxAttackRange() < 2){
-            if((Math.abs(nyPosX - selectedUnit.getPositionX())<2) && (Math.abs(nyPosY - selectedUnit.getPositionY())<2)){
+        if (selectedUnit.getMaxAttackRange() < 2) {
+            if ((Math.abs(nyPosX - selectedUnit.getPositionX()) < 2) && (Math.abs(nyPosY - selectedUnit.getPositionY()) < 2)) {
                 return true;
             } else {
                 return false;
@@ -631,7 +627,7 @@ public class GameLogic extends Application {
 
         /////////////ATTACK RANGE > 1///////////////////////////////////////
 
-        if(Math.abs(nyPosX-selectedPosX)+Math.abs(nyPosY-selectedPosY) <= selectedUnit.getMaxAttackRange()){ //Beautiful math skills in progress.
+        if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= selectedUnit.getMaxAttackRange()) { //Beautiful math skills in progress.
             return true;
         }
 
@@ -662,23 +658,20 @@ public class GameLogic extends Application {
     private int checkForWinner() {
         int yourPieces = 0;
         int opponentsPieces = 0;
-        for(int i = 0; i< unitList.size(); i++){
-            if(unitList.get(i).getHp() <= 0){
-                if(unitList.get(i).getEnemy()){
+        for (int i = 0; i < unitList.size(); i++) {
+            if (unitList.get(i).getHp() >= 0) {
+                if (unitList.get(i).getEnemy()) {
                     opponentsPieces++;
-                }
-                else{
+                } else {
                     yourPieces++;
                 }
             }
         }
-        if(yourPieces == 0){
+        if (yourPieces == 0) {
             return 1;
-        }
-        else if(opponentsPieces == 0){
+        } else if (opponentsPieces == 0) {
             return 0;
-        }
-        else {
+        } else {
             return -1;
         }
     }
@@ -747,7 +740,7 @@ public class GameLogic extends Application {
                                         VBox content = new VBox();
                                         content.setPadding(new Insets(20, 20, 20, 20));
                                         content.getChildren().add(winner);
-                                        Scene scene = new Scene(content);
+                                        Scene scene = new Scene(content,250,250);
                                         winner_alert.setScene(scene);
                                         winner_alert.showAndWait();
                                     }
