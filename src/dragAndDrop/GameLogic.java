@@ -287,10 +287,11 @@ public class GameLogic extends Application {
                         + pieces.get(j).getPositionY() + " hp: " + pieces.get(j).getCurrent_health() + " piece id: "
                 + pieces.get(j).getPieceId());
 
-                    PieceSetup correspondingPiece = null;
+
 
                     //TODO review this for-loop
                     for (int i = 0; i < unitList.size(); i++) {
+                        PieceSetup correspondingPiece = null;
                         if (unitList.get(i).getEnemy()) {
                             if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
