@@ -282,52 +282,54 @@ public class GameLogic extends Application {
         int posY;
 
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
-            for (int i = 0; i < unitList.size(); i++) {
-                System.out.println(i + " playerid: " + pieces.get(i).getPlayerId() + " pos X: " + pieces.get(i).getPositionX() + " pos y: "
-                        + pieces.get(i).getPositionY() + " hp: " + pieces.get(i).getCurrent_health() + " piece id: "
-                + pieces.get(i).getPieceId());
-                if(unitList.get(i).getHp() > 0) {
+            for (int j = 0; j < pieces.size(); j++) {
+                System.out.println(j + " playerid: " + pieces.get(j).getPlayerId() + " pos X: " + pieces.get(j).getPositionX() + " pos y: "
+                        + pieces.get(j).getPositionY() + " hp: " + pieces.get(j).getCurrent_health() + " piece id: "
+                + pieces.get(j).getPieceId());
+                if(unitList.get(j).getHp() > 0) {
 
                     PieceSetup correspondingPiece = null;
 
                     //TODO review this for-loop
-                    for (int j = 0; j < unitList.size(); j++) {
-                        if(unitList.get(i).getEnemy()){
-                            if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
+                    for (int i = 0; i < unitList.size(); i++) {
+                        if (unitList.get(i).getEnemy()) {
+                            if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
-                                System.out.println(i + " is enemy " + j +  " in this position in Pieces");
+                                System.out.println(i + " is enemy " + j + " in this position in Pieces");
 
                             }
                         } else {
                             if (pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
-                                System.out.println(i + " is friendly " + j +  " in this position in Pieces");
+                                System.out.println(i + " is friendly " + j + " in this position in Pieces");
                             }
                         }
-                    }
+                        if (correspondingPiece != null) {
 
-                    if (correspondingPiece != null) {
-
-                        unitList.get(i).setHasAttackedThisTurn(false);
-                        unitList.get(i).setHp(correspondingPiece.getCurrent_health());
-                        unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
-                        if (unitList.get(i).getHp() > 0) {
-                            pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                            unitList.get(i).setHasAttackedThisTurn(false);
+                            unitList.get(i).setHp(correspondingPiece.getCurrent_health());
+                            unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
+                            if (unitList.get(i).getHp() > 0) {
+                                pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                            }
+                            //TODO legg inn at når alle piecene dine er døde så taper du
+                            posX = unitList.get(i).getPositionX();
+                            posY = unitList.get(i).getPositionY();
+                            unitPosition[posY][posX] = unitList.get(i);
+                        } else {
+                            unitList.remove(i);
+                            System.out.println(i + " removed");
                         }
-                        //TODO legg inn at når alle piecene dine er døde så taper du
-                        posX = unitList.get(i).getPositionX();
-                        posY = unitList.get(i).getPositionY();
-                        unitPosition[posY][posX] = unitList.get(i);
+
+
+                        System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
+                                + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
+                                + unitList.get(i).getPieceID());
                     }
                 }
-                else{
-                    unitList.remove(i);
-                    System.out.println(i + " removed");
-                }
-                System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
-                        + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
-                        + unitList.get(i).getPieceID());
-            }
+                    }
+
+
             ///////////////////////////////////////////////////////////////////////////////////
     }
 
