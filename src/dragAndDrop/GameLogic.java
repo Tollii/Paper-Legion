@@ -30,6 +30,8 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -561,7 +563,7 @@ public class GameLogic extends Application {
             for(int j=0; j<unitPosition[i].length; j++){
                 if (unitPosition[i][j] != null && unitPosition[i][j] != selectedUnit) {
 
-
+                    // Currently shows swordsman attack range wrong.
                     if ((((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() /tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY()/tileSize)) <= selectedUnit.getMaxAttackRange())
                         && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX()/tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY()/tileSize)) >= selectedUnit.getMinAttackRange()){
 
@@ -730,6 +732,24 @@ public class GameLogic extends Application {
 
                                     deDrawUnits();
                                     drawUnits();
+
+                                    if (checkForWinner() != 0) {
+                                        //Game is won.
+                                        Stage winner_alert = new Stage();
+                                        winner_alert.initModality(Modality.APPLICATION_MODAL);
+                                        winner_alert.setTitle("Game over!");
+                                        Text winner = new Text();
+                                        if (checkForWinner() == 1) {
+                                            winner.setText("You lose!");
+                                        } else {
+                                            winner.setText("You win!");
+                                        }
+                                        VBox content = new VBox();
+                                        content.getChildren().add(winner);
+                                        Scene scene = new Scene(content);
+                                        winner_alert.setScene(scene);
+                                        winner_alert.showAndWait();
+                                    }
 
                                     movementPhase = true;
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
