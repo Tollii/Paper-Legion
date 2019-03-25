@@ -30,7 +30,7 @@
             </VBox>
          </bottom>
          <center>
-            <JFXTextArea focusColor="#c9c8c8" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking. Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " unFocusColor="#c9c8c8" BorderPane.alignment="CENTER" />
+            <JFXTextArea focusColor="#c9c8c8" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking. Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. &#10;&#10;Controlls:&#10;Left click to select piece, right click to unselect" unFocusColor="#c9c8c8" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </children>
