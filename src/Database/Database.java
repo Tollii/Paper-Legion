@@ -422,7 +422,7 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         String sqlsetning = "select Pieces.piece_id, Pieces.match_id, Pieces.player_id,position_x, position_y, unit_type_id, current_health from Pieces \n" +
                 "join Units U on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id and Pieces.player_id = U.player_id\n" +
-                "where Pieces.match_id=?ª;";
+                "where Pieces.match_id=?;";
         try {
             myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlsetning);
