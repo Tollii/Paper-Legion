@@ -434,7 +434,7 @@ public class GameLogic extends Application {
         int id;
         // If there is a unit on the selected tile.
         if(yourTurn) {
-            if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosX][attackPosY].getHp() > 0) {
+            if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosY][attackPosX].getHp() > 0) {
                 // If within attack range.
                 if (attackRange(attackPosX, attackPosY)) {
                     // If attacked unit is not itself.
