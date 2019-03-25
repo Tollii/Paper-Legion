@@ -733,7 +733,7 @@ public class GameLogic extends Application {
                                     deDrawUnits();
                                     drawUnits();
 
-                                    if (checkForWinner() != 0) {
+                                    if (checkForWinner() != -1) {
                                         //Game is won.
                                         Stage winner_alert = new Stage();
                                         winner_alert.initModality(Modality.APPLICATION_MODAL);
@@ -745,6 +745,7 @@ public class GameLogic extends Application {
                                             winner.setText("You win!");
                                         }
                                         VBox content = new VBox();
+                                        content.setPadding(new Insets(20, 20, 20, 20));
                                         content.getChildren().add(winner);
                                         Scene scene = new Scene(content);
                                         winner_alert.setScene(scene);
