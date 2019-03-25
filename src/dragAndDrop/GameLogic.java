@@ -739,6 +739,8 @@ public class GameLogic extends Application {
                                     //What will happen when it is your turn again.
 
                                     //Increments turn. Back to your turn.
+                                    deSelect(rSidePanel, description);
+                                    selectedUnit = null;
 
                                     turn++;
                                     turnCounter.setText("TURN: " + turn);
