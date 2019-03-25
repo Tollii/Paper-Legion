@@ -286,7 +286,6 @@ public class GameLogic extends Application {
                 System.out.println(j + " playerid: " + pieces.get(j).getPlayerId() + " pos X: " + pieces.get(j).getPositionX() + " pos y: "
                         + pieces.get(j).getPositionY() + " hp: " + pieces.get(j).getCurrent_health() + " piece id: "
                 + pieces.get(j).getPieceId());
-                if(unitList.get(j).getHp() > 0) {
 
                     PieceSetup correspondingPiece = null;
 
@@ -329,7 +328,7 @@ public class GameLogic extends Application {
                     }
 
                 }
-                    }
+
 
 
             ///////////////////////////////////////////////////////////////////////////////////
