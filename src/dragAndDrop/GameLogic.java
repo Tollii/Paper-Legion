@@ -316,16 +316,18 @@ public class GameLogic extends Application {
                             posX = unitList.get(i).getPositionX();
                             posY = unitList.get(i).getPositionY();
                             unitPosition[posY][posX] = unitList.get(i);
+                            System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
+                                    + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
+                                    + unitList.get(i).getPieceID());
                         } else {
                             unitList.remove(i);
                             System.out.println(i + " removed");
                         }
 
 
-                        System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
-                                + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
-                                + unitList.get(i).getPieceID());
+
                     }
+
                 }
                     }
 
