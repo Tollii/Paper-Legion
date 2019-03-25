@@ -288,34 +288,37 @@ public class GameLogic extends Application {
                     PieceSetup correspondingPiece = null;
 
                     //TODO review this for-loop
-                    for (int j = 0; j < unitList.size(); j++) {
-                        if(unitList.get(i).getEnemy()){
-                            if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
+                    for (int j = 0; j < pieces.size(); j++) {
+                        if (unitList.get(i).getEnemy()) {
+                            if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
                             }
-                        }else{
-                            if(pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
+                        } else {
+                            if (pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
                             }
                         }
                     }
-                    unitList.get(i).setHasAttackedThisTurn(false);
-                    unitList.get(i).setHp(correspondingPiece.getCurrent_health());
-                    unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
-                    if (unitList.get(i).getHp() > 0) {
-                        pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+
+                    if (correspondingPiece != null) {
+
+                        unitList.get(i).setHasAttackedThisTurn(false);
+                        unitList.get(i).setHp(correspondingPiece.getCurrent_health());
+                        unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
+                        if (unitList.get(i).getHp() > 0) {
+                            pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                        }
+                        //TODO legg inn at når alle piecene dine er døde så taper du
+                        posX = unitList.get(i).getPositionX();
+                        posY = unitList.get(i).getPositionY();
+                        unitPosition[posY][posX] = unitList.get(i);
                     }
-                    //TODO legg inn at når alle piecene dine er døde så taper du
-                    posX = unitList.get(i).getPositionX();
-                    posY = unitList.get(i).getPositionY();
-                    unitPosition[posY][posX] = unitList.get(i);
                 }
                 else{
                     unitList.remove(i);
                 }
             }
             ///////////////////////////////////////////////////////////////////////////////////
-
     }
 
     public void deDrawUnits(){
