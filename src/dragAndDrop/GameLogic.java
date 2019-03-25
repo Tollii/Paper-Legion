@@ -172,6 +172,7 @@ public class GameLogic extends Application {
                 db.sendTurn(turn);
                 deSelect(rSidePanel, description);
                 selectedUnit = null;
+                winner();
                 waitForTurn();
             }
         });
@@ -683,6 +684,26 @@ public class GameLogic extends Application {
         }
     }
 
+    public void winner(){
+        if (checkForWinner() != 0) {
+            //Game is won.
+            Stage winner_alert = new Stage();
+            winner_alert.initModality(Modality.APPLICATION_MODAL);
+            winner_alert.setTitle("Game over!");
+            Text winner = new Text();
+            if (checkForWinner() == 1) {
+                winner.setText("You lose!");
+            } else {
+                winner.setText("You win!");
+            }
+            VBox content = new VBox();
+            content.getChildren().add(winner);
+            Scene scene = new Scene(content);
+            winner_alert.setScene(scene);
+            winner_alert.showAndWait();
+        }
+    }
+
 
     public static void main(String[] args) {
         //Shutdown hook. CLoses stuff when program exits.
@@ -733,23 +754,7 @@ public class GameLogic extends Application {
                                     deDrawUnits();
                                     drawUnits();
 
-                                    if (checkForWinner() != 0) {
-                                        //Game is won.
-                                        Stage winner_alert = new Stage();
-                                        winner_alert.initModality(Modality.APPLICATION_MODAL);
-                                        winner_alert.setTitle("Game over!");
-                                        Text winner = new Text();
-                                        if (checkForWinner() == 1) {
-                                            winner.setText("You lose!");
-                                        } else {
-                                            winner.setText("You win!");
-                                        }
-                                        VBox content = new VBox();
-                                        content.getChildren().add(winner);
-                                        Scene scene = new Scene(content);
-                                        winner_alert.setScene(scene);
-                                        winner_alert.showAndWait();
-                                    }
+                                    winner();
 
                                     movementPhase = true;
                                     //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
