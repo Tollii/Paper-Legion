@@ -435,42 +435,44 @@ public class GameLogic extends Application {
         int attackPosY = getPosYFromEvent(event);
         int id;
         // If there is a unit on the selected tile.
-        if (unitPosition[attackPosY][attackPosX] != null) {
-            // If within attack range.
-            if(attackRange(attackPosX, attackPosY)){
-                // If attacked unit is not itself.
-                if (selectedUnit != unitPosition[attackPosY][attackPosX]){
-                    // Attack is executed and unit takes damage.
-                    unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
+        if(yourTurn) {
+            if (unitPosition[attackPosY][attackPosX] != null) {
+                // If within attack range.
+                if (attackRange(attackPosX, attackPosY)) {
+                    // If attacked unit is not itself.
+                    if (selectedUnit != unitPosition[attackPosY][attackPosX]) {
+                        // Attack is executed and unit takes damage.
+                        unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
 
-                    attackCount++;
+                        attackCount++;
 
-                    //Plays audio cue for each type.
-                    if (selectedUnit.getType().equalsIgnoreCase("Swordsman")){
-                        sword.play();
-                    } else if(selectedUnit.getType().equalsIgnoreCase("Archer")){
-                        bow.play();
-                    }
-                    db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
-
-
-                    //If units health is zero. Remove it from the board.
-                    if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
-                        //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
-                        pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
-                        unitPosition[attackPosY][attackPosX].setHp(0);
-                        for (int i = 0; i < unitList.size(); i++){
-                            if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()){
-                                unitList.remove(i);
-                            }
+                        //Plays audio cue for each type.
+                        if (selectedUnit.getType().equalsIgnoreCase("Swordsman")) {
+                            sword.play();
+                        } else if (selectedUnit.getType().equalsIgnoreCase("Archer")) {
+                            bow.play();
                         }
-                        unitPosition[attackPosY][attackPosX] = null;
-                        unitList.removeAll(Collections.singletonList(null));
+                        db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
 
+
+                        //If units health is zero. Remove it from the board.
+                        if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
+                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
+                            pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
+                            unitPosition[attackPosY][attackPosX].setHp(0);
+                            for (int i = 0; i < unitList.size(); i++) {
+                                if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()) {
+                                    unitList.remove(i);
+                                }
+                            }
+                            unitPosition[attackPosY][attackPosX] = null;
+                            unitList.removeAll(Collections.singletonList(null));
+
+                        }
+
+                        selectedUnit.setHasAttackedThisTurn(true);
+                        clearHighlight();
                     }
-
-                    selectedUnit.setHasAttackedThisTurn(true);
-                    clearHighlight();
                 }
             }
         }
