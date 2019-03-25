@@ -321,8 +321,6 @@ public class GameLogic extends Application {
                     }
                 }
                 else{
-                    unitList.remove(i);
-                    System.out.println(i + " removed");
                 }
                 System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
                         + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
