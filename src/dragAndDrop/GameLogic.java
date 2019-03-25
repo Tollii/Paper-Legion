@@ -283,7 +283,7 @@ public class GameLogic extends Application {
 
                     PieceSetup correspondingPiece = null;
 
-                    //TODO review this for-loop
+                    //TODO review this for-loop. Was made to fix the problem of units switching teams, did not fix the problem.
                     for (int j = 0; j < pieces.size(); j++) {
                         if(unitList.get(i).getEnemy()){
                             if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
