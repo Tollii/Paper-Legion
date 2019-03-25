@@ -740,7 +740,7 @@ public class GameLogic extends Application {
                                         VBox content = new VBox();
                                         content.setPadding(new Insets(20, 20, 20, 20));
                                         content.getChildren().add(winner);
-                                        Scene scene = new Scene(content,250,250);
+                                        Scene scene = new Scene(content, 250, 250);
                                         winner_alert.setScene(scene);
                                         winner_alert.showAndWait();
                                     }

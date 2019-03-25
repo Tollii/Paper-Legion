@@ -328,7 +328,6 @@ public class Database {
         PreparedStatement playerInsert2 = null;
 
 
-
         //Player 1
         String sqlPlayer1piece = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,0);";
         String sqlPlayer1piece2 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(2,?,?,3,0);";
@@ -576,6 +575,7 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+
     public boolean exportPieceMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
@@ -675,7 +675,7 @@ public class Database {
             preparedStatement = myConn.prepareStatement(sqlString);
             resultSet = preparedStatement.executeQuery();
             myConn.commit();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
                 resultSet.next();
             }
@@ -861,8 +861,7 @@ public class Database {
             if (preparedStatement.executeUpdate() > 0) {
                 myConn.commit();
                 return 1;
-            }
-            else return -1;
+            } else return -1;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -999,8 +998,7 @@ public class Database {
             if (preparedStatement.executeUpdate() > 0) {
                 myConn.commit();
                 return 1;
-            }
-            else return -1;
+            } else return -1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
