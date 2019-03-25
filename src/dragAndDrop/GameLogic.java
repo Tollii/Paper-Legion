@@ -439,7 +439,7 @@ public class GameLogic extends Application {
                 // If within attack range.
                 if (attackRange(attackPosX, attackPosY)) {
                     // If attacked unit is not itself.
-                    if (selectedUnit != unitPosition[attackPosY][attackPosX]) {
+                    if (selectedUnit != unitPosition[attackPosY][attackPosX]  && unitPosition[attackPosY][attackPosX].getEnemy()) {
                         // Attack is executed and unit takes damage.
                         unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
 
