@@ -351,7 +351,7 @@ public class GameLogic extends Application {
         int posY = getPosYFromEvent(event);
 
 
-        if (!(posX > boardSize || posY > boardSize || posX < 0 || posY < 0 ) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy() && unitPosition[posY][posX].getHp() > 0) {
+         if (!(posX > boardSize || posY > boardSize || posX < 0 || posY < 0 ) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy() && unitPosition[posY][posX].getHp() > 0) {
 
             unitPosition[posY][posX].setPosition((int)(unitPosition[posY][posX].getTranslateX() / tileSize), (int)(unitPosition[posY][posX].getTranslateY() / tileSize));
             unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
