@@ -169,6 +169,7 @@ public class GameLogic extends Application {
                 //Add the next turn into the database.
                 db.sendTurn(turn);
                 deSelect(rSidePanel, description);
+                selectedUnit = null;
                 waitForTurn();
             }
         });
