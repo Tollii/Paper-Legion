@@ -313,11 +313,11 @@ public class GameLogic extends Application {
                         unitList.get(i).setPosition(correspondingPiece.getPositionX(), correspondingPiece.getPositionY());
                         if (unitList.get(i).getHp() > 0) {
                             pieceContainer.getChildren().add(unitList.get(i).getPieceAvatar());
+                            posX = unitList.get(i).getPositionX();
+                            posY = unitList.get(i).getPositionY();
+                            unitPosition[posY][posX] = unitList.get(i);
                         }
-                        //TODO legg inn at når alle piecene dine er døde så taper du
-                        posX = unitList.get(i).getPositionX();
-                        posY = unitList.get(i).getPositionY();
-                        unitPosition[posY][posX] = unitList.get(i);
+
                     }
                 }
                 else{
