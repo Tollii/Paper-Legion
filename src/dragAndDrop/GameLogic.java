@@ -141,8 +141,7 @@ public class GameLogic extends Application {
                 //Increments turn. Opponents Turn.
                 turn++;
 
-                //Add the next turn into the database.
-                db.sendTurn(turn);
+
 
                 turnCounter.setText("TURN: " + turn);
                 endTurnButton.setText("Waiting for other player");
@@ -158,12 +157,17 @@ public class GameLogic extends Application {
                 }
 
 
+
+
                 /////SEND ATTACKS////
                 //TODO Having a attackList just like movementList. Alternative solution below.
 
                 // Alternative solution to creating a List of attacks in the future.
                 // Finds every enemy unit that was damaged and sends their new info the database.
                 //Wait for you next turn
+
+                //Add the next turn into the database.
+                db.sendTurn(turn);
                 waitForTurn();
             }
         });
