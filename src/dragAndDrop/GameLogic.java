@@ -657,6 +657,30 @@ public class GameLogic extends Application {
         return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
+    private int checkForWinner() {
+        int yourPieces = 0;
+        int opponentsPieces = 0;
+        for(int i = 0; i< unitList.size(); i++){
+            if(unitList.get(i).getHp() <= 0){
+                if(unitList.get(i).getEnemy()){
+                    opponentsPieces++;
+                }
+                else{
+                    yourPieces++;
+                }
+            }
+        }
+        if(yourPieces == 0){
+            return 1;
+        }
+        else if(opponentsPieces == 0){
+            return 0;
+        }
+        else {
+            return -1;
+        }
+    }
+
 
     public static void main(String[] args) {
         //Shutdown hook. CLoses stuff when program exits.
