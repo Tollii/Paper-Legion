@@ -283,19 +283,25 @@ public class GameLogic extends Application {
 
             ///////////////////////////////LOAD ALL PIECES ONTO BOARD ///////////////////////////////
             for (int i = 0; i < unitList.size(); i++) {
+                System.out.println(i + " playerid: " + pieces.get(i).getPlayerId() + " pos X: " + pieces.get(i).getPositionX() + " pos y: "
+                        + pieces.get(i).getPositionY() + " hp: " + pieces.get(i).getCurrent_health() + " piece id: "
+                + pieces.get(i).getPieceId());
                 if(unitList.get(i).getHp() > 0) {
 
                     PieceSetup correspondingPiece = null;
 
                     //TODO review this for-loop
-                    for (int j = 0; j < pieces.size(); j++) {
-                        if (unitList.get(i).getEnemy()) {
-                            if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
+                    for (int j = 0; j < unitList.size(); j++) {
+                        if(unitList.get(i).getEnemy()){
+                            if(pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()){
                                 correspondingPiece = pieces.get(j);
+                                System.out.println(i + " is enemy " + j +  " in this position in Pieces");
+
                             }
                         } else {
                             if (pieces.get(j).getPlayerId() == user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
                                 correspondingPiece = pieces.get(j);
+                                System.out.println(i + " is friendly " + j +  " in this position in Pieces");
                             }
                         }
                     }
@@ -316,7 +322,11 @@ public class GameLogic extends Application {
                 }
                 else{
                     unitList.remove(i);
+                    System.out.println(i + " removed");
                 }
+                System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
+                        + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
+                        + unitList.get(i).getPieceID());
             }
             ///////////////////////////////////////////////////////////////////////////////////
     }
