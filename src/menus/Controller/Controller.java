@@ -21,7 +21,7 @@ public class Controller {
 
         Parent root2 = null;
         try {
-            root2 = FXMLLoader.load(getClass().getResource("/sample/View/"+fxml));
+            root2 = FXMLLoader.load(getClass().getResource("/menus/View/"+fxml));
 
         } catch (IOException e) {
             e.printStackTrace();
