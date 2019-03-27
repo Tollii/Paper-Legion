@@ -755,7 +755,7 @@ public class GameLogic extends Application {
                     try {
                         while (!yourTurn) {
                             System.out.println("sleeps thread " + Thread.currentThread());
-                            Thread.sleep(5000);
+                            Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
                             if (db.getTurnPlayer() == user_id) {
