@@ -18,13 +18,17 @@ public class Controller {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(currentClass.getResource(fxmlDir));
 
+
+        Parent root2 = null;
         try {
-            loader.load();
+            root2 = FXMLLoader.load(getClass().getResource("/sample/View/"+fxml));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Parent root = loader.getRoot();
-        Main.window.setScene(new Scene(root, stageWidth, stageHeight));
-        Main.window.show();
+
+        Main.rootScene.setRoot(root2);
+
+
     }
 }
