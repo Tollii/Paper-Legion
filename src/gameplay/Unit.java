@@ -204,7 +204,11 @@ public class Unit extends Rectangle {
         return descriptionTag + "\n" +
                 "\nHp: " + hp +
                 "\nMovement Range: " + movementRange +
-                "\nAttack: " + attack + "x\n" + "\n" + description;
+                "\nAttack: " + attack +
+                "\nAttack Range min: " + minAttackRange +
+                "\nAttack Range max " + maxAttackRange +
+                "\n" +
+                "\n" + description;
     }
 
 
