@@ -1,10 +1,10 @@
 package gameplay;
 
-import tmp.Database;
+import database.Database;
 
 import java.util.ArrayList;
 
-import static tmp.Variables.db;
+import static database.Variables.db;
 
 public class SetUp {
 

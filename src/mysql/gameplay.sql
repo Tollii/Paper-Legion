@@ -1,5 +1,5 @@
 
--- Send turn to tmp
+-- Send turn to database
 INSERT INTO Turns(turn_id,match_id, player) VALUES (?,?,?);
 
 -- For polling during opponents turn

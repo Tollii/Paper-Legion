@@ -1,4 +1,4 @@
-package tmp;
+package database;
 
 import gameplay.Move;
 import gameplay.PieceSetup;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static tmp.Variables.*;
+import static database.Variables.*;
 
 
 public class Database {
@@ -318,7 +318,7 @@ public class Database {
         }
     }
 
-    //Inserts pieces into tmp
+    //Inserts pieces into database
     public void insertPieces() {
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();
@@ -406,7 +406,7 @@ public class Database {
         }
     }
 
-    //puts the units from the tmp into an arraylist
+    //puts the units from the database into an arraylist
     public ArrayList<PieceSetup> importPlacementPieces() {
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
         ResultSet result = null;

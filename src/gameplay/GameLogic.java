@@ -37,13 +37,13 @@ import javafx.stage.StageStyle;
 
 import java.sql.SQLException;
 
-import static tmp.Variables.*;
+import static database.Variables.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static tmp.Variables.db;
-import static tmp.Variables.user_id;
+import static database.Variables.db;
+import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
@@ -129,12 +129,12 @@ public class GameLogic extends Application {
 
         drawUnits();
 
-        //If you are player 2. Start polling the tmp for next turn.
+        //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
         } else {
-            //Enters turn 1 into tmp.
+            //Enters turn 1 into database.
             db.sendTurn(turn);
         }
 
@@ -163,10 +163,10 @@ public class GameLogic extends Application {
                 //TODO Having a attackList just like movementList. Alternative solution below.
 
                 // Alternative solution to creating a List of attacks in the future.
-                // Finds every enemy unit that was damaged and sends their new info the tmp.
+                // Finds every enemy unit that was damaged and sends their new info the database.
                 //Wait for you next turn
 
-                //Add the next turn into the tmp.
+                //Add the next turn into the database.
                 db.sendTurn(turn);
                 deSelect(rSidePanel, description);
                 selectedUnit = null;
@@ -742,7 +742,7 @@ public class GameLogic extends Application {
                 while (!yourTurn) {
                     Thread.sleep(5000);
                     System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                    //Checks the tmp continually to check if the turn registered in the tmp is yours.
+                    //Checks the database continually to check if the turn registered in the database is yours.
                     if (db.getTurnPlayer() == user_id) {
                         yourTurn = true;
                     }
@@ -786,7 +786,7 @@ public class GameLogic extends Application {
 
     @Override
     public void stop() {
-        // Executed when the application shuts down. User is logged out and tmp connection is closed.
+        // Executed when the application shuts down. User is logged out and database connection is closed.
         if (user_id > 0) {
             db.logout(user_id);
         }

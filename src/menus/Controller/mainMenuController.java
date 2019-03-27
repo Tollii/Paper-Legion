@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import menus.Main;
 
 import java.util.Timer;
-import static tmp.Variables.*;
+import static database.Variables.*;
 
 public class mainMenuController extends Controller {
     private static boolean findGameClicked = false;

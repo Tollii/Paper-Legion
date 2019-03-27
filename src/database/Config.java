@@ -1,4 +1,4 @@
-package tmp;
+package database;
 
 public class Config {
 

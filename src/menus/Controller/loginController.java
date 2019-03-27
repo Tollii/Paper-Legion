@@ -6,8 +6,8 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static tmp.Variables.db;
-import static tmp.Variables.user_id;
+import static database.Variables.db;
+import static database.Variables.user_id;
 
 public class loginController extends Controller {
 

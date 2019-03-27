@@ -30,7 +30,7 @@ public class Unit extends Rectangle {
 
     ////UTILITIES////
     private final int LOW_HP_THRESHOLD = 20;
-    private int pieceID; //Same as pieceID in the tmp
+    private int pieceID; //Same as pieceID in the database
     private boolean enemy;
     private boolean hasAttackedThisTurn;
     private GridPane pieceAvatar =  new GridPane();
