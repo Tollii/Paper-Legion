@@ -16,8 +16,10 @@
 
 package gameplay;
 
+import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -747,7 +749,7 @@ public class GameLogic extends Application {
     private void waitForTurn() {
 
         // Runnable lambda implementation for turn waiting with it's own thread
-        Runnable waitTurnRunnable = new Runnable() {
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -774,8 +776,10 @@ public class GameLogic extends Application {
                         selectedUnit = null;
 
                         turn++;
-                        turnCounter.setText("TURN: " + turn);
-                        endTurnButton.setText("End turn");
+                        Platform.runLater(()->{
+                            turnCounter.setText("TURN: " + turn);
+                            endTurnButton.setText("End turn");
+                        });
 
                         deDrawUnits();
                         drawUnits();
@@ -790,10 +794,12 @@ public class GameLogic extends Application {
                 }
             }
 
+            @Override
             public synchronized void doStop(){
                 this.doStop = true;
             }
 
+            @Override
             public synchronized boolean keepRunning(){
                 return !this.doStop;
             }
