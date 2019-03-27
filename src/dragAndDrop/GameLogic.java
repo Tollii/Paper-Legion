@@ -657,9 +657,11 @@ public class GameLogic extends Application {
         return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
+    // method that checks if the game has been won by either player. Returns 1 if you lost, 0 if you won or -1 if noone has won yet.
     private int checkForWinner() {
         int yourPieces = 0;
         int opponentsPieces = 0;
+        //Goes through all units and counts how many are alive for each player.
         for (int i = 0; i < unitList.size(); i++) {
             if (unitList.get(i).getHp() >= 0) {
                 if (unitList.get(i).getEnemy()) {
@@ -678,6 +680,7 @@ public class GameLogic extends Application {
         }
     }
 
+    // Opens the winner/loser pop-up on the screen and ends the game.
     public void winner(){
         if (checkForWinner() != -1) {
             //Game is won.
@@ -725,10 +728,9 @@ public class GameLogic extends Application {
             try {
                 while (!yourTurn) {
                     Thread.sleep(5000);
-                    //When player in database matches your own user_id it is your turn again.
                     System.out.println("Whose turn is it? " + db.getTurnPlayer());
+                    //Checks the database continually to check if the turn registered in the database is yours.
                     if (db.getTurnPlayer() == user_id) {
-                        System.out.println("yourTurn endres");
                         yourTurn = true;
                     }
                     if (yourTurn) {
@@ -743,17 +745,22 @@ public class GameLogic extends Application {
                                     deSelect(rSidePanel, description);
                                     selectedUnit = null;
 
-                                    turn++;
+                                    //Increment the turn variable
+                                     turn++;
+
+                                    //Updates UI
                                     turnCounter.setText("TURN: " + turn);
                                     endTurnButton.setText("End turn");
 
+                                    //All units are removed from the visual board and then drawn in again in the correct locations.
                                     deDrawUnits();
                                     drawUnits();
 
+                                    //Checks if the opponent won the game.
                                     winner();
 
+                                    //MovementPhase boolean is reset so that you can start your movementphase.
                                     movementPhase = true;
-                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
                                 });
                     }
                 }
