@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import menus.Main;
 
 import java.io.IOException;
 
@@ -34,9 +36,23 @@ public class winner extends Application {
         winner.setStyle("-fx-font-size:32px;");
         //Button endgame = new Button("Return to menu");
 
+        //winner_alert.setStyle("-fx-effect: innershadow(gaussian, #039ed3, 2, 1.0, 0, 0);");
+
         JFXButton endgame = new JFXButton("Return to menu");
 
-        // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+        endgame.setOnAction(event -> {
+
+            String fxmlDir = "/menus/View/mainMenu.fxml";
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(fxmlDir));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = loader.getRoot();
+            Main.window.setScene(new Scene(root));
+        });
 
         winner.setText("You win!");
 

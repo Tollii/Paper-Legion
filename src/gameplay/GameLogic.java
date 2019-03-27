@@ -56,14 +56,14 @@ public class GameLogic extends Application {
     private final int initialWindowSizeY = 768;
     private Thread thread;
 
-
     ////SCENE ELEMENTS////
     private Scene scene;                                //Scene for second and third phase of the game
     private HBox root = new HBox();                     //Root container
     private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
     private VBox rSidePanel = new VBox();               //Sidepanel for unit description and End turn button
     private Label description = new Label();
-    private JFXButton endTurnButton = new JFXButton("end turn");
+    private JFXButton endTurnButton = new JFXButton("End turn");
+    private JFXButton surrenderButton = new JFXButton("Surrender");
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
@@ -143,6 +143,11 @@ public class GameLogic extends Application {
             endTurn();
         });
 
+        ////SURRENDER HANDLER////
+        surrenderButton.setOnAction(event -> {
+            surrender();
+        });
+
 
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -205,11 +210,16 @@ public class GameLogic extends Application {
         endTurnButton.setTextFill(Color.WHITE);
         endTurnButton.setStyle("-fx-background-color: #000000");
 
+        surrenderButton.setPrefWidth(150);
+        surrenderButton.setPrefHeight(75);
+        surrenderButton.setTextFill(Color.WHITE);
+        surrenderButton.setStyle("-fx-background-color: #000000");
+
         description.setStyle("-fx-font-family: 'Arial Black'");
         description.setPadding(new Insets(0, 0, 350, 0));
 
         rSidePanel.setPrefWidth(250);
-        rSidePanel.getChildren().addAll(turnCounter, endTurnButton);
+        rSidePanel.getChildren().addAll(turnCounter,endTurnButton,surrenderButton);
         rSidePanel.setPrefWidth(650);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -253,6 +263,10 @@ public class GameLogic extends Application {
             winner();
             waitForTurn();
         }
+    }
+
+    private void surrender() {
+        //TODO
     }
 
     private void createUnits() {
@@ -702,7 +716,6 @@ public class GameLogic extends Application {
                 db.incrementGamesWon();
                 winner.setText("You Lose");
             }
-
             else {
                 winner.setText("You win!");
             }
