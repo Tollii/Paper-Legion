@@ -3,7 +3,7 @@ package menus.Controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import static database.Variables.*;
+import static tmp.Variables.*;
 
 public class StatsController extends Controller{
 

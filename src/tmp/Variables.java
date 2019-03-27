@@ -1,4 +1,4 @@
-package database;
+package tmp;
 
 public class Variables {
     public static Database db;

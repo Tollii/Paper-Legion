@@ -25,7 +25,7 @@ UPDATE Users SET online_status = 0;
 -- delete TestUser
 DELETE FROM Users WHERE username = 'testUserReg';
 
--- Shows current process to the database. Close your stuff.
+-- Shows current process to the tmp. Close your stuff.
 SHOW PROCESSLIST;
 
 UPDATE Users SET online_status = 0 WHERE username = 'tolnes';

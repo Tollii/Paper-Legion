@@ -1,4 +1,4 @@
-package database;
+package tmp;
 
 /**
  *
@@ -124,7 +124,7 @@ public class ConnectionPool {
     // Small test that finds ISBN and forfatter from one of the programming exercises and then shuts down the connection pools
     public static void main(String[]args){
 /*
-        // Does not work with Thomas' database
+        // Does not work with Thomas' tmp
 
         ConnectionPool pool;
 

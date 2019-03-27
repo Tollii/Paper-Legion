@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static database.Variables.db;
+import static tmp.Variables.db;
 
 public class signUpController extends Controller {
 
@@ -48,7 +48,7 @@ public class signUpController extends Controller {
         signUpButton.setOnAction(event -> {
             //Checks if both password fields are the same.
             if (passwordInput.getText().equals(confirmPasswordInput.getText())) {
-                // Tries to register user in database.
+                // Tries to register user in tmp.
                 int signup = db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText());
                 if (signup > 0) {
                     changeScene("login.fxml");

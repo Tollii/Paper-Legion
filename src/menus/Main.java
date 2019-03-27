@@ -1,6 +1,6 @@
 package menus;
 
-import database.Database;
+import tmp.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +9,8 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-import static database.Variables.db;
-import static database.Variables.user_id;
+import static tmp.Variables.db;
+import static tmp.Variables.user_id;
 
 public class Main extends Application {
 
@@ -20,7 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
 
-        //database is a static class that starts when the application starts. All queries from the the database goes through it.
+        //tmp is a static class that starts when the application starts. All queries from the the tmp goes through it.
         db = new Database();
         Parent root = FXMLLoader.load(getClass().getResource("/menus/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
@@ -46,7 +46,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        // Executed when the application shuts down. User is logged out and database connection is closed.
+        // Executed when the application shuts down. User is logged out and tmp connection is closed.
         if (user_id > 0) {
             db.logout(user_id);
         }
