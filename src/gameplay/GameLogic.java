@@ -743,9 +743,6 @@ public class GameLogic extends Application {
         }
     }
 
-
-
-
     private void waitForTurn() {
 
         // Runnable lambda implementation for turn waiting with it's own thread
@@ -772,11 +769,10 @@ public class GameLogic extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        deSelect(rSidePanel, description);
-                        selectedUnit = null;
-
-                        turn++;
                         Platform.runLater(()->{
+                            deSelect(rSidePanel, description);
+                            selectedUnit = null;
+                            turn++;
                             turnCounter.setText("TURN: " + turn);
                             endTurnButton.setText("End turn");
                         });
