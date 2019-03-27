@@ -266,7 +266,6 @@ public class GameLogic extends Application {
     }
 
     private void surrender() {
-        //TODO
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
         confirm_alert.setTitle("Game over!");
@@ -283,7 +282,7 @@ public class GameLogic extends Application {
         });
 
         surrender_no.setOnAction(event -> {
-            //TODO
+            confirm_alert.close();
         });
 
         HBox buttons = new HBox();
