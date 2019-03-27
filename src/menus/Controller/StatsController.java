@@ -1,9 +1,9 @@
-package Menus.Controller;
+package menus.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import static Database.Variables.*;
+import static database.Variables.*;
 
 public class StatsController extends Controller{
 

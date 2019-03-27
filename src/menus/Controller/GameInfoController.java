@@ -1,4 +1,4 @@
-package Menus.Controller;
+package menus.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;

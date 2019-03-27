@@ -14,7 +14,7 @@
 //      ##    ##       ##     ## ##     ##       ##     ##         //
 //      ##    ######## ##     ## ##     ##     ######   ##         //
 
-package Gameplay;
+package gameplay;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
@@ -37,13 +37,13 @@ import javafx.stage.StageStyle;
 
 import java.sql.SQLException;
 
-import static Database.Variables.*;
+import static database.Variables.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static Database.Variables.db;
-import static Database.Variables.user_id;
+import static database.Variables.db;
+import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
@@ -82,8 +82,8 @@ public class GameLogic extends Application {
     ArrayList<Unit> unitList = new ArrayList<Unit>();
 
     ////AUDIO ELEMENTS////
-    private AudioClip sword = new AudioClip(this.getClass().getResource("/Gameplay/assets/hitSword.wav").toString());
-    private AudioClip bow = new AudioClip(this.getClass().getResource("/Gameplay/assets/arrow.wav").toString());
+    private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
+    private AudioClip bow = new AudioClip(this.getClass().getResource("/gameplay/assets/arrow.wav").toString());
 
     ////COLORS////
     private Paint movementHighlightColor = Color.GREENYELLOW;

@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Menus.Controller.GameInfoController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.Controller.GameInfoController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <top>
@@ -35,7 +35,7 @@
             </VBox>
          </bottom>
          <center>
-            <JFXTextArea focusColor="#c9c8c8" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the Gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking. Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " unFocusColor="#c9c8c8" BorderPane.alignment="CENTER">
+            <JFXTextArea focusColor="#c9c8c8" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking. Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " unFocusColor="#c9c8c8" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="100.0" right="100.0" top="25.0" />
                </BorderPane.margin></JFXTextArea>

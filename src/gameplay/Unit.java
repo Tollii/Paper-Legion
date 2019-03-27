@@ -1,4 +1,4 @@
-package Gameplay;
+package gameplay;
 
 
 import javafx.geometry.Pos;
@@ -30,7 +30,7 @@ public class Unit extends Rectangle {
 
     ////UTILITIES////
     private final int LOW_HP_THRESHOLD = 20;
-    private int pieceID; //Same as pieceID in the Database
+    private int pieceID; //Same as pieceID in the database
     private boolean enemy;
     private boolean hasAttackedThisTurn;
     private GridPane pieceAvatar =  new GridPane();
@@ -77,20 +77,20 @@ public class Unit extends Rectangle {
 
             case "Archer":
                 if(enemy){
-                    Image archerGold = new Image("/Gameplay/assets/archer_gold.png");
+                    Image archerGold = new Image("/gameplay/assets/archer_gold.png");
                     this.setFill(new ImagePattern(archerGold));
                 } else{
-                    Image archerBlue = new Image("/Gameplay/assets/archer_blue.png");
+                    Image archerBlue = new Image("/gameplay/assets/archer_blue.png");
                     this.setFill(new ImagePattern(archerBlue));
                 }
                 break;
 
             case "Swordsman":
                 if(enemy){
-                    Image swordsmanGold = new Image("/Gameplay/assets/sword_gold.png");
+                    Image swordsmanGold = new Image("/gameplay/assets/sword_gold.png");
                     this.setFill(new ImagePattern(swordsmanGold));
                 } else{
-                    Image swordsmanBlue = new Image("/Gameplay/assets/sword_blue.png");
+                    Image swordsmanBlue = new Image("/gameplay/assets/sword_blue.png");
                     this.setFill(new ImagePattern(swordsmanBlue));
                 }
                 break;

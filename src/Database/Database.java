@@ -1,8 +1,8 @@
-package Database;
+package database;
 
-import Gameplay.Move;
-import Gameplay.PieceSetup;
-import Gameplay.ProtoUnitType;
+import gameplay.Move;
+import gameplay.PieceSetup;
+import gameplay.ProtoUnitType;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static Database.Variables.*;
+import static database.Variables.*;
 
 
 public class Database {
@@ -318,7 +318,7 @@ public class Database {
         }
     }
 
-    //Inserts pieces into Database
+    //Inserts pieces into database
     public void insertPieces() {
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();

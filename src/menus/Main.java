@@ -1,6 +1,6 @@
-package Menus;
+package menus;
 
-import Database.Database;
+import database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +9,8 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-import static Database.Variables.db;
-import static Database.Variables.user_id;
+import static database.Variables.db;
+import static database.Variables.user_id;
 
 public class Main extends Application {
 
@@ -20,9 +20,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
 
-        //Database is a static class that starts when the application starts. All queries from the the database goes through it.
+        //database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
-        Parent root = FXMLLoader.load(getClass().getResource("/Menus/View/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/menus/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();

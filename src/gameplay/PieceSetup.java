@@ -1,4 +1,4 @@
-package Gameplay;
+package gameplay;
 
 public class PieceSetup {
     private int pieceId;

@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 /**
  *
@@ -12,7 +12,6 @@ package Database;
  *
  */
 
-import Database.Config;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

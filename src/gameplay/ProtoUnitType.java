@@ -1,4 +1,4 @@
-package Gameplay;
+package gameplay;
 
 public class ProtoUnitType implements UnitType {
 

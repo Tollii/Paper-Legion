@@ -1,16 +1,14 @@
 package tests;
 
-import Database.Database;
+import database.Database;
 import org.junit.*;
 
 import static org.junit.Assert.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import Database.BasicConnectionPool;
-import Database.Cleaner;
-import org.junit.runners.MethodSorters;
+import database.BasicConnectionPool;
+import database.Cleaner;
 
 //@FixMethodOrder(MethodSorters.DEFAULT)
 public class SignUpLoginTest {
