@@ -26,8 +26,8 @@ public class Main extends Application {
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(850);
+        primaryStage.setMinHeight(650);
 
     }
 
