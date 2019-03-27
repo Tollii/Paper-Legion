@@ -775,12 +775,10 @@ public class GameLogic extends Application {
                             turn++;
                             turnCounter.setText("TURN: " + turn);
                             endTurnButton.setText("End turn");
+                            deDrawUnits();
+                            drawUnits();
+                            winner();
                         });
-
-                        deDrawUnits();
-                        drawUnits();
-
-                        winner();
 
                         movementPhase = true;
 
