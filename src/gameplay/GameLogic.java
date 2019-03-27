@@ -265,6 +265,9 @@ public class GameLogic extends Application {
         }
     }
 
+
+
+
     private void surrender() {
         //TODO
         Stage confirm_alert = new Stage();
@@ -279,7 +282,7 @@ public class GameLogic extends Application {
         JFXButton surrender_no = new JFXButton("No");
 
         surrender_yes.setOnAction(event -> {
-            //TODO
+            db.surrenderGame();
         });
 
         surrender_no.setOnAction(event -> {
@@ -736,6 +739,9 @@ public class GameLogic extends Application {
     // Opens the winner/loser pop-up on the screen and ends the game.
     public void winner(){
         int winnerOrLoser = checkForWinner();
+        if(db.checkForSurrender() == opponent_id){
+            winnerOrLoser = 0;
+        }
         if (winnerOrLoser != -1) {
             //Game is won or lost.
             Stage winner_alert = new Stage();
