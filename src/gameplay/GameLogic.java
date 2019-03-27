@@ -786,7 +786,7 @@ public class GameLogic extends Application {
             }
 
             public synchronized boolean keepRunning(){
-                return this.doStop == false;
+                return !this.doStop;
             }
         };
 

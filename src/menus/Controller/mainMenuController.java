@@ -1,5 +1,6 @@
 package menus.Controller;
 
+import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import gameplay.GameLogic;
 import gameplay.SetUp;
@@ -37,7 +38,7 @@ public class mainMenuController extends Controller {
     @FXML
     void initialize() {
 
-        Runnable searchGameRunnable = new Runnable() {
+        RunnableInterface searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -45,18 +46,27 @@ public class mainMenuController extends Controller {
                 while(keepRunning()){
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {
-                        mainMenuPlayButton.setText("Play");
-                        findGameClicked = false;
-                        db.abortMatch(user_id);
+                        Platform.runLater(() -> {
+                            findGameClicked = false;
+                            mainMenuPlayButton.setText("Play");
+                            db.abortMatch(user_id);
+                        });
+
                         this.doStop();
                     } else {
-                        findGameClicked = true;
+                        Platform.runLater(() -> {
+                            mainMenuPlayButton.setText("Abort");
+                        });
                         match_id = db.matchMaking_search(user_id);
+                        findGameClicked = true;
                         if(match_id > 0) {
                             // If you join a game, you are player 2.
                             yourTurn = false;
                             startGame = true;
-                            enterGame();
+                            Platform.runLater(
+                                    () ->{
+                                        enterGame();
+                                    });
                             this.doStop();
                         }
                         //if none available create own game
@@ -69,12 +79,11 @@ public class mainMenuController extends Controller {
                                     Thread.sleep(3000);
                                     gameEntered = db.pollGameStarted(match_id);
                                     if(gameEntered){
-                                        Platform.runLater(
-                                                () ->{
-                                                    enterGame();
-                                                    this.doStop();
-                                                }
-                                        );
+                                        Platform.runLater(()->{
+                                            enterGame();
+                                        });
+
+                                        this.doStop();
                                     }
 
                                 }
@@ -82,19 +91,18 @@ public class mainMenuController extends Controller {
                                 e.printStackTrace();
                             }
                         }
-
-                        mainMenuPlayButton.setText("Abort");
-                        this.doStop();
                     }
                 }
             }
 
-            public void doStop(){
+            @Override
+            public synchronized void doStop(){
                 this.doStop = true;
             }
 
-            public boolean keepRunning(){
-                return this.doStop == false;
+            @Override
+            public synchronized boolean keepRunning(){
+                return !this.doStop;
             }
 
         };
@@ -114,6 +122,7 @@ public class mainMenuController extends Controller {
         });
 
         mainMenuPlayButton.setOnAction(event -> {
+            searchGameThread = new Thread(searchGameRunnable);
             searchGameThread.start();
 
         });
