@@ -84,6 +84,7 @@ public class GameLogic extends Application {
     private Unit selectedUnit;                                  //Reference to the selected unit. Used for move, attack, etc.
     private boolean selected = false;                           // True or false for selected piece.
     private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
+    private ArrayList<Attack> attackList = new ArrayList<>();
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
@@ -94,7 +95,7 @@ public class GameLogic extends Application {
     private AudioClip bow = new AudioClip(this.getClass().getResource("/gameplay/assets/arrow.wav").toString());
 
     ////STYLING////
-    private String title = "BINARY WARFARE";
+    private String gameTitle = "BINARY WARFARE";
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
     private String turnCounterFontSize = "-fx-font-size: 32px";
@@ -131,6 +132,7 @@ public class GameLogic extends Application {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
 
+        //TODO placementPhase code goes here
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
             db.insertPieces();
@@ -230,7 +232,7 @@ public class GameLogic extends Application {
         ///////////////////////////////////////////////////////////////////////////////////////
 
 
-        window.setTitle(title);
+        window.setTitle(gameTitle);
         window.setScene(scene);
         window.show();
     }
