@@ -47,11 +47,17 @@ import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
+
+    ////LAYOUT////
     private static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
     private static Unit[][] unitPosition = new Unit[boardSize][boardSize];
     private static final int offsetX = 100;
     private static final int offsetY = 100;
+    private final int descriptionOffsetLeft = 0;
+    private final int descriptionOffsetRight = 0;
+    private final int descriptionOffsetTop = 0;
+    private final int descriptionOffsetBottom = 350;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
     private Thread thread;
@@ -67,6 +73,8 @@ public class GameLogic extends Application {
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
+
+
 
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                                   //Holds the X position to the selected piece.
@@ -85,9 +93,17 @@ public class GameLogic extends Application {
     private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
     private AudioClip bow = new AudioClip(this.getClass().getResource("/gameplay/assets/arrow.wav").toString());
 
-    ////COLORS////
+    ////STYLING////
+    private String title = "BINARY WARFARE";
+    private String descriptionFont = "-fx-font-family: 'Arial Black'";
+    private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
+    private String turnCounterFontSize = "-fx-font-size: 32px";
+    private Paint endTurnButtonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
+
+
+
 
 
     //////////////////////////GAME INFO FROM MYSQL//////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +229,7 @@ public class GameLogic extends Application {
         ///////////////////////////////////////////////////////////////////////////////////////
 
 
-        window.setTitle("BINARY WARFARE");
+        window.setTitle(title);
         window.setScene(scene);
         window.show();
     }
@@ -230,15 +246,15 @@ public class GameLogic extends Application {
         board.getChildren().add(grid.gp); //Insert grid from Grid class.
         pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        turnCounter.setStyle("-fx-font-size:32px;");
+        turnCounter.setStyle(turnCounterFontSize);
 
         endTurnButton.setPrefWidth(150);
         endTurnButton.setPrefHeight(75);
-        endTurnButton.setTextFill(Color.WHITE);
-        endTurnButton.setStyle("-fx-background-color: #000000");
+        endTurnButton.setTextFill(endTurnButtonTextColor);
+        endTurnButton.setStyle(endTurnButtonBackgroundColor);
 
-        description.setStyle("-fx-font-family: 'Arial Black'");
-        description.setPadding(new Insets(0, 0, 350, 0));
+        description.setStyle(descriptionFont);
+        description.setPadding(new Insets(descriptionOffsetTop, descriptionOffsetRight, descriptionOffsetBottom, descriptionOffsetLeft));
 
         rSidePanel.setPrefWidth(250);
         rSidePanel.getChildren().addAll(turnCounter, endTurnButton);
