@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import menus.Main;
-
 import java.util.Timer;
 import static Database.Variables.*;
 

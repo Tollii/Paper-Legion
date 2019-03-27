@@ -18,7 +18,6 @@ package gameplay;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,17 +33,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.sql.SQLException;
-
-import static database.Variables.*;
-
+import static Database.Variables.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import static database.Variables.db;
-import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
