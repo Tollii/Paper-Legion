@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" xmlns="http://javafx.com/javafx/8" fx:controller="menus.Controller.GameInfoController">
+<AnchorPane minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.Controller.GameInfoController">
    <children>
       <AnchorPane layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
          <children>
@@ -49,7 +49,14 @@
                       </Tab>
                       <Tab text="Plasement phase">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fitHeight="253.0" fitWidth="610.0" layoutX="135.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../Downloads/55628876_458119234926830_5411408100013899776_n.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children></AnchorPane>
                         </content>
                       </Tab>
                         <Tab text="Movement phase">
