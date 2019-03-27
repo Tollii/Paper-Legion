@@ -463,7 +463,7 @@ public class GameLogic extends Application {
                         if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
                             //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                             pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
-                            unitPosition[attackPosY][attackPosX].setHp(0);
+                            //unitPosition[attackPosY][attackPosX].setHp(0);
                             for (int i = 0; i < unitList.size(); i++) {
                                 if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()) {
                                     //unitList.remove(i);
@@ -697,7 +697,9 @@ public class GameLogic extends Application {
 
             Text winner = new Text();
             winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            db.incrementGamesPlayed();
             if (winnerOrLoser == 1){
+                db.incrementGamesWon();
                 winner.setText("You Lose");
             }
 

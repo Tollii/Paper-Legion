@@ -928,7 +928,58 @@ public class Database {
     \ \| __/ _` | __/ __|
     _\ \ || (_| | |_\__ \
     \__/\__\__,_|\__|___/
+    Stats
      */
+
+    public boolean incrementGamesPlayed() {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Statistics set games_played=games_played + 1 where user_id = ?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, user_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result == 1) {
+                System.out.println("Game registered");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
+
+    public boolean incrementGamesWon() {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Statistics set games_won=games_won + 1 where user_id = ?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, user_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result == 1) {
+                System.out.println("Win regisrered");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
 
     public String getGamesPlayed(int user_id) {
         Connection myConn = connectionPool.getConnection();
