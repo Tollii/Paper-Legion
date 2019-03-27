@@ -267,6 +267,39 @@ public class GameLogic extends Application {
 
     private void surrender() {
         //TODO
+        Stage confirm_alert = new Stage();
+        confirm_alert.initModality(Modality.APPLICATION_MODAL);
+        confirm_alert.setTitle("Game over!");
+
+        Text surrender_text = new Text();
+        surrender_text.setText("Are you sure?");
+        surrender_text.setStyle("-fx-font-size:32px;");
+
+        JFXButton surrender_yes = new JFXButton("Yes");
+        JFXButton surrender_no = new JFXButton("No");
+
+        surrender_yes.setOnAction(event -> {
+            //TODO
+        });
+
+        surrender_no.setOnAction(event -> {
+            //TODO
+        });
+
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(surrender_yes,surrender_no);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(50);
+
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER);
+        content.setSpacing(20);
+
+        content.getChildren().addAll(surrender_text,buttons);
+        Scene scene = new Scene(content, 250, 150);
+        confirm_alert.initStyle(StageStyle.UNDECORATED);
+        confirm_alert.setScene(scene);
+        confirm_alert.showAndWait();
     }
 
     private void createUnits() {
