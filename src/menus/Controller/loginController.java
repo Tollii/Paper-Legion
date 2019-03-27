@@ -37,6 +37,9 @@ public class loginController extends Controller {
     private Label alertField;
 
     @FXML
+    private Label gameTitleLabel;
+
+    @FXML
     void initialize() {
 
         newUserButton.setOnAction(event -> {

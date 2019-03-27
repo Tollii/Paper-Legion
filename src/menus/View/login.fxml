@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -10,69 +16,39 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="menus.Controller.loginController">
-    <children>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" StackPane.alignment="CENTER">
-            <StackPane.margin>
-                <Insets />
-            </StackPane.margin>
-            <center>
-                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <VBox alignment="CENTER" prefHeight="193.0" prefWidth="500.0" spacing="40.0">
-                            <children>
-                                <JFXTextField fx:id="usernameInput" alignment="CENTER" maxWidth="200.0" promptText="Username" />
-                                <JFXPasswordField fx:id="passwordInput" alignment="CENTER" maxWidth="200.0" promptText="Password" />
-                                <VBox alignment="CENTER" prefHeight="31.0" prefWidth="500.0">
-                                    <VBox.margin>
-                                        <Insets top="-35.0" />
-                                    </VBox.margin>
-                                    <children>
-                                        <JFXButton fx:id="newUserButton" style="-fx-background-color: e3e4e5;" text="New User?" textAlignment="CENTER" />
-                                    </children>
-                           <opaqueInsets>
-                              <Insets bottom="20.0" left="20.0" right="20.0" />
-                           </opaqueInsets>
-                           <StackPane.margin>
-                              <Insets left="50.0" right="50.0" top="50.0" />
-                           </StackPane.margin>
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
-                                </VBox>
-                            </children>
-                            <StackPane.margin>
-                                <Insets left="50.0" right="50.0" />
-                            </StackPane.margin>
-                        </VBox>
-                    </children>
-                </StackPane>
-            </center>
-            <bottom>
-                <BorderPane prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
-                    <bottom>
-                        <VBox alignment="CENTER" prefHeight="68.0" prefWidth="500.0" BorderPane.alignment="CENTER">
-                            <children>
-                                <JFXButton fx:id="loginEnterButton" style="-fx-background-color: #000000; -fx-text-fill: #ffffff;" text="Enter" />
-                            </children>
-                            <BorderPane.margin>
-                                <Insets left="50.0" right="50.0" />
-                            </BorderPane.margin>
-                        </VBox>
-                    </bottom>
-                </BorderPane>
-            </bottom>
-            <top>
-                <BorderPane prefHeight="91.0" prefWidth="600.0" style="-fx-background-color: #424242;" BorderPane.alignment="CENTER">
-                    <center>
-                        <Label fx:id="alertField" text="Binary Warfare" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
-                            <font>
-                                <Font size="40.0" />
-                            </font>
-                        </Label>
-                    </center>
-                </BorderPane>
-            </top>
-        </BorderPane>
-    </children>
-</StackPane>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #3e3e3e;" xmlns="http://javafx.com/javafx/8" fx:controller="menus.Controller.loginController">
+   <children>
+      <AnchorPane layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
+         <children>
+                  <VBox alignment="CENTER" prefHeight="366.0" prefWidth="590.0" spacing="30.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <children>
+                  <Label fx:id="gameTitleLabel" text="Paper Legion">
+                     <font>
+                        <Font name="Avenir Light" size="39.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                          <JFXTextField fx:id="usernameInput" alignment="CENTER" maxWidth="300.0" prefWidth="350.0" promptText="Username">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                          <JFXPasswordField fx:id="passwordInput" alignment="CENTER" maxWidth="300.0" promptText="Password" />
+                            <JFXButton fx:id="newUserButton" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: e3e4e5;" text="New User?" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="-20.0" top="25.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                          <JFXButton fx:id="loginEnterButton" prefHeight="49.0" prefWidth="189.0" style="-fx-background-color: #000000; -fx-text-fill: #ffffff;" text="Enter">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </JFXButton>
+                      </children>
+                  </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
