@@ -24,7 +24,7 @@ public class Main extends Application {
         db = new Database();
         Parent root = FXMLLoader.load(getClass().getResource("/sample/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 850, 650));
         primaryStage.show();
         primaryStage.setMinWidth(850);
         primaryStage.setMinHeight(650);
