@@ -56,14 +56,14 @@ public class GameLogic extends Application {
     private final int initialWindowSizeY = 768;
     private Thread thread;
 
-
     ////SCENE ELEMENTS////
     private Scene scene;                                //Scene for second and third phase of the game
     private HBox root = new HBox();                     //Root container
     private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
     private VBox rSidePanel = new VBox();               //Sidepanel for unit description and End turn button
     private Label description = new Label();
-    private JFXButton endTurnButton = new JFXButton("end turn");
+    private JFXButton endTurnButton = new JFXButton("End turn");
+    private JFXButton surrenderButton = new JFXButton("Surrender");
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
@@ -143,6 +143,11 @@ public class GameLogic extends Application {
             endTurn();
         });
 
+        ////SURRENDER HANDLER////
+        surrenderButton.setOnAction(event -> {
+            surrender();
+        });
+
 
         ///////////////////////////////////SELECTION//////////////////////////////////////////////
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -205,11 +210,16 @@ public class GameLogic extends Application {
         endTurnButton.setTextFill(Color.WHITE);
         endTurnButton.setStyle("-fx-background-color: #000000");
 
+        surrenderButton.setPrefWidth(150);
+        surrenderButton.setPrefHeight(75);
+        surrenderButton.setTextFill(Color.WHITE);
+        surrenderButton.setStyle("-fx-background-color: #000000");
+
         description.setStyle("-fx-font-family: 'Arial Black'");
         description.setPadding(new Insets(0, 0, 350, 0));
 
         rSidePanel.setPrefWidth(250);
-        rSidePanel.getChildren().addAll(turnCounter, endTurnButton);
+        rSidePanel.getChildren().addAll(turnCounter,endTurnButton,surrenderButton);
         rSidePanel.setPrefWidth(650);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -253,6 +263,10 @@ public class GameLogic extends Application {
             winner();
             waitForTurn();
         }
+    }
+
+    private void surrender() {
+        //TODO
     }
 
     private void createUnits() {
@@ -463,7 +477,7 @@ public class GameLogic extends Application {
                         if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
                             //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                             pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
-                            unitPosition[attackPosY][attackPosX].setHp(0);
+                            //unitPosition[attackPosY][attackPosX].setHp(0);
                             for (int i = 0; i < unitList.size(); i++) {
                                 if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()) {
                                     //unitList.remove(i);
@@ -668,7 +682,7 @@ public class GameLogic extends Application {
         int opponentsPieces = 0;
         //Goes through all units and counts how many are alive for each player.
         for (int i = 0; i < unitList.size(); i++) {
-            if (unitList.get(i).getHp() >= 0) {
+            if (unitList.get(i).getHp() > 0) {
                 if (unitList.get(i).getEnemy()) {
                     opponentsPieces++;
                 } else {
@@ -676,6 +690,7 @@ public class GameLogic extends Application {
                 }
             }
         }
+        System.out.println("YourPiceces " + yourPieces + " opponent: " + opponentsPieces);
         if (yourPieces == 0) {
             return 1;
         } else if (opponentsPieces == 0) {
@@ -687,8 +702,7 @@ public class GameLogic extends Application {
 
     // Opens the winner/loser pop-up on the screen and ends the game.
     public void winner(){
-        int winnerOrLoser = -1;
-        winnerOrLoser = checkForWinner();
+        int winnerOrLoser = checkForWinner();
         if (winnerOrLoser != -1) {
             //Game is won or lost.
             Stage winner_alert = new Stage();
@@ -697,10 +711,11 @@ public class GameLogic extends Application {
 
             Text winner = new Text();
             winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            db.incrementGamesPlayed();
             if (winnerOrLoser == 1){
+                db.incrementGamesWon();
                 winner.setText("You Lose");
             }
-
             else {
                 winner.setText("You win!");
             }
