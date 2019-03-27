@@ -283,6 +283,7 @@ public class GameLogic extends Application {
 
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
+            winner();
         });
 
         surrender_no.setOnAction(event -> {
@@ -739,8 +740,12 @@ public class GameLogic extends Application {
     // Opens the winner/loser pop-up on the screen and ends the game.
     public void winner(){
         int winnerOrLoser = checkForWinner();
-        if(db.checkForSurrender() == opponent_id){
+        int surrendered = db.checkForSurrender();
+        if(surrendered == opponent_id){
             winnerOrLoser = 0;
+        }
+        if(surrendered == user_id){
+            winnerOrLoser = 1;
         }
         if (winnerOrLoser != -1) {
             //Game is won or lost.
