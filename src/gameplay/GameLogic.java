@@ -244,7 +244,7 @@ public class GameLogic extends Application {
         pieceContainer.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         pieceContainer.setPrefWidth(900);
 
-        board.getChildren().add(grid.gp); //Insert grid from Grid class.
+        board.getChildren().add(grid); //Insert grid from Grid class.
         pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
         turnCounter.setStyle(turnCounterFontSize);
