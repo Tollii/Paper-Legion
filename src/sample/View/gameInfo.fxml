@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
@@ -35,10 +37,37 @@
             </VBox>
          </bottom>
          <center>
-            <JFXTextArea focusColor="#c9c8c8" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking. Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " unFocusColor="#c9c8c8" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets left="100.0" right="100.0" top="25.0" />
-               </BorderPane.margin></JFXTextArea>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab text="Game info">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <JFXTextArea focusColor="#c9c8c8" layoutX="47.0" layoutY="23.0" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking. Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " unFocusColor="#c9c8c8" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="47.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="23.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Placement phase">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="180.0" fitWidth="507.0" layoutX="47.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="Movement phase">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab text="Attack phase">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
          </center>
       </BorderPane>
    </children>
