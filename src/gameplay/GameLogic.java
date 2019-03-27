@@ -683,16 +683,23 @@ public class GameLogic extends Application {
 
     // Opens the winner/loser pop-up on the screen and ends the game.
     public void winner(){
-        if (checkForWinner() != -1) {
-            //Game is won.
+        int winnerOrLoser = -1;
+        winnerOrLoser = checkForWinner();
+        if (winnerOrLoser != -1) {
+            //Game is won or lost.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
 
             Text winner = new Text();
-            winner.setStyle("-fx-font-size:32px;");
-            winner.setText("You win!");
+            winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            if (winnerOrLoser == 1){
+                winner.setText("You Lose");
+            }
 
+            else {
+                winner.setText("You win!");
+            }
             JFXButton endgame = new JFXButton("Return to menu");
             // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
 
