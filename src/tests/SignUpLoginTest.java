@@ -1,26 +1,25 @@
 package tests;
 
+import Database.ConnectionPool;
 import Database.Database;
 import org.junit.*;
 
 import static org.junit.Assert.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import Database.BasicConnectionPool;
+
 import Database.Cleaner;
-import org.junit.runners.MethodSorters;
 
 //@FixMethodOrder(MethodSorters.DEFAULT)
 public class SignUpLoginTest {
     private Database instance;
-    BasicConnectionPool connectionPool = null;
+    ConnectionPool connectionPool = null;
     int userId = 0;
     @BeforeClass
     public static void setUpClass() throws SQLException {
-        BasicConnectionPool connectionPool;
-        connectionPool = BasicConnectionPool.create();
+        ConnectionPool connectionPool;
+        connectionPool = ConnectionPool.create();
 
         Connection myConn = connectionPool.getConnection();
         String stmt = "DELETE FROM Users WHERE username = 'testUserReg'; ";
