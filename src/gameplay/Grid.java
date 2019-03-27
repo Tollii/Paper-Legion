@@ -33,8 +33,4 @@ public class Grid extends Rectangle {
     public int getRows(){
         return rows;
     }
-
-//
-
-
 }

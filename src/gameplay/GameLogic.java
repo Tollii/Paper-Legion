@@ -98,6 +98,7 @@ public class GameLogic extends Application {
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
     private String turnCounterFontSize = "-fx-font-size: 32px";
+    private Paint selectionOutlineColor = Color.RED;
     private Paint endTurnButtonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
@@ -372,7 +373,7 @@ public class GameLogic extends Application {
             unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
             unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
             unitPosition[posY][posX].setStrokeWidth(3);
-            unitPosition[posY][posX].setStroke(Color.RED);
+            unitPosition[posY][posX].setStroke(selectionOutlineColor);
 
             selected = true;
 
@@ -505,11 +506,6 @@ public class GameLogic extends Application {
         int posY = selectedPosY;
         int movementRange = selectedUnit.getMovementRange();
 
-//        System.out.println(selectedPosX + "SelectposX");
-//        System.out.println("PosX+1: " + (posX + 2));
-//        System.out.println("PosX-1: " + (posX - 2));
-//        System.out.println("PosY+1: " + (posY + 2));
-//        System.out.println("PosY-1: " + (posY - 2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if (selectedPosX - 1 >= 0) {
