@@ -1,4 +1,4 @@
-package Menus.Controller;
+package menus.Controller;
 
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
@@ -6,8 +6,8 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static Database.Variables.db;
-import static Database.Variables.user_id;
+import static database.Variables.db;
+import static database.Variables.user_id;
 
 public class loginController extends Controller {
 

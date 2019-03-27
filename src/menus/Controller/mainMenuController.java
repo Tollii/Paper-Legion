@@ -1,15 +1,15 @@
-package Menus.Controller;
+package menus.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import Gameplay.GameLogic;
-import Gameplay.SetUp;
+import gameplay.GameLogic;
+import gameplay.SetUp;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import Menus.Main;
+import menus.Main;
 
 import java.util.Timer;
-import static Database.Variables.*;
+import static database.Variables.*;
 
 public class mainMenuController extends Controller {
     private static boolean findGameClicked = false;

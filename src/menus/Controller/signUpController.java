@@ -1,4 +1,4 @@
-package Menus.Controller;
+package menus.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static Database.Variables.db;
+import static database.Variables.db;
 
 public class signUpController extends Controller {
 

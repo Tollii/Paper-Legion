@@ -1,4 +1,4 @@
-package Gameplay;
+package gameplay;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;

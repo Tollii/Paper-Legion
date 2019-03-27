@@ -1,4 +1,4 @@
-package Gameplay;
+package gameplay;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -15,7 +15,7 @@ public class Tile extends Rectangle {
     super(sizeX,sizeY,Color.WHITE);
     super.setStrokeType(StrokeType.INSIDE);
     super.setStroke(Color.BLACK);
-    //Image tile = new Image("/Gameplay/assets/tile.jpg");
+    //Image tile = new Image("/gameplay/assets/tile.jpg");
     //this.setFill(new ImagePattern(tile));
   }
 
