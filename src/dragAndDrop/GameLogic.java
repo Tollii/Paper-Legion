@@ -40,6 +40,7 @@ import static Database.Variables.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static Database.Variables.db;
 import static Database.Variables.user_id;
@@ -53,8 +54,7 @@ public class GameLogic extends Application {
     private static final int offsetY = 100;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
-    private Thread thread;
-
+    private Thread waitTurnThread;
 
     ////SCENE ELEMENTS////
     private Scene scene;                                //Scene for second and third phase of the game
@@ -100,6 +100,7 @@ public class GameLogic extends Application {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -121,17 +122,24 @@ public class GameLogic extends Application {
             do {
 
                 number = db.pollForUnits();
-                thread.sleep(5000);
+                Thread.sleep(5000);
             } while (number != 10);
         }
         createUnits();
 
         drawUnits();
 
+
+        // Runnable lambda implementation for turn waiting with it's own thread
+
+
+
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
+
+
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -718,48 +726,61 @@ public class GameLogic extends Application {
     }
 
     private void waitForTurn() {
-        //TODO make waitForTurn() it's own class and Interupt() and an AtomicBoolean as a control variable
+        Runnable waitTurnRunnable = new Runnable() {
+            private boolean doStop = false;
 
-        thread = new Thread(() -> {
-            try {
-                while (!yourTurn) {
-                    Thread.sleep(5000);
-                    //When player in database matches your own user_id it is your turn again.
-                    System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                    if (db.getTurnPlayer() == user_id) {
-                        System.out.println("yourTurn endres");
-                        yourTurn = true;
-                    }
-                    if (yourTurn) {
-                        Platform.runLater(
-                                () -> {
-                                    thread.stop();
+            @Override
+            public void run() {
+                while(keepRunning()){
+                    try {
+                        while (!yourTurn) {
+                            System.out.println("sleeps thread " + Thread.currentThread());
+                            Thread.sleep(5000);
+                            //When player in database matches your own user_id it is your turn again.
+                            System.out.println("Whose turn is it? " + db.getTurnPlayer());
+                            if (db.getTurnPlayer() == user_id) {
+                                System.out.println("yourTurn endres");
+                                yourTurn = true;
+                                this.doStop();
+                            }
+                        }
 
+                        //What will happen when it is your turn again.
+                        //Increments turn. Back to your turn.
 
-                                    //What will happen when it is your turn again.
+                        turn++;
+                        turnCounter.setText("TURN: " + turn);
+                        endTurnButton.setText("End turn");
 
-                                    //Increments turn. Back to your turn.
+                        deDrawUnits();
+                        drawUnits();
 
-                                    turn++;
-                                    turnCounter.setText("TURN: " + turn);
-                                    endTurnButton.setText("End turn");
+                        winner();
 
-                                    deDrawUnits();
-                                    drawUnits();
+                        movementPhase = true;
 
-                                    winner();
-
-                                    movementPhase = true;
-                                    //TODO UPDATE BOARD WITH CHANGES FROM OTHER PLAYER'S TURN, MAKE SURE TO REMOVE DEAD UNITS.
-                                });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        });
-        thread.start();
+
+            public synchronized void doStop(){
+                this.doStop = true;
+            }
+
+            public synchronized boolean keepRunning(){
+                return this.doStop == false;
+            }
+        };
+
+        waitTurnThread = new Thread(waitTurnRunnable);
+        waitTurnThread.start();
+
     }
+
+
+
 
     @Override
     public void stop() {
