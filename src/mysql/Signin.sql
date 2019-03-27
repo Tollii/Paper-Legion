@@ -32,5 +32,17 @@ UPDATE Users SET online_status = 0 WHERE username = 'tolnes';
 UPDATE Matches SET player2 = 1 WHERE player1 = 30;
 UPDATE Matches SET game_started = 1 WHERE player1 = 30;
 
+-- create stats for user
+INSERT INTO Statistics(user_id, games_won, games_played) VALUES(?,?,?);
+INSERT INTO Statistics(user_id, games_won, games_played) VALUES(26,0,0);
+
+-- increments games
+update Statistics set games_played=games_played + 1 where user_id = ?;
+update Statistics set games_played=games_played + 1 where user_id = 1;
+
+-- increments games won
+update Statistics set games_won=games_won + 1 where user_id = ?;
+update Statistics set games_won=games_won + 1 where user_id = 1;
+
 
 
