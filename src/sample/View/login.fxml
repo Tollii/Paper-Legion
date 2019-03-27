@@ -38,7 +38,7 @@
                           <JFXPasswordField fx:id="passwordInput" alignment="CENTER" maxWidth="300.0" promptText="Password" />
                             <JFXButton fx:id="newUserButton" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: e3e4e5;" text="New User?" textAlignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="-20.0" top="25.0" />
+                        <Insets top="25.0" />
                      </VBox.margin>
                   </JFXButton>
                           <JFXButton fx:id="loginEnterButton" prefHeight="49.0" prefWidth="189.0" style="-fx-background-color: #000000; -fx-text-fill: #ffffff;" text="Enter">

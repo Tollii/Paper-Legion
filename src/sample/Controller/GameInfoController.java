@@ -10,9 +10,6 @@ import java.util.ResourceBundle;
 public class GameInfoController extends Controller {
 
 
-    @FXML
-    private JFXButton gameInfoBackButton;
-
 
     @FXML
     private ResourceBundle resources;
@@ -20,11 +17,11 @@ public class GameInfoController extends Controller {
     @FXML
     private URL location;
 
-
+    @FXML
+    private JFXButton gameInfoBackButton;
 
     @FXML
     private Label gameTitleLabel;
-
 
 
     @FXML

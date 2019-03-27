@@ -9,7 +9,9 @@ import javafx.scene.control.Label;
 import sample.Main;
 import Database.Database;
 
+import java.net.URL;
 import java.sql.SQLOutput;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import static Database.Variables.*;
 
@@ -19,14 +21,15 @@ public class mainMenuController extends Controller {
     public static Timer timer = new Timer(true);
     public static boolean gameEntered = false;
     private Thread thread;
-    @FXML
-    private JFXButton mainMenuPlayButton;
 
     @FXML
-    private JFXButton mainMenuSettingsButton;
+    private ResourceBundle resources;
 
     @FXML
-    private JFXButton mainMenuStatsButton;
+    private URL location;
+
+    @FXML
+    private Label mainMenuLoggedInAsLabel;
 
     @FXML
     private JFXButton mainMenuGameInfoButton;
@@ -35,7 +38,17 @@ public class mainMenuController extends Controller {
     private JFXButton mainMenuExitButton;
 
     @FXML
-    private Label mainMenuLoggedInAsLabel;
+    private JFXButton mainMenuStatsButton;
+
+    @FXML
+    private Label gameTitleLabel;
+
+    @FXML
+    private JFXButton mainMenuSettingsButton;
+
+    @FXML
+    private JFXButton mainMenuPlayButton;
+
 
     @FXML
     void initialize() {

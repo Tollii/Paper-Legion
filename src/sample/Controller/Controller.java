@@ -12,6 +12,8 @@ public class Controller {
     public void changeScene(String fxml) {
         Class currentClass = this.getClass();
 
+        double stageWidth = Main.window.getScene().getWidth();
+        double stageHeight = Main.window.getScene().getHeight();
         String fxmlDir = "/sample/View/"+fxml;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(currentClass.getResource(fxmlDir));
@@ -22,6 +24,7 @@ public class Controller {
             e.printStackTrace();
         }
         Parent root = loader.getRoot();
-        Main.window.setScene(new Scene(root));
+        Main.window.setScene(new Scene(root, stageWidth, stageHeight));
+        Main.window.show();
     }
 }

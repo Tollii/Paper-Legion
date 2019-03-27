@@ -55,7 +55,7 @@ public class loginController extends Controller {
                 changeScene("mainMenu.fxml");
             } else {
                 //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
-                alertField.setText("Login Failed");
+                gameTitleLabel.setText("Login Failed");
             }
         });
 
