@@ -47,11 +47,17 @@ import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
+
+    ////LAYOUT////
     private static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
     private static Unit[][] unitPosition = new Unit[boardSize][boardSize];
     private static final int offsetX = 100;
     private static final int offsetY = 100;
+    private final int descriptionOffsetLeft = 0;
+    private final int descriptionOffsetRight = 0;
+    private final int descriptionOffsetTop = 0;
+    private final int descriptionOffsetBottom = 350;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
     private Thread thread;
@@ -68,6 +74,8 @@ public class GameLogic extends Application {
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
 
+
+
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                                   //Holds the X position to the selected piece.
     private int selectedPosY;                                   //Holds the Y position to the selected piece.
@@ -76,6 +84,7 @@ public class GameLogic extends Application {
     private Unit selectedUnit;                                  //Reference to the selected unit. Used for move, attack, etc.
     private boolean selected = false;                           // True or false for selected piece.
     private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
+    private ArrayList<Attack> attackList = new ArrayList<>();
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
@@ -85,9 +94,18 @@ public class GameLogic extends Application {
     private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
     private AudioClip bow = new AudioClip(this.getClass().getResource("/gameplay/assets/arrow.wav").toString());
 
-    ////COLORS////
+    ////STYLING////
+    private String gameTitle = "BINARY WARFARE";
+    private String descriptionFont = "-fx-font-family: 'Arial Black'";
+    private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
+    private String turnCounterFontSize = "-fx-font-size: 32px";
+    private Paint selectionOutlineColor = Color.RED;
+    private Paint endTurnButtonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
+
+
+
 
 
     //////////////////////////GAME INFO FROM MYSQL//////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +132,7 @@ public class GameLogic extends Application {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
 
+        //TODO placementPhase code goes here
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
             db.insertPieces();
@@ -186,7 +205,7 @@ public class GameLogic extends Application {
         ///////////////////////////////////////////////////////////////////////////////////////
 
 
-        window.setTitle("BINARY WARFARE");
+        window.setTitle(gameTitle);
         window.setScene(scene);
         window.show();
     }
@@ -200,15 +219,18 @@ public class GameLogic extends Application {
         pieceContainer.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         pieceContainer.setPrefWidth(900);
 
-        board.getChildren().add(grid.gp); //Insert grid from Grid class.
+        board.getChildren().add(grid); //Insert grid from Grid class.
         pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        turnCounter.setStyle("-fx-font-size:32px;");
+        turnCounter.setStyle(turnCounterFontSize);
 
         endTurnButton.setPrefWidth(150);
         endTurnButton.setPrefHeight(75);
-        endTurnButton.setTextFill(Color.WHITE);
-        endTurnButton.setStyle("-fx-background-color: #000000");
+        endTurnButton.setTextFill(endTurnButtonTextColor);
+        endTurnButton.setStyle(endTurnButtonBackgroundColor);
+
+        description.setStyle(descriptionFont);
+        description.setPadding(new Insets(descriptionOffsetTop, descriptionOffsetRight, descriptionOffsetBottom, descriptionOffsetLeft));
 
         surrenderButton.setPrefWidth(150);
         surrenderButton.setPrefHeight(75);
@@ -374,7 +396,7 @@ public class GameLogic extends Application {
             unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
             unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
             unitPosition[posY][posX].setStrokeWidth(3);
-            unitPosition[posY][posX].setStroke(Color.RED);
+            unitPosition[posY][posX].setStroke(selectionOutlineColor);
 
             selected = true;
 
@@ -383,11 +405,16 @@ public class GameLogic extends Application {
 
             selectedUnit = unitPosition[selectedPosY][selectedPosX];
 
-            if (movementPhase) {
-                highlightPossibleMoves();
-            } else if (!selectedUnit.getHasAttackedThisTurn()) {
-                highlightPossibleAttacks();
+            //Decides based on the phase and whether or not it's your turn, what will happen when you select a unit.
+            //If it's not your turn, you will have the ability to see the units info and description, but not the movement/attach highlight
+            if(yourTurn){
+                if (movementPhase) {
+                    highlightPossibleMoves();
+                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                    highlightPossibleAttacks();
+                }
             }
+
 
             description.setText(selectedUnit.getDescription());
             vBox.getChildren().add(description);
@@ -502,11 +529,6 @@ public class GameLogic extends Application {
         int posY = selectedPosY;
         int movementRange = selectedUnit.getMovementRange();
 
-//        System.out.println(selectedPosX + "SelectposX");
-//        System.out.println("PosX+1: " + (posX + 2));
-//        System.out.println("PosX-1: " + (posX - 2));
-//        System.out.println("PosY+1: " + (posY + 2));
-//        System.out.println("PosY-1: " + (posY - 2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if (selectedPosX - 1 >= 0) {
@@ -734,24 +756,7 @@ public class GameLogic extends Application {
     }
 
 
-    public static void main(String[] args) {
-        //Shutdown hook. CLoses stuff when program exits.
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
 
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-
-        launch(args);
-    }
 
     private void waitForTurn() {
         //TODO make waitForTurn() it's own class and Interupt() and an AtomicBoolean as a control variable
@@ -814,5 +819,24 @@ public class GameLogic extends Application {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        //Shutdown hook. CLoses stuff when program exits.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (user_id > 0) {
+                db.logout(user_id);
+            }
+            try {
+                db.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
+
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+
+        launch(args);
     }
 }

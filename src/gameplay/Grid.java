@@ -1,11 +1,9 @@
 package gameplay;
 
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Rectangle;
 
-public class Grid extends Rectangle {
+public class Grid extends GridPane {
     Tile[][]liste;
-    GridPane gp = new GridPane();
     int columns;
     int rows;
 
@@ -21,7 +19,7 @@ public class Grid extends Rectangle {
                 tile2.setTranslateX(j * GameLogic.tileSize);
                 tile2.setTranslateY(i * GameLogic.tileSize);
                 this.liste[i][j] = tile2;
-                gp.getChildren().add(tile2);
+                this.getChildren().add(tile2);
             }
         }
     }
@@ -33,8 +31,4 @@ public class Grid extends Rectangle {
     public int getRows(){
         return rows;
     }
-
-//
-
-
 }
