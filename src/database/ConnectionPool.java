@@ -16,7 +16,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicConnectionPool {
+public class ConnectionPool {
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
     private static int INITIAL_POOL_SIZE = 5;
@@ -24,7 +24,7 @@ public class BasicConnectionPool {
 
 
     // Initializes an ArrayList, then fills it with connections. This is the connectionPool.
-    public static BasicConnectionPool create() throws SQLException{
+    public static ConnectionPool create() throws SQLException{
         try{
             Config config = Config.getInstance();
             Class.forName(config.DB_DRIVER);
@@ -32,14 +32,14 @@ public class BasicConnectionPool {
             for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
                 pool.add(createConnection());
             }
-            return new BasicConnectionPool(pool);
+            return new ConnectionPool(pool);
         } catch (ClassNotFoundException clne){
             clne.printStackTrace();
         }
         return null;
     }
 
-    public BasicConnectionPool(List<Connection> pool){
+    public ConnectionPool(List<Connection> pool){
         this.connectionPool = pool;
     }
 
@@ -126,7 +126,7 @@ public class BasicConnectionPool {
 /*
         // Does not work with Thomas' database
 
-        BasicConnectionPool pool;
+        ConnectionPool pool;
 
         try{
             pool = create();

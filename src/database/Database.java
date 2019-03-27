@@ -25,13 +25,13 @@ public class Database {
 
     //Class variables
 
-    private static BasicConnectionPool connectionPool = null;
+    private static ConnectionPool connectionPool = null;
 
     public Database() {
 
         try {
             System.out.println("Creating pool");
-            connectionPool = BasicConnectionPool.create();
+            connectionPool = ConnectionPool.create();
         } catch (SQLException e) {
             //Prints out the error
             e.printStackTrace();
