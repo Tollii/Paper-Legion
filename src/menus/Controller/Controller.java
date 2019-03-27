@@ -12,16 +12,23 @@ public class Controller {
     public void changeScene(String fxml) {
         Class currentClass = this.getClass();
 
-        String fxmlDir = "/menus/View/" +fxml;
+        double stageWidth = Main.window.getScene().getWidth();
+        double stageHeight = Main.window.getScene().getHeight();
+        String fxmlDir = "/menus/View/"+fxml;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(currentClass.getResource(fxmlDir));
 
+
+        Parent root2 = null;
         try {
-            loader.load();
+            root2 = FXMLLoader.load(getClass().getResource("/menus/View/"+fxml));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Parent root = loader.getRoot();
-        Main.window.setScene(new Scene(root));
+
+        Main.rootScene.setRoot(root2);
+
+
     }
 }

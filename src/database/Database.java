@@ -333,7 +333,7 @@ public class Database {
         String sqlPlayer1piece3 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,0);";
         String sqlPlayer1piece4 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,1);";
         String sqlPlayer1piece5 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,1);";
-        String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
+          String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
         String unit_player2 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);";
         String unit_player3 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);";
         String unit_player4 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);";
@@ -343,7 +343,7 @@ public class Database {
         piecesPlayer1.add(sqlPlayer1piece3);
         piecesPlayer1.add(sqlPlayer1piece4);
         piecesPlayer1.add(sqlPlayer1piece5);
-        piecesPlayer1.add(unit_player1);
+          piecesPlayer1.add(unit_player1);
         piecesPlayer1.add(unit_player2);
         piecesPlayer1.add(unit_player3);
         piecesPlayer1.add(unit_player4);
@@ -390,9 +390,9 @@ public class Database {
 
                 playerInsert2.executeUpdate();
             }
-//
-//            myConn.commit();
-//            myConn2.commit();
+
+            myConn.commit();
+            myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -693,6 +693,31 @@ public class Database {
         return outputList;
     }
 
+    public boolean surrenderGame() {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Units set current_health=0 where player_id  = ?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, user_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result == 1) {
+                System.out.println("Game registered");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
+
     //TODO
     public boolean importAttackList() {
         return false;
@@ -927,7 +952,60 @@ public class Database {
     \ \| __/ _` | __/ __|
     _\ \ || (_| | |_\__ \
     \__/\__\__,_|\__|___/
+    Stats
      */
+
+    public boolean incrementGamesPlayed() {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Statistics set games_played=games_played + 1 where user_id = ?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, user_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result == 1) {
+                System.out.println("Game registered");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
+
+
+
+    public boolean incrementGamesWon() {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "update Statistics set games_won=games_won + 1 where user_id = ?;";
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement.setInt(1, user_id);
+            int result = preparedStatement.executeUpdate();
+            myConn.commit();
+            if (result == 1) {
+                System.out.println("Win regisrered");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return false;
+    }
 
     public String getGamesPlayed(int user_id) {
         Connection myConn = connectionPool.getConnection();

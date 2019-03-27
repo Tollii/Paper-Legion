@@ -8,6 +8,10 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import menus.Main;
+
+import java.net.URL;
+import java.sql.SQLOutput;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import static Database.Variables.*;
 
@@ -18,13 +22,13 @@ public class mainMenuController extends Controller {
     public static boolean gameEntered = false;
     private Thread searchGameThread;
     @FXML
-    private JFXButton mainMenuPlayButton;
+    private ResourceBundle resources;
 
     @FXML
-    private JFXButton mainMenuSettingsButton;
+    private URL location;
 
     @FXML
-    private JFXButton mainMenuStatsButton;
+    private Label mainMenuLoggedInAsLabel;
 
     @FXML
     private JFXButton mainMenuGameInfoButton;
@@ -33,7 +37,17 @@ public class mainMenuController extends Controller {
     private JFXButton mainMenuExitButton;
 
     @FXML
-    private Label mainMenuLoggedInAsLabel;
+    private JFXButton mainMenuStatsButton;
+
+    @FXML
+    private Label gameTitleLabel;
+
+    @FXML
+    private JFXButton mainMenuSettingsButton;
+
+    @FXML
+    private JFXButton mainMenuPlayButton;
+
 
     @FXML
     void initialize() {
