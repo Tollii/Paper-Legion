@@ -447,7 +447,7 @@ public class GameLogic extends Application {
                 // If within attack range.
                 if (attackRange(attackPosX, attackPosY)) {
                     // If attacked unit is not itself.
-                    if (selectedUnit != unitPosition[attackPosY][attackPosX]) {
+                    if (selectedUnit != unitPosition[attackPosY][attackPosX]  && unitPosition[attackPosY][attackPosX].getEnemy()) {
                         // Attack is executed and unit takes damage.
                         unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
 
@@ -569,8 +569,9 @@ public class GameLogic extends Application {
                 if (unitPosition[i][j] != null && unitPosition[i][j] != selectedUnit) {
 
                     // Currently shows swordsman attack range wrong.
-                    if ((((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) <= selectedUnit.getMaxAttackRange())
-                            && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) >= selectedUnit.getMinAttackRange()) {
+                    //(((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) <= selectedUnit.getMaxAttackRange())
+                    //                            && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) >= selectedUnit.getMinAttackRange()
+                    if (attackRange(j, i)) {
 
                         if (unitPosition[i][j].getEnemy()) {
                             grid.liste[i][j].setFill(attackHighlightColor);
@@ -747,8 +748,12 @@ public class GameLogic extends Application {
                             }
                         }
 
+
                         //What will happen when it is your turn again.
+
                         //Increments turn. Back to your turn.
+                        deSelect(rSidePanel, description);
+                        selectedUnit = null;
 
                         turn++;
                         turnCounter.setText("TURN: " + turn);
