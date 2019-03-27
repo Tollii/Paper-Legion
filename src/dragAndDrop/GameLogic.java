@@ -33,6 +33,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.SQLException;
 
@@ -687,15 +688,20 @@ public class GameLogic extends Application {
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
+
             Text winner = new Text();
-            if (checkForWinner() == 1) {
-                winner.setText("You lose!");
-            } else {
-                winner.setText("You win!");
-            }
+            winner.setStyle("-fx-font-size:32px;");
+            winner.setText("You win!");
+
+            JFXButton endgame = new JFXButton("Return to menu");
+            // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+
             VBox content = new VBox();
-            content.getChildren().add(winner);
-            Scene scene = new Scene(content);
+            content.setAlignment(Pos.CENTER);
+            content.setSpacing(20);
+            content.getChildren().addAll(winner,endgame);
+            Scene scene = new Scene(content,250,150);
+            winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
             winner_alert.showAndWait();
         }
