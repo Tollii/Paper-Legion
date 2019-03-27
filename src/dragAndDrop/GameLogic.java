@@ -139,39 +139,7 @@ public class GameLogic extends Application {
 
         ////END TURN HANDLER////
         endTurnButton.setOnAction(event -> {
-            if (yourTurn) {
-                //Increments turn. Opponents Turn.
-                turn++;
-
-
-                turnCounter.setText("TURN: " + turn);
-                endTurnButton.setText("Waiting for other player");
-                yourTurn = false;
-
-
-                ////SEND MOVEMENT////
-
-                //db.exportMoveList(movementList); when we use movement table use this
-                if (movementList.size() != 0) {
-                    db.exportPieceMoveList(movementList);
-                    movementList = new ArrayList<>(); //Resets the movementList for the next turn.
-                }
-
-
-                /////SEND ATTACKS////
-                //TODO Having a attackList just like movementList. Alternative solution below.
-
-                // Alternative solution to creating a List of attacks in the future.
-                // Finds every enemy unit that was damaged and sends their new info the database.
-                //Wait for you next turn
-
-                //Add the next turn into the database.
-                db.sendTurn(turn);
-                deSelect(rSidePanel, description);
-                selectedUnit = null;
-                winner();
-                waitForTurn();
-            }
+            endTurn();
         });
 
 
@@ -248,6 +216,42 @@ public class GameLogic extends Application {
         //window.widthProperty().addListener();
 
         scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
+    }
+
+    private void endTurn(){
+        if (yourTurn) {
+            //Increments turn. Opponents Turn.
+            turn++;
+
+
+            turnCounter.setText("TURN: " + turn);
+            endTurnButton.setText("Waiting for other player");
+            yourTurn = false;
+
+
+            ////SEND MOVEMENT////
+
+            //db.exportMoveList(movementList); when we use movement table use this
+            if (movementList.size() != 0) {
+                db.exportPieceMoveList(movementList);
+                movementList = new ArrayList<>(); //Resets the movementList for the next turn.
+            }
+
+
+            /////SEND ATTACKS////
+            //TODO Having a attackList just like movementList. Alternative solution below.
+
+            // Alternative solution to creating a List of attacks in the future.
+            // Finds every enemy unit that was damaged and sends their new info the database.
+            //Wait for you next turn
+
+            //Add the next turn into the database.
+            db.sendTurn(turn);
+            deSelect(rSidePanel, description);
+            selectedUnit = null;
+            winner();
+            waitForTurn();
+        }
     }
 
     private void createUnits() {
