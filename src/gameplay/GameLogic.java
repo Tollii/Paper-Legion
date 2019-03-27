@@ -365,11 +365,16 @@ public class GameLogic extends Application {
 
             selectedUnit = unitPosition[selectedPosY][selectedPosX];
 
-            if (movementPhase) {
-                highlightPossibleMoves();
-            } else if (!selectedUnit.getHasAttackedThisTurn()) {
-                highlightPossibleAttacks();
+            //Decides based on the phase and whether or not it's your turn, what will happen when you select a unit.
+            //If it's not your turn, you will have the ability to see the units info and description, but not the movement/attach highlight
+            if(yourTurn){
+                if (movementPhase) {
+                    highlightPossibleMoves();
+                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                    highlightPossibleAttacks();
+                }
             }
+
 
             description.setText(selectedUnit.getDescription());
             vBox.getChildren().add(description);
@@ -715,24 +720,7 @@ public class GameLogic extends Application {
     }
 
 
-    public static void main(String[] args) {
-        //Shutdown hook. CLoses stuff when program exits.
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
 
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-
-        launch(args);
-    }
 
     private void waitForTurn() {
         //TODO make waitForTurn() it's own class and Interupt() and an AtomicBoolean as a control variable
@@ -795,5 +783,24 @@ public class GameLogic extends Application {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        //Shutdown hook. CLoses stuff when program exits.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (user_id > 0) {
+                db.logout(user_id);
+            }
+            try {
+                db.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
+
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+
+        launch(args);
     }
 }
