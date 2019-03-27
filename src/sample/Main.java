@@ -23,9 +23,9 @@ public class Main extends Application {
         //Database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
         Parent root = FXMLLoader.load(getClass().getResource("/sample/View/login.fxml"));
-        primaryStage.setTitle("Binary Warfare");
-        primaryStage.setScene(new Scene(root, 850, 650));
         primaryStage.show();
+        primaryStage.setTitle("Paper Legion");
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.setMinWidth(850);
         primaryStage.setMinHeight(650);
 
