@@ -668,7 +668,7 @@ public class GameLogic extends Application {
         int opponentsPieces = 0;
         //Goes through all units and counts how many are alive for each player.
         for (int i = 0; i < unitList.size(); i++) {
-            if (unitList.get(i).getHp() >= 0) {
+            if (unitList.get(i).getHp() > 0) {
                 if (unitList.get(i).getEnemy()) {
                     opponentsPieces++;
                 } else {
@@ -676,6 +676,7 @@ public class GameLogic extends Application {
                 }
             }
         }
+        System.out.println("YourPiceces " + yourPieces + " opponent: " + opponentsPieces);
         if (yourPieces == 0) {
             return 1;
         } else if (opponentsPieces == 0) {
@@ -687,8 +688,7 @@ public class GameLogic extends Application {
 
     // Opens the winner/loser pop-up on the screen and ends the game.
     public void winner(){
-        int winnerOrLoser = -1;
-        winnerOrLoser = checkForWinner();
+        int winnerOrLoser = checkForWinner();
         if (winnerOrLoser != -1) {
             //Game is won or lost.
             Stage winner_alert = new Stage();
