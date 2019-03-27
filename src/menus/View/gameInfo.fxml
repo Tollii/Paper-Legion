@@ -53,7 +53,7 @@
                                  <children>
                                     <ImageView fitHeight="253.0" fitWidth="610.0" layoutX="135.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../../Downloads/55628876_458119234926830_5411408100013899776_n.png" />
+                                          <Image url="@../menuAssets/placement.png" />
                                        </image>
                                     </ImageView>
                                  </children></AnchorPane>
