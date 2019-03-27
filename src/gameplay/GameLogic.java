@@ -14,7 +14,7 @@
 //      ##    ##       ##     ## ##     ##       ##     ##         //
 //      ##    ######## ##     ## ##     ##     ######   ##         //
 
-package dragAndDrop;
+package Gameplay;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
@@ -82,8 +82,8 @@ public class GameLogic extends Application {
     ArrayList<Unit> unitList = new ArrayList<Unit>();
 
     ////AUDIO ELEMENTS////
-    private AudioClip sword = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/hitSword.wav").toString());
-    private AudioClip bow = new AudioClip(this.getClass().getResource("/dragAndDrop/assets/arrow.wav").toString());
+    private AudioClip sword = new AudioClip(this.getClass().getResource("/Gameplay/assets/hitSword.wav").toString());
+    private AudioClip bow = new AudioClip(this.getClass().getResource("/Gameplay/assets/arrow.wav").toString());
 
     ////COLORS////
     private Paint movementHighlightColor = Color.GREENYELLOW;

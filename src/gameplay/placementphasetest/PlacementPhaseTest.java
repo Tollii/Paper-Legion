@@ -1,10 +1,9 @@
-package dragAndDrop;
+package Gameplay;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import java.util.ArrayList;
 import javafx.geometry.Orientation;
 
 public class PlacementPhaseTest extends Application {

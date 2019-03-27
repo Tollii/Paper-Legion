@@ -1,4 +1,4 @@
-package dragAndDrop;
+package Gameplay;
 
 public class ProtoUnitType implements UnitType {
 

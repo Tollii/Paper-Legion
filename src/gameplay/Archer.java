@@ -1,6 +1,6 @@
-package dragAndDrop;
+package Gameplay;
 
-public class Swordsman implements UnitType {
+public class Archer implements UnitType {
 
     private final String type;
     private final double hp;
@@ -13,7 +13,7 @@ public class Swordsman implements UnitType {
     private final String description;
     private final String descriptionTag;
 
-    public Swordsman(String type, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description, String descriptionTag){
+    public Archer(String type, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description, String descriptionTag){
         this.type = type;
         this.hp = hp;
         this.attack = attack;

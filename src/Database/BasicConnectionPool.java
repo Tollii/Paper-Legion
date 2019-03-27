@@ -8,7 +8,7 @@ package Database;
  * or for testing purposes
  * Not all methods are tested yet
  *
- * Import mysql-connector
+ * Import MySQL-connector
  *
  */
 

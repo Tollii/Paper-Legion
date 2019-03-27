@@ -1,18 +1,20 @@
-package temp;
+package Temp;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class winner extends Application {
 
+
+    /*
+    This is a temporary file used to preview the winner pop-up.
+     */
 
     @Override
     public void start(Stage primaryStage) throws Exception {

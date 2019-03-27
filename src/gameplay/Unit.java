@@ -1,4 +1,4 @@
-package dragAndDrop;
+package Gameplay;
 
 
 import javafx.geometry.Pos;
@@ -77,20 +77,20 @@ public class Unit extends Rectangle {
 
             case "Archer":
                 if(enemy){
-                    Image archerGold = new Image("/dragAndDrop/assets/archer_gold.png");
+                    Image archerGold = new Image("/Gameplay/assets/archer_gold.png");
                     this.setFill(new ImagePattern(archerGold));
                 } else{
-                    Image archerBlue = new Image("/dragAndDrop/assets/archer_blue.png");
+                    Image archerBlue = new Image("/Gameplay/assets/archer_blue.png");
                     this.setFill(new ImagePattern(archerBlue));
                 }
                 break;
 
             case "Swordsman":
                 if(enemy){
-                    Image swordsmanGold = new Image("/dragAndDrop/assets/sword_gold.png");
+                    Image swordsmanGold = new Image("/Gameplay/assets/sword_gold.png");
                     this.setFill(new ImagePattern(swordsmanGold));
                 } else{
-                    Image swordsmanBlue = new Image("/dragAndDrop/assets/sword_blue.png");
+                    Image swordsmanBlue = new Image("/Gameplay/assets/sword_blue.png");
                     this.setFill(new ImagePattern(swordsmanBlue));
                 }
                 break;

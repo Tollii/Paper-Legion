@@ -1,15 +1,13 @@
-package sample.Controller;
+package Menus.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import dragAndDrop.GameLogic;
-import dragAndDrop.SetUp;
+import Gameplay.GameLogic;
+import Gameplay.SetUp;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import sample.Main;
-import Database.Database;
+import Menus.Main;
 
-import java.sql.SQLOutput;
 import java.util.Timer;
 import static Database.Variables.*;
 

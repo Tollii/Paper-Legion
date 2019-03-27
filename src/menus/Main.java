@@ -1,4 +1,4 @@
-package sample;
+package Menus;
 
 import Database.Database;
 import javafx.application.Application;
@@ -22,7 +22,7 @@ public class Main extends Application {
 
         //Database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/View/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/Menus/View/login.fxml"));
         primaryStage.setTitle("Binary Warfare");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();

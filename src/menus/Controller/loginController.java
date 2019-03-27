@@ -1,4 +1,4 @@
-package sample.Controller;
+package Menus.Controller;
 
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;

@@ -1,8 +1,8 @@
 package Database;
 
-import dragAndDrop.Move;
-import dragAndDrop.PieceSetup;
-import dragAndDrop.ProtoUnitType;
+import Gameplay.Move;
+import Gameplay.PieceSetup;
+import Gameplay.ProtoUnitType;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
