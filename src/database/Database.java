@@ -392,8 +392,8 @@ public class Database {
                 playerInsert2.executeUpdate();
             }
 
-            myConn.commit();
-            myConn2.commit();
+//            myConn.commit();
+//            myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

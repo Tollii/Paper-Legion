@@ -282,11 +282,13 @@ public class GameLogic extends Application {
 
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
+            endTurn();
             winner();
         });
 
         surrender_no.setOnAction(event -> {
             confirm_alert.close();
+            //TODO legg inn at alerten lukker seg, kanskje det over funker
         });
 
         HBox buttons = new HBox();
