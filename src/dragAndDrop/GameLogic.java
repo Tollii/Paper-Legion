@@ -130,7 +130,7 @@ public class GameLogic extends Application {
         drawUnits();
 
 
-        // Runnable lambda implementation for turn waiting with it's own thread
+
 
 
 
@@ -726,6 +726,8 @@ public class GameLogic extends Application {
     }
 
     private void waitForTurn() {
+
+        // Runnable lambda implementation for turn waiting with it's own thread
         Runnable waitTurnRunnable = new Runnable() {
             private boolean doStop = false;
 

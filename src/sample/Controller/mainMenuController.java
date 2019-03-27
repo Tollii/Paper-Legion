@@ -7,9 +7,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import sample.Main;
-import Database.Database;
-
-import java.sql.SQLOutput;
 import java.util.Timer;
 import static Database.Variables.*;
 
@@ -18,7 +15,7 @@ public class mainMenuController extends Controller {
     public static boolean startGame = false;
     public static Timer timer = new Timer(true);
     public static boolean gameEntered = false;
-    private Thread thread;
+    private Thread searchGameThread;
     @FXML
     private JFXButton mainMenuPlayButton;
 
@@ -40,6 +37,70 @@ public class mainMenuController extends Controller {
     @FXML
     void initialize() {
 
+        Runnable searchGameRunnable = new Runnable() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while(keepRunning()){
+                    // If user clicks the button while searching for game the matchmaking thread is shut down.
+                    if (findGameClicked) {
+                        mainMenuPlayButton.setText("Play");
+                        findGameClicked = false;
+                        db.abortMatch(user_id);
+                        this.doStop();
+                    } else {
+                        findGameClicked = true;
+                        match_id = db.matchMaking_search(user_id);
+                        if(match_id > 0) {
+                            // If you join a game, you are player 2.
+                            yourTurn = false;
+                            startGame = true;
+                            enterGame();
+                            this.doStop();
+                        }
+                        //if none available create own game
+                        if (match_id < 0) {
+                            match_id = db.createGame(user_id);
+                            // If you create the game, you are player 1.
+                            yourTurn = true;
+                            try {
+                                while(!gameEntered){
+                                    Thread.sleep(3000);
+                                    gameEntered = db.pollGameStarted(match_id);
+                                    if(gameEntered){
+                                        Platform.runLater(
+                                                () ->{
+                                                    enterGame();
+                                                    this.doStop();
+                                                }
+                                        );
+                                    }
+
+                                }
+                            } catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+
+                        mainMenuPlayButton.setText("Abort");
+                        this.doStop();
+                    }
+                }
+            }
+
+            public void doStop(){
+                this.doStop = true;
+            }
+
+            public boolean keepRunning(){
+                return this.doStop == false;
+            }
+
+        };
+
+
+
         mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
 
         // Logs out the current user.
@@ -53,51 +114,7 @@ public class mainMenuController extends Controller {
         });
 
         mainMenuPlayButton.setOnAction(event -> {
-            // If user clicks the button while searching for game the matchmaking thread is shut down.
-            if (findGameClicked) {
-                mainMenuPlayButton.setText("Play");
-                findGameClicked = false;
-                db.abortMatch(user_id);
-                thread.stop();
-            } else {
-                findGameClicked = true;
-                match_id = db.matchMaking_search(user_id);
-                if(match_id > 0) {
-                    // If you join a game, you are player 2.
-                    yourTurn = false;
-                    startGame = true;
-                    enterGame();
-                }
-                //if none available create own game
-                if (match_id < 0) {
-                    match_id = db.createGame(user_id);
-                    // If you create the game, you are player 1.
-                    yourTurn = true;
-                    thread = new Thread(() -> {
-                        try {
-                            while(!gameEntered){
-                                Thread.sleep(3000);
-                                gameEntered = db.pollGameStarted(match_id);
-                                if(gameEntered){
-                                    Platform.runLater(
-                                            () ->{
-                                                thread.stop();
-                                                enterGame();
-                                            }
-                                    );
-                                }
-
-                            }
-                        } catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
-                    });
-                    thread.start();
-                }
-
-                mainMenuPlayButton.setText("Abort");
-
-            }
+            searchGameThread.start();
 
         });
 
