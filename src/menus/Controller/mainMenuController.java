@@ -10,10 +10,9 @@ import javafx.scene.control.Label;
 import menus.Main;
 
 import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import static Database.Variables.*;
+import static database.Variables.*;
 
 public class mainMenuController extends Controller {
     private static boolean findGameClicked = false;

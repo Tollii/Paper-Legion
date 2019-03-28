@@ -36,7 +36,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.sql.SQLException;
-import static Database.Variables.*;
+import static database.Variables.*;
 import java.util.ArrayList;
 import java.util.Collections;
 

@@ -1,6 +1,6 @@
 package menus;
 
-import Database.Database;
+import database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +9,8 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-import static Database.Variables.db;
-import static Database.Variables.user_id;
+import static database.Variables.db;
+import static database.Variables.user_id;
 
 public class Main extends Application {
 

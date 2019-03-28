@@ -1,7 +1,7 @@
 package tests;
 
-import Database.ConnectionPool;
-import Database.Database;
+import database.ConnectionPool;
+import database.Database;
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import Database.Cleaner;
+import database.Cleaner;
 
 //@FixMethodOrder(MethodSorters.DEFAULT)
 public class SignUpLoginTest {

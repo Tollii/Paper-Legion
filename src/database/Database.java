@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import gameplay.Move;
 import gameplay.PieceSetup;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static Database.Variables.*;
+import static database.Variables.*;
 
 public class Database {
     //Test
