@@ -283,8 +283,9 @@ public class GameLogic extends Application {
 
             ////SEND MOVEMENT////
 
-            //db.exportMoveList(movementList); when we use movement table use this
             if (movementList.size() != 0) {
+                System.out.println("SENDING MOVE LIST!");
+                db.exportMoveList(movementList); //when we use movement table use this
                 db.exportPieceMoveList(movementList);
                 movementList = new ArrayList<>(); //Resets the movementList for the next turn.
             }

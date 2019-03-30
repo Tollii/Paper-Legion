@@ -613,7 +613,7 @@ public class Database {
         return true;
     }
 
-    /*public boolean exportMoveList(ArrayList<Move> movementList) {
+    public boolean exportMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
         int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
@@ -653,9 +653,47 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
         return true;
-    }*/
+    }
 
-    //TODO
+    public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
+
+        ArrayList<Move> outputList = new ArrayList<>();
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "SELECT turn_id, Movements.piece_id, Movements.match_id, start_pos_x, start_pos_y, end_pos_x, end_pos_y FROM Movements JOIN Pieces ON Pieces.piece_id = Movements.piece_id WHERE player_id = ? AND Movements.match_id = ? AND turn_id = ?;";
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            preparedStatement.setInt(1, otherPlayerIdInput); //"Arrays begin at 1"
+            preparedStatement.setInt(2, matchIdInput);
+            preparedStatement.setInt(3, enemyTurnIDInput);
+
+            resultSet = preparedStatement.executeQuery();
+            myConn.commit();
+            while (resultSet.next()) {
+                outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
+                resultSet.next();
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return outputList;
+    }
+
     public boolean exportAttackList(ArrayList<Attack> attackList) {
 
         int turnId = attackList.get(0).getTurnId();                         //TurnId is the same for all entries in the list
@@ -699,12 +737,12 @@ public class Database {
         return true;
     }
 
-    public ArrayList<Move> importMoveList(int turnIDInput, int matchIdInput, int playerIdInput) {
+    public ArrayList<Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
 
-        ArrayList<Move> outputList = new ArrayList<>();
+        ArrayList<Attack> outputList = new ArrayList<>();
 
         Connection myConn = connectionPool.getConnection();
-        String sqlString = "SELECT turn_id, Movements.piece_id, Movements.match_id, start_pos_x, start_pos_y, end_pos_x, end_pos_y FROM Movements JOIN Pieces ON Pieces.piece_id = Movements.piece_id WHERE player_id = playerIdInput AND Movements.match_id = matchIdInput AND turn_id = turnIdInput;";
+        String sqlString = "SELECT * FROM Attacks WHERE attacking_player_id = ? AND match_id = ? AND turn_id = ?;";
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -712,10 +750,17 @@ public class Database {
         try {
             myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlString);
+
+            preparedStatement.setInt(1, otherPlayerIdInput); //"Arrays begin at 1"
+            preparedStatement.setInt(2, matchIdInput);
+            preparedStatement.setInt(3, enemyTurnIDInput);
+
             resultSet = preparedStatement.executeQuery();
+
             myConn.commit();
+
             while (resultSet.next()) {
-                outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
+                outputList.add(new Attack(resultSet.getInt("turn_id"), resultSet.getInt("match_id"), resultSet.getInt("attacking_player_id"), resultSet.getInt("attacker_piece_id"), resultSet.getInt("reciever_piece_id"), resultSet.getInt("damage_dealt")));
                 resultSet.next();
             }
 
@@ -732,6 +777,8 @@ public class Database {
 
         return outputList;
     }
+
+
 
     public boolean surrenderGame() {
         Connection myConn = connectionPool.getConnection();
@@ -758,10 +805,6 @@ public class Database {
         return false;
     }
 
-    //TODO
-    public boolean importAttackList() {
-        return false;
-    }
     /*
      __ _             _
     / _(_) __ _ _ __ (_)_ __
