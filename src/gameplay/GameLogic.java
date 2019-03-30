@@ -164,9 +164,6 @@ public class GameLogic extends Application {
 
 
 
-
-
-
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
@@ -274,6 +271,7 @@ public class GameLogic extends Application {
 
     private void endTurn(){
         if (yourTurn) {
+
             //Increments turn. Opponents Turn.
             turn++;
 
@@ -293,7 +291,11 @@ public class GameLogic extends Application {
 
 
             /////SEND ATTACKS////
-            //TODO Having a attackList just like movementList. Alternative solution below.
+
+            if(attackList.size() != 0){
+                db.exportAttackList(attackList);
+                attackList = new ArrayList<>(); //Resets the attackList for the next turn.
+            }
 
             // Alternative solution to creating a List of attacks in the future.
             // Finds every enemy unit that was damaged and sends their new info the database.
@@ -403,7 +405,7 @@ public class GameLogic extends Application {
     }
 
     private void surrender() {
-        //TODO
+        //TODO: NO SURRENDER!
     }
 
     private void deSelect(VBox sidePanel, Label description) {
@@ -674,16 +676,22 @@ public class GameLogic extends Application {
 
         int attackPosX = getPosXFromEvent(event);
         int attackPosY = getPosYFromEvent(event);
-        int id;
-        // If there is a unit on the selected tile.
+
+
         if (yourTurn) {
+
+            // If there is a unit on the selected tile.
             if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosY][attackPosX].getHp() > 0) {
                 // If within attack range.
                 if (attackRange(attackPosX, attackPosY)) {
                     // If attacked unit is not itself.
-                    if (selectedUnit != unitPosition[attackPosY][attackPosX]  && unitPosition[attackPosY][attackPosX].getEnemy()) {
+                    if (selectedUnit != unitPosition[attackPosY][attackPosX] && unitPosition[attackPosY][attackPosX].getEnemy()) {
                         // Attack is executed and unit takes damage.
                         unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
+
+                        //Adds an attack to the attack list
+                        //This is used to transfer the attack to the other player
+                        attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceID(), unitPosition[attackPosY][attackPosX].getPieceID(), selectedUnit.getAttack()));
 
                         attackCount++;
 

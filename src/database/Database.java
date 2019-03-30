@@ -1,5 +1,6 @@
 package database;
 
+import gameplay.Attack;
 import gameplay.Move;
 import gameplay.PieceSetup;
 import gameplay.ProtoUnitType;
@@ -655,8 +656,47 @@ public class Database {
     }*/
 
     //TODO
-    public boolean exportAttackList() {
-        return false;
+    public boolean exportAttackList(ArrayList<Attack> attackList) {
+
+        int turnId = attackList.get(0).getTurnId();                         //TurnId is the same for all entries in the list
+        int attackingPlayerId = attackList.get(0).getAttackingPlayerId();   //AttackingPlayerId is the same for all entries in the list
+        int matchId = attackList.get(0).getMatchId();                       //MatchId is the same for all entries in the list
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "INSERT INTO Attacks VALUES (?,?,?,?,?,?);";
+
+        PreparedStatement preparedStatement = null;
+        try {
+
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            myConn.setAutoCommit(false);
+
+            for (int i = 0; i < attackList.size(); i++) {
+                preparedStatement.setInt(1, turnId); //"Arrays begin at 1"
+                preparedStatement.setInt(2, attackingPlayerId);
+                preparedStatement.setInt(3, attackList.get(i).getAttackerPieceID());
+                preparedStatement.setInt(4, attackList.get(i).getReceiverPieceID());
+                preparedStatement.setInt(5, matchId);
+                preparedStatement.setInt(6, attackList.get(i).getDamage());
+
+                preparedStatement.executeUpdate();
+            }
+
+            myConn.commit();
+            Cleaner.setAutoCommit(myConn);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Cleaner.rollBack(myConn);
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return true;
     }
 
     public ArrayList<Move> importMoveList(int turnIDInput, int matchIdInput, int playerIdInput) {
