@@ -635,7 +635,7 @@ public class Database {
                 preparedStatement.setInt(4, movementList.get(i).getStartPosX());
                 preparedStatement.setInt(5, movementList.get(i).getStartPosY());
                 preparedStatement.setInt(6, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(7, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(7, movementList.get(i).getEndPosY());
 
                 preparedStatement.executeUpdate();
             }
