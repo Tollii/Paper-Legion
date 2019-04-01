@@ -101,19 +101,6 @@ public class GameLogic extends Application {
     private Paint attackHighlightColor = Color.DARKRED;
 
 
-
-
-
-    //////////////////////////GAME INFO FROM MYSQL//////////////////////////////////////////////////////////////////////////////////
-    //Match: player1, player2, match id, game_started                                                                             //
-    //Attacks: turn_id, attacker, receiever, match_id, damage_dealt                                                               //
-    //Movements: turn_id, piece_id, match_id, start_pos, end_pos                                                                  //
-    //Pieces: piece_id, match_id, position, player                                                                                //
-    //Turns: turn_id, match_id, player                                                                                            //
-    //Unit_types: unit_type_id, unit_name, max_health, attack, attack_range, ability_cooldown                                     //
-    //Units: piece_id, match_id, current_health, current_attack, current_attack_range, current_ability_cooldown,unit_type_id      //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static void main(String[] args) {
         //Shutdown hook. CLoses stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -803,9 +790,6 @@ public class GameLogic extends Application {
         waitTurnThread.start();
 
     }
-
-
-
 
     @Override
     public void stop() {
