@@ -35,7 +35,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sun.plugin2.message.ModalityChangeMessage;
 
 import java.sql.SQLException;
 import static database.Variables.*;
@@ -289,7 +288,8 @@ public class GameLogic extends Application {
             if (movementList.size() != 0) {
                 System.out.println("SENDING MOVE LIST!");
                 db.exportMoveList(movementList); //when we use movement table use this
-                db.exportPieceMoveList(movementList);
+                ////Old method////
+                //db.exportPieceMoveList(movementList);
                 movementList = new ArrayList<>(); //Resets the movementList for the next turn.
             }
 
@@ -301,15 +301,27 @@ public class GameLogic extends Application {
                 attackList = new ArrayList<>(); //Resets the attackList for the next turn.
             }
 
-            // Alternative solution to creating a List of attacks in the future.
             // Finds every enemy unit that was damaged and sends their new info the database.
-            //Wait for you next turn
+
 
             //Add the next turn into the database.
             db.sendTurn(turn);
+
+            //de-selects the currently selected unit
             deSelect(rSidePanel, description);
-            selectedUnit = null;
+
+            //Resets hasAttackedThisTurn for all units
+            for (int i = 0; i < unitList.size(); i++) {
+
+                unitList.get(i).setHasAttackedThisTurn(false);
+
+            }
+
+
+            //Check if you have won
             winner();
+
+            //Wait for you next turn
             waitForTurn();
         }
     }
@@ -782,56 +794,9 @@ public class GameLogic extends Application {
 
                         //Increments turn. Back to your turn.
                         Platform.runLater(()->{
-                            deSelect(rSidePanel, description);
-                            selectedUnit = null;
-                            turn++;
-                            turnCounter.setText("TURN: " + turn);
-                            endTurnButton.setText("End turn");
 
-                            importedMovementList = db.importMoveList(turn-1, match_id, opponent_id);
-                            importedAttackList = db.importAttackList(turn-1, match_id, opponent_id);
+                            setUpNewTurn();
 
-                            ////EXECUTES MOVES FROM OPPONENTS TURN////
-                            for (int i = 0; i < importedMovementList.size(); i++) {
-
-                                Unit movingUnit = unitPosition[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()];
-
-                                movingUnit.setPosition(importedMovementList.get(i).getEndPosX(), importedMovementList.get(i).getEndPosY());
-
-                                ////EXECUTES THE MOVE////
-                                unitPosition[importedMovementList.get(i).getEndPosY()][importedMovementList.get(i).getEndPosX()] = movingUnit;
-                                unitPosition[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()] = null;
-                            }
-
-                            ////EXECUTES ATTACKS FROM OPPONENTS TURN////
-                            for (int i = 0; i < importedAttackList.size(); i++) {
-
-                                for (int j = 0; j < unitList.size(); j++) {
-
-                                    if(!unitList.get(j).getEnemy() && unitList.get(j).getPieceID() == importedAttackList.get(i).getReceiverPieceID()){
-                                        System.out.println(importedAttackList.get(i).getDamage());
-
-                                        unitList.get(j).takeDamage(importedAttackList.get(i).getDamage());
-                                        System.out.println(unitList.get(j).getHp());
-
-
-                                        //If units health is zero. Remove it from the board.
-                                        if (unitList.get(j).getHp() <= 0) {
-                                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
-                                            pieceContainer.getChildren().removeAll(unitList.get(j).getPieceAvatar());
-
-                                            unitPosition[unitList.get(j).getPositionY()][unitList.get(j).getPositionX()] = null;
-                                            unitList.remove(j);
-                                            unitList.removeAll(Collections.singletonList(null));
-                                        }
-                                    }
-
-                                }
-                            }
-
-                            //deDrawUnits();
-                            //drawUnits();
-                            winner();
                         });
 
                         movementPhase = true;
@@ -858,7 +823,62 @@ public class GameLogic extends Application {
 
     }
 
+    private void setUpNewTurn(){
+        deSelect(rSidePanel, description);
+        selectedUnit = null;
+        turn++;
+        turnCounter.setText("TURN: " + turn);
+        endTurnButton.setText("End turn");
 
+        importedMovementList = db.importMoveList(turn-1, match_id);
+        importedAttackList = db.importAttackList(turn-1, match_id, opponent_id);
+
+        System.out.println("importedAttackList size is: " + importedAttackList.size());
+
+        ////EXECUTES MOVES FROM OPPONENTS TURN////
+        for (int i = 0; i < importedMovementList.size(); i++) {
+
+            Unit movingUnit = unitPosition[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()];
+
+            movingUnit.setPosition(importedMovementList.get(i).getEndPosX(), importedMovementList.get(i).getEndPosY());
+
+            ////EXECUTES THE MOVE////
+            unitPosition[importedMovementList.get(i).getEndPosY()][importedMovementList.get(i).getEndPosX()] = movingUnit;
+            unitPosition[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()] = null;
+        }
+
+        ////EXECUTES ATTACKS FROM OPPONENTS TURN////
+        for (int i = 0; i < importedAttackList.size(); i++) {
+
+            for (int j = 0; j < unitList.size(); j++) {
+
+                if(!unitList.get(j).getEnemy() && unitList.get(j).getPieceID() == importedAttackList.get(i).getReceiverPieceID()){
+                    System.out.println(importedAttackList.get(i).getDamage());
+
+                    System.out.println("DOING AN ATTACK!" + unitList.get(j).getHp());
+
+                    unitList.get(j).takeDamage(importedAttackList.get(i).getDamage());
+
+
+
+                    //If units health is zero. Remove it from the board.
+                    if (unitList.get(j).getHp() <= 0) {
+                        //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
+                        pieceContainer.getChildren().removeAll(unitList.get(j).getPieceAvatar());
+
+                        unitPosition[unitList.get(j).getPositionY()][unitList.get(j).getPositionX()] = null;
+                        unitList.remove(j);
+                        unitList.removeAll(Collections.singletonList(null));
+                    }
+                }
+
+            }
+        }
+        ////Old methods////
+        //deDrawUnits();
+        //drawUnits();
+        winner();
+    }
 
 
     @Override
