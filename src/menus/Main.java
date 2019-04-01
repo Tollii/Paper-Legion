@@ -40,11 +40,13 @@ public class Main extends Application {
             if (user_id > 0) {
                 db.logout(user_id);
             }
+
             try {
                 db.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            System.exit(0);
         }));
         launch(args);
     }

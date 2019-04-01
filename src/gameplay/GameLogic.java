@@ -981,6 +981,7 @@ public class GameLogic extends Application {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            System.exit(0);
         }));
         launch(args);
     }
