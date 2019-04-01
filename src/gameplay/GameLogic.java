@@ -809,8 +809,10 @@ public class GameLogic extends Application {
                                 for (int j = 0; j < unitList.size(); j++) {
 
                                     if(!unitList.get(j).getEnemy() && unitList.get(j).getPieceID() == importedAttackList.get(i).getReceiverPieceID()){
+                                        System.out.println(importedAttackList.get(i).getDamage());
 
                                         unitList.get(j).takeDamage(importedAttackList.get(i).getDamage());
+                                        System.out.println(unitList.get(j).getHp());
 
 
                                         //If units health is zero. Remove it from the board.

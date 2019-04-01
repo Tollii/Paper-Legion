@@ -760,7 +760,7 @@ public class Database {
             myConn.commit();
 
             while (resultSet.next()) {
-                outputList.add(new Attack(resultSet.getInt("turn_id"), resultSet.getInt("match_id"), resultSet.getInt("attacking_player_id"), resultSet.getInt("attacker_piece_id"), resultSet.getInt("reciever_piece_id"), resultSet.getInt("damage_dealt")));
+                outputList.add(new Attack(resultSet.getInt("turn_id"), resultSet.getInt("match_id"), resultSet.getInt("attacking_player_id"), resultSet.getInt("attacker_piece_id"), resultSet.getInt("receiver_piece_id"), resultSet.getInt("damage_dealt")));
                 resultSet.next();
             }
 
