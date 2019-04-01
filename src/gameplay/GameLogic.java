@@ -37,16 +37,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import menus.Controller.Controller;
 import menus.Main;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import static database.Variables.*;
 import java.util.ArrayList;
 import java.util.Collections;
-
-
+import static database.Variables.*;
 
 public class GameLogic extends Application {
 
@@ -127,7 +124,7 @@ public class GameLogic extends Application {
         if (user_id == player1) {
             db.insertPieces();
         } else {
-            int number = 0;
+            int number;
             do {
                 number = db.pollForUnits();
                 Thread.sleep(5000);
@@ -782,6 +779,7 @@ public class GameLogic extends Application {
                 while(keepRunning()){
                     try {
                         while (!yourTurn) {
+                            //Wait time for polling.
                             System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
