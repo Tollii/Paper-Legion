@@ -19,8 +19,10 @@ package gameplay;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -34,7 +36,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import menus.Controller.Controller;
+import menus.Main;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import static database.Variables.*;
@@ -770,6 +775,19 @@ public class GameLogic extends Application {
             // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
 
             endGameBtn.setOnAction(event -> {
+                String fxmlDir = "/menus/View/mainMenu.fxml";
+                FXMLLoader loader = new FXMLLoader();
+                Parent root2 =null;
+                try {
+                    root2 =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
+                    // loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("load failed");
+                }
+
+                Main.window.setScene(new Scene(root2));
+
                 //TODO Switch scene to main menu
             });
 
