@@ -4,9 +4,13 @@ import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
 
-public class UnitGenerator {
+public class  UnitGenerator {
 
     //Variables
+
+    ////Unit ID generator////
+    private static int unitId = 0;
+
     private static double swordsmanMaxHP;
     private static int swordsmanAttack;
     private static int swordsmanAbilityCooldown;
@@ -84,25 +88,40 @@ public class UnitGenerator {
 
     }
 
-    public static UnitType newUnit(int unitType) {
-      UnitType type = null;
+    public static Unit newUnit(boolean enemy, int unitType) {
+
       switch (unitType) {
-        case 1: type = swordsmanUnitType;
-          break;
-        case 2: type = archerUnitType;
-          break;
+        case 1:
+            return new Unit( enemy, swordsmanUnitType, unitId++);
+
+        case 2:
+            return new Unit( enemy, archerUnitType, unitId++);
       }
-      return type;
+      return null;
     }
 
-    public static UnitType newUnit(String unitType) {
-        UnitType type = null;
+    public static Unit newUnit(boolean enemy, String unitType) {
+
         switch (unitType) {
-            case "Swordsman": type = swordsmanUnitType;
-                break;
-            case "Archer": type = archerUnitType;
-                break;
+            case "Swordsman":
+                return new Unit( enemy, swordsmanUnitType, unitId++);
+
+            case "Archer":
+                return new Unit( enemy, archerUnitType, unitId++);
+
         }
-        return type;
+
+        return null;
+    }
+
+    public static Recruit newRecruit(int unitType) {
+        switch (unitType) {
+            case 1:
+                return new Recruit(swordsmanUnitType);
+
+            case 2:
+                return new Recruit(archerUnitType);
+        }
+        return null;
     }
 }
