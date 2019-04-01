@@ -764,13 +764,17 @@ public class GameLogic extends Application {
             else {
                 winner.setText("You win!");
             }
-            JFXButton endgame = new JFXButton("Return to menu");
+            JFXButton endGameBtn = new JFXButton("Return to menu");
             // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+
+            endGameBtn.setOnAction(event -> {
+                //TODO Switch scene to main menu
+            });
 
             VBox content = new VBox();
             content.setAlignment(Pos.CENTER);
             content.setSpacing(20);
-            content.getChildren().addAll(winner,endgame);
+            content.getChildren().addAll(winner,endGameBtn);
             Scene scene = new Scene(content,250,150);
             winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
