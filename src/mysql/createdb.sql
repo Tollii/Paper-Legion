@@ -51,7 +51,8 @@ CREATE TABLE Turns(
 CREATE TABLE Pieces(
   piece_id int NOT NULL,
   match_id int NOT NULL,
-  position point NOT NULL,
+  position_x int NULL,
+  position_y int NULL,
   player int NOT NULL,
   PRIMARY KEY(piece_id, match_id),
   FOREIGN KEY(match_id) REFERENCES Matches(match_id) ON DELETE CASCADE
@@ -60,8 +61,11 @@ CREATE TABLE Pieces(
 CREATE TABLE Obstacles(
   piece_id int NOT NULL,
   match_id int NOT NULL,
+  position_x int NULL,
+  position_y int NULL,
   PRIMARY KEY(piece_id, match_id),
-  FOREIGN KEY(piece_id, match_id) REFERENCES Pieces(piece_id, match_id) ON DELETE CASCADE
+  --FOREIGN KEY(piece_id, match_id) REFERENCES Pieces(piece_id, match_id) ON DELETE CASCADE
+  FOREIGN KEY(match_id) REFERENCES Matches(match_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Units(

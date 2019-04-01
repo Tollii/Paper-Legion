@@ -21,3 +21,13 @@ select Pieces.piece_id, Pieces.match_id, Pieces.player_id,position_x, position_y
 right join Units U on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id and Pieces.player_id = U.player_id
 where Pieces.match_id=345
 Order by piece_id,player_id;
+
+-- obstacles
+insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);
+insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(2,295,1,1);
+
+ALTER TABLE Obstacles DROP FOREIGN KEY piece_id;
+
+ALTER TABLE Obstacles DROP INDEX obstacle_id;
+
+ALTER TABLE Obstacles ADD FOREIGN KEY(match_id) REFERENCES Matches(match_id) ON DELETE CASCADE;

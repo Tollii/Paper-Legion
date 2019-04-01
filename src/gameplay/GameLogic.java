@@ -47,7 +47,7 @@ import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
-    private static final int boardSize = 7; // 7x7 for example
+    public static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
     private static Unit[][] unitPosition = new Unit[boardSize][boardSize];
     private static final int offsetX = 100;
@@ -116,6 +116,7 @@ public class GameLogic extends Application {
 
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
+            db.insertObstacles();
             db.insertPieces();
         } else {
             int number = 0;

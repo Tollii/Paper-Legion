@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import static gameplay.GameLogic.*;
 import static database.Variables.*;
 
 
@@ -27,7 +28,7 @@ public class Database {
     //Class variables
 
     private static ConnectionPool connectionPool = null;
-
+    private int[][] obstacles;
     public Database() {
 
         try {
@@ -455,112 +456,68 @@ public class Database {
         }
         return null;
     }
+    private boolean randGenNoRepeats(int xPos, int yPos, int length){
 
-//    public void insertObstacles() {
-//        Random rand = new Random();
-//        int antallObstacles = 3 + rand.nextInt(5);
-//        int[][] obstacles = new int[antallObstacles][2];
-//        for(int i = 0; i<antallObstacles; i++){
-//           // obstacles[i];
-//
-//        }
-//        Connection myConn = connectionPool.getConnection();
-//        Connection myConn2 = connectionPool.getConnection();
-//        ArrayList<String> piecesPlayer1 = new ArrayList<String>();
-//        ArrayList<String> piecesPlayer2 = new ArrayList<String>();
-//        PreparedStatement playerInsert1 = null;
-//        PreparedStatement playerInsert2 = null;
-//
-//
-//        //Player 1
-//        String sqlPlayerObstacle = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(1,?,?,0,0);";
-//        String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (5,?,?, 60, 50, 2,3,1,2);";
-//        //piecesPlayer1.add(sqlPlayer1piece);
-//
-//        piecesPlayer1.add(unit_player1);
-//
-//        try {
-////            myConn.setAutoCommit(false);
-////            myConn2.setAutoCommit(false);
-//
-//            for (int i = 0; i < piecesPlayer1.size(); i++) {
-//                playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
-//                playerInsert1.setInt(1, match_id);
-//                playerInsert1.setInt(2, player1);
-//
-//                playerInsert1.executeUpdate();
-//            }
-//
-//            for (int i = 0; i < piecesPlayer2.size(); i++) {
-//                playerInsert2 = myConn2.prepareStatement(piecesPlayer2.get(i));
-//                playerInsert2.setInt(1, match_id);
-//                playerInsert2.setInt(2, player2);
-//
-//                playerInsert2.executeUpdate();
-//            }
-//
-////            myConn.commit();
-////            myConn2.commit();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-////            Cleaner.setAutoCommit(myConn);
-////            Cleaner.setAutoCommit(myConn2);
-//            Cleaner.closeStatement(playerInsert1);
-//            Cleaner.closeStatement(playerInsert2);
-//            connectionPool.releaseConnection(myConn);
-//            connectionPool.releaseConnection(myConn2);
-//        }
-//    }
-//
-//    //puts the units from the database into an arraylist
-//    public ArrayList<PieceSetup> importPlacementPieces() {
-//        ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
-//        ResultSet result = null;
-//        PreparedStatement preparedStatement = null;
-//        int pieceId;
-//        int match_idDB;
-//        int player_id;
-//        int positionX;
-//        int positionY;
-//        int unit_type_id;
-//        double current_hp;
-//
-//        Connection myConn = connectionPool.getConnection();
-//        String sqlsetning = "select Pieces.piece_id, Pieces.match_id, Pieces.player_id,position_x, position_y, unit_type_id, current_health from Pieces \n" +
-//                "join Units U on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id and Pieces.player_id = U.player_id\n" +
-//                "where Pieces.match_id=?;";
-//        try {
+    for(int i = 0; i<length; i++){
+        if(xPos == obstacles[i][0] && yPos == obstacles[i][1]){
+            return false;
+        }
+    }
+    return true;
+    }
+
+    public void insertObstacles() {
+        Random rand = new Random();
+        int antallObstacles = 3 + rand.nextInt(5);
+        obstacles = new int[antallObstacles][2];
+        int xPos;
+        int yPos;
+        boolean position_exists;
+        for(int i = 0; i<antallObstacles; i++){
+            position_exists = true;
+            while(position_exists) {
+                xPos = rand.nextInt(boardSize-1);
+                yPos = 2 + rand.nextInt(boardSize-(2*2)-1);
+                if (randGenNoRepeats(xPos, yPos, i)) {
+                    obstacles[i][0] = xPos;
+                    obstacles[i][1] = yPos;
+                    position_exists = false;
+                }
+            }
+        }
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement player = null;
+
+
+        //The statement
+        String sqlPlayerObstacle = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
+
+
+        try {
 //            myConn.setAutoCommit(false);
-//            preparedStatement = myConn.prepareStatement(sqlsetning);
-//            preparedStatement.setInt(1, match_id); //This is the correct one
-//            // preparedStatement.setInt(1,250); //for test purposes;
-//            result = preparedStatement.executeQuery();
+//            myConn2.setAutoCommit(false);
+
+            for (int i = 0; i < antallObstacles; i++) {
+                player = myConn.prepareStatement(sqlPlayerObstacle);
+                player.setInt(1, i+1);
+                player.setInt(2, match_id);
+                player.setInt(3, obstacles[i][0]);
+                player.setInt(4, obstacles[i][1]);
+
+                player.executeUpdate();
+            }
+
+
 //            myConn.commit();
-//            while (result.next()) {
-//                pieceId = result.getInt("piece_id");
-//                player_id = result.getInt("player_id");
-//                positionX = result.getInt("position_x");
-//                positionY = result.getInt("position_y");
-//                unit_type_id = result.getInt("unit_type_id");
-//                current_hp = result.getDouble("current_health");
-//
-//                PieceSetup piece = new PieceSetup(pieceId, match_id, player_id, positionX, positionY, unit_type_id, current_hp);
-//                piecesImport.add(piece);
-//            }
-//
-//
-//            return piecesImport;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
 //            Cleaner.setAutoCommit(myConn);
-//            Cleaner.closeResSet(result);
-//            Cleaner.closeStatement(preparedStatement);
-//            connectionPool.releaseConnection(myConn);
-//        }
-//        return null;
-//    }
+            Cleaner.closeStatement(player);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
     /*
        ___                           _
       / _ \__ _ _ __ ___   ___ _ __ | | __ _ _   _
