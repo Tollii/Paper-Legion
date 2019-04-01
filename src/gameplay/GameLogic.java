@@ -289,7 +289,9 @@ public class GameLogic extends Application {
             winner();
 
             //Wait for you next turn
-            waitForTurn();
+            if (checkForWinner() == -1) {
+                setUpNewTurn();
+            }
         }
     }
 
@@ -960,6 +962,13 @@ public class GameLogic extends Application {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
         waitTurnThread.stop();
+
+        //Sets turns back to 1 for next match.
+        turn = 1;
+        match_id = -1;
+        player1 = -1;
+        player2 = -1;
+        opponent_id = -1;
     }
 
     public static void main(String[] args) {
