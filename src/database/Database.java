@@ -476,8 +476,8 @@ public class Database {
         for(int i = 0; i<antallObstacles; i++){
             position_exists = true;
             while(position_exists) {
-                xPos = rand.nextInt(boardSize-1);
-                yPos = 2 + rand.nextInt(boardSize-(2*2)-1);
+                xPos = rand.nextInt(boardSize);
+                yPos = 2 + rand.nextInt(boardSize-(2*2));
                 if (randGenNoRepeats(xPos, yPos, i)) {
                     obstacles[i][0] = xPos;
                     obstacles[i][1] = yPos;
