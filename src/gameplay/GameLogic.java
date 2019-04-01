@@ -951,9 +951,11 @@ public class GameLogic extends Application {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
-                winner_alert.close();
-                winner_alert.hide();
+
                 Main.window.setScene(new Scene(root2));
+                winner_alert.close();
+
+
 
                 //TODO Switch scene to main menu
             });
