@@ -316,7 +316,7 @@ public class Database {
     }
 
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
-        //TODO
+        //TODO Finish this method
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(?,?,?,0,0);";
         ResultSet resultSet = null;
