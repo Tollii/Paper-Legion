@@ -57,6 +57,9 @@ public class mainMenuController extends Controller {
 
             @Override
             public void run() {
+
+                //TODO Currently you can't create a new game after cancelling a game. Also "isPressed" is confusing.
+
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {
@@ -64,9 +67,9 @@ public class mainMenuController extends Controller {
                             findGameClicked = false;
                             mainMenuPlayButton.setText("Play");
                             db.abortMatch(user_id);
+                            System.out.println("Game cancelled");
                             this.runAgain();
                         });
-
                         this.doStop();
                     } else {
                         Platform.runLater(() -> {
@@ -96,14 +99,12 @@ public class mainMenuController extends Controller {
 
                                     if (gameEntered) {
                                         Platform.runLater(() -> {
+                                            isPressed = false;
                                             enterGame();
                                         });
-
                                         this.doStop();
                                     }
-
                                 }
-                                isPressed = false;
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -122,7 +123,7 @@ public class mainMenuController extends Controller {
                 return !this.doStop;
             }
 
-            public synchronized  void runAgain(){
+            public synchronized void runAgain() {
                 this.doStop = false;
             }
 
@@ -143,12 +144,12 @@ public class mainMenuController extends Controller {
         });
 
         mainMenuPlayButton.setOnAction(event -> {
-            if(!threadStarted){
+            if (!threadStarted) {
                 threadStarted = true;
                 searchGameThread.start();
             }
 
-            if(isPressed){
+            if (isPressed) {
                 isPressed = false;
             }
 
