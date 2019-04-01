@@ -35,6 +35,9 @@ CREATE TABLE Matches(
   FOREIGN KEY(player1) REFERENCES Users(user_id),
   FOREIGN KEY(player2) REFERENCES Users(user_id)
 );
+--legg inn dette
+ALTER TABLE `Matches` ADD `player1_ready` TINYINT(1) NULL DEFAULT NULL AFTER `surrendered`,
+ ADD `player2_ready` TINYINT(1) NULL DEFAULT NULL AFTER `player1_ready`;
 
 CREATE TABLE Turns(
   turn_id int NOT NULL,
