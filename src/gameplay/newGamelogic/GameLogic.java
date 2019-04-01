@@ -151,14 +151,14 @@ public class GameLogic extends Application {
   }
 
   private int getPosXFromEvent(MouseEvent event) {
-    return (int)Math.ceil((event.getX() - gridXPadding) / 100);
+    return (int)Math.ceil((event.getX() - gridXPadding) / tileSize);
   }
 
   private int getPosYFromEvent(MouseEvent event) {
-    return (int)Math.ceil((event.getY() - gridYPadding) / 100);
+    return (int)Math.ceil((event.getY() - gridYPadding) / tileSize);
   }
 
-  public Pane createGrid() { //adds grid and styles it
+  private Pane createGrid() { //adds grid and styles it
     Pane gridPane = new Pane();
 
     gridPane.getChildren().add(grid);
@@ -170,14 +170,14 @@ public class GameLogic extends Application {
     return gridPane;
   }
 
-  public Pane createRecruitPane() { //adds unit selector/recruiter and styles it
+  private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
     Pane unitPane = new Pane();
     FlowPane units = new FlowPane(Orientation.HORIZONTAL, 5, 5);
 
     units.setMinWidth(520);
 
     for (int i = 0; i < SetUp.unitTypeList.size(); i++) {
-      RecruitTile tile = new RecruitTile(tileSize, tileSize, new Recruit(UnitGenerator.newUnit(SetUp.unitTypeList.get(i))));
+      RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
       units.getChildren().add(tile);
     }
     unitPane.getChildren().add(units);
