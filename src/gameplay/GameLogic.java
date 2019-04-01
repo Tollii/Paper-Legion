@@ -965,4 +965,18 @@ public class GameLogic extends Application {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         waitTurnThread.stop();
     }
+
+    public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
+            if (user_id > 0) {
+                db.logout(user_id);
+            }
+            try {
+                db.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
+        launch(args);
+    }
 }
