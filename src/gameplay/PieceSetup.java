@@ -1,5 +1,8 @@
 package gameplay;
 
+/* This class is used as a placeholder for information stored in database about
+/* Units/Pieces, and is intended to use with static positions especially for mvp */
+
 public class PieceSetup {
     private int pieceId;
     private int matchId;
