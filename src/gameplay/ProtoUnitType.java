@@ -1,5 +1,8 @@
 package gameplay;
 
+import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
+
 public class ProtoUnitType implements UnitType {
 
     private final String type;
@@ -12,8 +15,10 @@ public class ProtoUnitType implements UnitType {
     private final int movementRange;
     private final String description;
     private final String descriptionTag;
+    private final Image image;
+    private final AudioClip audio;
 
-    public ProtoUnitType(String type, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description, String descriptionTag){
+    public ProtoUnitType(String type, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description, String descriptionTag, Image image, AudioClip audio){
         this.type = type;
         this.hp = hp;
         this.attack = attack;
@@ -24,6 +29,8 @@ public class ProtoUnitType implements UnitType {
         this.movementRange = movementRage;
         this.description = description;
         this.descriptionTag = descriptionTag;
+        this.image = image;
+        this.audio = audio;
     }
 
     @Override
@@ -74,5 +81,15 @@ public class ProtoUnitType implements UnitType {
     @Override
     public String getDescriptionTag() {
         return descriptionTag;
+    }
+
+    @Override
+    public Image getUnitImage() {
+        return image;
+    }
+
+    @Override
+    public AudioClip getAudio() {
+        return audio;
     }
 }

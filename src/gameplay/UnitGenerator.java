@@ -84,14 +84,25 @@ public class UnitGenerator {
 
     }
 
-    public UnitType newUnit(String unitType) {
+    public static UnitType newUnit(int unitType) {
       UnitType type = null;
       switch (unitType) {
-        case "Archer": type = archerUnitType;
+        case 1: type = swordsmanUnitType;
           break;
-        case "Swordsman": type = swordsmanUnitType;
+        case 2: type = archerUnitType;
           break;
       }
       return type;
+    }
+
+    public static UnitType newUnit(String unitType) {
+        UnitType type = null;
+        switch (unitType) {
+            case "Swordsman": type = swordsmanUnitType;
+                break;
+            case "Archer": type = archerUnitType;
+                break;
+        }
+        return type;
     }
 }

@@ -202,8 +202,8 @@ public class GameLogic extends Application {
 
     units.setMinWidth(520);
 
-    for (int i = 0; i < unitTypeList.size(); i++) {
-      RecruitTile tile = new RecruitTile(tileSize, tileSize, new Recruit(UnitGenerator.newUnit(unitTypeList.get(i))));
+    for (int i = 0; i < SetUp.unitTypeList.size(); i++) {
+      RecruitTile tile = new RecruitTile(tileSize, tileSize, new Recruit(UnitGenerator.newUnit(SetUp.unitTypeList.get(i))));
       units.getChildren().add(tile);
     }
     unitPane.getChildren().add(units);
