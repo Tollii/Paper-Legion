@@ -1018,7 +1018,7 @@ public class Database {
             int result = preparedStatement.executeUpdate();
             myConn.commit();
             if (result == 1) {
-                System.out.println("Win regisrered");
+                System.out.println("Win registered");
                 return true;
             }
         } catch (SQLException e) {

@@ -756,7 +756,8 @@ public class GameLogic extends Application {
             winner_alert.setTitle("Game over!");
 
             Text winner = new Text();
-            winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            //winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            winner.setStyle("-fx-font-size:32px;");
             db.incrementGamesPlayed();
             if (winnerOrLoser == 1){
                 winner.setText("You Lose");
