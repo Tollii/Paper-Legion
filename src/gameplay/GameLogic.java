@@ -775,16 +775,7 @@ public class GameLogic extends Application {
             }
             JFXButton endGameBtn = new JFXButton("Return to menu");
 
-            endGameBtn.setOnAction(event -> {
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("/menus/View/mainMenu.fxml"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                winner_alert.close();
-                window.setScene(new Scene(root, 600, 400));
-            });
+
 
             // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
 
@@ -799,7 +790,8 @@ public class GameLogic extends Application {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
-
+                winner_alert.close();
+                winner_alert.hide();
                 Main.window.setScene(new Scene(root2));
 
                 //TODO Switch scene to main menu
