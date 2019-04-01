@@ -21,7 +21,6 @@ import java.util.Random;
 import static gameplay.GameLogic.*;
 import static database.Variables.*;
 
-
 public class Database {
     //Test
 

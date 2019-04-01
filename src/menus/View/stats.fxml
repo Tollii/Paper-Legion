@@ -14,56 +14,48 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.Controller.StatsController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" fx:controller="menus.Controller.StatsController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0">
-         <top>
-            <BorderPane prefHeight="91.0" prefWidth="600.0" style="-fx-background-color: #424242;" BorderPane.alignment="CENTER">
-               <center>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Binary Warfare" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Text>
-               </center>
-            </BorderPane>
-         </top>
-         <left>
-            <VBox prefHeight="309.0" prefWidth="429.0" BorderPane.alignment="CENTER">
+      <AnchorPane minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
                <children>
-                  <Label fx:id="statsUsernameLabel" text="Username: ">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="statsEmailLabel" text="E-mail: ">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="statsGamesPlayedLabel" text="Games played:">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="statsGamesWonLabel" text="Games won: ">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
+                  <VBox alignment="CENTER" prefHeight="366.0" prefWidth="590.0" spacing="30.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label fx:id="gameTitleLabel" text="Paper Legion">
+                           <font>
+                              <Font name="Avenir Light" size="39.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="statsUsernameLabel" text="Username: ">
+                           <font>
+                              <Font name="Avenir Light" size="22.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="statsEmailLabel" text="E-mail: ">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="statsGamesPlayedLabel" text="Games played:">
+                           <font>
+                              <Font name="Avenir Light" size="22.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="statsGamesWonLabel" text="Games won: ">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="statsBackButton" style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Back" />
+                     </children>
+                  </VBox>
                </children>
-               <BorderPane.margin>
-                  <Insets bottom="25.0" left="100.0" right="100.0" top="25.0" />
-               </BorderPane.margin>
-            </VBox>
-         </left>
-         <bottom>
-            <VBox alignment="CENTER" prefHeight="78.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-               <children>
-                  <JFXButton fx:id="statsBackButton" style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Back" />
-               </children>
-            </VBox>
-         </bottom>
-      </BorderPane>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
    </children>
-</StackPane>
+</AnchorPane>

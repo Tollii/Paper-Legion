@@ -23,6 +23,10 @@ public class ConnectionPool {
     private static int MAX_POOL_SIZE = 10;
 
 
+    public ConnectionPool(List<Connection> pool){
+        this.connectionPool = pool;
+    }
+
     // Initializes an ArrayList, then fills it with connections. This is the connectionPool.
     public static ConnectionPool create() throws SQLException{
         try{
@@ -37,10 +41,6 @@ public class ConnectionPool {
             clne.printStackTrace();
         }
         return null;
-    }
-
-    public ConnectionPool(List<Connection> pool){
-        this.connectionPool = pool;
     }
 
     // Fetches a connection from the connection pool

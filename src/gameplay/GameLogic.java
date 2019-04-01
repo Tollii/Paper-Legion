@@ -16,6 +16,7 @@
 
 package gameplay;
 
+import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -34,27 +35,28 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.sql.SQLException;
-
 import static database.Variables.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static database.Variables.db;
-import static database.Variables.user_id;
 
 
 public class GameLogic extends Application {
+
+    ////LAYOUT////
     public static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
     private static Unit[][] unitPosition = new Unit[boardSize][boardSize];
     private static final int offsetX = 100;
     private static final int offsetY = 100;
+    private final int descriptionOffsetLeft = 0;
+    private final int descriptionOffsetRight = 0;
+    private final int descriptionOffsetTop = 0;
+    private final int descriptionOffsetBottom = 350;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
-    private Thread thread;
+    private Thread waitTurnThread;
 
     ////SCENE ELEMENTS////
     private Scene scene;                                //Scene for second and third phase of the game
@@ -68,6 +70,8 @@ public class GameLogic extends Application {
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
 
+
+
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                                   //Holds the X position to the selected piece.
     private int selectedPosY;                                   //Holds the Y position to the selected piece.
@@ -76,6 +80,7 @@ public class GameLogic extends Application {
     private Unit selectedUnit;                                  //Reference to the selected unit. Used for move, attack, etc.
     private boolean selected = false;                           // True or false for selected piece.
     private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
+    private ArrayList<Attack> attackList = new ArrayList<>();
     private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
@@ -85,7 +90,13 @@ public class GameLogic extends Application {
     private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
     private AudioClip bow = new AudioClip(this.getClass().getResource("/gameplay/assets/arrow.wav").toString());
 
-    ////COLORS////
+    ////STYLING////
+    private String gameTitle = "BINARY WARFARE";
+    private String descriptionFont = "-fx-font-family: 'Arial Black'";
+    private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
+    private String turnCounterFontSize = "-fx-font-size: 32px";
+    private Paint selectionOutlineColor = Color.RED;
+    private Paint endTurnButtonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
 
@@ -114,6 +125,7 @@ public class GameLogic extends Application {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
 
+        //TODO placementPhase code goes here
         ///Inserts units into DB for game. Only player1 draws the units. This is a temporary filler for the placement phase.
         if (user_id == player1) {
             db.insertObstacles();
@@ -123,17 +135,24 @@ public class GameLogic extends Application {
             do {
 
                 number = db.pollForUnits();
-                thread.sleep(5000);
+                Thread.sleep(5000);
             } while (number != 10);
         }
         createUnits();
 
         drawUnits();
 
+
+
+
+
+
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
+
+
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -187,7 +206,7 @@ public class GameLogic extends Application {
         ///////////////////////////////////////////////////////////////////////////////////////
 
 
-        window.setTitle("BINARY WARFARE");
+        window.setTitle(gameTitle);
         window.setScene(scene);
         window.show();
     }
@@ -201,15 +220,18 @@ public class GameLogic extends Application {
         pieceContainer.setAlignment(Pos.BASELINE_LEFT); //Only baseline_Left is correct according to positions.
         pieceContainer.setPrefWidth(900);
 
-        board.getChildren().add(grid.gp); //Insert grid from Grid class.
+        board.getChildren().add(grid); //Insert grid from Grid class.
         pieceContainer.getChildren().add(board);  //Legger alle tiles til i stackpane som blir lagt til scenen.
 
-        turnCounter.setStyle("-fx-font-size:32px;");
+        turnCounter.setStyle(turnCounterFontSize);
 
         endTurnButton.setPrefWidth(150);
         endTurnButton.setPrefHeight(75);
-        endTurnButton.setTextFill(Color.WHITE);
-        endTurnButton.setStyle("-fx-background-color: #000000");
+        endTurnButton.setTextFill(endTurnButtonTextColor);
+        endTurnButton.setStyle(endTurnButtonBackgroundColor);
+
+        description.setStyle(descriptionFont);
+        description.setPadding(new Insets(descriptionOffsetTop, descriptionOffsetRight, descriptionOffsetBottom, descriptionOffsetLeft));
 
         surrenderButton.setPrefWidth(150);
         surrenderButton.setPrefHeight(75);
@@ -403,39 +425,6 @@ public class GameLogic extends Application {
         System.out.println(pieceContainer.getChildren().size());
     }
 
-    private void select(MouseEvent event, VBox vBox, Label description) {
-
-        int posX = getPosXFromEvent(event);
-        int posY = getPosYFromEvent(event);
-
-
-        if (!(posX > boardSize || posY > boardSize || posX < 0 || posY < 0) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy() && unitPosition[posY][posX].getHp() > 0) {
-
-            unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
-            unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
-            unitPosition[posY][posX].setStrokeWidth(3);
-            unitPosition[posY][posX].setStroke(Color.RED);
-
-            selected = true;
-
-            selectedPosX = posX;
-            selectedPosY = posY;
-
-            selectedUnit = unitPosition[selectedPosY][selectedPosX];
-
-            if (movementPhase) {
-                highlightPossibleMoves();
-            } else if (!selectedUnit.getHasAttackedThisTurn()) {
-                highlightPossibleAttacks();
-            }
-
-            description.setText(selectedUnit.getDescription());
-            vBox.getChildren().add(description);
-            description.toBack();
-
-        }
-    }
-
     private void deSelect(VBox sidePanel, Label description) {
 
         for (int i = 0; i < unitPosition.length; i++) {
@@ -487,52 +476,41 @@ public class GameLogic extends Application {
         }
     }
 
-    private void attack(MouseEvent event) {
+    private void select(MouseEvent event, VBox vBox, Label description) {
 
-        int attackPosX = getPosXFromEvent(event);
-        int attackPosY = getPosYFromEvent(event);
-        int id;
-        // If there is a unit on the selected tile.
-        if (yourTurn) {
-            if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosY][attackPosX].getHp() > 0) {
-                // If within attack range.
-                if (attackRange(attackPosX, attackPosY)) {
-                    // If attacked unit is not itself.
-                    if (selectedUnit != unitPosition[attackPosY][attackPosX]  && unitPosition[attackPosY][attackPosX].getEnemy()) {
-                        // Attack is executed and unit takes damage.
-                        unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
-
-                        attackCount++;
-
-                        //Plays audio cue for each type.
-                        if (selectedUnit.getType().equalsIgnoreCase("Swordsman")) {
-                            sword.play();
-                        } else if (selectedUnit.getType().equalsIgnoreCase("Archer")) {
-                            bow.play();
-                        }
-                        db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
+        int posX = getPosXFromEvent(event);
+        int posY = getPosYFromEvent(event);
 
 
-                        //If units health is zero. Remove it from the board.
-                        if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
-                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
-                            pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
-                            //unitPosition[attackPosY][attackPosX].setHp(0);
-                            for (int i = 0; i < unitList.size(); i++) {
-                                if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()) {
-                                    //unitList.remove(i);
-                                }
-                            }
-                            unitPosition[attackPosY][attackPosX] = null;
-                            unitList.removeAll(Collections.singletonList(null));
+        if (!(posX > boardSize || posY > boardSize || posX < 0 || posY < 0) && (unitPosition[posY][posX] != null) && !unitPosition[posY][posX].getEnemy() && unitPosition[posY][posX].getHp() > 0) {
 
-                        }
+            unitPosition[posY][posX].setPosition((int) (unitPosition[posY][posX].getTranslateX() / tileSize), (int) (unitPosition[posY][posX].getTranslateY() / tileSize));
+            unitPosition[posY][posX].setStrokeType(StrokeType.INSIDE);
+            unitPosition[posY][posX].setStrokeWidth(3);
+            unitPosition[posY][posX].setStroke(selectionOutlineColor);
 
-                        selectedUnit.setHasAttackedThisTurn(true);
-                        clearHighlight();
-                    }
+            selected = true;
+
+            selectedPosX = posX;
+            selectedPosY = posY;
+
+            selectedUnit = unitPosition[selectedPosY][selectedPosX];
+
+            //Decides based on the phase and whether or not it's your turn, what will happen when you select a unit.
+            //If it's not your turn, you will have the ability to see the units info and description, but not the movement/attach highlight
+            if(yourTurn){
+                if (movementPhase) {
+                    highlightPossibleMoves();
+                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                    highlightPossibleAttacks();
                 }
             }
+
+
+            description.setText(selectedUnit.getDescription());
+            vBox.getChildren().add(description);
+            description.toBack();
+
         }
     }
 
@@ -542,11 +520,6 @@ public class GameLogic extends Application {
         int posY = selectedPosY;
         int movementRange = selectedUnit.getMovementRange();
 
-//        System.out.println(selectedPosX + "SelectposX");
-//        System.out.println("PosX+1: " + (posX + 2));
-//        System.out.println("PosX-1: " + (posX - 2));
-//        System.out.println("PosY+1: " + (posY + 2));
-//        System.out.println("PosY-1: " + (posY - 2));
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
         if (selectedPosX - 1 >= 0) {
@@ -716,6 +689,55 @@ public class GameLogic extends Application {
         return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
+    private void attack(MouseEvent event) {
+
+        int attackPosX = getPosXFromEvent(event);
+        int attackPosY = getPosYFromEvent(event);
+        int id;
+        // If there is a unit on the selected tile.
+        if (yourTurn) {
+            if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosY][attackPosX].getHp() > 0) {
+                // If within attack range.
+                if (attackRange(attackPosX, attackPosY)) {
+                    // If attacked unit is not itself.
+                    if (selectedUnit != unitPosition[attackPosY][attackPosX]  && unitPosition[attackPosY][attackPosX].getEnemy()) {
+                        // Attack is executed and unit takes damage.
+                        unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
+
+                        attackCount++;
+
+                        //Plays audio cue for each type.
+                        if (selectedUnit.getType().equalsIgnoreCase("Swordsman")) {
+                            sword.play();
+                        } else if (selectedUnit.getType().equalsIgnoreCase("Archer")) {
+                            bow.play();
+                        }
+                        db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
+
+
+                        //If units health is zero. Remove it from the board.
+                        if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
+                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
+                            pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
+                            //unitPosition[attackPosY][attackPosX].setHp(0);
+                            for (int i = 0; i < unitList.size(); i++) {
+                                if (attackPosX == unitList.get(i).getPositionX() && attackPosY == unitList.get(i).getPositionY()) {
+                                    //unitList.remove(i);
+                                }
+                            }
+                            unitPosition[attackPosY][attackPosX] = null;
+                            unitList.removeAll(Collections.singletonList(null));
+
+                        }
+
+                        selectedUnit.setHasAttackedThisTurn(true);
+                        clearHighlight();
+                    }
+                }
+            }
+        }
+    }
+
     // method that checks if the game has been won by either player. Returns 1 if you lost, 0 if you won or -1 if noone has won yet.
     private int checkForWinner() {
         int yourPieces = 0;
@@ -740,119 +762,66 @@ public class GameLogic extends Application {
         }
     }
 
-    // Opens the winner/loser pop-up on the screen and ends the game.
-    public void winner(){
-        int winnerOrLoser = checkForWinner();
-        int surrendered = db.checkForSurrender();
-        if(surrendered == opponent_id){
-            winnerOrLoser = 0;
-        }
-        if(surrendered == user_id){
-            winnerOrLoser = 1;
-        }
-        if (winnerOrLoser != -1) {
-            //Game is won or lost.
-            Stage winner_alert = new Stage();
-            winner_alert.initModality(Modality.APPLICATION_MODAL);
-            winner_alert.setTitle("Game over!");
-
-            Text winner = new Text();
-            //winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
-            winner.setStyle("-fx-font-size:32px;");
-            db.incrementGamesPlayed();
-            if (winnerOrLoser == 1){
-                winner.setText("You Lose");
-            }
-            else {
-                db.incrementGamesWon();
-                winner.setText("You win!");
-            }
-            JFXButton endGameBtn = new JFXButton("Return to menu");
-            // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
-
-            endGameBtn.setOnAction(event -> {
-                //TODO Switch scene to main menu
-            });
-
-            VBox content = new VBox();
-            content.setAlignment(Pos.CENTER);
-            content.setSpacing(20);
-            content.getChildren().addAll(winner,endGameBtn);
-            Scene scene = new Scene(content,250,150);
-            winner_alert.initStyle(StageStyle.UNDECORATED);
-            winner_alert.setScene(scene);
-            winner_alert.showAndWait();
-        }
-    }
-
-
-    public static void main(String[] args) {
-        //Shutdown hook. CLoses stuff when program exits.
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
-
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-
-        launch(args);
-    }
-
     private void waitForTurn() {
         //TODO make waitForTurn() it's own class and Interupt() and an AtomicBoolean as a control variable
 
-        thread = new Thread(() -> {
-            try {
-                while (!yourTurn) {
-                    Thread.sleep(5000);
-                    System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                    //Checks the database continually to check if the turn registered in the database is yours.
-                    if (db.getTurnPlayer() == user_id) {
-                        yourTurn = true;
-                    }
-                    if (yourTurn) {
-                        Platform.runLater(
-                                () -> {
-                                    thread.stop();
+        // Runnable lambda implementation for turn waiting with it's own thread
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while(keepRunning()){
+                    try {
+                        while (!yourTurn) {
+                            System.out.println("sleeps thread " + Thread.currentThread());
+                            Thread.sleep(1000);
+                            //When player in database matches your own user_id it is your turn again.
+                            System.out.println("Whose turn is it? " + db.getTurnPlayer());
+                            if (db.getTurnPlayer() == user_id) {
+                                System.out.println("yourTurn endres");
+                                yourTurn = true;
+                                this.doStop();
+                            }
+                        }
 
 
-                                    //What will happen when it is your turn again.
+                        //What will happen when it is your turn again.
 
-                                    //Increments turn. Back to your turn.
-                                    deSelect(rSidePanel, description);
-                                    selectedUnit = null;
+                        //Increments turn. Back to your turn.
+                        Platform.runLater(()->{
+                            deSelect(rSidePanel, description);
+                            selectedUnit = null;
+                            turn++;
+                            turnCounter.setText("TURN: " + turn);
+                            endTurnButton.setText("End turn");
+                            deDrawUnits();
+                            drawUnits();
+                            winner();
+                        });
 
-                                    //Increment the turn variable
-                                     turn++;
+                        movementPhase = true;
 
-                                    //Updates UI
-                                    turnCounter.setText("TURN: " + turn);
-                                    endTurnButton.setText("End turn");
-
-                                    //All units are removed from the visual board and then drawn in again in the correct locations.
-                                    deDrawUnits();
-                                    drawUnits();
-
-                                    //Checks if the opponent won the game.
-                                    winner();
-
-                                    //MovementPhase boolean is reset so that you can start your movementphase.
-                                    movementPhase = true;
-                                });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        });
-        thread.start();
+
+            @Override
+            public synchronized void doStop(){
+                this.doStop = true;
+            }
+
+            @Override
+            public synchronized boolean keepRunning(){
+                return !this.doStop;
+            }
+        };
+
+        waitTurnThread = new Thread(waitTurnRunnable);
+        waitTurnThread.start();
+
     }
 
     @Override
@@ -865,6 +834,39 @@ public class GameLogic extends Application {
             db.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Opens the winner/loser pop-up on the screen and ends the game.
+    public void winner(){
+        int winnerOrLoser = checkForWinner();
+        if (winnerOrLoser != -1) {
+            //Game is won or lost.
+            Stage winner_alert = new Stage();
+            winner_alert.initModality(Modality.APPLICATION_MODAL);
+            winner_alert.setTitle("Game over!");
+
+            Text winner = new Text();
+            winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            db.incrementGamesPlayed();
+            if (winnerOrLoser == 1){
+                db.incrementGamesWon();
+                winner.setText("You Lose");
+            }
+            else {
+                winner.setText("You win!");
+            }
+            JFXButton endgame = new JFXButton("Return to menu");
+            // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+
+            VBox content = new VBox();
+            content.setAlignment(Pos.CENTER);
+            content.setSpacing(20);
+            content.getChildren().addAll(winner,endgame);
+            Scene scene = new Scene(content,250,150);
+            winner_alert.initStyle(StageStyle.UNDECORATED);
+            winner_alert.setScene(scene);
+            winner_alert.showAndWait();
         }
     }
 }

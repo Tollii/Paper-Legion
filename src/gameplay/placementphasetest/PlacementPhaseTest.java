@@ -29,7 +29,7 @@ public class PlacementPhaseTest extends Application {
   public void createGrid(Pane root) { //legger til spillbrettet og håndterer styling
     Pane grid = new Pane();
 
-    grid.getChildren().add(gp.gp);
+    grid.getChildren().add(gp);
 
     grid.setLayoutX(300);
     grid.setLayoutY(100);
