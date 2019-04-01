@@ -16,11 +16,11 @@ import java.util.Timer;
 import static database.Variables.*;
 
 public class mainMenuController extends Controller {
-    private static boolean findGameClicked = false;
-    public static boolean startGame = false;
+    private static boolean findGameClicked, gameEntered = false;
     public static Timer timer = new Timer(true);
-    public static boolean gameEntered = false;
     private Thread searchGameThread;
+    private boolean isPressed, threadStarted = false;
+
     @FXML
     private ResourceBundle resources;
 
@@ -64,6 +64,7 @@ public class mainMenuController extends Controller {
                             findGameClicked = false;
                             mainMenuPlayButton.setText("Play");
                             db.abortMatch(user_id);
+                            this.runAgain();
                         });
 
                         this.doStop();
@@ -71,12 +72,12 @@ public class mainMenuController extends Controller {
                         Platform.runLater(() -> {
                             mainMenuPlayButton.setText("Abort");
                         });
+                        isPressed = true;
                         match_id = db.matchMaking_search(user_id);
                         findGameClicked = true;
                         if (match_id > 0) {
                             // If you join a game, you are player 2.
                             yourTurn = false;
-                            startGame = true;
                             Platform.runLater(
                                     () -> {
                                         enterGame();
@@ -89,9 +90,10 @@ public class mainMenuController extends Controller {
                             // If you create the game, you are player 1.
                             yourTurn = true;
                             try {
-                                while (!gameEntered) {
+                                while (!gameEntered && isPressed) {
                                     Thread.sleep(3000);
                                     gameEntered = db.pollGameStarted(match_id);
+
                                     if (gameEntered) {
                                         Platform.runLater(() -> {
                                             enterGame();
@@ -101,6 +103,7 @@ public class mainMenuController extends Controller {
                                     }
 
                                 }
+                                isPressed = false;
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -119,7 +122,13 @@ public class mainMenuController extends Controller {
                 return !this.doStop;
             }
 
+            public synchronized  void runAgain(){
+                this.doStop = false;
+            }
+
         };
+
+        searchGameThread = new Thread(searchGameRunnable);
 
         mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
 
@@ -134,8 +143,14 @@ public class mainMenuController extends Controller {
         });
 
         mainMenuPlayButton.setOnAction(event -> {
-            searchGameThread = new Thread(searchGameRunnable);
-            searchGameThread.start();
+            if(!threadStarted){
+                threadStarted = true;
+                searchGameThread.start();
+            }
+
+            if(isPressed){
+                isPressed = false;
+            }
 
         });
 
