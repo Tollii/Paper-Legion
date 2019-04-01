@@ -284,6 +284,7 @@ public class GameLogic extends Application {
             db.surrenderGame();
             endTurn();
             winner();
+            confirm_alert.close();
         });
 
         surrender_no.setOnAction(event -> {
@@ -758,10 +759,10 @@ public class GameLogic extends Application {
             winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
             db.incrementGamesPlayed();
             if (winnerOrLoser == 1){
-                db.incrementGamesWon();
                 winner.setText("You Lose");
             }
             else {
+                db.incrementGamesWon();
                 winner.setText("You win!");
             }
             JFXButton endGameBtn = new JFXButton("Return to menu");
