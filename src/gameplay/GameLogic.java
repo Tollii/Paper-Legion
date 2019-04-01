@@ -780,6 +780,7 @@ public class GameLogic extends Application {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                winner_alert.close();
                 window.setScene(new Scene(root, 600, 400));
             });
 
