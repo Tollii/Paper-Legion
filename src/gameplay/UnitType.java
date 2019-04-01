@@ -1,5 +1,9 @@
 package gameplay;
 
+import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
+
+
 public interface UnitType {
 
     String getType();
@@ -21,4 +25,8 @@ public interface UnitType {
     String getDescription();
 
     String getDescriptionTag();
-}
+
+    Image getUnitImage();
+
+    AudioClip getAudio();
+  }

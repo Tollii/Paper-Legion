@@ -1,9 +1,12 @@
 package gameplay;
 
+import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
+
+
 public class UnitGenerator {
 
     //Variables
-    private static UnitType swordsmanUnitType;
     private static double swordsmanMaxHP;
     private static int swordsmanAttack;
     private static int swordsmanAbilityCooldown;
@@ -18,8 +21,12 @@ public class UnitGenerator {
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
+    private static Image swordsmanImage = new Image(UnitGenerator.class.getResource("assets/swordsman.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
+    private static AudioClip swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
 
-    private static UnitType archerUnitType;
+    private static UnitType swordsmanUnitType;
+
+
     private static double archerMaxHP;
     private static int archerAttack;
     private static int archerAbilityCooldown;
@@ -34,6 +41,11 @@ public class UnitGenerator {
             "Because of his bow, he has a longer range than others.";
     private static String archerDescriptionTag =
             "Heroic Archer";
+    private static Image archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
+    private static AudioClip archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
+
+
+    private static UnitType archerUnitType;
 
 
     public UnitGenerator(){}
@@ -48,8 +60,7 @@ public class UnitGenerator {
         this.swordsmanMinAttackRange = swordsmanProto.getMinAttackRange();
         this.swordsmanMaxAttackRange = swordsmanProto.getMaxAttackRange();
         this.swordsmanMovementRange = swordsmanProto.getMovementRange();
-        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag);
-
+        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
 
         this.archerMaxHP = archerProto.getHp();
         this.archerAttack = archerProto.getAttack();
@@ -58,10 +69,8 @@ public class UnitGenerator {
         this.archerMinAttackRange = archerProto.getMinAttackRange();
         this.archerMaxAttackRange = archerProto.getMaxAttackRange();
         this.archerMovementRange = archerProto.getMovementRange();
-        archerUnitType = new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag);
-
+        archerUnitType =  new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag, archerImage, archerSound);
     }
-
 
     public UnitType newArcher(){
 
@@ -73,5 +82,16 @@ public class UnitGenerator {
 
         return swordsmanUnitType;
 
+    }
+
+    public UnitType newUnit(String unitType) {
+      UnitType type = null;
+      switch (unitType) {
+        case "Archer": type = archerUnitType;
+          break;
+        case "Swordsman": type = swordsmanUnitType;
+          break;
+      }
+      return type;
     }
 }
