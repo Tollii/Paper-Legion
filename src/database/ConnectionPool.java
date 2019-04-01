@@ -61,14 +61,14 @@ public class ConnectionPool {
 
         Connection con = connectionPool.remove(connectionPool.size() - 1);
         usedConnections.add(con);
-        System.out.println("Connection opened");
+        //System.out.println("Connection opened");
         return con;
     }
 
     // Will put the connection back into the connection pool and remove it from the usedConnections list
     public boolean releaseConnection(Connection con){
         connectionPool.add(con);
-        System.out.println("Connection released");
+        //System.out.println("Connection released");
         return usedConnections.remove(con);
     }
 

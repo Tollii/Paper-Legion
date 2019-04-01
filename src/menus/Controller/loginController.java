@@ -11,8 +11,10 @@ import static database.Variables.*;
 
 public class loginController extends Controller {
 
+    private boolean loginPressed = false;
     private boolean changeScene = false;
     private Thread loginThread;
+    private boolean executed = false;
 
     @FXML
     private ResourceBundle resources;
@@ -63,25 +65,30 @@ public class loginController extends Controller {
             @Override
             public void run() {
                 while(keepRunning()){
-                    //Logs user in and enter main menu. Currently no info about the user is sent along.
-                    int userId = db.login(usernameInput.getText(),passwordInput.getText());
-                    if (userId > 0) {
-                        setUser_id(userId);
-                        Platform.runLater( () ->{
-                            changeScene("mainMenu.fxml");
-                                });
-                        this.doStop();
-                    } else {
-                        //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
-                        Platform.runLater(() ->{
-                            gameTitleLabel.setText("Login Failed");
-                        });
-                        this.doStop();
+                    if(loginPressed){
+                        //Logs user in and enter main menu. Currently no info about the user is sent along.
+                        int userId = db.login(usernameInput.getText(),passwordInput.getText());
+                        if (userId > 0) {
+                            setUser_id(userId);
+                            Platform.runLater( () ->{
+                                changeScene("mainMenu.fxml");
+                            });
+                            loginPressed = false;
+                            this.doStop();
+                        } else {
+                            //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
+                            Platform.runLater(() ->{
+                                gameTitleLabel.setText("Login Failed");
+                                loginPressed = false;
+                            });
+                        }
                     }
                 }
+
             }
         };
 
+        loginThread = new Thread(loginRunnable);
 
         newUserButton.setOnAction(event -> {
             //newUserButton.getScene().getWindow().hide();
@@ -89,12 +96,18 @@ public class loginController extends Controller {
         });
 
         loginEnterButton.setOnAction(event -> {
-            loginThread = new Thread(loginRunnable);
-            loginThread.start();
+            loginPressed = true;
+            if(!executed){
+                executed = true;
+                loginThread.start();
+            }
+
+
 
         });
 
         loginEnterButton.setDefaultButton(true);
+
     }
     private void setUser_id(int userIDFromLogin) {
         user_id = userIDFromLogin;

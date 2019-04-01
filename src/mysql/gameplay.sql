@@ -26,6 +26,9 @@ Order by piece_id,player_id;
 insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);
 insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(2,295,1,1);
 
+--obstacles matches
+UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;
+UPDATE Matches SET obstacle_amount = 5 WHERE  match_id = 295;
 ALTER TABLE Obstacles DROP FOREIGN KEY piece_id;
 
 ALTER TABLE Obstacles DROP INDEX obstacle_id;

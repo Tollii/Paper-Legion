@@ -94,11 +94,13 @@ CREATE TABLE Movements(
 
 CREATE TABLE Attacks(
   turn_id int NOT NULL,
+  attacking_player_id int NOT NULL,
   attacker int NOT NULL,
   reciever int NOT NULL,
   match_id int NOT NULL,
   damage_dealt int NOT NULL,
-  PRIMARY KEY(turn_id, attacker, reciever, match_id),
+  PRIMARY KEY(turn_id, attacking_player_id, attacker, reciever, match_id),
+  FOREIGN KEY(attacking_player_id) REFERENCES Users(user_id),
   FOREIGN KEY(attacker) REFERENCES Units(piece_id),
   FOREIGN KEY(reciever) REFERENCES Units(piece_id),
   FOREIGN KEY(turn_id, match_id) REFERENCES Turns(turn_id, match_id) ON DELETE CASCADE

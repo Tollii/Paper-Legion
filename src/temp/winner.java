@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -41,17 +40,18 @@ public class winner extends Application {
         JFXButton endgame = new JFXButton("Return to menu");
 
         endgame.setOnAction(event -> {
-
             String fxmlDir = "/menus/View/mainMenu.fxml";
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(fxmlDir));
+            Parent root2 =null;
             try {
-                loader.load();
+               root2 =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
+               // loader.load();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("load failed");
             }
-            Parent root = loader.getRoot();
-            Main.window.setScene(new Scene(root));
+
+            Main.window.setScene(new Scene(root2));
         });
 
         winner.setText("You win!");

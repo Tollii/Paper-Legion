@@ -1,8 +1,6 @@
 package database;
 
-import gameplay.Move;
-import gameplay.PieceSetup;
-import gameplay.ProtoUnitType;
+import gameplay.*;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -393,8 +391,8 @@ public class Database {
                 playerInsert2.executeUpdate();
             }
 
-//            myConn.commit();
-//            myConn2.commit();
+            myConn.commit();
+            myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -485,12 +483,14 @@ public class Database {
             }
         }
         Connection myConn = connectionPool.getConnection();
+        Connection myConn2 = connectionPool.getConnection();
         PreparedStatement player = null;
+        PreparedStatement matchUpdate = null;
 
 
         //The statement
         String sqlPlayerObstacle = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
-
+        String ObstacleAmounts = "UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;";
 
         try {
 //            myConn.setAutoCommit(false);
@@ -506,6 +506,11 @@ public class Database {
                 player.executeUpdate();
             }
 
+            matchUpdate = myConn2.prepareStatement(ObstacleAmounts);
+            matchUpdate.setInt(1,antallObstacles);
+            matchUpdate.setInt(2,match_id);
+
+
 
 //            myConn.commit();
         } catch (SQLException e) {
@@ -516,6 +521,88 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+    public ArrayList<Obstacle> importObstacles() {
+        ArrayList<Obstacle> ObstacleImport = new ArrayList<Obstacle>();
+        ResultSet result = null;
+        PreparedStatement preparedStatement = null;
+        int positionX;
+        int positionY;
+        int obstacleID;
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlsetning = "SELECT obstacle_id, position_x, position_y FROM Obstacles WHERE match_id = ?";
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlsetning);
+            preparedStatement.setInt(1, match_id); //This is the correct one
+            result = preparedStatement.executeQuery();
+            myConn.commit();
+            while (result.next()) {
+                obstacleID = result.getInt("obstacle_id");
+                positionX = result.getInt("position_x");
+                positionY = result.getInt("position_y");
+
+                Obstacle piece = new Obstacle(positionX, positionY, obstacleID);
+                ObstacleImport.add(piece);
+            }
+
+
+            return ObstacleImport;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return null;
+    }
+
+    public Boolean importObsticleAmount() {
+        ResultSet result = null;
+        ResultSet result2 = null;
+
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        Integer obstacle_amount;
+        int obstacle_in_db;
+
+        Connection myConn = connectionPool.getConnection();
+        Connection myConn2 = connectionPool.getConnection();
+        String sqlsetning = "SELECT obstacle_amount FROM Matches WHERE match_id = ?";
+        String sqlCount = "SELECT COUNT(*) AS counting FROM Obstacles WHERE match_id = ?";
+        try {
+            myConn.setAutoCommit(false);
+            myConn2.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlsetning);
+            preparedStatement2 = myConn.prepareStatement(sqlCount);
+            preparedStatement.setInt(1, match_id); //This is the correct one
+            preparedStatement2.setInt(1,match_id);
+            result = preparedStatement.executeQuery();
+            result2 = preparedStatement2.executeQuery();
+            myConn.commit();
+            myConn2.commit();
+            result.next();
+            result2.next();
+                obstacle_amount = result.getInt("obstacle_amount");
+                obstacle_in_db = result2.getInt("counting");
+
+                if(obstacle_amount == obstacle_in_db && obstacle_amount !=null){
+                    return true;
+                }
+                return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return null;
+    }
+
 
     /*
        ___                           _
@@ -676,7 +763,7 @@ public class Database {
         return true;
     }
 
-    /*public boolean exportMoveList(ArrayList<Move> movementList) {
+    public boolean exportMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
         int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
@@ -698,7 +785,7 @@ public class Database {
                 preparedStatement.setInt(4, movementList.get(i).getStartPosX());
                 preparedStatement.setInt(5, movementList.get(i).getStartPosY());
                 preparedStatement.setInt(6, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(7, movementList.get(i).getStartPosY());
+                preparedStatement.setInt(7, movementList.get(i).getEndPosY());
 
                 preparedStatement.executeUpdate();
             }
@@ -716,31 +803,29 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
         return true;
-    }*/
-
-    //TODO
-    public boolean exportAttackList() {
-        return false;
     }
 
-    public ArrayList<Move> importMoveList(int turnIDInput, int matchIdInput, int playerIdInput) {
+    public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
 
         ArrayList<Move> outputList = new ArrayList<>();
 
         Connection myConn = connectionPool.getConnection();
-        String sqlString = "SELECT turn_id, Movements.piece_id, Movements.match_id, start_pos_x, start_pos_y, end_pos_x, end_pos_y FROM Movements JOIN Pieces ON Pieces.piece_id = Movements.piece_id WHERE player_id = playerIdInput AND Movements.match_id = matchIdInput AND turn_id = turnIdInput;";
+        String sqlString = "SELECT turn_id, Movements.piece_id, Movements.match_id, start_pos_x, start_pos_y, end_pos_x, end_pos_y FROM Movements WHERE Movements.match_id = ? AND turn_id = ?;";
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlString);
+
+            preparedStatement.setInt(1, matchIdInput); //"Arrays begin at 1"
+            preparedStatement.setInt(2, enemyTurnIDInput);
+
             resultSet = preparedStatement.executeQuery();
-            myConn.commit();
+
             while (resultSet.next()) {
+                System.out.println("Adding to output!!!");
                 outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
-                resultSet.next();
             }
 
 
@@ -748,7 +833,89 @@ public class Database {
             e.printStackTrace();
             return null;
         } finally {
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        System.out.println("Imported move list size: " + outputList.size());
+
+        return outputList;
+    }
+
+    public boolean exportAttackList(ArrayList<Attack> attackList) {
+
+        int turnId = attackList.get(0).getTurnId();                         //TurnId is the same for all entries in the list
+        int attackingPlayerId = attackList.get(0).getAttackingPlayerId();   //AttackingPlayerId is the same for all entries in the list
+        int matchId = attackList.get(0).getMatchId();                       //MatchId is the same for all entries in the list
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "INSERT INTO Attacks VALUES (?,?,?,?,?,?);";
+
+        PreparedStatement preparedStatement = null;
+        try {
+
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            myConn.setAutoCommit(false);
+
+            for (int i = 0; i < attackList.size(); i++) {
+                preparedStatement.setInt(1, turnId); //"Arrays begin at 1"
+                preparedStatement.setInt(2, attackingPlayerId);
+                preparedStatement.setInt(3, attackList.get(i).getAttackerPieceID());
+                preparedStatement.setInt(4, attackList.get(i).getReceiverPieceID());
+                preparedStatement.setInt(5, matchId);
+                preparedStatement.setInt(6, attackList.get(i).getDamage());
+
+                preparedStatement.executeUpdate();
+            }
+
+            myConn.commit();
             Cleaner.setAutoCommit(myConn);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Cleaner.rollBack(myConn);
+            return false;
+        } finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return true;
+    }
+
+    public ArrayList<Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
+
+        ArrayList<Attack> outputList = new ArrayList<>();
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlString = "SELECT * FROM Attacks WHERE attacking_player_id = ? AND match_id = ? AND turn_id = ?;";
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = myConn.prepareStatement(sqlString);
+
+            preparedStatement.setInt(1, otherPlayerIdInput); //"Arrays begin at 1"
+            preparedStatement.setInt(2, matchIdInput);
+            preparedStatement.setInt(3, enemyTurnIDInput);
+
+            resultSet = preparedStatement.executeQuery();
+
+
+            while (resultSet.next()) {
+                System.out.println("ADDING TO ATTACK LIST!");
+                outputList.add(new Attack(resultSet.getInt("turn_id"), resultSet.getInt("match_id"), resultSet.getInt("attacking_player_id"), resultSet.getInt("attacker_piece_id"), resultSet.getInt("receiver_piece_id"), resultSet.getInt("damage_dealt")));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
             Cleaner.closeResSet(resultSet);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
