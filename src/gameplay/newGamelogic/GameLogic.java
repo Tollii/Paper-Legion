@@ -108,7 +108,7 @@ public class GameLogic extends Application {
     window.show();
   }
 
-  public void placementPhaseStart() {
+  private void placementPhaseStart() {
     Pane recruitPane = createRecruitPane();
 
     JFXButton finishedPlacing = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
@@ -139,7 +139,7 @@ public class GameLogic extends Application {
     });
   }
 
-  public void placementPhaseFinished(Pane recruitPane) {
+  private void placementPhaseFinished(Pane recruitPane) {
     root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
 
     for (int i = 0; i < boardSize; i++) {
@@ -148,6 +148,26 @@ public class GameLogic extends Application {
         grid.tileList[i][j].setUntargetable();
       }
     }
+
+    ArrayList<Unit> exportUnitList = new ArrayList<>();
+    ArrayList<Integer> exportPositionXList = new ArrayList<>();
+    ArrayList<Integer> exportPositionYList = new ArrayList<>();
+
+    for (int i = 0; i < grid.tileList.length; i++) {
+      for (int j = 0; j < grid.tileList[i].length; j++) {
+
+        if(grid.tileList[i][j].getUnit() != null){
+          exportUnitList.add(grid.tileList[i][j].getUnit());
+          exportPositionXList.add(j);
+          exportPositionYList.add(i);
+        }
+      }
+    }
+
+    if (exportUnitList != null){
+      db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
+    }
+
   }
 
   private int getPosXFromEvent(MouseEvent event) {
@@ -189,7 +209,7 @@ public class GameLogic extends Application {
     return unitPane;
   }
 
-  public Pane createSidePanel() {
+  private Pane createSidePanel() {
     Pane sidePanel = new Pane();
     return sidePanel;
   }
