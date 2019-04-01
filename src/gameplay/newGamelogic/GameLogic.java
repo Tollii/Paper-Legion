@@ -100,11 +100,6 @@ public class GameLogic extends Application {
 
     placementPhaseStart(); //starts the placement phase
 
-    //TODO: might need the other phases as methods as well
-
-    //TODO: think we might use phaseStart() and phaseFinish() methods, and to all the event handling
-    //inside start(), and then call the the start methods when a phase starts, and call the finish
-    //method when the phase finishes
 
     window.setTitle(gameTitle);
     window.setScene(scene);
@@ -151,29 +146,6 @@ public class GameLogic extends Application {
         grid.tileList[i][j].setUntargetable();
       }
     }
-  }
-
-  //TODO: need to finish the selection method, it takes three arguments and should let us mark a unit
-  //and either get the tiles it can move to, og the tiles with units that it can attack.
-  //Description box is currently missing, so add method to add it, similarly to the other
-  //create pane methods, use old styler for it, just change it into using the new standard for creating panes
-  //focus on movementphase, as i've got some ideas for the attack phase
-  private void select(int posX, int posY, boolean movementPhase) {
-    int row = posX - 1;
-    int column = posY - 1;
-    if (grid.tileList[column][row].getUnit() != null) {
-      if (movementPhase) {
-
-      } else {
-
-      }
-    }
-  }
-
-  //TODO: finish deselector, should sort of mirror the select method, while not beeing too diffrent from
-  // the old deselector
-  private void deselect() {
-
   }
 
   private int getPosXFromEvent(MouseEvent event) {
