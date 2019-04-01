@@ -38,7 +38,11 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
 
         boolean success = false;
         if (dragboard.hasImage() && dragboard.hasString()) {
+<<<<<<< HEAD
           Unit newUnit = new Unit(false, SetUp.unitGenerator.newUnit(dragboard.getString())); //creates new unit and adds to tile
+=======
+          Unit newUnit = SetUp.unitGenerator.newUnit(false, dragboard.getString()); //creates new unit and adds to tile
+>>>>>>> 0b6cbf3af688715ed33c88c045b2a5b6d9e5b556
           setUnit(newUnit);
           success = true;
         }
