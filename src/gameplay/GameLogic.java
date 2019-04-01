@@ -300,9 +300,6 @@ public class GameLogic extends Application {
         }
     }
 
-
-
-
     private void surrender() {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
@@ -324,7 +321,6 @@ public class GameLogic extends Application {
 
         surrender_no.setOnAction(event -> {
             confirm_alert.close();
-            //TODO legg inn at alerten lukker seg, kanskje det over funker
         });
 
         HBox buttons = new HBox();
@@ -919,6 +915,8 @@ public class GameLogic extends Application {
         }
         if (winnerOrLoser != -1) {
             //Game is won or lost.
+
+            gameCleanUp();
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
@@ -966,5 +964,10 @@ public class GameLogic extends Application {
             winner_alert.setScene(scene);
             winner_alert.showAndWait();
         }
+    }
+
+    private void gameCleanUp() {
+
+        //Stuff that need to be closed or reset.
     }
 }

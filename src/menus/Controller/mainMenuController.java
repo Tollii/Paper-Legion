@@ -156,6 +156,7 @@ public class mainMenuController extends Controller {
 
     public static void enterGame(){
         try{
+            findGameClicked = false;
             SetUp setUp = new SetUp();
             setUp.importUnitTypes();
             GameLogic game = new GameLogic();
