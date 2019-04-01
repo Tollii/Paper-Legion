@@ -108,7 +108,7 @@ public class GameLogic extends Application {
     window.show();
   }
 
-  public void placementPhaseStart() {
+  private void placementPhaseStart() {
     Pane recruitPane = createRecruitPane();
 
     JFXButton finishedPlacing = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
@@ -139,7 +139,7 @@ public class GameLogic extends Application {
     });
   }
 
-  public void placementPhaseFinished(Pane recruitPane) {
+  private void placementPhaseFinished(Pane recruitPane) {
     root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
 
     for (int i = 0; i < boardSize; i++) {
@@ -189,7 +189,7 @@ public class GameLogic extends Application {
     return unitPane;
   }
 
-  public Pane createSidePanel() {
+  private Pane createSidePanel() {
     Pane sidePanel = new Pane();
     return sidePanel;
   }
