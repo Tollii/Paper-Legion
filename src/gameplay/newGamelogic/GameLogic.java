@@ -65,16 +65,25 @@ public class GameLogic extends Application {
   private final int buttonHeight = 75;
 
   ////PANE PADDINGS////
+  //GRID//
   private final int gridXPadding = 300;
   private final int gridYPadding = 100;
+  //PLACMENT PHASE SIDE PANEL//
   private final int recruitXPadding = gridXPadding + tileSize*boardSize + 150;
   private final int recruitYPadding = 150;
   private final int placementButtonXPadding = 100;
   private final int placementButtonYPadding = 500;
+  //MOVEMENT AND ATTACK PHASE SIDE PANEL//
   private final int sidePanelXPadding = gridXPadding + tileSize*boardSize + 150;
   private final int sidePanelYPadding = 150;
   private final int descriptionXPadding = 0;
   private final int descriptionYPadding = 0;
+  private final int turnCounterXPadding = 0;
+  private final int turnCounterYPadding = 0;
+  private final int endTurnButtonXPadding = 100;
+  private final int endTurnButtonYPadding = 500;
+  private final int surrenderButtonXPadding = 100;
+  private final int surrenderButtonYPadding = 580;
 
   ////GAME CONTROL VARIABLES////
   private boolean unitSelected = false;
@@ -162,6 +171,26 @@ public class GameLogic extends Application {
     }
   }
 
+  private void movementAttackPhaseStart() {
+    Pane sidePanel = createSidePanel();
+
+    JFXButton endTurnButton = new JFXButton("End turn");
+    endTurnButton.setMinSize(buttonWidth, buttonHeight);
+    endTurnButton.setTextFill(buttonTextColor);
+    endTurnButton.setStyle(buttonBackgroundColor);
+    endTurnButton.setLayoutX(endTurnButtonXPadding);
+    endTurnButton.setLayoutY(endTurnButtonYPadding);
+
+    JFXButton surrenderButton = new JFXButton("Surrender");
+    surrenderButton.setMinSize(buttonWidth, buttonHeight);
+    surrenderButton.setTextFill(buttonTextColor);
+    surrenderButton.setStyle(buttonBackgroundColor);
+    surrenderButton.setLayoutX(surrenderButtonXPadding);
+    surrenderButton.setLayoutY(surrenderButtonyPadding);
+
+    sidePanel.getChildren().addAll(endTurnButton, surrenderButton);
+  }
+
   private int getPosXFromEvent(MouseEvent event) {
     return (int)Math.ceil((event.getX() - gridXPadding) / tileSize);
   }
@@ -204,12 +233,14 @@ public class GameLogic extends Application {
   private Pane createSidePanel() { //creates the side panel for movement/attack phase
     Pane sidePanel = new Pane();
 
-    turnCounter.setStyle(turnCounterFontSize);
-
     description.setStyle(descriptionFont);
     description.setLayoutX(descriptionXPadding);
     description.setLayoutY(descriptionYPadding);
     description.setVisible(false);
+
+    turnCounter.setStyle(turnCounterFontSize);
+    turnCounter.setLayoutX(descriptionXPadding);
+    turnCounter.setLayoutY(descriptionYPadding);
 
     sidePanel.getChildren().addAll(description, turnCounter);
 
