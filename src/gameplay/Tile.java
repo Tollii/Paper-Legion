@@ -15,6 +15,7 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
   private Unit unit;
   private Rectangle rect;
   private boolean isTargetable = true;
+  private int unitId = 0;
 
     public Tile(int sizeX, int sizeY){
       rect = new Rectangle(sizeX, sizeY, Color.WHITE);
@@ -38,9 +39,10 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
 
         boolean success = false;
         if (dragboard.hasImage() && dragboard.hasString()) {
-          Unit newUnit = new Unit(false, SetUp.unitGenerator.newUnit(dragboard.getString())); //creates new unit and adds to tile
+          Unit newUnit = new Unit(false, SetUp.unitGenerator.newUnit(dragboard.getString()), unitId); //creates new unit and adds to tile
           setUnit(newUnit);
           success = true;
+          unitId++;
         }
         event.setDropCompleted(success);
       });

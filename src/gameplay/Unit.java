@@ -32,8 +32,9 @@ public class Unit extends StackPane {
     private boolean enemy;
     private boolean hasAttackedThisTurn;
     private int healthbarPosY = 40;
+    private int unitId;
 
-    public Unit(boolean enemy, UnitType type){
+    public Unit(boolean enemy, UnitType type, int unitId){
         rect = new Rectangle();
         rect.setWidth(GameLogic.tileSize);
         rect.setHeight(GameLogic.tileSize);
@@ -50,6 +51,7 @@ public class Unit extends StackPane {
         this.movementRange = type.getMovementRange();
         description = type.getDescription();
         descriptionTag = type.getDescriptionTag();
+        this.unitId = unitId;
 
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
@@ -118,6 +120,10 @@ public class Unit extends StackPane {
 
     public int getMovementRange() {
         return movementRange;
+    }
+
+    public int getUnitId() {
+      return unitId;
     }
 
     public String getDescription(){
