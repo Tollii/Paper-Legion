@@ -943,9 +943,9 @@ public class GameLogic extends Application {
             endGameBtn.setOnAction(event -> {
                 String fxmlDir = "/menus/View/mainMenu.fxml";
                 FXMLLoader loader = new FXMLLoader();
-                Parent root2 =null;
+                Parent root = null;
                 try {
-                    root2 =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
+                    root =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
                     // loader.load();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -953,9 +953,8 @@ public class GameLogic extends Application {
                 }
                 winner_alert.close();
                 winner_alert.hide();
-                Main.window.setScene(new Scene(root2));
+                Main.window.setScene(new Scene(root));
 
-                //TODO Switch scene to main menu
             });
 
             VBox content = new VBox();
