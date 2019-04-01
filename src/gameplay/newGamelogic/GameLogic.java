@@ -51,12 +51,18 @@ public class GameLogic extends Application {
   ////SCENE ELEMENTS////
   private Grid grid = new Grid(boardSize, boardSize);
   private Pane root;
+  private Label description = new Label(); //description label for the selected unit
+  private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
 
   private Thread waitTurnThread;
 
   ////WINDOW SIZE////
   private final int windowWidth = 1920;
   private final int windowHeight = 1080;
+
+  ////SIZE VARIABLES////
+  private final int buttonWidth = 150;
+  private final int buttonHeight = 75;
 
   ////PANE PADDINGS////
   private final int gridXPadding = 300;
@@ -65,6 +71,10 @@ public class GameLogic extends Application {
   private final int recruitYPadding = 150;
   private final int placementButtonXPadding = 100;
   private final int placementButtonYPadding = 500;
+  private final int sidePanelXPadding = gridXPadding + tileSize*boardSize + 150;
+  private final int sidePanelYPadding = 150;
+  private final int descriptionXPadding = 0;
+  private final int descriptionYPadding = 0;
 
   ////GAME CONTROL VARIABLES////
   private boolean unitSelected = false;
@@ -80,10 +90,10 @@ public class GameLogic extends Application {
   ////STYLING////
   private String gameTitle = "PAPER LEGION";
   private String descriptionFont = "-fx-font-family: 'Arial Black'";
-  private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
+  private String buttonBackgroundColor = "-fx-background-color: #000000";
   private String turnCounterFontSize = "-fx-font-size: 32px";
   private Paint selectionOutlineColor = Color.RED;
-  private Paint endTurnButtonTextColor = Color.WHITE;
+  private Paint buttonTextColor = Color.WHITE;
   private Paint movementHighlightColor = Color.GREENYELLOW;
   private Paint attackHighlightColor = Color.DARKRED;
   private Paint untargetableTileColor = Color.color(155.0/255.0, 135.0/255.0, 65.0/255.0);
@@ -111,12 +121,14 @@ public class GameLogic extends Application {
   private void placementPhaseStart() {
     Pane recruitPane = createRecruitPane();
 
-    JFXButton finishedPlacing = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
-    finishedPlacing.setMinSize(200.0, 70.0);
-    finishedPlacing.setLayoutX(placementButtonXPadding);
-    finishedPlacing.setLayoutY(placementButtonYPadding);
+    JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
+    finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
+    finishedPlacingButton.setTextFill(buttonTextColor);
+    finishedPlacingButton.setStyle(buttonBackgroundColor);
+    finishedPlacingButton.setLayoutX(placementButtonXPadding);
+    finishedPlacingButton.setLayoutY(placementButtonYPadding);
 
-    recruitPane.getChildren().add(finishedPlacing);
+    recruitPane.getChildren().add(finishedPlacingButton);
 
     int playerSideTop, playerSideBottom; //sets paddings depending on player side (to the coloring of the boardtiles as well as untargetability)
     if (user_id == player1) {
@@ -134,7 +146,7 @@ public class GameLogic extends Application {
       }
     }
 
-    finishedPlacing.setOnAction(event -> { //when button pressed, finishes the placementphase
+    finishedPlacingButton.setOnAction(event -> { //when button pressed, finishes the placementphase
       placementPhaseFinished(recruitPane);
     });
   }
@@ -189,8 +201,22 @@ public class GameLogic extends Application {
     return unitPane;
   }
 
-  private Pane createSidePanel() {
+  private Pane createSidePanel() { //creates the side panel for movement/attack phase
     Pane sidePanel = new Pane();
+
+    turnCounter.setStyle(turnCounterFontSize);
+
+    description.setStyle(descriptionFont);
+    description.setLayoutX(descriptionXPadding);
+    description.setLayoutY(descriptionYPadding);
+    description.setVisible(false);
+
+    sidePanel.getChildren().addAll(description, turnCounter);
+
+    sidePanel.setLayoutX(sidePanelXPadding);
+    sidePanel.setLayoutY(sidePanelYPadding);
+    root.getChildren().add(sidePanel);
+
     return sidePanel;
   }
 }
