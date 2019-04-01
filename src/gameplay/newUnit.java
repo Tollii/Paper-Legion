@@ -31,6 +31,7 @@ public class Unit extends StackPane {
     private final int LOW_HP_THRESHOLD = 20;
     private boolean enemy;
     private boolean hasAttackedThisTurn;
+    private int healthbarPosY = 40;
 
     public Unit(boolean enemy, UnitType type){
         rect = new Rectangle();
@@ -56,7 +57,7 @@ public class Unit extends StackPane {
         this.getChildren().addAll(rect, healthbar);
         healthbar.setPrefWidth(GameLogic.tileSize);
         healthbar.setAlignment(Pos.CENTER);
-        healthbar.setTranslateY(40);
+        healthbar.setTranslateY(healthbarPosY);
 
 
         healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");

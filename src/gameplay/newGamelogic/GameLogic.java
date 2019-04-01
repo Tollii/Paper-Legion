@@ -17,26 +17,40 @@
 
 package gameplay;
 
+import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.input.MouseButton;
-import javafx.geometry.Orientation;
-import javafx.scene.input.MouseEvent;
-
+import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import java.sql.SQLException;
+import static database.Variables.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import javafx.geometry.Orientation;
 
 public class GameLogic extends Application {
-  static ArrayList<String> unitTypeList = new ArrayList<String>();
   private static final int boardSize = 7; //sets the number of tiles en each direction of the grid
   public static final int tileSize = 100; //sets size of each tile on the grid
 
+  ////SCENE ELEMENTS////
   private Grid grid = new Grid(boardSize, boardSize);
   private Pane root;
+
+  private Thread waitTurnThread;
 
   ////WINDOW SIZE////
   private final int windowWidth = 1920;
@@ -45,26 +59,46 @@ public class GameLogic extends Application {
   ////PANE PADDINGS////
   private final int gridXPadding = 300;
   private final int gridYPadding = 100;
-  private final int recruitXPadding = 150;
+  private final int recruitXPadding = gridXPadding + tileSize*boardSize + 150;
   private final int recruitYPadding = 150;
   private final int placementButtonXPadding = 100;
   private final int placementButtonYPadding = 500;
 
+  ////GAME CONTROL VARIABLES////
   private boolean unitSelected = false;
-  private final boolean player = true;
+  private int moveCounter = 0;                                // Counter for movement phase.
+  private int attackCount = 0;                                // Counter for attack phase.
+  private Unit selectedUnit;
+  private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
+  private ArrayList<Attack> attackList = new ArrayList<>();
+  private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
+  private UnitGenerator unitGenerator = new UnitGenerator();
+  ArrayList<PieceSetup> setupPieces;
 
-  ////COLORS////
+  ////STYLING////
+  private String gameTitle = "PAPER LEGION";
+  private String descriptionFont = "-fx-font-family: 'Arial Black'";
+  private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
+  private String turnCounterFontSize = "-fx-font-size: 32px";
+  private Paint selectionOutlineColor = Color.RED;
+  private Paint endTurnButtonTextColor = Color.WHITE;
   private Paint movementHighlightColor = Color.GREENYELLOW;
   private Paint attackHighlightColor = Color.DARKRED;
   private Paint untargetableTileColor = Color.color(155.0/255.0, 135.0/255.0, 65.0/255.0);
 
   public void start(Stage window) throws Exception {
+    // Sets static variables for players and opponent id.
+    db.getPlayers();
+
+    SetUp setUp = new SetUp();
+    setUp.importUnitTypes();
+
     root = new Pane();
     Scene scene = new Scene(root, windowWidth, windowHeight);
 
-    Pane gridPane = createGrid();
+    Pane gridPane = createGrid(); //creates the grid
 
-    placementPhaseStart();
+    placementPhaseStart(); //starts the placement phase
 
     //TODO: might need the other phases as methods as well
 
@@ -72,7 +106,7 @@ public class GameLogic extends Application {
     //inside start(), and then call the the start methods when a phase starts, and call the finish
     //method when the phase finishes
 
-    window.setTitle("");
+    window.setTitle(gameTitle);
     window.setScene(scene);
     window.show();
   }
@@ -169,22 +203,20 @@ public class GameLogic extends Application {
     units.setMinWidth(520);
 
     for (int i = 0; i < unitTypeList.size(); i++) {
-      RecruitTile tile = new RecruitTile(100, 100, new Recruit(UnitGenerator.newUnit(unitTypeList.get(i))));
+      RecruitTile tile = new RecruitTile(tileSize, tileSize, new Recruit(UnitGenerator.newUnit(unitTypeList.get(i))));
       units.getChildren().add(tile);
     }
     unitPane.getChildren().add(units);
 
-    unitPane.setLayoutX(1150);
-    unitPane.setLayoutY(150);
+    unitPane.setLayoutX(recruitXPadding);
+    unitPane.setLayoutY(recruitYPadding);
     root.getChildren().add(unitPane);
 
     return unitPane;
   }
 
-  public static void main(String[] args) {
-    unitTypeList.add("Archer");
-    unitTypeList.add("Swordsman");
-
-    launch(args);
+  public Pane createSidePanel() {
+    Pane sidePanel = new Pane();
+    return sidePanel;
   }
 }
