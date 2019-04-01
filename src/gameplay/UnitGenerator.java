@@ -88,7 +88,7 @@ public class  UnitGenerator {
 
     }
 
-    public static Unit newUnit(boolean enemy, int unitType) {
+    public Unit newUnit(boolean enemy, int unitType) {
 
       switch (unitType) {
         case 1:
@@ -100,7 +100,7 @@ public class  UnitGenerator {
       return null;
     }
 
-    public static Unit newUnit(boolean enemy, String unitType) {
+    public Unit newUnit(boolean enemy, String unitType) {
 
         switch (unitType) {
             case "Swordsman":
@@ -114,7 +114,7 @@ public class  UnitGenerator {
         return null;
     }
 
-    public static Recruit newRecruit(int unitType) {
+    public Recruit newRecruit(int unitType) {
         switch (unitType) {
             case 1:
                 return new Recruit(swordsmanUnitType);

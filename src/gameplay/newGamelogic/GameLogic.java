@@ -127,7 +127,7 @@ public class GameLogic extends Application {
       playerSideBottom = playerSideSize;
     }
 
-    for (int i = 0 + playerSideTop; i < boardSize - playerSideBottom; i++) { //colors and makes tiles untargetable
+    for (int i = playerSideTop; i < boardSize - playerSideBottom; i++) { //colors and makes tiles untargetable
       for (int j = 0; j < boardSize; j++) {
         grid.tileList[i][j].setFill(untargetableTileColor);
         grid.tileList[i][j].setUntargetable();
