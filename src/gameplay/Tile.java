@@ -39,8 +39,9 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
         boolean success = false;
         if (dragboard.hasImage() && dragboard.hasString()) {
           Unit newUnit = SetUp.unitGenerator.newUnit(false, dragboard.getString()); //creates new unit and adds to tile
-          
+
           setUnit(newUnit);
+          setUntargetable();
           success = true;
         }
         event.setDropCompleted(success);
