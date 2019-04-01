@@ -15,6 +15,7 @@ import static database.Variables.user_id;
 public class Main extends Application {
 
     public static Stage window;
+    public static Scene rootScene;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -23,8 +24,12 @@ public class Main extends Application {
         //database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
         Parent root = FXMLLoader.load(getClass().getResource("/menus/View/login.fxml"));
-        primaryStage.setTitle("Binary Warfare");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        rootScene = new Scene(root, 850,650);
+
+        primaryStage.setTitle("Paper Legion");
+        primaryStage.setScene(rootScene);
+        primaryStage.setMinWidth(850);
+        primaryStage.setMinHeight(650);
         primaryStage.show();
 
     }

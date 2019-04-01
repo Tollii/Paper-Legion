@@ -17,7 +17,7 @@ UPDATE  Users SET online_status = 1 WHERE username = 'admin';
 
 -- log off
 -- UPDATE Users SET online_status = 0 WHERE username = ?;
-UPDATE Users SET online_status = 0 WHERE username = 'admin';
+UPDATE Users SET online_status = 0 WHERE username = 'thomas2';
 
 -- log everyone off
 UPDATE Users SET online_status = 0;

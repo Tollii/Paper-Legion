@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static database.Variables.db;
+import static database.Variables.*;
 
 public class signUpController extends Controller {
 

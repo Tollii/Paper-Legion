@@ -23,6 +23,10 @@ public class ConnectionPool {
     private static int MAX_POOL_SIZE = 10;
 
 
+    public ConnectionPool(List<Connection> pool){
+        this.connectionPool = pool;
+    }
+
     // Initializes an ArrayList, then fills it with connections. This is the connectionPool.
     public static ConnectionPool create() throws SQLException{
         try{
@@ -37,10 +41,6 @@ public class ConnectionPool {
             clne.printStackTrace();
         }
         return null;
-    }
-
-    public ConnectionPool(List<Connection> pool){
-        this.connectionPool = pool;
     }
 
     // Fetches a connection from the connection pool
@@ -61,14 +61,14 @@ public class ConnectionPool {
 
         Connection con = connectionPool.remove(connectionPool.size() - 1);
         usedConnections.add(con);
-        System.out.println("Connection opened");
+        //System.out.println("Connection opened");
         return con;
     }
 
     // Will put the connection back into the connection pool and remove it from the usedConnections list
     public boolean releaseConnection(Connection con){
         connectionPool.add(con);
-        System.out.println("Connection released");
+        //System.out.println("Connection released");
         return usedConnections.remove(con);
     }
 
