@@ -101,25 +101,6 @@ public class GameLogic extends Application {
     private Paint attackHighlightColor = Color.DARKRED;
 
 
-    public static void main(String[] args) {
-        //Shutdown hook. CLoses stuff when program exits.
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
-
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -741,7 +722,7 @@ public class GameLogic extends Application {
                 while(keepRunning()){
                     try {
                         while (!yourTurn) {
-                            System.out.println("sleeps thread " + Thread.currentThread());
+                            System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
