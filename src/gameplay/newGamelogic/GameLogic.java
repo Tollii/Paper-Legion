@@ -169,6 +169,26 @@ public class GameLogic extends Application {
         grid.tileList[i][j].setUntargetable();
       }
     }
+
+    ArrayList<Unit> exportUnitList = new ArrayList<>();
+    ArrayList<Integer> exportPositionXList = new ArrayList<>();
+    ArrayList<Integer> exportPositionYList = new ArrayList<>();
+
+    for (int i = 0; i < grid.tileList.length; i++) {
+      for (int j = 0; j < grid.tileList[i].length; j++) {
+
+        if(grid.tileList[i][j].getUnit() != null){
+          exportUnitList.add(grid.tileList[i][j].getUnit());
+          exportPositionXList.add(j);
+          exportPositionYList.add(i);
+        }
+      }
+    }
+
+    if (exportUnitList != null){
+      db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
+    }
+
   }
 
   private void movementAttackPhaseStart() {

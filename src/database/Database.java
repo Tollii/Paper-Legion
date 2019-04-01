@@ -1,9 +1,6 @@
 package database;
 
-import gameplay.Attack;
-import gameplay.Move;
-import gameplay.PieceSetup;
-import gameplay.ProtoUnitType;
+import gameplay.*;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -316,6 +313,15 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
+    }
+
+    public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
+        //TODO Finish this method
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(?,?,?,0,0);";
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
     }
 
     //Inserts pieces into database
@@ -1176,4 +1182,6 @@ public class Database {
     public void close() throws SQLException {
         connectionPool.shutdown();
     }
+
+
 }
