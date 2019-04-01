@@ -65,7 +65,7 @@ public class GameLogic extends Application {
     private Thread waitTurnThread;
 
     ////SCENE ELEMENTS////
-    private Stage window;
+    private Stage window;                               //Main stage for the game.
     private Scene scene;                                //Scene for second and third phase of the game
     private HBox root = new HBox();                     //Root container
     private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
@@ -76,7 +76,6 @@ public class GameLogic extends Application {
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
-
 
 
     ////GAME CONTROL VARIABLES////
@@ -130,7 +129,6 @@ public class GameLogic extends Application {
         } else {
             int number = 0;
             do {
-
                 number = db.pollForUnits();
                 Thread.sleep(5000);
             } while (number != 10);
@@ -139,14 +137,10 @@ public class GameLogic extends Application {
 
         drawUnits();
 
-
-
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
-
-
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -291,7 +285,6 @@ public class GameLogic extends Application {
 
             }
 
-
             //Check if you have won
             winner();
 
@@ -299,9 +292,6 @@ public class GameLogic extends Application {
             waitForTurn();
         }
     }
-
-
-
 
     private void surrender() {
         Stage confirm_alert = new Stage();
@@ -324,7 +314,6 @@ public class GameLogic extends Application {
 
         surrender_no.setOnAction(event -> {
             confirm_alert.close();
-            //TODO legg inn at alerten lukker seg, kanskje det over funker
         });
 
         HBox buttons = new HBox();
@@ -872,11 +861,8 @@ public class GameLogic extends Application {
 
                     unitList.get(j).takeDamage(importedAttackList.get(i).getDamage());
 
-
-
                     //If units health is zero. Remove it from the board.
                     if (unitList.get(j).getHp() <= 0) {
-                        //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                         pieceContainer.getChildren().removeAll(unitList.get(j).getPieceAvatar());
 
                         unitPosition[unitList.get(j).getPositionY()][unitList.get(j).getPositionX()] = null;
@@ -919,6 +905,8 @@ public class GameLogic extends Application {
         }
         if (winnerOrLoser != -1) {
             //Game is won or lost.
+
+            gameCleanUp();
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
@@ -943,21 +931,18 @@ public class GameLogic extends Application {
             endGameBtn.setOnAction(event -> {
                 String fxmlDir = "/menus/View/mainMenu.fxml";
                 FXMLLoader loader = new FXMLLoader();
-                Parent root2 =null;
+                Parent root = null;
                 try {
-                    root2 =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
+                    root =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
                     // loader.load();
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
-
-                Main.window.setScene(new Scene(root2));
                 winner_alert.close();
+                winner_alert.hide();
+                Main.window.setScene(new Scene(root));
 
-
-
-                //TODO Switch scene to main menu
             });
 
             VBox content = new VBox();
@@ -969,5 +954,25 @@ public class GameLogic extends Application {
             winner_alert.setScene(scene);
             winner_alert.showAndWait();
         }
+    }
+
+    private void gameCleanUp() {
+
+        //Stuff that need to be closed or reset. Might not warrant its own method.
+        waitTurnThread.stop();
+    }
+
+    public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
+            if (user_id > 0) {
+                db.logout(user_id);
+            }
+            try {
+                db.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
+        launch(args);
     }
 }

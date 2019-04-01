@@ -12,6 +12,7 @@ import menus.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
+
 import static database.Variables.*;
 
 public class mainMenuController extends Controller {
@@ -48,8 +49,6 @@ public class mainMenuController extends Controller {
     private JFXButton mainMenuPlayButton;
 
 
-
-
     @FXML
     void initialize() {
 
@@ -58,7 +57,7 @@ public class mainMenuController extends Controller {
 
             @Override
             public void run() {
-                while(keepRunning()){
+                while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {
                         Platform.runLater(() -> {
@@ -74,12 +73,12 @@ public class mainMenuController extends Controller {
                         });
                         match_id = db.matchMaking_search(user_id);
                         findGameClicked = true;
-                        if(match_id > 0) {
+                        if (match_id > 0) {
                             // If you join a game, you are player 2.
                             yourTurn = false;
                             startGame = true;
                             Platform.runLater(
-                                    () ->{
+                                    () -> {
                                         enterGame();
                                     });
                             this.doStop();
@@ -90,11 +89,11 @@ public class mainMenuController extends Controller {
                             // If you create the game, you are player 1.
                             yourTurn = true;
                             try {
-                                while(!gameEntered){
+                                while (!gameEntered) {
                                     Thread.sleep(3000);
                                     gameEntered = db.pollGameStarted(match_id);
-                                    if(gameEntered){
-                                        Platform.runLater(()->{
+                                    if (gameEntered) {
+                                        Platform.runLater(() -> {
                                             enterGame();
                                         });
 
@@ -102,7 +101,7 @@ public class mainMenuController extends Controller {
                                     }
 
                                 }
-                            } catch (InterruptedException e){
+                            } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -111,18 +110,16 @@ public class mainMenuController extends Controller {
             }
 
             @Override
-            public synchronized void doStop(){
+            public synchronized void doStop() {
                 this.doStop = true;
             }
 
             @Override
-            public synchronized boolean keepRunning(){
+            public synchronized boolean keepRunning() {
                 return !this.doStop;
             }
 
         };
-
-
 
         mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
 
@@ -142,7 +139,7 @@ public class mainMenuController extends Controller {
 
         });
 
-        mainMenuGameInfoButton.setOnAction( event -> {
+        mainMenuGameInfoButton.setOnAction(event -> {
             changeScene("gameInfo.fxml");
 
         });
@@ -154,20 +151,18 @@ public class mainMenuController extends Controller {
     }
 
 
-    public static void enterGame(){
-        try{
+    public static void enterGame() {
+        try {
+            findGameClicked = false;
             SetUp setUp = new SetUp();
             setUp.importUnitTypes();
             GameLogic game = new GameLogic();
             game.start(Main.window);
             System.out.println("Success!!!!");
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
-
 
 
 }
