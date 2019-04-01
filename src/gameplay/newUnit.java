@@ -30,6 +30,7 @@ public class Unit extends StackPane {
     ////UTILITIES////
     private final int LOW_HP_THRESHOLD = 20;
     private boolean enemy;
+    private boolean hasAttackedThisTurn;
 
     public Unit(boolean enemy, UnitType type){
         rect = new Rectangle();
@@ -75,6 +76,14 @@ public class Unit extends StackPane {
 
     public boolean getEnemy(){
         return enemy;
+    }
+
+    public boolean getHasAttackedThisTurn() {
+        return hasAttackedThisTurn;
+    }
+
+    public void setHasAttackedThisTurn(boolean hasAttackedThisTurn) {
+        this.hasAttackedThisTurn = hasAttackedThisTurn;
     }
 
     ////GET UNIT INFO////
