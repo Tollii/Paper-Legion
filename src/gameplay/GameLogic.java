@@ -65,7 +65,7 @@ public class GameLogic extends Application {
     private Thread waitTurnThread;
 
     ////SCENE ELEMENTS////
-    private Stage window;
+    private Stage window;                               //Main stage for the game.
     private Scene scene;                                //Scene for second and third phase of the game
     private HBox root = new HBox();                     //Root container
     private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
@@ -76,7 +76,6 @@ public class GameLogic extends Application {
     private Pane board = new Pane();                    // Holds all the tiles.
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
-
 
 
     ////GAME CONTROL VARIABLES////
@@ -130,7 +129,6 @@ public class GameLogic extends Application {
         } else {
             int number = 0;
             do {
-
                 number = db.pollForUnits();
                 Thread.sleep(5000);
             } while (number != 10);
@@ -139,14 +137,10 @@ public class GameLogic extends Application {
 
         drawUnits();
 
-
-
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
-
-
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -968,6 +962,7 @@ public class GameLogic extends Application {
 
     private void gameCleanUp() {
 
-        //Stuff that need to be closed or reset.
+        //Stuff that need to be closed or reset. Might not warrant its own method.
+        waitTurnThread.stop();
     }
 }
