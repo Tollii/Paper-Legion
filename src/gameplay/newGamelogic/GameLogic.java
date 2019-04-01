@@ -43,8 +43,10 @@ import java.util.Collections;
 import javafx.geometry.Orientation;
 
 public class GameLogic extends Application {
+  ////BOARD SIZE CONTROLS////
   private static final int boardSize = 7; //sets the number of tiles en each direction of the grid
   public static final int tileSize = 100; //sets size of each tile on the grid
+  private static final int playerSideSize = 2; //Used to set width of the placement area
 
   ////SCENE ELEMENTS////
   private Grid grid = new Grid(boardSize, boardSize);
@@ -116,13 +118,13 @@ public class GameLogic extends Application {
 
     recruitPane.getChildren().add(finishedPlacing);
 
-    int playerSideTop, playerSideBottom; //sets paddings depending on player side
-    if (player == true) {
-      playerSideTop = 2;
+    int playerSideTop, playerSideBottom; //sets paddings depending on player side (to the coloring of the boardtiles as well as untargetability)
+    if (user_id == player1) {
+      playerSideTop = playerSideSize;
       playerSideBottom = 0;
     } else {
       playerSideTop = 0;
-      playerSideBottom = 2;
+      playerSideBottom = playerSideSize;
     }
 
     for (int i = 0 + playerSideTop; i < boardSize - playerSideBottom; i++) { //colors and makes tiles untargetable
