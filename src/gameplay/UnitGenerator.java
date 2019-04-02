@@ -91,30 +91,57 @@ public class  UnitGenerator {
 
     }
 
-    public Unit newUnit(boolean enemy, int unitType) {
+    public Unit newFriendlyUnit(int unitType) {
 
       switch (unitType) {
         case 1:
-            return new Unit( enemy, swordsmanUnitType, unitId++);
+            return new Unit( false, swordsmanUnitType, unitId++);
 
         case 2:
-            return new Unit( enemy, archerUnitType, unitId++);
+            return new Unit( false, archerUnitType, unitId++);
       }
       return null;
     }
 
-    public Unit newUnit(boolean enemy, String unitType) {
+    public Unit newFriendlyUnit(String unitType) {
 
         switch (unitType) {
             case "Swordsman":
-                return new Unit( enemy, swordsmanUnitType, unitId++);
+                return new Unit( false, swordsmanUnitType, unitId++);
 
             case "Archer":
-                return new Unit( enemy, archerUnitType, unitId++);
+                return new Unit( false, archerUnitType, unitId++);
         }
 
         return null;
     }
+
+    public Unit newEnemyUnit(int unitType, int unitIdInput) {
+
+        switch (unitType) {
+            case 1:
+                return new Unit( true, swordsmanUnitType, unitIdInput);
+
+            case 2:
+                return new Unit( true, archerUnitType, unitIdInput);
+        }
+        return null;
+    }
+
+    public Unit newEnemyUnit(String unitType, int unitIdInput) {
+
+        switch (unitType) {
+            case "Swordsman":
+                return new Unit( true, swordsmanUnitType, unitIdInput);
+
+            case "Archer":
+                return new Unit( true, archerUnitType, unitIdInput);
+        }
+
+        return null;
+    }
+
+
 
     public Recruit newRecruit(int unitType) {
         switch (unitType) {

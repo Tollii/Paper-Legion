@@ -366,6 +366,9 @@ public class Database {
         }
     }
 
+
+
+
     //Inserts pieces into database
     public void insertPieces() {
         Connection myConn = connectionPool.getConnection();
