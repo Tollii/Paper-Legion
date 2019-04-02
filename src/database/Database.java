@@ -4,6 +4,7 @@ import gameplay.Attack;
 import gameplay.Move;
 import gameplay.PieceSetup;
 import gameplay.ProtoUnitType;
+import menus.Controller.Match;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -46,6 +47,42 @@ public class Database {
 \/    \/\__,_|\__\___|_| |_|_| |_| |_|\__,_|_|\_\_|_| |_|\__, |
                                                          |___/
      */
+
+
+
+    public ArrayList<Match> findGamesAvailable(){
+        ArrayList<Match> matches = new ArrayList<Match>();
+        String sqlString = "select match_id, username from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = myConn.prepareStatement(sqlString);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                int match_id = resultSet.getInt("match_id");
+                String playername = resultSet.getString("username");
+                boolean password = false;
+
+                matches.add(new Match(match_id,playername, password));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+
+        return matches;
+
+    }
 
     public static ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";

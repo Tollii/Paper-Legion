@@ -36,7 +36,7 @@ public class mainMenuController extends Controller {
     private JFXButton mainMenuStatsButton;
 
     @FXML
-    private JFXButton mainMenuSettingsButton;
+    private JFXButton mainMenuCustomMatchButton;
 
     @FXML
     private JFXButton mainMenuPlayButton;
@@ -69,7 +69,6 @@ public class mainMenuController extends Controller {
                         Platform.runLater(() -> {
                             mainMenuPlayButton.setText("Abort");
                         });
-                        //isPressed = true;
                         match_id = db.matchMaking_search(user_id);
                         findGameClicked = true;
                         if (match_id > 0) {
@@ -143,6 +142,10 @@ public class mainMenuController extends Controller {
 
         });
 
+        mainMenuCustomMatchButton.setOnAction(event -> {
+            changeScene("MatchSetup.fxml");
+        });
+
         // Logs out the current user.
         mainMenuExitButton.setOnAction(event -> {
             cancelGame();
@@ -167,7 +170,6 @@ public class mainMenuController extends Controller {
     private void enterGame() {
         try {
             findGameClicked = false;
-            //isPressed = true;
             SetUp setUp = new SetUp();
             setUp.importUnitTypes();
             GameLogic game = new GameLogic();

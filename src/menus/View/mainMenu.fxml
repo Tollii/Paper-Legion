@@ -44,7 +44,7 @@
                                       <Insets bottom="-10.0" />
                                   </VBox.margin>
                               </JFXButton>
-                              <JFXButton fx:id="mainMenuSettingsButton" maxHeight="50.0" maxWidth="256.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Settings">
+                              <JFXButton fx:id="mainMenuCustomMatchButton" maxHeight="50.0" maxWidth="256.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Custom Match">
                                   <VBox.margin>
                                       <Insets bottom="-10.0" />
                                   </VBox.margin>
