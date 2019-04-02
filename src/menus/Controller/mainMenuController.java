@@ -11,7 +11,6 @@ import menus.Main;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Timer;
 
 import static database.Variables.*;
 
@@ -36,9 +35,6 @@ public class mainMenuController extends Controller {
 
     @FXML
     private JFXButton mainMenuStatsButton;
-
-    @FXML
-    private Label gameTitleLabel;
 
     @FXML
     private JFXButton mainMenuSettingsButton;
@@ -164,8 +160,7 @@ public class mainMenuController extends Controller {
 
     }
 
-
-    public void enterGame() {
+    private void enterGame() {
         try {
             findGameClicked = false;
             //isPressed = true;

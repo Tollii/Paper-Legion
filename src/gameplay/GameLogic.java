@@ -306,8 +306,8 @@ public class GameLogic extends Application {
 
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
-            endTurn();
             checkForGameOver();
+            endTurn();
             confirm_alert.close();
         });
 
@@ -925,6 +925,7 @@ public class GameLogic extends Application {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
+                winner_alert.close();
                 Main.window.setScene(new Scene(root));
             });
 
