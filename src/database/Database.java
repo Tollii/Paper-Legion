@@ -372,8 +372,8 @@ public class Database {
         piecesPlayer2.add(unit_player2_5);
 
         try {
-//            myConn.setAutoCommit(false);
-//            myConn2.setAutoCommit(false);
+      //      myConn.setAutoCommit(false);
+        //    myConn2.setAutoCommit(false);
 
             for (int i = 0; i < piecesPlayer1.size(); i++) {
                 playerInsert1 = myConn.prepareStatement(piecesPlayer1.get(i));
@@ -391,13 +391,13 @@ public class Database {
                 playerInsert2.executeUpdate();
             }
 
-            myConn.commit();
-            myConn2.commit();
+  //          myConn.commit();
+  //          myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-//            Cleaner.setAutoCommit(myConn);
-//            Cleaner.setAutoCommit(myConn2);
+   //         Cleaner.setAutoCommit(myConn);
+   //         Cleaner.setAutoCommit(myConn2);
             Cleaner.closeStatement(playerInsert1);
             Cleaner.closeStatement(playerInsert2);
             connectionPool.releaseConnection(myConn);
@@ -493,8 +493,8 @@ public class Database {
         String ObstacleAmounts = "UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;";
 
         try {
-//            myConn.setAutoCommit(false);
-//            myConn2.setAutoCommit(false);
+ //           myConn.setAutoCommit(false);
+   //         myConn2.setAutoCommit(false);
 
             for (int i = 0; i < antallObstacles; i++) {
                 player = myConn.prepareStatement(sqlPlayerObstacle);
@@ -510,9 +510,12 @@ public class Database {
             matchUpdate.setInt(1,antallObstacles);
             matchUpdate.setInt(2,match_id);
 
+            matchUpdate.executeUpdate();
 
 
-//            myConn.commit();
+
+ //           myConn.commit();
+   //         myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
