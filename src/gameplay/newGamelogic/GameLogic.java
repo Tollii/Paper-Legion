@@ -205,7 +205,7 @@ public class GameLogic extends Application {
     surrenderButton.setTextFill(buttonTextColor);
     surrenderButton.setStyle(buttonBackgroundColor);
     surrenderButton.setLayoutX(surrenderButtonXPadding);
-    surrenderButton.setLayoutY(surrenderButtonyPadding);
+    surrenderButton.setLayoutY(surrenderButtonYPadding);
 
     sidePanel.getChildren().addAll(endTurnButton, surrenderButton);
   }

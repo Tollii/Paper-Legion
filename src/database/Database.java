@@ -316,7 +316,6 @@ public class Database {
     }
 
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
-        //TODO Finish this method
         Connection myConn = connectionPool.getConnection();
         String sqlSetningPieces = "INSERT INTO Pieces VALUES(?,?,?,?,?);";
         String sqlSetningUnits = "INSERT INTO Units VALUES(?,?,?,?,?,?,?,?,?);";

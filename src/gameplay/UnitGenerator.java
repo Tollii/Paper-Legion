@@ -78,7 +78,6 @@ public class  UnitGenerator {
         this.archerMovementRange = archerProto.getMovementRange();
         archerUnitType =  new Archer("Archer", archerUnitTypeId, archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag, archerImage, archerSound);
     }
-    
 
     public UnitType newArcher(){
 
