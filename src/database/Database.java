@@ -906,20 +906,20 @@ public class Database {
         return outputList;
     }
 
-
-
     public boolean surrenderGame() {
         Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "update Units set current_health=0 where player_id  = ?;";
+        String sqlSetning = "update Matches set surrendered=? where match_id=?";
         PreparedStatement preparedStatement = null;
         try {
             myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, user_id);
+            preparedStatement.setInt(2, match_id);
+
             int result = preparedStatement.executeUpdate();
             myConn.commit();
             if (result == 1) {
-                System.out.println("Game registered");
+                System.out.println("Game surrendered");
                 return true;
             }
         } catch (SQLException e) {
@@ -933,6 +933,34 @@ public class Database {
         return false;
     }
 
+    public int checkForSurrender() {
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        String stmt = "SELECT surrendered FROM Matches WHERE match_id = ?;";
+        ResultSet rs = null;
+        try {
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.setInt(1, match_id);
+            rs = preparedStatement.executeQuery();
+            if (!rs.next()) {
+                return -1;
+            }
+            return rs.getInt("surrendered");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(rs);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return -1;
+    }
+
+    //TODO
+    public boolean importAttackList() {
+        return false;
+    }
     /*
      __ _             _
     / _(_) __ _ _ __ (_)_ __
@@ -1204,7 +1232,7 @@ public class Database {
             int result = preparedStatement.executeUpdate();
             myConn.commit();
             if (result == 1) {
-                System.out.println("Win regisrered");
+                System.out.println("Win registered");
                 return true;
             }
         } catch (SQLException e) {

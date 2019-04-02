@@ -21,3 +21,7 @@ select Pieces.piece_id, Pieces.match_id, Pieces.player_id,position_x, position_y
 right join Units U on Pieces.piece_id = U.piece_id and Pieces.match_id = U.match_id and Pieces.player_id = U.player_id
 where Pieces.match_id=345
 Order by piece_id,player_id;
+
+
+
+delete from Matches where player2=2;

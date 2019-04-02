@@ -6,64 +6,88 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import menus.Main;
 
 import java.io.IOException;
 
+import static database.Variables.*;
+import static database.Variables.db;
+
 public class winner extends Application {
 
 
     /*
-    This is a temporary file used to preview the winner pop-up.
+    This is a temporary file used to preview the checkForGameOver pop-up.
      */
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Stage winner_alert = primaryStage;
+        String win_loseText;
+        String gameSummary = "";
+        int loser = -1;
+        turn = 5;
+        user_id = 2;
+        opponent_id = 3;
 
-        //Game is won.
-        winner_alert = new Stage();
-        //winner_alert.initModality(Modality.APPLICATION_MODAL);
-        winner_alert.setTitle("Game over!");
+        if (true) {
+            gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
+            loser = 3;
+        } else if (db.checkForSurrender() != -1) {
+            gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
+            loser = 3;
+        }
 
-        Text winner = new Text();
-        winner.setStyle("-fx-font-size:32px;");
-        //Button endgame = new Button("Return to menu");
+        if (loser != -1) {
+            //Game is won or lost.
+            //Open alert window.
+            Stage winner_alert = new Stage();
+            winner_alert.initModality(Modality.APPLICATION_MODAL);
+            winner_alert.setTitle("Game over!");
 
-        //winner_alert.setStyle("-fx-effect: innershadow(gaussian, #039ed3, 2, 1.0, 0, 0);");
+            Text winnerTextHeader = new Text();
+            Text winnerText = new Text();
+            winnerTextHeader.setStyle("-fx-font-size:32px;");
+            winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
+            //db.incrementGamesPlayed();
 
-        JFXButton endgame = new JFXButton("Return to menu");
-
-        endgame.setOnAction(event -> {
-
-            String fxmlDir = "/menus/View/mainMenu.fxml";
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(fxmlDir));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (loser == user_id) {
+                win_loseText = "You Lose!\n";
+            } else {
+                win_loseText = "You Win!\n";
             }
-            Parent root = loader.getRoot();
-            Main.window.setScene(new Scene(root));
-        });
 
-        winner.setText("You win!");
+            winnerTextHeader.setText(win_loseText);
+            winnerText.setText(gameSummary);
 
-        VBox content = new VBox();
-        content.setAlignment(Pos.CENTER);
-        content.setSpacing(20);
-        content.getChildren().addAll(winner,endgame);
-        Scene scene = new Scene(content,250,150);
-        winner_alert.initStyle(StageStyle.UNDECORATED);
-        winner_alert.setScene(scene);
-        winner_alert.show();
+            JFXButton endGameBtn = new JFXButton("Return to menu");
 
+            endGameBtn.setOnAction(event -> {
+                String fxmlDir = "/menus/View/mainMenu.fxml";
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(this.getClass().getResource(fxmlDir));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("load failed");
+                }
+                winner_alert.setScene(new Scene(root));
+            });
+
+            VBox content = new VBox();
+            content.setAlignment(Pos.CENTER);
+            content.setSpacing(20);
+            content.getChildren().addAll(winnerTextHeader,winnerText,endGameBtn);
+            Scene scene = new Scene(content,450,200);
+            winner_alert.initStyle(StageStyle.UNDECORATED);
+            winner_alert.setScene(scene);
+            winner_alert.showAndWait();
+        }
     }
 }

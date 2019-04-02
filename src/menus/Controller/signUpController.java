@@ -41,6 +41,9 @@ public class signUpController extends Controller {
 
     @FXML
     void initialize() {
+
+        alertField.setText("");
+
         goBackButton.setOnAction(event -> {
             changeScene("login.fxml");
         });
