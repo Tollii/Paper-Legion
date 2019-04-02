@@ -15,8 +15,7 @@ import java.util.ResourceBundle;
 import static database.Variables.*;
 
 public class mainMenuController extends Controller {
-    private boolean findGameClicked, gameEntered = false;
-    private boolean isPressed, threadStarted = false;
+    private boolean findGameClicked, gameEntered, threadStarted = false;
 
     @FXML
     private ResourceBundle resources;
@@ -61,13 +60,14 @@ public class mainMenuController extends Controller {
                     if (findGameClicked) {
                         Platform.runLater(() -> {
                             cancelGame();
-                            this.runAgain();
+                            threadStarted = false;
+                            searchGameThread = null;
+                            changeScene("mainMenu.fxml");
+                            this.doStop();
                         });
-                        this.doStop();
                     } else {
                         Platform.runLater(() -> {
                             mainMenuPlayButton.setText("Abort");
-                            isPressed = true;
                         });
                         //isPressed = true;
                         match_id = db.matchMaking_search(user_id);
@@ -87,16 +87,25 @@ public class mainMenuController extends Controller {
                             // If you create the game, you are player 1.
                             yourTurn = true;
                             try {
-                                while (!gameEntered && isPressed) {
-                                    Thread.sleep(3000);
+                                while (!gameEntered && findGameClicked) {
+                                    Thread.sleep(1000);
                                     gameEntered = db.pollGameStarted(match_id);
 
                                     if (gameEntered) {
                                         Platform.runLater(() -> {
-                                            isPressed = false;
                                             enterGame();
                                         });
                                         this.doStop();
+                                    }
+
+                                    if(!findGameClicked){
+                                        Platform.runLater(()->{
+                                            cancelGame();
+                                            threadStarted = false;
+                                            searchGameThread = null;
+                                            changeScene("mainMenu.fxml");
+                                        });
+                                            this.doStop();
                                     }
                                 }
                             } catch (InterruptedException e) {
@@ -117,26 +126,21 @@ public class mainMenuController extends Controller {
                 return !this.doStop;
             }
 
-            public synchronized void runAgain() {
-                this.doStop = false;
-            }
-
         };
 
-        searchGameThread = new Thread(searchGameRunnable);
+
         mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
 
         //Button handlers
 
         mainMenuPlayButton.setOnAction(event -> {
             if (!threadStarted) {
+                searchGameThread = new Thread(searchGameRunnable);
                 threadStarted = true;
                 searchGameThread.start();
             }
+            if(findGameClicked)findGameClicked = false;
 
-            if (isPressed) {
-                isPressed = false;
-            }
         });
 
         // Logs out the current user.
