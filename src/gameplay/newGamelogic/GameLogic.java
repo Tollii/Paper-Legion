@@ -199,6 +199,10 @@ public class GameLogic extends Application {
     if (exportUnitList != null){
       db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
     }
+
+    db.setReady(true);
+    waitForOpponentReady();
+
   }
 
   private void movementActionPhaseStart() {
@@ -219,6 +223,8 @@ public class GameLogic extends Application {
     surrenderButton.setLayoutY(surrenderButtonYPadding);
 
     sidePanel.getChildren().addAll(endTurnButton, surrenderButton);
+
+    movementPhase = true;
 
     //If you are player 2. Start polling the database for next turn.
     if (!yourTurn) {
@@ -391,6 +397,60 @@ public class GameLogic extends Application {
     waitTurnThread = new Thread(waitTurnRunnable);
     waitTurnThread.start();
   }
+
+    private void waitForOpponentReady() {
+
+        // Runnable lambda implementation for turn waiting with it's own thread
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while(keepRunning()){
+                    try {
+                        while (!yourTurn) {
+                            Thread.sleep(1000);
+                            //When player in database matches your own user_id it is your turn again.
+
+                            if (db.checkIfOpponentReady()) {
+                                opponentReady = true;
+
+
+                                this.doStop();
+                            }
+                        }
+
+
+                        //What will happen when your opponent is ready.
+
+                        //Increments turn. Back to your turn.
+                        Platform.runLater(()->{
+
+                            movementActionPhaseStart();
+
+                        });
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public synchronized void doStop(){
+                this.doStop = true;
+            }
+
+            @Override
+            public synchronized boolean keepRunning(){
+                return !this.doStop;
+            }
+        };
+
+        waitTurnThread = new Thread(waitTurnRunnable);
+        waitTurnThread.start();
+    }
+
 
   private void setUpNewTurn(JFXButton endTurnButton){
     deselect();
