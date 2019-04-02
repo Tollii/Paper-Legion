@@ -609,6 +609,25 @@ public class GameLogic extends Application {
     return sidePanel;
   }
 
+  @Override
+  public void stop() {
+      // Executed when the application shuts down. User is logged out and database connection is closed.
+      if (user_id > 0) {
+          db.logout(user_id);
+      }
+      if (Variables.searchGameThread.isAlive()) {
+          Variables.searchGameThread.stop();
+      }
+      if (Variables.waitTurnThread.isAlive()) {
+          Variables.waitTurnThread.stop();
+      }
+      try {
+          db.close();
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+  }
+
   public static void main(String[] args) {
       Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
           if (user_id > 0) {
