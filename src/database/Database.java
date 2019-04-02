@@ -586,14 +586,17 @@ public class Database {
             result2 = preparedStatement2.executeQuery();
             myConn.commit();
             myConn2.commit();
-            result.next();
             result2.next();
+            result.next();
+            if (!result.wasNull()) {
                 obstacle_amount = result.getInt("obstacle_amount");
                 obstacle_in_db = result2.getInt("counting");
 
-                if(obstacle_amount == obstacle_in_db && obstacle_amount !=null){
+                if (obstacle_amount == obstacle_in_db && obstacle_in_db != 0) {
                     return true;
                 }
+            }
+
                 return false;
         } catch (SQLException e) {
             e.printStackTrace();
