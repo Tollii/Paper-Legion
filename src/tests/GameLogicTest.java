@@ -11,6 +11,9 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
+//testUser2 Password: testPassword2
+//testUser password: testPassword
+
 public class GameLogicTest {
 
     @Test
