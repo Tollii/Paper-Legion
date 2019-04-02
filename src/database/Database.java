@@ -366,6 +366,41 @@ public class Database {
         }
     }
 
+    public ArrayList<PieceSetup> importPlacementUnits() {
+
+        ArrayList<PieceSetup> outputList = null;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "SELECT Pieces.piece_id, Pieces.match_id, Pieces.player_id, position_x, position_y, unit_type_id FROM Pieces JOIN Units U ON Pieces.piece_id = U.piece_id AND Pieces.match_id = U.match_id AND Pieces.player_id = U.player_id WHERE Pieces.match_id = ? AND Pieces.player_id = ?;";
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+                preparedStatement = myConn.prepareStatement(sqlSetning);
+
+                preparedStatement.setInt(1, match_id);    //"Arrays begin at 1"
+                preparedStatement.setInt(2, opponent_id);
+
+                resultSet = preparedStatement.executeQuery();
+
+                outputList = new ArrayList<>();
+
+                while(resultSet.next()){
+
+                    outputList.add(new PieceSetup(resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("player_id"), resultSet.getInt("position_x"), resultSet.getInt("position_y"), resultSet.getInt("unit_type_id")));
+                }
+
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return outputList;
+    }
+
 
 
 
