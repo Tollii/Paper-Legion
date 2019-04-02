@@ -16,9 +16,7 @@ import java.util.Timer;
 import static database.Variables.*;
 
 public class mainMenuController extends Controller {
-    private static boolean findGameClicked, gameEntered = false;
-    public static Timer timer = new Timer(true);
-    private Thread searchGameThread;
+    private boolean findGameClicked, gameEntered = false;
     private boolean isPressed, threadStarted = false;
 
     @FXML
@@ -76,8 +74,9 @@ public class mainMenuController extends Controller {
                     } else {
                         Platform.runLater(() -> {
                             mainMenuPlayButton.setText("Abort");
+                            isPressed = true;
                         });
-                        isPressed = true;
+                        //isPressed = true;
                         match_id = db.matchMaking_search(user_id);
                         findGameClicked = true;
                         if (match_id > 0) {
@@ -169,9 +168,10 @@ public class mainMenuController extends Controller {
     }
 
 
-    public static void enterGame() {
+    public void enterGame() {
         try {
             findGameClicked = false;
+            //isPressed = true;
             SetUp setUp = new SetUp();
             setUp.importUnitTypes();
             GameLogic game = new GameLogic();

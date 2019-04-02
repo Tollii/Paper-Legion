@@ -18,6 +18,7 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
+import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -38,6 +39,7 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import menus.Controller.mainMenuController;
 import menus.Main;
 
 import java.io.IOException;
@@ -60,7 +62,6 @@ public class GameLogic extends Application {
     private final int descriptionOffsetBottom = 350;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
-    private Thread waitTurnThread;
 
     ////SCENE ELEMENTS////
     private Stage window;                               //Main stage for the game.
@@ -860,6 +861,12 @@ public class GameLogic extends Application {
         if (user_id > 0) {
             db.logout(user_id);
         }
+        if (Variables.searchGameThread.isAlive()) {
+            Variables.searchGameThread.stop();
+        }
+        if (Variables.waitTurnThread.isAlive()) {
+            Variables.waitTurnThread.stop();
+        }
         try {
             db.close();
         } catch (SQLException e) {
@@ -875,14 +882,15 @@ public class GameLogic extends Application {
 
         if (checkForEliminationVictory() != -1) {
             gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
-            loser = 3;
+            loser = checkForEliminationVictory();
         } else if (db.checkForSurrender() != -1) {
             gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
-            loser = 3;
+            loser = db.checkForSurrender();
         }
 
         if (loser != -1) {
             //Game is won or lost.
+            gameCleanUp();
             //Open alert window.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
@@ -896,8 +904,10 @@ public class GameLogic extends Application {
 
             if (loser == user_id) {
                 win_loseText = "You Lose!\n";
-            } else {
+            } else if (loser == opponent_id){
                 win_loseText = "You Win!\n";
+            } else {
+                win_loseText = "Something went wrong\n";
             }
 
             winnerTextHeader.setText(win_loseText);
@@ -954,7 +964,6 @@ public class GameLogic extends Application {
     private void gameCleanUp() {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        waitTurnThread.stop();
 
         //Sets turns back to 1 for next match.
         turn = 1;
@@ -969,12 +978,17 @@ public class GameLogic extends Application {
             if (user_id > 0) {
                 db.logout(user_id);
             }
+            if (Variables.searchGameThread.isAlive()) {
+                Variables.searchGameThread.stop();
+            }
+            if (Variables.waitTurnThread.isAlive()) {
+                Variables.waitTurnThread.stop();
+            }
             try {
                 db.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            System.exit(0);
         }));
         launch(args);
     }
