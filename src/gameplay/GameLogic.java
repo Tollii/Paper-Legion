@@ -77,7 +77,6 @@ public class GameLogic extends Application {
     private Grid grid = new Grid(boardSize, boardSize); //Sets up a grid which is equivalent to boardSize x boardSize.
     private Label turnCounter = new Label("TURN: " + turn);            //Describes what turn it is.
 
-
     ////GAME CONTROL VARIABLES////
     private int selectedPosX;                                           //Holds the X position to the selected piece.
     private int selectedPosY;                                           //Holds the Y position to the selected piece.
