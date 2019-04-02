@@ -380,7 +380,28 @@ public class GameLogic extends Application {
   }
 
   private int checkForWinner() {
-
+    int yourPieces = 0;
+    int opponentsPieces = 0;
+    //Goes through all units and counts how many are alive for each player.
+    for (int i = 0; i < grid.tileList.length; i++) {
+        for (int j = 0; j < grid.tileList[i].length; j++) {
+          if (grid.tileList[i][j].getUnit().getHp() > 0) {
+              if (grid.tileList[i][j].getUnit().getEnemy()) {
+                  opponentsPieces++;
+              } else {
+                  yourPieces++;
+              }
+          }
+        }
+    }
+    System.out.println("YourPiceces " + yourPieces + " opponent: " + opponentsPieces);
+    if (yourPieces == 0) {
+        return 1;
+    } else if (opponentsPieces == 0) {
+        return 0;
+    } else {
+        return -1;
+    }
   }
 
   private int getPosXFromEvent(MouseEvent event) {
