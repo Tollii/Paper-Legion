@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import static database.Variables.*;
 
 
-    public class MatchSetupController {
+    public class MatchSetupController extends Controller {
 
         @FXML
         private ResourceBundle resources;
@@ -52,8 +52,16 @@ import static database.Variables.*;
         @FXML
         private TableView<Match> table;
 
+
+        @FXML
+        private JFXButton backToMenuButton;
+
         @FXML
         void initialize() {
+
+            backToMenuButton.setOnAction(event -> {
+                changeScene("mainMenu.fxml");
+            });
 
             //Sets up variables for connecting Match class with Table Columns
             player_table.setCellValueFactory(new PropertyValueFactory<>("player"));

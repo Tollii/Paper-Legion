@@ -43,6 +43,11 @@
                      <children>
                         <JFXButton fx:id="joinGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Join Game" textFill="WHITE" />
                         <JFXButton fx:id="createGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Create Game" textFill="WHITE" />
+                        <JFXButton fx:id="backToMenuButton" prefHeight="41.0" prefWidth="95.0" text="Back">
+                           <VBox.margin>
+                              <Insets top="150.0" />
+                           </VBox.margin>
+                        </JFXButton>
                      </children>
                   </VBox>
                </children>
