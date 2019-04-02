@@ -19,10 +19,13 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
+import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -33,14 +36,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import static database.Variables.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.geometry.Orientation;
+import menus.Main;
 
 public class GameLogic extends Application {
   ////BOARD SIZE CONTROLS////
@@ -225,7 +232,7 @@ public class GameLogic extends Application {
     });
 
     surrenderButton.setOnAction(event -> {
-      surrender();
+      surrender(endTurnButton);
     });
 
     grid.addEventHandler(event -> {
@@ -279,7 +286,7 @@ public class GameLogic extends Application {
       }
 
       //Check if you have won
-      winner();
+      checkForGameOver();
 
       //Wait for you next turn
       waitForTurn(endTurnButton);
@@ -386,46 +393,115 @@ public class GameLogic extends Application {
       }
     }
 
-    winner();
+    checkForGameOver();
   }
 
-  private void surrender() {
-    //TODO: Surrender
+  private void surrender(JFXButton endTurnButton) {
+    Stage confirm_alert = new Stage();
+    confirm_alert.initModality(Modality.APPLICATION_MODAL);
+    confirm_alert.setTitle("Game over!");
+
+    Text surrender_text = new Text();
+    surrender_text.setText("Are you sure?");
+    surrender_text.setStyle("-fx-font-size:32px;");
+
+    JFXButton surrender_yes = new JFXButton("Yes");
+    JFXButton surrender_no = new JFXButton("No");
+
+    surrender_yes.setOnAction(event -> {
+        db.surrenderGame();
+        checkForGameOver();
+        endTurn(endTurnButton);
+        confirm_alert.close();
+    });
+
+    surrender_no.setOnAction(event -> {
+        confirm_alert.close();
+    });
+
+    HBox buttons = new HBox();
+    buttons.getChildren().addAll(surrender_yes,surrender_no);
+    buttons.setAlignment(Pos.CENTER);
+    buttons.setSpacing(50);
+
+    VBox content = new VBox();
+    content.setAlignment(Pos.CENTER);
+    content.setSpacing(20);
+
+    content.getChildren().addAll(surrender_text,buttons);
+    Scene scene = new Scene(content, 250, 150);
+    confirm_alert.initStyle(StageStyle.UNDECORATED);
+    confirm_alert.setScene(scene);
+    confirm_alert.showAndWait();
   }
 
-  private void winner() {
-    int winnerOrLoser = checkForWinner();
-    if (winnerOrLoser != -1) {
+  private void checkForGameOver() {
+    String win_loseText;
+    String gameSummary = "";
+    int loser = -1;
+    int eliminationResult = checkForEliminationVictory();
+    int surrenderResult = db.checkForSurrender();
+
+    if (eliminationResult != -1) {
+      gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
+      loser = eliminationResult;
+    } else if (surrenderResult == user_id || surrenderResult == opponent_id) {
+      gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
+      loser = surrenderResult;
+    }
+
+    if (loser != -1) {
       //Game is won or lost.
+      gameCleanUp();
+      //Open alert window.
       Stage winner_alert = new Stage();
       winner_alert.initModality(Modality.APPLICATION_MODAL);
       winner_alert.setTitle("Game over!");
 
-      Text winner = new Text();
-      winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
-      db.incrementGamesPlayed();
-      if (winnerOrLoser == 1){
-        db.incrementGamesWon();
-        winner.setText("You Lose");
+      Text winnerTextHeader = new Text();
+      Text winnerText = new Text();
+      winnerTextHeader.setStyle("-fx-font-size:32px;");
+      winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
+      //db.incrementGamesPlayed();
+
+      if (loser == user_id) {
+        win_loseText = "You Lose!\n";
+      } else if (loser == opponent_id){
+        win_loseText = "You Win!\n";
+      } else {
+        win_loseText = "Something went wrong\n";
       }
-      else {
-        winner.setText("You win!");
-      }
-      JFXButton endgame = new JFXButton("Return to menu");
-      // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+
+      winnerTextHeader.setText(win_loseText);
+      winnerText.setText(gameSummary);
+
+      JFXButton endGameBtn = new JFXButton("Return to menu");
+
+      endGameBtn.setOnAction(event -> {
+        String fxmlDir = "/menus/View/mainMenu.fxml";
+        Parent root = null;
+        try {
+          root = FXMLLoader.load(this.getClass().getResource(fxmlDir));
+        } catch (IOException e) {
+          e.printStackTrace();
+          System.out.println("load failed");
+        }
+        winner_alert.close();
+        Main.window.setScene(new Scene(root));
+      });
 
       VBox content = new VBox();
       content.setAlignment(Pos.CENTER);
       content.setSpacing(20);
-      content.getChildren().addAll(winner,endgame);
-      Scene scene = new Scene(content,250,150);
+      content.getChildren().addAll(winnerTextHeader, winnerText, endGameBtn);
+      Scene scene = new Scene(content, 450, 200);
       winner_alert.initStyle(StageStyle.UNDECORATED);
       winner_alert.setScene(scene);
       winner_alert.showAndWait();
     }
   }
 
-  private int checkForWinner() {
+  private int checkForEliminationVictory() {
     int yourPieces = 0;
     int opponentsPieces = 0;
     //Goes through all units and counts how many are alive for each player.
@@ -448,6 +524,21 @@ public class GameLogic extends Application {
     } else {
       return -1;
     }
+  }
+
+  private void gameCleanUp() {
+
+    //Stuff that need to be closed or reset. Might not warrant its own method.
+    if (Variables.waitTurnThread.isAlive()) {
+      Variables.waitTurnThread.stop();
+    }
+
+    //Sets turns back to 1 for next match.
+    turn = 1;
+    match_id = -1;
+    player1 = -1;
+    player2 = -1;
+    opponent_id = -1;
   }
 
   private int getPosXFromEvent(MouseEvent event) {
