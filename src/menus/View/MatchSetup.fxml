@@ -24,7 +24,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <TableView fx:id="table" prefHeight="320.0" prefWidth="354.0" stylesheets="@../JFX-table-view.css">
+                        <TableView fx:id="table" prefHeight="320.0" prefWidth="354.0">
                           <columns>
                             <TableColumn fx:id="matchID_Table" prefWidth="104.0" text="Match ID" />
                             <TableColumn fx:id="player_table" prefWidth="159.0" text="Player" />
