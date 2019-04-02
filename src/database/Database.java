@@ -402,6 +402,48 @@ public class Database {
         return outputList;
     }
 
+    public boolean checkIfOpponentReady(){
+
+        Boolean returnBoolean = false;
+
+        Connection myConn = connectionPool.getConnection();
+
+        String sqlSetning = "";
+        ResultSet resultSet = null;
+
+        if(opponent_id == player1){
+            sqlSetning = "SELECT player1_ready AS ready FROM Matches WHERE match_id = ?";
+        }else{
+            sqlSetning = "SELECT player2_ready AS ready FROM Matches WHERE match_id = ?";
+        }
+
+        PreparedStatement preparedStatement = null;
+
+        try{
+
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+
+            preparedStatement.setInt(1, match_id);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                returnBoolean = resultSet.getBoolean("ready");
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+
+        }finally{
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return returnBoolean;
+
+    }
+
 
 
 /*
