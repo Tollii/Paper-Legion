@@ -879,12 +879,13 @@ public class GameLogic extends Application {
         String win_loseText;
         String gameSummary = "";
         int loser = -1;
+        int eliminationResult = checkForEliminationVictory();
         int surrenderResult = db.checkForSurrender();
 
-        if (checkForEliminationVictory() != -1) {
+        if (eliminationResult != -1) {
             gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
-            loser = checkForEliminationVictory();
-        } else if (surrenderResult != -1) {
+            loser = eliminationResult;
+        } else if (surrenderResult == user_id || surrenderResult == opponent_id) {
             gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
             loser = surrenderResult;
         }
@@ -1030,6 +1031,7 @@ public class GameLogic extends Application {
     private void gameCleanUp() {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
+        Variables.waitTurnThread.stop();
 
         //Sets turns back to 1 for next match.
         turn = 1;

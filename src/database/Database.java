@@ -801,7 +801,7 @@ public class Database {
         return false;
     }
 
-    public int checkForSurrender() { //Midlertidig metode for auto generert units
+    public int checkForSurrender() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "SELECT surrendered FROM Matches WHERE match_id = ?;";
@@ -810,8 +810,10 @@ public class Database {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
-            //rs.next();
-            if (rs.next()) {
+            rs.next();
+
+            Integer meh = rs.getInt("surrendered");
+            if (meh != null) {
                 return rs.getInt("surrendered");
             }
             return -1;
