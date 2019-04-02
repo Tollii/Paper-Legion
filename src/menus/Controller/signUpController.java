@@ -42,8 +42,6 @@ public class signUpController extends Controller {
     @FXML
     void initialize() {
 
-        alertField.setText("");
-
         goBackButton.setOnAction(event -> {
             changeScene("login.fxml");
         });
@@ -59,7 +57,6 @@ public class signUpController extends Controller {
                 else if(signup == 0){
                     alertField.setText("User already exists");
                 }
-
             }
             alertField.setText("Error while signing up.");
 
