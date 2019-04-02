@@ -34,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -283,12 +284,10 @@ public class GameLogic extends Application {
             }
 
             //Check if you have won
-            winner();
+            checkForGameOver();
 
             //Wait for you next turn
-            if (checkForWinner() == -1) {
-                setUpNewTurn();
-            }
+            setUpNewTurn();
         }
     }
 
@@ -307,7 +306,7 @@ public class GameLogic extends Application {
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
             endTurn();
-            winner();
+            checkForGameOver();
             confirm_alert.close();
         });
 
@@ -402,7 +401,6 @@ public class GameLogic extends Application {
                     }
 
                 }
-            } else {
             }
             System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
                     + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
@@ -744,30 +742,6 @@ public class GameLogic extends Application {
         return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
-    // method that checks if the game has been won by either player. Returns 1 if you lost, 0 if you won or -1 if noone has won yet.
-    private int checkForWinner() {
-        int yourPieces = 0;
-        int opponentsPieces = 0;
-        //Goes through all units and counts how many are alive for each player.
-        for (int i = 0; i < unitList.size(); i++) {
-            if (unitList.get(i).getHp() > 0) {
-                if (unitList.get(i).getEnemy()) {
-                    opponentsPieces++;
-                } else {
-                    yourPieces++;
-                }
-            }
-        }
-        System.out.println("YourPiceces " + yourPieces + " opponent: " + opponentsPieces);
-        if (yourPieces == 0) {
-            return 1;
-        } else if (opponentsPieces == 0) {
-            return 0;
-        } else {
-            return -1;
-        }
-    }
-
     private void waitForTurn() {
 
         // Runnable lambda implementation for turn waiting with it's own thread
@@ -876,7 +850,7 @@ public class GameLogic extends Application {
         ////Old methods////
         //deDrawUnits();
         //drawUnits();
-        winner();
+        checkForGameOver();
     }
 
 
@@ -893,66 +867,87 @@ public class GameLogic extends Application {
         }
     }
 
-    // Opens the winner/loser pop-up on the screen and ends the game.
-    public void winner(){
-        int winnerOrLoser = checkForWinner();
-        int surrendered = db.checkForSurrender();
-        if(surrendered == opponent_id){
-            winnerOrLoser = 0;
-        }
-        if(surrendered == user_id){
-            winnerOrLoser = 1;
-        }
-        if (winnerOrLoser != -1) {
-            //Game is won or lost.
+    // Opens the win/lose pop-up on the screen and ends the game.
+    public void checkForGameOver() {
+        String win_loseText;
+        String gameSummary = "";
+        int loser = -1;
 
-            gameCleanUp();
+        if (checkForEliminationVictory() != -1) {
+            gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
+            loser = 3;
+        } else if (db.checkForSurrender() != -1) {
+            gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
+            loser = 3;
+        }
+
+        if (loser != -1) {
+            //Game is won or lost.
+            //Open alert window.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
 
-            Text winner = new Text();
-            //winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
-            winner.setStyle("-fx-font-size:32px;");
-            db.incrementGamesPlayed();
-            if (winnerOrLoser == 1){
-                winner.setText("You Lose");
+            Text winnerTextHeader = new Text();
+            Text winnerText = new Text();
+            winnerTextHeader.setStyle("-fx-font-size:32px;");
+            winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
+            //db.incrementGamesPlayed();
+
+            if (loser == user_id) {
+                win_loseText = "You Lose!\n";
+            } else {
+                win_loseText = "You Win!\n";
             }
-            else {
-                db.incrementGamesWon();
-                winner.setText("You win!");
-            }
+
+            winnerTextHeader.setText(win_loseText);
+            winnerText.setText(gameSummary);
+
             JFXButton endGameBtn = new JFXButton("Return to menu");
-
-
-
-            // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
 
             endGameBtn.setOnAction(event -> {
                 String fxmlDir = "/menus/View/mainMenu.fxml";
-                FXMLLoader loader = new FXMLLoader();
                 Parent root = null;
                 try {
-                    root =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
-                    // loader.load();
+                    root = FXMLLoader.load(this.getClass().getResource(fxmlDir));
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
-                winner_alert.close();
-                winner_alert.hide();
                 Main.window.setScene(new Scene(root));
-
             });
 
             VBox content = new VBox();
             content.setAlignment(Pos.CENTER);
             content.setSpacing(20);
-            content.getChildren().addAll(winner,endGameBtn);
-            Scene scene = new Scene(content,250,150);
+            content.getChildren().addAll(winnerTextHeader, winnerText, endGameBtn);
+            Scene scene = new Scene(content, 450, 200);
             winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
             winner_alert.showAndWait();
+        }
+    }
+
+    // method that checks if the game has been won by eliminating other player's units. Returns the user_id of the winning player.
+    private int checkForEliminationVictory() {
+        int yourPieces = 0;
+        int opponentsPieces = 0;
+        //Goes through all units and counts how many are alive for each player.
+        for (int i = 0; i < unitList.size(); i++) {
+            if (unitList.get(i).getHp() > 0) {
+                if (unitList.get(i).getEnemy()) {
+                    opponentsPieces++;
+                } else {
+                    yourPieces++;
+                }
+            }
+        }
+        if (yourPieces == 0) {
+            return opponent_id;
+        } else if (opponentsPieces == 0) {
+            return user_id;
+        } else {
+            return -1;
         }
     }
 
