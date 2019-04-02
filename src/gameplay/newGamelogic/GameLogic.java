@@ -132,12 +132,13 @@ public class GameLogic extends Application {
 
     placementPhaseStart(); //starts the placement phase
 
-
     window.setTitle(gameTitle);
     window.setScene(scene);
     window.show();
   }
 
+
+  ////PLACMENET PHASE STARTER AND FINISHER METHODS////
   private void placementPhaseStart() {
     Pane recruitPane = createRecruitPane();
 
@@ -205,6 +206,7 @@ public class GameLogic extends Application {
 
   }
 
+  ////MOVEMENT AND ACTION PHASE STARTER////
   private void movementActionPhaseStart() {
     Pane sidePanel = createSidePanel();
 
@@ -235,6 +237,7 @@ public class GameLogic extends Application {
       db.sendTurn(turn);
     }
 
+    ////BUTTON EvenT HANDLERS////
     endTurnButton.setOnAction(event -> {
       endTurn(endTurnButton);
     });
@@ -243,6 +246,7 @@ public class GameLogic extends Application {
       surrender(endTurnButton);
     });
 
+    ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
     grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
       //selects unit if there is none selected
       if (!unitSelected) {
@@ -270,26 +274,36 @@ public class GameLogic extends Application {
     });
   }
 
-  private void attack(MouseEvent event) {
+  ////MOVEMENT AND ATTACK METHODS////
+  private void move(MouseEvent event) {
+    if (movementPhase) { //checks if movement phase
 
+    }
   }
 
-  private void move(MouseEvent event) {
+  private void attack(MouseEvent event) {
+    if (!movementPhase) { //checks if attack phase
 
+    }
+  }
+
+  ////HIGHLIGHTING METHODS////
+  private void highlightPossibleMoves() {
+    ArrayList<Tile> movementTargets = getMovementPossibleTiles();
+
+    //colors all tiles that are possible movement targets green
+    for (int i = 0; i < movementTargets.size(); i++) {
+      movementTargets.get(i).setFill(movementHighlightColor);
+    }
   }
 
   private void highlightPossibleAttacks() {
+    ArrayList<Tile> attackTargets = getAttackableTiles();
 
-  }
-
-  private void highlightPossibleMoves() {
-
-  }
-
-  private ArrayList<Tile> getAttackableTiles() {
-    ArrayList<Tile> attackTargets = new ArrayList<Tile>();
-
-    return attackTargets;
+    //colors all attackable tiles red
+    for (int i= 0; i < attackTargets.size(); i++) {
+      attackTargets.get(i).setFill(attackHighlightColor);
+    }
   }
 
   private ArrayList<Tile> getMovementPossibleTiles() {
@@ -298,17 +312,23 @@ public class GameLogic extends Application {
     return movementTargets;
   }
 
-  private void cleaHighLight() {
-    for (int i = 0; i < grid.liste.length; i++) {
-        for (int j = 0; j < grid.liste[i].length; j++) {
-            grid.liste[i][j].setFill(Color.WHITE);
+  private ArrayList<Tile> getAttackableTiles() {
+    ArrayList<Tile> attackTargets = new ArrayList<Tile>();
+
+    return attackTargets;
+  }
+
+  private void clearHighLight() {
+    for (int i = 0; i < grid.tileList.length; i++) {
+        for (int j = 0; j < grid.tileList[i].length; j++) {
+            grid.tileList[i][j].setFill(Color.WHITE);
         }
     }
   }
 
+////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
   private void endTurn(JFXButton endTurnButton) {
     if (yourTurn) {
-
       //Increments turn. Opponents Turn.
       turn++;
 
@@ -316,27 +336,19 @@ public class GameLogic extends Application {
       endTurnButton.setText("Waiting for other player");
       yourTurn = false;
 
-
       ////SEND MOVEMENT////
-
       if (movementList.size() != 0) {
         System.out.println("SENDING MOVE LIST!");
         db.exportMoveList(movementList); //when we use movement table use this
-        ////Old method////
-        //db.exportPieceMoveList(movementList);
+
         movementList = new ArrayList<>(); //Resets the movementList for the next turn.
       }
 
-
       /////SEND ATTACKS////
-
       if(attackList.size() != 0){
         db.exportAttackList(attackList);
         attackList = new ArrayList<>(); //Resets the attackList for the next turn.
       }
-
-      // Finds every enemy unit that was damaged and sends their new info the database.
-
 
       //Add the next turn into the database.
       db.sendTurn(turn);
@@ -360,7 +372,6 @@ public class GameLogic extends Application {
   }
 
   private void waitForTurn(JFXButton endTurnButton) {
-
     // Runnable lambda implementation for turn waiting with it's own thread
     RunnableInterface waitTurnRunnable = new RunnableInterface() {
       private boolean doStop = false;
@@ -380,8 +391,6 @@ public class GameLogic extends Application {
                 this.doStop();
               }
             }
-
-
             //What will happen when it is your turn again.
 
             //Increments turn. Back to your turn.
@@ -392,7 +401,6 @@ public class GameLogic extends Application {
             });
 
             movementPhase = true;
-
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -414,8 +422,8 @@ public class GameLogic extends Application {
     waitTurnThread.start();
   }
 
+  ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
     private void waitForOpponentReady() {
-
         // Runnable lambda implementation for turn waiting with it's own thread
         RunnableInterface waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
@@ -467,7 +475,7 @@ public class GameLogic extends Application {
         waitTurnThread.start();
     }
 
-
+////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
   private void setUpNewTurn(JFXButton endTurnButton){
     deselect();
     selectedUnit = null;
@@ -482,7 +490,6 @@ public class GameLogic extends Application {
 
     ////EXECUTES MOVES FROM OPPONENTS TURN////
     for (int i = 0; i < importedMovementList.size(); i++) {
-
       //gets the unit from the tile and removes it from the same tile
       Unit movingUnit = grid.tileList[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()].getUnit();
       grid.tileList[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()].removeUnit();
@@ -516,6 +523,7 @@ public class GameLogic extends Application {
     checkForGameOver();
   }
 
+  ////METHOD FOR HANDLING SURRENDER////
   private void surrender(JFXButton endTurnButton) {
     Stage confirm_alert = new Stage();
     confirm_alert.initModality(Modality.APPLICATION_MODAL);
@@ -555,6 +563,7 @@ public class GameLogic extends Application {
     confirm_alert.showAndWait();
   }
 
+////METHODS FOR ENDING THE GAME////
   private void checkForGameOver() {
     String win_loseText;
     String gameSummary = "";
@@ -620,7 +629,7 @@ public class GameLogic extends Application {
       winner_alert.showAndWait();
     }
   }
-
+  ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
   private int checkForEliminationVictory() {
     int yourPieces = 0;
     int opponentsPieces = 0;
@@ -647,7 +656,6 @@ public class GameLogic extends Application {
   }
 
   private void gameCleanUp() {
-
     //Stuff that need to be closed or reset. Might not warrant its own method.
     if (Variables.waitTurnThread.isAlive()) {
       Variables.waitTurnThread.stop();
@@ -669,6 +677,7 @@ public class GameLogic extends Application {
     return (int)Math.ceil((event.getY() - gridYPadding) / tileSize);
   }
 
+////UNIT SELECTOR AND DESELECTORS////
   private void select(MouseEvent event) {
     //checks if clicked tile has unit
     if(grid.tileList[getPosYFromEvent(event)][getPosXFromEvent(event)] != null) {
@@ -713,9 +722,10 @@ public class GameLogic extends Application {
     description.setText("");
     description.setVisible(false);
 
-    cleaHighLight();
+    clearHighLight();
   }
 
+////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
   private Pane createGrid() { //adds grid and styles it
     Pane gridPane = new Pane();
 
@@ -768,6 +778,7 @@ public class GameLogic extends Application {
     return sidePanel;
   }
 
+////SHUTDOWN METHODS////
   @Override
   public void stop() {
       // Executed when the application shuts down. User is logged out and database connection is closed.
@@ -787,6 +798,7 @@ public class GameLogic extends Application {
       }
   }
 
+////MAIN USED FOR SHUTDOWN HOOK////
   public static void main(String[] args) {
       Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
           if (user_id > 0) {
