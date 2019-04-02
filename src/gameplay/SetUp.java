@@ -30,6 +30,6 @@ public class SetUp {
            unitTypeArray[i] = db.importUnitType(unitTypeList.get(i));
         }
 
-        unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1]);
+        unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1], unitTypeArray[2], unitTypeArray[3]);
     }
 }

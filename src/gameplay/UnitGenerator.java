@@ -11,6 +11,7 @@ public class  UnitGenerator {
     ////Unit ID generator////
     private static int unitId = 0;
 
+    ////Swordsman////
     private static int swordsmanUnitTypeId;
     private static double swordsmanMaxHP;
     private static int swordsmanAttack;
@@ -31,6 +32,7 @@ public class  UnitGenerator {
 
     private static UnitType swordsmanUnitType;
 
+    ////Archer////
     private static int archerUnitTypeId;
     private static double archerMaxHP;
     private static int archerAttack;
@@ -49,14 +51,33 @@ public class  UnitGenerator {
     private static Image archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
     private static AudioClip archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
 
-
     private static UnitType archerUnitType;
+
+    ////Juggernaut////
+    private static String juggernautDescription =
+            "Big angry man with stick, sometimes turns green";
+    private static String juggernautDescriptionTag =
+            "Juggernaut";
+    //TODO
+    private static Image juggernautImage = null;
+    //TODO
+    private static AudioClip juggernautSound = null;
+
+    ////Catapult////
+    private static String catapultDescription=
+            "Usurped by the clearly better trebuchet";
+    private static String catapultDescriptionTag =
+            "Throwy-McGig";
+    //TODO
+    private static Image catapultImage = null;
+    //TODO
+    private static AudioClip catapultSound = null;
 
 
     public UnitGenerator(){}
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
-                         ProtoUnitType archerProto){
+                         ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
 
         this.swordsmanUnitTypeId = swordsmanProto.getUnitTypeId();
         this.swordsmanMaxHP = swordsmanProto.getHp();
@@ -77,6 +98,8 @@ public class  UnitGenerator {
         this.archerMaxAttackRange = archerProto.getMaxAttackRange();
         this.archerMovementRange = archerProto.getMovementRange();
         archerUnitType =  new Archer("Archer", archerUnitTypeId, archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag, archerImage, archerSound);
+
+
     }
 
     public UnitType newArcher(){
