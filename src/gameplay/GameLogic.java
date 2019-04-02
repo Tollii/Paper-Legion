@@ -681,9 +681,9 @@ public class GameLogic extends Application {
                         attackCount++;
 
                         //Plays audio cue for each type.
-                        if (selectedUnit.getType().equalsIgnoreCase("Swordsman")) {
+                        if (selectedUnit.getTypeString().equalsIgnoreCase("Swordsman")) {
                             sword.play();
-                        } else if (selectedUnit.getType().equalsIgnoreCase("Archer")) {
+                        } else if (selectedUnit.getTypeString().equalsIgnoreCase("Archer")) {
                             bow.play();
                         }
                         //db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());

@@ -11,6 +11,7 @@ public class  UnitGenerator {
     ////Unit ID generator////
     private static int unitId = 0;
 
+    private static int swordsmanUnitTypeId;
     private static double swordsmanMaxHP;
     private static int swordsmanAttack;
     private static int swordsmanAbilityCooldown;
@@ -30,7 +31,7 @@ public class  UnitGenerator {
 
     private static UnitType swordsmanUnitType;
 
-
+    private static int archerUnitTypeId;
     private static double archerMaxHP;
     private static int archerAttack;
     private static int archerAbilityCooldown;
@@ -57,6 +58,7 @@ public class  UnitGenerator {
     public UnitGenerator(ProtoUnitType swordsmanProto,
                          ProtoUnitType archerProto){
 
+        this.swordsmanUnitTypeId = swordsmanProto.getUnitTypeId();
         this.swordsmanMaxHP = swordsmanProto.getHp();
         this.swordsmanAttack = swordsmanProto.getAttack();
         this.swordsmanAbilityCooldown = swordsmanProto.getAbilityCooldown();
@@ -64,8 +66,9 @@ public class  UnitGenerator {
         this.swordsmanMinAttackRange = swordsmanProto.getMinAttackRange();
         this.swordsmanMaxAttackRange = swordsmanProto.getMaxAttackRange();
         this.swordsmanMovementRange = swordsmanProto.getMovementRange();
-        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
+        swordsmanUnitType = new Swordsman("Swordsman", swordsmanUnitTypeId, swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
 
+        this.archerUnitTypeId = archerProto.getUnitTypeId();
         this.archerMaxHP = archerProto.getHp();
         this.archerAttack = archerProto.getAttack();
         this.archerAbilityCooldown = archerProto.getAbilityCooldown();
@@ -73,7 +76,7 @@ public class  UnitGenerator {
         this.archerMinAttackRange = archerProto.getMinAttackRange();
         this.archerMaxAttackRange = archerProto.getMaxAttackRange();
         this.archerMovementRange = archerProto.getMovementRange();
-        archerUnitType =  new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag, archerImage, archerSound);
+        archerUnitType =  new Archer("Archer", archerUnitTypeId, archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag, archerImage, archerSound);
     }
 
     public UnitType newArcher(){
@@ -108,7 +111,6 @@ public class  UnitGenerator {
 
             case "Archer":
                 return new Unit( enemy, archerUnitType, unitId++);
-
         }
 
         return null;

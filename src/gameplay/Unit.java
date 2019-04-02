@@ -15,7 +15,8 @@ public class Unit extends StackPane {
     private Rectangle rect;
 
     ////UNIT INFO////
-    private UnitType type;
+    private final UnitType type;
+    private final int unitTypeId;
     private double hp;
     private int attack;
     private int abilityCooldown;
@@ -32,7 +33,7 @@ public class Unit extends StackPane {
     private boolean enemy;
     private boolean hasAttackedThisTurn;
     private int healthbarPosY = 40;
-    private int unitId;
+    private int pieceId;
 
     public Unit(boolean enemy, UnitType type, int unitId){
         rect = new Rectangle();
@@ -42,16 +43,17 @@ public class Unit extends StackPane {
 
         ///SETS UNIT INFO////
         this.type = type;
-        this.hp = type.getHp();
+        unitTypeId = type.getUnitTypeId();
+        hp = type.getHp();
         attack = type.getAttack();
         abilityCooldown = type.getAbilityCooldown();
-        this.defenceMultiplier = type.getDefenceMultiplier();
+        defenceMultiplier = type.getDefenceMultiplier();
         minAttackRange = type.getMinAttackRange();
         maxAttackRange = type.getMaxAttackRange();
-        this.movementRange = type.getMovementRange();
+        movementRange = type.getMovementRange();
         description = type.getDescription();
         descriptionTag = type.getDescriptionTag();
-        this.unitId = unitId;
+        pieceId = unitId;
 
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
@@ -90,8 +92,16 @@ public class Unit extends StackPane {
     }
 
     ////GET UNIT INFO////
-    public String getType(){
+    public String getTypeString(){
         return type.getType();
+    }
+
+    public UnitType getType(){
+        return type;
+    }
+
+    public int getUnitTypeId(){
+        return unitTypeId;
     }
 
     public double getHp(){
@@ -122,8 +132,8 @@ public class Unit extends StackPane {
         return movementRange;
     }
 
-    public int getUnitId() {
-      return unitId;
+    public int getPieceId() {
+      return pieceId;
     }
 
     public String getDescription(){

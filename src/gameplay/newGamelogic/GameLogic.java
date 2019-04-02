@@ -179,7 +179,6 @@ public class GameLogic extends Application {
     if (exportUnitList != null){
       db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
     }
-
   }
 
   private int getPosXFromEvent(MouseEvent event) {

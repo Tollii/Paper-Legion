@@ -53,6 +53,7 @@ public class Database {
 
         ////UNIT INFO////
         String type;
+        int unitTypeId;
         double hp;
         int attack;
         int abilityCooldown;
@@ -70,9 +71,8 @@ public class Database {
             myConn.commit();
             resultSet.next();
             type = resultSet.getString("unit_name");
-            System.out.println(type);
+            unitTypeId = resultSet.getInt("unit_type_id");
             hp = (double) resultSet.getFloat("max_health");
-            System.out.println(hp);
             attack = resultSet.getInt("attack");
             abilityCooldown = resultSet.getInt("ability_cooldown");
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
@@ -88,7 +88,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "", null, null);
+        return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "", null, null);
     }
 
     public int matchMaking_search(int player_id) {
@@ -318,10 +318,53 @@ public class Database {
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
         //TODO Finish this method
         Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(?,?,?,0,0);";
-        ResultSet resultSet = null;
+        String sqlSetningPieces = "INSERT INTO Pieces VALUES(?,?,?,?,?);";
+        String sqlSetningUnits = "INSERT INTO Units VALUES(?,?,?,?,?,?,?,?,?);";
+
         PreparedStatement preparedStatement = null;
 
+        try {
+            myConn.setAutoCommit(false);
+
+            for (int i = 0; i < exportUnitList.size(); i++) {
+
+                preparedStatement = myConn.prepareStatement(sqlSetningPieces);
+
+                preparedStatement.setInt(1, exportUnitList.get(i).getPieceId());    //"Arrays begin at 1"
+                preparedStatement.setInt(2, match_id);
+                preparedStatement.setInt(3, user_id);
+                preparedStatement.setInt(4, exportPositionXList.get(i));
+                preparedStatement.setInt(5, exportPositionYList.get(i));
+
+                preparedStatement.executeUpdate();
+
+                preparedStatement = myConn.prepareStatement(sqlSetningUnits);
+
+                preparedStatement.setInt(1, exportUnitList.get(i).getPieceId());
+                preparedStatement.setInt(2, match_id);
+                preparedStatement.setInt(3, user_id);
+                preparedStatement.setDouble(4, exportUnitList.get(i).getHp());
+                preparedStatement.setInt(5, exportUnitList.get(i).getAttack());
+                preparedStatement.setInt(6, exportUnitList.get(i).getMinAttackRange());
+                preparedStatement.setInt(7, exportUnitList.get(i).getMaxAttackRange());
+                preparedStatement.setInt(8, exportUnitList.get(i).getAbilityCooldown());
+                preparedStatement.setInt(9, exportUnitList.get(i).getUnitTypeId());
+
+                preparedStatement.executeUpdate();
+            }
+
+            //If the loop is successful, commit
+            myConn.commit();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            Cleaner.rollBack(myConn);
+        }finally {
+
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
     }
 
     //Inserts pieces into database
@@ -340,7 +383,7 @@ public class Database {
         String sqlPlayer1piece3 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,0);";
         String sqlPlayer1piece4 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,1);";
         String sqlPlayer1piece5 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,1);";
-          String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
+        String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
         String unit_player2 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);";
         String unit_player3 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);";
         String unit_player4 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);";
@@ -350,7 +393,7 @@ public class Database {
         piecesPlayer1.add(sqlPlayer1piece3);
         piecesPlayer1.add(sqlPlayer1piece4);
         piecesPlayer1.add(sqlPlayer1piece5);
-          piecesPlayer1.add(unit_player1);
+        piecesPlayer1.add(unit_player1);
         piecesPlayer1.add(unit_player2);
         piecesPlayer1.add(unit_player3);
         piecesPlayer1.add(unit_player4);

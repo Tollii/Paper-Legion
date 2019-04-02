@@ -8,6 +8,8 @@ public interface UnitType {
 
     String getType();
 
+    int getUnitTypeId();
+
     double getHp();
 
     int getAttack();
