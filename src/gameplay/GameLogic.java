@@ -574,50 +574,46 @@ public class GameLogic extends Application {
         int posY = selectedPosY;
         int movementRange = selectedUnit.getMovementRange();
 
-
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
-        if (selectedPosX - 1 >= 0) {
-            grid.liste[posY][posX - 1].setFill(movementHighlightColor);
-        }
-
-        if (selectedPosX + 1 < boardSize) {
-            grid.liste[posY][posX + 1].setFill(movementHighlightColor);
-        }
-
-        if (selectedPosY - 1 >= 0) {
-            grid.liste[posY - 1][posX].setFill(movementHighlightColor);
-        }
-
-        if (selectedPosY + 1 < boardSize) {
-            grid.liste[posY + 1][posX].setFill(movementHighlightColor);
-        }
-
-        //////////////////////////////////////////////////////////////////////
+//        if (selectedPosX - 1 >= 0) {
+//            grid.liste[posY][posX - 1].setFill(movementHighlightColor);
+//        }
+//
+//        if (selectedPosX + 1 < boardSize) {
+//            grid.liste[posY][posX + 1].setFill(movementHighlightColor);
+//        }
+//
+//        if (selectedPosY - 1 >= 0) {
+//            grid.liste[posY - 1][posX].setFill(movementHighlightColor);
+//        }
+//
+//        if (selectedPosY + 1 < boardSize) {
+//            grid.liste[posY + 1][posX].setFill(movementHighlightColor);
+//        }
 
 
         ////////////////////////////CORNERS///////////////////////////////////
 
-        if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
-            grid.liste[posY + 1][posX + 1].setFill(movementHighlightColor);
-        }
+//        if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
+//            grid.liste[posY + 1][posX + 1].setFill(movementHighlightColor);
+//        }
+//
+//        if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
+//            grid.liste[posY - 1][posX - 1].setFill(movementHighlightColor);
+//        }
+//
+//        if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
+//            grid.liste[posY + 1][posX - 1].setFill(movementHighlightColor);
+//        }
+//
+//        if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
+//            grid.liste[posY - 1][posX + 1].setFill(movementHighlightColor);
 
-        if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
-            grid.liste[posY - 1][posX - 1].setFill(movementHighlightColor);
-        }
-
-        if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
-            grid.liste[posY + 1][posX - 1].setFill(movementHighlightColor);
-        }
-
-        if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
-            grid.liste[posY - 1][posX + 1].setFill(movementHighlightColor);
-
-        }
+        //}
         ////////////////////////////////////////////////////////////////////
 
         //////////////IF PIECE HAS LONGER RANGE THAN 1////////////////////////////
-        if (selectedUnit.getMovementRange() > 1) {
-
+        //if (selectedUnit.getMovementRange() > 1) {
             if (selectedPosX - movementRange >= 0) {
                 grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
             }
@@ -633,10 +629,7 @@ public class GameLogic extends Application {
             if (selectedPosY + movementRange < boardSize) {
                 grid.liste[posY + movementRange][posX].setFill(movementHighlightColor);
             }
-
-
-        }
-
+        //}
         ///////////////////////////////////////////////////////////////////
     }
 
@@ -673,23 +666,9 @@ public class GameLogic extends Application {
 
     private boolean movementRange(int nyPosX, int nyPosY) {
 
-        ///////////////////////ORDINARY MOVEMENT RANGE == 1//////////////////////
-        if (selectedUnit.getMovementRange() < 2) {
-            if ((Math.abs(nyPosX - selectedUnit.getPositionX()) < 2) && (Math.abs(nyPosY - selectedUnit.getPositionY()) < 2)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////
-
-        /////////////MOVEMENT RANGE> 1///////////////////////////////////////
-
         if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= selectedUnit.getMovementRange()) { //Beautiful math skills in progress.
             return true;
         }
-
 
 //        if (!(Math.abs(nyPosX - unitPosition[selectedPosY][selectedPosX].getOldPosX()) > unitPosition[selectedPosY][selectedPosX].getRange()) &&
 //                (!(Math.abs(nyPosY - unitPosition[selectedPosY][selectedPosX].getOldPosY()) > unitPosition[selectedPosY][selectedPosX].getRange()))) {
@@ -1030,7 +1009,9 @@ public class GameLogic extends Application {
     private void gameCleanUp() {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        Variables.waitTurnThread.stop();
+        if (Variables.waitTurnThread.isAlive()) {
+            Variables.waitTurnThread.stop();
+        }
 
         //Sets turns back to 1 for next match.
         turn = 1;
