@@ -51,6 +51,8 @@ import static database.Variables.*;
 
 public class GameLogic extends Application {
 
+
+
     ////LAYOUT////
     private static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
@@ -98,7 +100,7 @@ public class GameLogic extends Application {
     private AudioClip bow = new AudioClip(this.getClass().getResource("/gameplay/assets/arrow.wav").toString());
 
     ////STYLING////
-    private String gameTitle = "BINARY WARFARE";
+    private String gameTitle = "Paper Legion";
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
     private String turnCounterFontSize = "-fx-font-size: 32px";
