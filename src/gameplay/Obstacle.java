@@ -1,6 +1,8 @@
 package gameplay;
 
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -9,6 +11,9 @@ public class Obstacle extends Rectangle {
     private int posY;
     private int obsticleID;
     private Image obstacle = new Image("/gameplay/assets/obstacle.png");
+    private GridPane pieceAvatar = new GridPane();
+    StackPane stackPane = new StackPane();
+
 
     public Obstacle(int posX, int posY, int obsticleID){
         super(GameLogic.tileSize,GameLogic.tileSize);
@@ -16,6 +21,7 @@ public class Obstacle extends Rectangle {
         this.posY = posY;
         this.obsticleID = obsticleID;
         this.setFill(new ImagePattern(obstacle));
+        pieceAvatar.getChildren().add(stackPane);
         setTranslate();
     }
 
@@ -24,4 +30,9 @@ public class Obstacle extends Rectangle {
         super.setTranslateY(posY*100);
     }
 
+    public GridPane getPieceAvatar(){return pieceAvatar;}
+
+    public int getPosX() { return posX; }
+
+    public int getPosY() { return posY; }
 }

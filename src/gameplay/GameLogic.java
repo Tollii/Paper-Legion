@@ -54,6 +54,7 @@ public class GameLogic extends Application {
     public static final int boardSize = 7; // 7x7 for example
     static final int tileSize = 100; //Size(in pixels) of each tile
     private static Unit[][] unitPosition = new Unit[boardSize][boardSize];
+    private static Obstacle[][] obstaclePosition = new Obstacle[boardSize][boardSize];
     private static final int offsetX = 100;
     private static final int offsetY = 100;
     private final int descriptionOffsetLeft = 0;
@@ -425,9 +426,17 @@ public class GameLogic extends Application {
                 }
             } else {
             }
+
             System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
                     + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
                     + unitList.get(i).getPieceID());
+        }
+        //Tegner obstacles inn på samma måte inn i obstaclePosition
+        for(int i = 0; i < obstacles.size(); i++){
+            pieceContainer.getChildren().add(obstacles.get(i).getPieceAvatar());
+            posX = obstacles.get(i).getPosX();
+            posY = obstacles.get(i).getPosY();
+            obstaclePosition[posY][posX] = obstacles.get(i);
         }
         ///////////////////////////////////////////////////////////////////////////////////
     }
@@ -507,7 +516,7 @@ public class GameLogic extends Application {
             int nyPosY = getPosYFromEvent(event);
 
             if (movementRange(nyPosX, nyPosY)) {
-                if (unitPosition[nyPosY][nyPosX] == null) {
+                if (unitPosition[nyPosY][nyPosX] == null && obstaclePosition[nyPosY][nyPosX] == null) {
 
                     ////ADDS A NEW MOVE TO THE MOVE LIST////
                     movementList.add(new Move(turn, selectedUnit.getPieceID(), match_id, selectedUnit.getPositionX(), selectedUnit.getPositionY(), nyPosX, nyPosY));
