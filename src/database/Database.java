@@ -444,6 +444,37 @@ public class Database {
 
     }
 
+    public void setReady(boolean ready){
+
+        Connection myConn = connectionPool.getConnection();
+
+        String sqlSetning;
+
+        if(user_id == player1){
+            sqlSetning = "UPDATE Matches SET player1_ready = ?";
+        }else{
+            sqlSetning = "UPDATE Matches SET player2_ready = ?";
+        }
+
+        PreparedStatement preparedStatement = null;
+
+        try{
+
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+
+            preparedStatement.setInt(1, ready);
+
+
+        }catch(SQLException e){
+            e.printStackTrace();
+
+        }finally{
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+
 
 
 /*
