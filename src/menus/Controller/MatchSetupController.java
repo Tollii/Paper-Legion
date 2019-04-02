@@ -73,6 +73,7 @@ import static database.Variables.*;
         @FXML
         void initialize() {
             //Sets up variables for connecting Match class with Table Columns
+            table.setPlaceholder(new Label("No available matches found"));
             player_table.setCellValueFactory(new PropertyValueFactory<>("player"));
             matchID_Table.setCellValueFactory(new PropertyValueFactory<>("match_id"));
             passwordTable.setCellValueFactory(new PropertyValueFactory<>("passwordProtected"));
