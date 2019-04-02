@@ -280,8 +280,24 @@ public class GameLogic extends Application {
 
   }
 
-  private void cleaHighLight() {
+  private ArrayList<Tile> getAttackableTiles() {
+    ArrayList<Tile> attackTargets = new ArrayList<Tile>();
 
+    return attackTargets;
+  }
+
+  private ArrayList<Tile> getMovementPossibleTiles() {
+    ArrayList<Tile> movementTargets = new ArrayList<Tile>();
+
+    return movementTargets;
+  }
+
+  private void cleaHighLight() {
+    for (int i = 0; i < grid.liste.length; i++) {
+        for (int j = 0; j < grid.liste[i].length; j++) {
+            grid.liste[i][j].setFill(Color.WHITE);
+        }
+    }
   }
 
   private void endTurn(JFXButton endTurnButton) {
