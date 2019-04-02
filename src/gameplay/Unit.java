@@ -9,6 +9,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.embed.swing.SwingFXUtils;
 import java.awt.image.BufferedImage;
+import javafx.scene.media.AudioClip;
 
 public class Unit extends StackPane {
     private Label healthbar;
@@ -169,6 +170,10 @@ public class Unit extends StackPane {
 
     public Image getUnitImage() {
       return type.getUnitImage();
+    }
+
+    public AudioClip getAudio() {
+      return type.getAudio();
     }
 
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
