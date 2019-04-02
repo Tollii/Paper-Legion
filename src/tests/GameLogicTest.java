@@ -17,22 +17,21 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
-//testUser2 Password: testPassword2
-//testUser password: testPassword
+//testUser2 Password: testPassword2 51
+//testUser password: testPassword   3
 
 public class GameLogicTest {
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
 
-        Database db = new Database();
-
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
+
         GameLogic game = new GameLogic();
 
-        database.Variables.user_id = 3;
-        Variables.opponent_id = 2;
+        Variables.user_id = 3;
+        Variables.opponent_id = 51;
     }
 
     @AfterClass

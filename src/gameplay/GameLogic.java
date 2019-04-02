@@ -92,6 +92,7 @@ public class GameLogic extends Application {
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
     ArrayList<Unit> unitList = new ArrayList<Unit>();
+    private RunnableInterface waitTurnRunnable;
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
@@ -737,10 +738,10 @@ public class GameLogic extends Application {
         return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
-    private void waitForTurn() {
+    public void waitForTurn() {
 
         // Runnable lambda implementation for turn waiting with it's own thread
-        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+        waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -858,7 +859,7 @@ public class GameLogic extends Application {
             Variables.searchGameThread.stop();
         }
         if (Variables.waitTurnThread.isAlive()) {
-            Variables.waitTurnThread.stop();
+            waitTurnRunnable.doStop();
         }
         try {
             db.close();
@@ -885,7 +886,7 @@ public class GameLogic extends Application {
 
         if (loser != -1) {
             //Game is won or lost.
-            gameCleanUp();
+
             //Open alert window.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
@@ -895,12 +896,13 @@ public class GameLogic extends Application {
             Text winnerText = new Text();
             winnerTextHeader.setStyle("-fx-font-size:32px;");
             winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
-            //db.incrementGamesPlayed();
+            db.incrementGamesPlayed();
 
             if (loser == user_id) {
                 win_loseText = "You Lose!\n";
             } else if (loser == opponent_id) {
                 win_loseText = "You Win!\n";
+                db.incrementGamesWon();
             } else {
                 win_loseText = "Something went wrong\n";
             }
@@ -919,6 +921,7 @@ public class GameLogic extends Application {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
+                gameCleanUp();
                 winner_alert.close();
                 Main.window.setScene(new Scene(root));
             });
@@ -1025,7 +1028,7 @@ public class GameLogic extends Application {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (Variables.waitTurnThread.isAlive()) {
-            Variables.waitTurnThread.stop();
+            waitTurnRunnable.doStop();
         }
 
         //Sets turns back to 1 for next match.
