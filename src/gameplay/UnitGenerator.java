@@ -12,14 +12,6 @@ public class  UnitGenerator {
     private static int unitId = 0;
 
     ////Swordsman////
-    private static int swordsmanUnitTypeId;
-    private static double swordsmanMaxHP;
-    private static int swordsmanAttack;
-    private static int swordsmanAbilityCooldown;
-    private static double swordsmanDefenceMultiplier;
-    private static int swordsmanMinAttackRange;
-    private static int swordsmanMaxAttackRange;
-    private static int swordsmanMovementRange;
     private static String swordsmanDescription =
             "Because he failed to get into clown college,\n" +
             "he was so distraught that he wowed to get stronger and faster,\n" +
@@ -33,14 +25,6 @@ public class  UnitGenerator {
     private static UnitType swordsmanUnitType;
 
     ////Archer////
-    private static int archerUnitTypeId;
-    private static double archerMaxHP;
-    private static int archerAttack;
-    private static int archerAbilityCooldown;
-    private static double archerDefenceMultiplier;
-    private static int archerMinAttackRange;
-    private static int archerMaxAttackRange;
-    private static int archerMovementRange;
     private static String archerDescription =
             "He has mastered his Sodoku in such a ingenious way,\n"+
             "he is now considered godlike amongst his peers.\n"+
@@ -63,6 +47,8 @@ public class  UnitGenerator {
     //TODO
     private static AudioClip juggernautSound = null;
 
+    private static UnitType juggernautUnitType;
+
     ////Catapult////
     private static String catapultDescription=
             "Usurped by the clearly better trebuchet";
@@ -73,33 +59,57 @@ public class  UnitGenerator {
     //TODO
     private static AudioClip catapultSound = null;
 
+    private static UnitType catapultUnitType;
+
 
     public UnitGenerator(){}
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
                          ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
+        
+        swordsmanUnitType = new Swordsman("Swordsman",
+                swordsmanProto.getUnitTypeId(),
+                swordsmanProto.getHp(),
+                swordsmanProto.getAttack(),
+                swordsmanProto.getAbilityCooldown(),
+                swordsmanProto.getDefenceMultiplier(),
+                swordsmanProto.getMinAttackRange(),
+                swordsmanProto.getMaxAttackRange(),
+                swordsmanProto.getMovementRange(),
+                swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
 
-        this.swordsmanUnitTypeId = swordsmanProto.getUnitTypeId();
-        this.swordsmanMaxHP = swordsmanProto.getHp();
-        this.swordsmanAttack = swordsmanProto.getAttack();
-        this.swordsmanAbilityCooldown = swordsmanProto.getAbilityCooldown();
-        this.swordsmanDefenceMultiplier = swordsmanProto.getDefenceMultiplier();
-        this.swordsmanMinAttackRange = swordsmanProto.getMinAttackRange();
-        this.swordsmanMaxAttackRange = swordsmanProto.getMaxAttackRange();
-        this.swordsmanMovementRange = swordsmanProto.getMovementRange();
-        swordsmanUnitType = new Swordsman("Swordsman", swordsmanUnitTypeId, swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
+        archerUnitType =  new Archer("Archer",
+                archerProto.getUnitTypeId(),
+                archerProto.getHp(),
+                archerProto.getAttack(),
+                archerProto.getAbilityCooldown(),
+                archerProto.getDefenceMultiplier(),
+                archerProto.getMinAttackRange(),
+                archerProto.getMaxAttackRange(),
+                archerProto.getMovementRange(),
+                archerDescription, archerDescriptionTag, archerImage, archerSound);
 
-        this.archerUnitTypeId = archerProto.getUnitTypeId();
-        this.archerMaxHP = archerProto.getHp();
-        this.archerAttack = archerProto.getAttack();
-        this.archerAbilityCooldown = archerProto.getAbilityCooldown();
-        this.archerDefenceMultiplier = archerProto.getDefenceMultiplier();
-        this.archerMinAttackRange = archerProto.getMinAttackRange();
-        this.archerMaxAttackRange = archerProto.getMaxAttackRange();
-        this.archerMovementRange = archerProto.getMovementRange();
-        archerUnitType =  new Archer("Archer", archerUnitTypeId, archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag, archerImage, archerSound);
+        juggernautUnitType = new Juggernaut("Juggernaut",
+                juggernautProto.getUnitTypeId(),
+                juggernautProto.getHp(),
+                juggernautProto.getAttack(),
+                juggernautProto.getAbilityCooldown(),
+                juggernautProto.getDefenceMultiplier(),
+                juggernautProto.getMinAttackRange(),
+                juggernautProto.getMaxAttackRange(),
+                juggernautProto.getMovementRange(),
+                juggernautDescription, juggernautDescriptionTag, juggernautImage, juggernautSound);
 
-
+        catapultUnitType = new Catapult("Catapult",
+                catapultProto.getUnitTypeId(),
+                catapultProto.getHp(),
+                catapultProto.getAttack(),
+                catapultProto.getAbilityCooldown(),
+                catapultProto.getDefenceMultiplier(),
+                catapultProto.getMinAttackRange(),
+                catapultProto.getMaxAttackRange(),
+                catapultProto.getMovementRange(),
+                catapultDescription, catapultDescriptionTag, catapultImage, catapultSound);
     }
 
     public UnitType newArcher(){
@@ -122,6 +132,12 @@ public class  UnitGenerator {
 
         case 2:
             return new Unit( false, archerUnitType, unitId++);
+
+          case 3:
+              return new Unit(false, juggernautUnitType, unitId++);
+
+          case 4:
+              return new Unit(false, catapultUnitType, unitId++);
       }
       return null;
     }
@@ -134,8 +150,13 @@ public class  UnitGenerator {
 
             case "Archer":
                 return new Unit( false, archerUnitType, unitId++);
-        }
 
+            case "Juggernaut":
+                return new Unit(false, juggernautUnitType, unitId++);
+
+            case "Catapult":
+                return new Unit(false, catapultUnitType, unitId++);
+        }
         return null;
     }
 
@@ -147,6 +168,12 @@ public class  UnitGenerator {
 
             case 2:
                 return new Unit( true, archerUnitType, unitIdInput);
+
+            case 3:
+                return new Unit(true, juggernautUnitType, unitIdInput);
+
+            case 4:
+                return new Unit(true, catapultUnitType, unitIdInput);
         }
         return null;
     }
@@ -159,6 +186,12 @@ public class  UnitGenerator {
 
             case "Archer":
                 return new Unit( true, archerUnitType, unitIdInput);
+
+            case "Juggernaut":
+                return new Unit(true, juggernautUnitType, unitIdInput);
+
+            case "Catapult":
+                return new Unit(true, catapultUnitType, unitIdInput);
         }
 
         return null;
