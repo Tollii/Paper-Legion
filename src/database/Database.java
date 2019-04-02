@@ -810,8 +810,12 @@ public class Database {
             preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
-            rs.next();
-            return rs.getInt("surrendered");
+            //rs.next();
+            if (rs.next()) {
+                return rs.getInt("surrendered");
+            }
+            return -1;
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
