@@ -608,4 +608,24 @@ public class GameLogic extends Application {
 
     return sidePanel;
   }
+
+  public static void main(String[] args) {
+      Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
+          if (user_id > 0) {
+              db.logout(user_id);
+          }
+          if (Variables.searchGameThread.isAlive()) {
+              Variables.searchGameThread.stop();
+          }
+          if (Variables.waitTurnThread.isAlive()) {
+              Variables.waitTurnThread.stop();
+          }
+          try {
+              db.close();
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
+      }));
+      launch(args);
+  }
 }
