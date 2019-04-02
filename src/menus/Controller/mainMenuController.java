@@ -44,7 +44,7 @@ public class mainMenuController extends Controller {
     @FXML
     void initialize() {
 
-        RunnableInterface searchGameRunnable = new RunnableInterface() {
+        searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -178,6 +178,7 @@ public class mainMenuController extends Controller {
         findGameClicked = false;
         mainMenuPlayButton.setText("Play");
         db.abortMatch(user_id);
+        searchGameRunnable.doStop();
         System.out.println("Game cancelled");
     }
 

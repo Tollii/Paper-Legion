@@ -1,5 +1,7 @@
 package database;
 
+import Runnables.RunnableInterface;
+
 public class Variables {
     public static Database db;
     public static int user_id;
@@ -13,5 +15,7 @@ public class Variables {
     //Threads
     public static Thread searchGameThread;
     public static Thread waitTurnThread;
+    public static RunnableInterface searchGameRunnable;
+    public static RunnableInterface waitTurnRunnable;
 
 }

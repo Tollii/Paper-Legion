@@ -91,8 +91,7 @@ public class GameLogic extends Application {
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
-    ArrayList<Unit> unitList = new ArrayList<Unit>();
-    private RunnableInterface waitTurnRunnable;
+    ArrayList<Unit> unitList = new ArrayList<>();
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
@@ -856,7 +855,7 @@ public class GameLogic extends Application {
             db.logout(user_id);
         }
         if (Variables.searchGameThread.isAlive()) {
-            Variables.searchGameThread.stop();
+            searchGameRunnable.doStop();
         }
         if (Variables.waitTurnThread.isAlive()) {
             waitTurnRunnable.doStop();

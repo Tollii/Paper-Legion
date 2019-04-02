@@ -12,8 +12,7 @@ import menus.Controller.mainMenuController;
 
 import java.sql.SQLException;
 
-import static database.Variables.db;
-import static database.Variables.user_id;
+import static database.Variables.*;
 
 public class Main extends Application {
 
@@ -62,7 +61,7 @@ public class Main extends Application {
             db.logout(user_id);
         }
         if (Variables.searchGameThread.isAlive()) {
-            Variables.searchGameThread.stop();
+            searchGameRunnable.doStop();
         }
         try {
             db.close();
