@@ -288,7 +288,7 @@ public class GameLogic extends Application {
             checkForGameOver();
 
             //Wait for you next turn
-            setUpNewTurn();
+            waitForTurn();
         }
     }
 
@@ -765,7 +765,6 @@ public class GameLogic extends Application {
                                 this.doStop();
                             }
                         }
-
 
                         //What will happen when it is your turn again.
 
