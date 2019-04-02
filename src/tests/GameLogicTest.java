@@ -58,6 +58,7 @@ public class GameLogicTest {
 
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
+
         GameLogic game = new GameLogic();
 
     }

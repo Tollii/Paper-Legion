@@ -3,7 +3,6 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import gameplay.GameLogic;
-import gameplay.SetUp;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -167,9 +166,6 @@ public class mainMenuController extends Controller {
     private void enterGame() {
         try {
             findGameClicked = false;
-            //isPressed = true;
-            SetUp setUp = new SetUp();
-            setUp.importUnitTypes();
             GameLogic game = new GameLogic();
             game.start(Main.window);
             System.out.println("Success!!!!");
