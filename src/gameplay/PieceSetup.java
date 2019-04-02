@@ -10,17 +10,15 @@ public class PieceSetup {
     private int positionX;
     private int positionY;
     private int unit_type_id;
-    private double current_health;
 
-    public PieceSetup(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id, double current_health){
+    public PieceSetup(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id){
+
         this.pieceId = pieceId;
         this.matchId = matchId;
         this.playerId = playerId;
         this.positionX = positionX;
         this.positionY = positionY;
         this.unit_type_id = unit_type_id;
-        this.current_health = current_health;
-
     }
 
     public int getPieceId() {
@@ -45,7 +43,4 @@ public class PieceSetup {
 
     public int getUnit_type_id(){ return unit_type_id; }
 
-    public double getCurrent_health(){
-        return current_health;
-    }
 }
