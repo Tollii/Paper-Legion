@@ -277,7 +277,30 @@ public class GameLogic extends Application {
   ////MOVEMENT AND ATTACK METHODS////
   private void move(MouseEvent event) {
     if (movementPhase) { //checks if movement phase
+      //
+      int newPosX = getPosXFromEvent(event), newPosY = getPosYFromEvent(event); //position of click
+      ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
+      for (int i = 0; i < movementTargets.size(); i++) {
+        if (movementTargets.get(i) == grid.tileList[newPosY][newPosX]) {
+          //moves unit from old tile to new
+          grid.tileList[selectedPosY][selectedPosX].removeUnit();
+          grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
+
+          //adds the move to movementlist
+          movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosY, newPosY));
+
+          //sets selected pos to new pos
+          selectedPosX = newPosX;
+          selectedPosY = newPosY;
+
+          movementPhase = false; //sets phase to attack
+          moveCounter++; //increaments move counter
+
+          deselect();
+          select(event);
+        }
+      }
     }
   }
 
@@ -289,32 +312,65 @@ public class GameLogic extends Application {
 
   ////HIGHLIGHTING METHODS////
   private void highlightPossibleMoves() {
-    ArrayList<Tile> movementTargets = getMovementPossibleTiles();
+    if (unitSelected) { //checks if there is a unit selected
+      ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
-    //colors all tiles that are possible movement targets green
-    for (int i = 0; i < movementTargets.size(); i++) {
-      movementTargets.get(i).setFill(movementHighlightColor);
+      //colors all tiles that are possible movement targets green
+      for (int i = 0; i < movementTargets.size(); i++) {
+        movementTargets.get(i).setFill(movementHighlightColor);
+      }
     }
   }
 
   private void highlightPossibleAttacks() {
-    ArrayList<Tile> attackTargets = getAttackableTiles();
+    if (unitSelected) { //checks if there is a unit selected
+      ArrayList<Tile> attackTargets = getAttackableTiles();
 
-    //colors all attackable tiles red
-    for (int i= 0; i < attackTargets.size(); i++) {
-      attackTargets.get(i).setFill(attackHighlightColor);
+      //colors all attackable tiles red
+      for (int i= 0; i < attackTargets.size(); i++) {
+        attackTargets.get(i).setFill(attackHighlightColor);
+      }
     }
   }
 
   private ArrayList<Tile> getMovementPossibleTiles() {
     ArrayList<Tile> movementTargets = new ArrayList<Tile>();
 
+    //goes throug all tiles and adds those which isn't occupied and are within movement distance
+    for (int i = 0; i < grid.tileList.lenght; i++) {
+      for (int j = 0; j < grid.tileList[i].length; j++) {
+        if (grid.tileList[i][j].getUnit() == null) { //checks if there is a unit on the tile
+          if (Math.abs(selectedPosY - i) + Math.abs(selectedPosX - j) <= selectedUnit.getMovementRange()) { //checks if tile within movement range
+            movementList.add(grid.tileList[i][j]);
+          }
+        }
+      }
+    }
     return movementTargets;
   }
 
   private ArrayList<Tile> getAttackableTiles() {
     ArrayList<Tile> attackTargets = new ArrayList<Tile>();
 
+    for (int i = 0; i < grid.tileList.lenght; i++) {
+      for (int j = 0; j < grid.tileList[i].length; j++) {
+        if (grid.tileList[i][j].getUnit() != null) { //checks if there is a unit on the tile
+          if (grid.tileList[i][j].getUnit().getEnemy()) { //checks if unit is enemy
+            if (selectedUnit.getMaxAttackRange() < 2) { //if attackrange = 1, use other method, so that it is possible to attack diagonally
+              if (Math.abs(selectedPosY - i) <= selectedUnit.getMaxAttackRange() && Math.abs(selectedPosX - j) <= selectedUnit.getMaxAttackRange()) { //checks if tile is one of the directly nearby tiles
+                attackTargets.add(grid.tileList[i][j]);
+              }
+            } else { //if attackrange > 1, uses this method
+              if (Math.abs(selectedPosY - i) + Math.abs(selectedPosX - j) <= selectedUnit.getMaxAttackRange()) { //checks if tile within max attack range
+                if (Math.abs(selectedPosY - i) + Math.abs(selectedPosX - j) >= selectedUnit.getMinAttackRange()) { //checks if tile above min attack range
+                  attackTargets.add(grid.tileList[i][j]);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     return attackTargets;
   }
 
