@@ -22,4 +22,8 @@ public class Match{
     public boolean getPassword(){
         return password;
     }
+
+    public String toString(){
+        return match_id + " : " + player + " : " + password;
+    }
 }

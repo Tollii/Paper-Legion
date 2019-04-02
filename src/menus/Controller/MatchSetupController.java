@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import database.Database;
+import gameplay.GameLogic;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import menus.Main;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ import static database.Variables.*;
 
 
     public class MatchSetupController extends Controller {
+
+        private boolean findGameClicked, gameEntered, threadStarted = false;
+
 
         @FXML
         private ResourceBundle resources;
@@ -71,7 +76,10 @@ import static database.Variables.*;
 
 
             joinGameButton.setOnAction(event -> {
-                //table.getSelectionModel().getSelectedCells()
+              Match selectedMatch = table.getSelectionModel().getSelectedItem();
+                System.out.println(selectedMatch);
+                db.joinGame(selectedMatch.getMatch_id(),user_id);
+                enterGame();
             });
 
 
@@ -135,24 +143,27 @@ import static database.Variables.*;
         }
 
     public ObservableList<Match> getMatches(){
-
         ArrayList<Match> matches =  db.findGamesAvailable();
         ObservableList<Match> match_ids = FXCollections.observableArrayList();
 
         for (Match i : matches) {
             match_ids.add(i);
         }
-
-
-
-
-//        match_ids.add(new Match(1,"Eric", true));
-//        match_ids.add(new Match(2,"Thomas", false));
-
         return match_ids;
     }
 
 
+    private void enterGame() {
+            try {
+                findGameClicked = false;
+                yourTurn = false;
+                GameLogic game = new GameLogic();
+                game.start(Main.window);
+                System.out.println("Success!!!!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 
 }
