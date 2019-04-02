@@ -57,12 +57,19 @@ import static database.Variables.*;
         @FXML
         private TableView<Match> table;
 
+        @FXML
+        private JFXButton matchSetup_refreshButton;
 
         @FXML
         private JFXButton backToMenuButton;
 
         @FXML
         void initialize() {
+
+            matchSetup_refreshButton.setOnAction(event -> {
+                table.setItems(getMatches()); //Refreshes tables.
+            });
+
 
             backToMenuButton.setOnAction(event -> {
                 changeScene("mainMenu.fxml");
@@ -71,15 +78,59 @@ import static database.Variables.*;
             //Sets up variables for connecting Match class with Table Columns
             player_table.setCellValueFactory(new PropertyValueFactory<>("player"));
             matchID_Table.setCellValueFactory(new PropertyValueFactory<>("match_id"));
-            passwordTable.setCellValueFactory(new PropertyValueFactory<>("password"));
+            passwordTable.setCellValueFactory(new PropertyValueFactory<>("passwordProtected"));
             table.setItems(getMatches());
 
 
             joinGameButton.setOnAction(event -> {
               Match selectedMatch = table.getSelectionModel().getSelectedItem();
-                System.out.println(selectedMatch);
-                db.joinGame(selectedMatch.getMatch_id(),user_id);
-                enterGame();
+              if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){ //Switched these to these input of password, this is false, and vice versa
+                  db.joinGame(selectedMatch.getMatch_id(),user_id);
+                  enterGame();
+              } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){ // This should be changed to true afterwards.
+                  // Enter password
+                  StackPane stackpane = new StackPane();
+                  VBox vBox = new VBox();
+                  Label dialog = new Label("Enter password");
+                  HBox hBox = new HBox();
+                  JFXButton abort = new JFXButton("Cancel");
+                  JFXButton join = new JFXButton("Join Game");
+                  JFXTextField inputPassword = new JFXTextField();
+                  JFXButton submitPassword = new JFXButton("Join game");
+
+
+                  hBox.getChildren().addAll(join, abort);
+                  hBox.setAlignment(Pos.CENTER);
+
+                  vBox.setAlignment(Pos.CENTER);
+                  vBox.setSpacing(20);
+                  vBox.getChildren().addAll(dialog, inputPassword,hBox);
+                  stackpane.getChildren().add(vBox);
+                  inputPassword.setPromptText("Enter password");
+                  inputPassword.setPrefWidth(150);
+                  inputPassword.setMaxWidth(150);
+
+                  Stage window = new Stage();
+                  window.initStyle(StageStyle.UNDECORATED);
+                  Scene scene = new Scene(stackpane, 300,150);
+                  window.setScene(scene);
+                  window.show();
+
+                  abort.setOnAction(event1 -> {
+                      window.close();
+                  });
+
+                  join.setOnAction(event1 -> {
+                      String passwordUserInput = inputPassword.getText().trim().toString();
+                      if(passwordUserInput.equalsIgnoreCase(selectedMatch.getPassword())){
+                          //TODO: NEEDS TO CHECK AGAINST MATCH PASSWORD
+                          System.out.println("joining game");
+                      } else {
+                          dialog.setText("Wrong password, try again");
+                      }
+                  });
+
+              }
             });
 
 
@@ -128,7 +179,8 @@ import static database.Variables.*;
                 });
 
                 no_button.setOnAction(event1 -> {
-                    //db.createGame(20);
+                  //  db.createGame(20); //TODO: UNCOMMENT THIS LATER.
+                    table.setItems(getMatches()); //Refreshes tables.
                     window.close();
                 });
 
@@ -136,7 +188,6 @@ import static database.Variables.*;
                 abort.setOnAction(event1 -> {
                     window.close();
                 });
-                table.setItems(getMatches()); //Refreshes tables.
 
             });
 

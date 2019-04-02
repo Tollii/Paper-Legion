@@ -3,11 +3,13 @@ package menus.Controller;
 public class Match{
     private int match_id;
     private String player;
-    private boolean password;
+    private boolean passwordProtected;
+    private String password;
 
-    public Match(int match_id, String player, boolean password){
+    public Match(int match_id, String player,boolean passwordProtected, String password){
         this.match_id= match_id;
         this.player = player;
+        this.passwordProtected = passwordProtected;
         this.password = password;
     }
 
@@ -19,7 +21,11 @@ public class Match{
         return player;
     }
 
-    public boolean getPassword(){
+    public boolean getPasswordProtected(){
+        return passwordProtected;
+    }
+
+    public String getPassword(){
         return password;
     }
 

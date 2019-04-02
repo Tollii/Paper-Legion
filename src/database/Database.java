@@ -64,9 +64,10 @@ public class Database {
             while (resultSet.next()){
                 int match_id = resultSet.getInt("match_id");
                 String playername = resultSet.getString("username");
-                boolean password = false;
+                boolean passwordProtected = false;
+                String password = "test";
 
-                matches.add(new Match(match_id,playername, password));
+                matches.add(new Match(match_id,playername, passwordProtected, password));
 
             }
 
