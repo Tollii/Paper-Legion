@@ -14,7 +14,22 @@
          <children>
             <HBox alignment="CENTER" prefHeight="470.0" prefWidth="624.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox alignment="CENTER_LEFT" prefHeight="366.0" prefWidth="590.0" spacing="15.0">
+                  <VBox alignment="CENTER" prefHeight="470.0" prefWidth="504.0" spacing="10.0">
+                     <children>
+                        <JFXButton fx:id="joinGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Join Game" textFill="WHITE" />
+                        <JFXButton fx:id="createGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Create Game" textFill="WHITE" />
+                        <JFXButton fx:id="matchSetup_refreshButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Refresh" textFill="WHITE" />
+                        <JFXButton fx:id="backToMenuButton" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: e3e4e5;" text="Back">
+                           <VBox.margin>
+                              <Insets top="150.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT" prefHeight="470.0" prefWidth="699.0" spacing="15.0">
                      <children>
                         <Label fx:id="gameTitleLabel" text="Paper Legion">
                            <font>
@@ -30,26 +45,17 @@
                             <TableColumn fx:id="player_table" prefWidth="159.0" text="Player" />
                               <TableColumn fx:id="passwordTable" prefWidth="90.0" text="Password" />
                           </columns>
+                           <VBox.margin>
+                              <Insets right="25.0" />
+                           </VBox.margin>
                         </TableView>
                      </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <HBox.margin>
-                        <Insets left="50.0" />
+                        <Insets left="50.0" right="50.0" />
                      </HBox.margin>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="470.0" prefWidth="436.0" spacing="10.0">
-                     <children>
-                        <JFXButton fx:id="joinGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Join Game" textFill="WHITE" />
-                        <JFXButton fx:id="createGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Create Game" textFill="WHITE" />
-                        <JFXButton fx:id="matchSetup_refreshButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Refresh" textFill="WHITE" />
-                        <JFXButton fx:id="backToMenuButton" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: e3e4e5;" text="Back">
-                           <VBox.margin>
-                              <Insets top="150.0" />
-                           </VBox.margin>
-                        </JFXButton>
-                     </children>
                   </VBox>
                </children>
             </HBox>
