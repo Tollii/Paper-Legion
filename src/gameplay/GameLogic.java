@@ -879,13 +879,14 @@ public class GameLogic extends Application {
         String win_loseText;
         String gameSummary = "";
         int loser = -1;
+        int surrenderResult = db.checkForSurrender();
 
         if (checkForEliminationVictory() != -1) {
             gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
             loser = checkForEliminationVictory();
-        } else if (db.checkForSurrender() != -1) {
+        } else if (surrenderResult != -1) {
             gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
-            loser = db.checkForSurrender();
+            loser = surrenderResult;
         }
 
         if (loser != -1) {
