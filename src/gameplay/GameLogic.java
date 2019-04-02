@@ -35,7 +35,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.sql.SQLException;
 import static database.Variables.*;
 import java.util.ArrayList;
@@ -74,17 +73,15 @@ public class GameLogic extends Application {
 
 
     ////GAME CONTROL VARIABLES////
-    private int selectedPosX;                                           //Holds the X position to the selected piece.
-    private int selectedPosY;                                           //Holds the Y position to the selected piece.
-    private int moveCounter = 0;                                        // Counter for movement phase.
-    private int attackCount = 0;                                        // Counter for attack phase.
-    private Unit selectedUnit;                                          //Reference to the selected unit. Used for move, attack, etc.
-    private boolean selected = false;                                   // True or false for selected piece.
-    private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
-    private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
-    private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
-    private ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
-    private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
+    private int selectedPosX;                                   //Holds the X position to the selected piece.
+    private int selectedPosY;                                   //Holds the Y position to the selected piece.
+    private int moveCounter = 0;                                // Counter for movement phase.
+    private int attackCount = 0;                                // Counter for attack phase.
+    private Unit selectedUnit;                                  //Reference to the selected unit. Used for move, attack, etc.
+    private boolean selected = false;                           // True or false for selected piece.
+    private ArrayList<Move> movementList = new ArrayList<>();   //Keeps track of the moves made for the current turn.
+    private ArrayList<Attack> attackList = new ArrayList<>();
+    private boolean movementPhase = true;                       //Controls if the player is in movement or attack phase
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
     ArrayList<Unit> unitList = new ArrayList<Unit>();
@@ -103,6 +100,25 @@ public class GameLogic extends Application {
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
 
+
+    public static void main(String[] args) {
+        //Shutdown hook. CLoses stuff when program exits.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (user_id > 0) {
+                db.logout(user_id);
+            }
+            try {
+                db.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
+
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -132,6 +148,9 @@ public class GameLogic extends Application {
         createUnits();
 
         drawUnits();
+
+
+
 
 
 
@@ -242,9 +261,9 @@ public class GameLogic extends Application {
 
     private void endTurn(){
         if (yourTurn) {
-
             //Increments turn. Opponents Turn.
             turn++;
+
 
             turnCounter.setText("TURN: " + turn);
             endTurnButton.setText("Waiting for other player");
@@ -253,43 +272,25 @@ public class GameLogic extends Application {
 
             ////SEND MOVEMENT////
 
+            //db.exportMoveList(movementList); when we use movement table use this
             if (movementList.size() != 0) {
-                System.out.println("SENDING MOVE LIST!");
-                db.exportMoveList(movementList); //when we use movement table use this
-                ////Old method////
-                //db.exportPieceMoveList(movementList);
+                db.exportPieceMoveList(movementList);
                 movementList = new ArrayList<>(); //Resets the movementList for the next turn.
             }
 
 
             /////SEND ATTACKS////
+            //TODO Having a attackList just like movementList. Alternative solution below.
 
-            if(attackList.size() != 0){
-                db.exportAttackList(attackList);
-                attackList = new ArrayList<>(); //Resets the attackList for the next turn.
-            }
-
+            // Alternative solution to creating a List of attacks in the future.
             // Finds every enemy unit that was damaged and sends their new info the database.
-
+            //Wait for you next turn
 
             //Add the next turn into the database.
             db.sendTurn(turn);
-
-            //de-selects the currently selected unit
             deSelect(rSidePanel, description);
-
-            //Resets hasAttackedThisTurn for all units
-            for (int i = 0; i < unitList.size(); i++) {
-
-                unitList.get(i).setHasAttackedThisTurn(false);
-
-            }
-
-
-            //Check if you have won
+            selectedUnit = null;
             winner();
-
-            //Wait for you next turn
             waitForTurn();
         }
     }
@@ -389,7 +390,7 @@ public class GameLogic extends Application {
     }
 
     private void surrender() {
-        //TODO: NO SURRENDER!
+        //TODO
     }
 
     private void deSelect(VBox sidePanel, Label description) {
@@ -416,12 +417,11 @@ public class GameLogic extends Application {
 
             if (movementRange(nyPosX, nyPosY)) {
                 if (unitPosition[nyPosY][nyPosX] == null) {
+                    selectedUnit.setTranslate(nyPosX, nyPosY);
+                    clearHighlight();
 
                     ////ADDS A NEW MOVE TO THE MOVE LIST////
                     movementList.add(new Move(turn, selectedUnit.getPieceID(), match_id, selectedUnit.getPositionX(), selectedUnit.getPositionY(), nyPosX, nyPosY));
-
-                    selectedUnit.setTranslate(nyPosX, nyPosY);
-                    clearHighlight();
 
                     ////EXECUTES THE MOVE////
                     unitPosition[nyPosY][nyPosX] = selectedUnit;
@@ -661,32 +661,26 @@ public class GameLogic extends Application {
 
         int attackPosX = getPosXFromEvent(event);
         int attackPosY = getPosYFromEvent(event);
-
-
+        int id;
+        // If there is a unit on the selected tile.
         if (yourTurn) {
-
-            // If there is a unit on the selected tile.
             if (unitPosition[attackPosY][attackPosX] != null && unitPosition[attackPosY][attackPosX].getHp() > 0) {
                 // If within attack range.
                 if (attackRange(attackPosX, attackPosY)) {
                     // If attacked unit is not itself.
-                    if (selectedUnit != unitPosition[attackPosY][attackPosX] && unitPosition[attackPosY][attackPosX].getEnemy()) {
+                    if (selectedUnit != unitPosition[attackPosY][attackPosX]  && unitPosition[attackPosY][attackPosX].getEnemy()) {
                         // Attack is executed and unit takes damage.
                         unitPosition[attackPosY][attackPosX].takeDamage(selectedUnit.getAttack());
-
-                        //Adds an attack to the attack list
-                        //This is used to transfer the attack to the other player
-                        attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceID(), unitPosition[attackPosY][attackPosX].getPieceID(), selectedUnit.getAttack()));
 
                         attackCount++;
 
                         //Plays audio cue for each type.
-                        if (selectedUnit.getTypeString().equalsIgnoreCase("Swordsman")) {
+                        if (selectedUnit.getType().equalsIgnoreCase("Swordsman")) {
                             sword.play();
-                        } else if (selectedUnit.getTypeString().equalsIgnoreCase("Archer")) {
+                        } else if (selectedUnit.getType().equalsIgnoreCase("Archer")) {
                             bow.play();
                         }
-                        //db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
+                        db.sendHealthInfo(unitPosition[attackPosY][attackPosX].getPieceID(), unitPosition[attackPosY][attackPosX].getHp());
 
 
                         //If units health is zero. Remove it from the board.
@@ -701,6 +695,7 @@ public class GameLogic extends Application {
                             }
                             unitPosition[attackPosY][attackPosX] = null;
                             unitList.removeAll(Collections.singletonList(null));
+
                         }
 
                         selectedUnit.setHasAttackedThisTurn(true);
@@ -746,7 +741,7 @@ public class GameLogic extends Application {
                 while(keepRunning()){
                     try {
                         while (!yourTurn) {
-                            System.out.println("Sleeps thread " + Thread.currentThread());
+                            System.out.println("sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
@@ -762,9 +757,14 @@ public class GameLogic extends Application {
 
                         //Increments turn. Back to your turn.
                         Platform.runLater(()->{
-
-                            setUpNewTurn();
-
+                            deSelect(rSidePanel, description);
+                            selectedUnit = null;
+                            turn++;
+                            turnCounter.setText("TURN: " + turn);
+                            endTurnButton.setText("End turn");
+                            deDrawUnits();
+                            drawUnits();
+                            winner();
                         });
 
                         movementPhase = true;
@@ -790,64 +790,6 @@ public class GameLogic extends Application {
         waitTurnThread.start();
 
     }
-
-    private void setUpNewTurn(){
-        deSelect(rSidePanel, description);
-        selectedUnit = null;
-        turn++;
-        turnCounter.setText("TURN: " + turn);
-        endTurnButton.setText("End turn");
-
-        importedMovementList = db.importMoveList(turn-1, match_id);
-        importedAttackList = db.importAttackList(turn-1, match_id, opponent_id);
-
-        System.out.println("importedAttackList size is: " + importedAttackList.size());
-
-        ////EXECUTES MOVES FROM OPPONENTS TURN////
-        for (int i = 0; i < importedMovementList.size(); i++) {
-
-            Unit movingUnit = unitPosition[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()];
-
-            movingUnit.setPosition(importedMovementList.get(i).getEndPosX(), importedMovementList.get(i).getEndPosY());
-
-            ////EXECUTES THE MOVE////
-            unitPosition[importedMovementList.get(i).getEndPosY()][importedMovementList.get(i).getEndPosX()] = movingUnit;
-            unitPosition[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()] = null;
-        }
-
-        ////EXECUTES ATTACKS FROM OPPONENTS TURN////
-        for (int i = 0; i < importedAttackList.size(); i++) {
-
-            for (int j = 0; j < unitList.size(); j++) {
-
-                if(!unitList.get(j).getEnemy() && unitList.get(j).getPieceID() == importedAttackList.get(i).getReceiverPieceID()){
-                    System.out.println(importedAttackList.get(i).getDamage());
-
-                    System.out.println("DOING AN ATTACK!" + unitList.get(j).getHp());
-
-                    unitList.get(j).takeDamage(importedAttackList.get(i).getDamage());
-
-
-
-                    //If units health is zero. Remove it from the board.
-                    if (unitList.get(j).getHp() <= 0) {
-                        //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
-                        pieceContainer.getChildren().removeAll(unitList.get(j).getPieceAvatar());
-
-                        unitPosition[unitList.get(j).getPositionY()][unitList.get(j).getPositionX()] = null;
-                        unitList.remove(j);
-                        unitList.removeAll(Collections.singletonList(null));
-                    }
-                }
-
-            }
-        }
-        ////Old methods////
-        //deDrawUnits();
-        //drawUnits();
-        winner();
-    }
-
 
     @Override
     public void stop() {
