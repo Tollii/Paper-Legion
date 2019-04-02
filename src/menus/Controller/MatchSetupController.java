@@ -72,30 +72,34 @@ import static database.Variables.*;
 
         @FXML
         void initialize() {
-
-            matchSetup_refreshButton.setOnAction(event -> {
-                table.setItems(getMatches()); //Refreshes tables.
-            });
-
-
-            backToMenuButton.setOnAction(event -> {
-                changeScene("mainMenu.fxml");
-            });
-
             //Sets up variables for connecting Match class with Table Columns
             player_table.setCellValueFactory(new PropertyValueFactory<>("player"));
             matchID_Table.setCellValueFactory(new PropertyValueFactory<>("match_id"));
             passwordTable.setCellValueFactory(new PropertyValueFactory<>("passwordProtected"));
             table.setItems(getMatches());
 
+            matchSetup_refreshButton.setOnAction(event -> {
+                table.setItems(getMatches()); //Refreshes tables.
+            });
 
+            // ABORTS CREATED MATCHES AND EXITS TO MAIN MENU
+            backToMenuButton.setOnAction(event -> {
+                db.abortMatch(user_id);
+                changeScene("mainMenu.fxml");
+            });
+
+            //JOINS SELECTED GAME ROW IN TABLE
             joinGameButton.setOnAction(event -> {
               Match selectedMatch = table.getSelectionModel().getSelectedItem();
+
+              // IF NOT PASSWORD PROTECTED, JOIN AND ENTER GAME
               if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){
                   db.joinGame(selectedMatch.getMatch_id(),user_id);
                   enterGame();
+
+                  // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
               } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){
-                  // Enter password
+                  // SETS UP WINDOW WITH PANES IF PASSWORD PROTECTED
                   StackPane stackpane = new StackPane();
                   VBox vBox = new VBox();
                   Label dialog = new Label("Enter password");
@@ -103,12 +107,10 @@ import static database.Variables.*;
                   JFXButton abort = new JFXButton("Cancel");
                   JFXButton join = new JFXButton("Join Game");
                   JFXTextField inputPassword = new JFXTextField();
-                  JFXButton submitPassword = new JFXButton("Join game");
 
-
+                  //STYLING, ALIGNMENT AND SPACING FOR CONTENT IN POPUP WINDOW
                   hBox.getChildren().addAll(join, abort);
                   hBox.setAlignment(Pos.CENTER);
-
                   vBox.setAlignment(Pos.CENTER);
                   vBox.setSpacing(20);
                   vBox.getChildren().addAll(dialog, inputPassword,hBox);
@@ -116,17 +118,24 @@ import static database.Variables.*;
                   inputPassword.setPromptText("Enter password");
                   inputPassword.setPrefWidth(150);
                   inputPassword.setMaxWidth(150);
+                  join.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                  abort.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                  hBox.setSpacing(10);
+                  hBox.setSpacing(10);
 
+                  //CREATES A POPUP WINDOW
                   Stage window = new Stage();
                   window.initStyle(StageStyle.UNDECORATED);
                   Scene scene = new Scene(stackpane, 300,150);
                   window.setScene(scene);
                   window.show();
 
+                  //CANCEL
                   abort.setOnAction(event1 -> {
                       window.close();
                   });
 
+                  // CHECKS INPUT PASSWORD AGAINST MATCH PASSWORD.
                   join.setOnAction(event1 -> {
                       String passwordUserInput = inputPassword.getText().trim().toString();
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
@@ -140,9 +149,8 @@ import static database.Variables.*;
               }
             });
 
-
             createGameButton.setOnAction(event -> {
-                //TODO: CREATE INPUT FOR PASSWORD
+                //SETS UP PANES FOR POPUP WINDOW
                 StackPane stackpane = new StackPane();
                 VBox vBox = new VBox();
                 Label dialog = new Label("Do you want to password protect this game?");
@@ -150,27 +158,34 @@ import static database.Variables.*;
                 JFXButton no_button = new JFXButton("No");
                 HBox hBox = new HBox();
                 JFXButton abort = new JFXButton("Abort");
+                JFXButton submitPassword = new JFXButton("Submit");
+                JFXTextField inputPassword = new JFXTextField();
 
+                //STYLING, ALIGNMENT AND SPACINGS FOR BUTTONS AND INPUT IN POPUP WINDOW
+                yes_button.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                no_button.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                abort.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                submitPassword.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                hBox.setSpacing(10);
                 hBox.setAlignment(Pos.CENTER);
                 hBox.getChildren().addAll(yes_button,no_button, abort);
                 vBox.getChildren().addAll(dialog,hBox);
                 vBox.setAlignment(Pos.CENTER);
                 vBox.setSpacing(20);
                 stackpane.getChildren().add(vBox);
-                JFXTextField inputPassword = new JFXTextField();
                 inputPassword.setPromptText("Enter password");
-                JFXButton submitPassword = new JFXButton("Submit");
                 inputPassword.setPrefWidth(150);
                 inputPassword.setMaxWidth(150);
 
 
-
+                //CREATES POPUP WINDOW
                 Stage window = new Stage();
                 window.initStyle(StageStyle.UNDECORATED);
                 Scene scene = new Scene(stackpane, 300,150);
                 window.setScene(scene);
                 window.show();
 
+                // IN CASE USER WANTS TO PASSWORD PROTECT GAME
                 yes_button.setOnAction(event1 -> {
                     dialog.setText("Input password for game:");
                     hBox.getChildren().removeAll(yes_button,no_button, abort);
@@ -179,19 +194,21 @@ import static database.Variables.*;
                     vBox.getChildren().addAll(inputPassword, hBox);
                 });
 
+                // ADD MATCH IN GAME AND WAIT FOR PLAYER TO JOIN
                 submitPassword.setOnAction(event1 -> {
                     String passwordInserted = inputPassword.getText().trim().toString();
                     //TODO: ADD TO DATABASE AND WAIT POLL, AND ENTER GAME WHEN PLAYER JOINED
                     System.out.println(passwordInserted);
                 });
 
+                // CREATE GAME WITHOUT PASSWORD
                 no_button.setOnAction(event1 -> {
-                  //  db.createGame(20); //TODO: UNCOMMENT THIS LATER.
+                    db.createGame(user_id);
                     table.setItems(getMatches()); //Refreshes tables.
                     window.close();
                 });
 
-
+                //CANCEL
                 abort.setOnAction(event1 -> {
                     window.close();
                 });
