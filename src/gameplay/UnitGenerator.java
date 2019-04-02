@@ -66,15 +66,7 @@ public class  UnitGenerator {
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
                          ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
-
-        this.swordsmanUnitTypeId = swordsmanProto.getUnitTypeId();
-        this.swordsmanMaxHP = swordsmanProto.getHp();
-        this.swordsmanAttack = swordsmanProto.getAttack();
-        this.swordsmanAbilityCooldown = swordsmanProto.getAbilityCooldown();
-        this.swordsmanDefenceMultiplier = swordsmanProto.getDefenceMultiplier();
-        this.swordsmanMinAttackRange = swordsmanProto.getMinAttackRange();
-        this.swordsmanMaxAttackRange = swordsmanProto.getMaxAttackRange();
-        this.swordsmanMovementRange = swordsmanProto.getMovementRange();
+        
         swordsmanUnitType = new Swordsman("Swordsman",
                 swordsmanProto.getUnitTypeId(),
                 swordsmanProto.getHp(),
