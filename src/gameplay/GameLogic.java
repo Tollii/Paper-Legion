@@ -72,7 +72,9 @@ public class GameLogic extends Application {
     private HBox root = new HBox();                     //Root container
     private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
     private VBox rSidePanel = new VBox();               //Sidepanel for unit description and End turn button
+    private HBox rSidePanelBtns = new HBox();
     private Label description = new Label();
+    private Label phaseLabel = new Label();
     private JFXButton endTurnButton = new JFXButton("End turn");
     private JFXButton surrenderButton = new JFXButton("Surrender");
     private Pane board = new Pane();                    // Holds all the tiles.
@@ -104,6 +106,7 @@ public class GameLogic extends Application {
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String endTurnButtonBackgroundColor = "-fx-background-color: #000000";
     private String turnCounterFontSize = "-fx-font-size: 32px";
+    private String phaseLabelFontSize = "-fx-font-size: 32px";
     private Paint selectionOutlineColor = Color.RED;
     private Paint endTurnButtonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
@@ -214,25 +217,32 @@ public class GameLogic extends Application {
 
         turnCounter.setStyle(turnCounterFontSize);
 
-        endTurnButton.setPrefWidth(150);
-        endTurnButton.setPrefHeight(75);
+        endTurnButton.setMinWidth(175);
+        endTurnButton.setMinHeight(75);
         endTurnButton.setTextFill(endTurnButtonTextColor);
         endTurnButton.setStyle(endTurnButtonBackgroundColor);
 
         description.setStyle(descriptionFont);
         description.setPadding(new Insets(descriptionOffsetTop, descriptionOffsetRight, descriptionOffsetBottom, descriptionOffsetLeft));
 
-        surrenderButton.setPrefWidth(150);
-        surrenderButton.setPrefHeight(75);
+        surrenderButton.setMinWidth(175);
+        surrenderButton.setMinHeight(75);
         surrenderButton.setTextFill(Color.WHITE);
         surrenderButton.setStyle("-fx-background-color: #000000");
+
+        rSidePanelBtns.getChildren().addAll(endTurnButton,surrenderButton);
+        rSidePanelBtns.setSpacing(5);
+        rSidePanelBtns.setAlignment(Pos.CENTER);
 
         description.setStyle("-fx-font-family: 'Arial Black'");
         description.setPadding(new Insets(0, 0, 350, 0));
 
-        rSidePanel.setPrefWidth(250);
-        rSidePanel.getChildren().addAll(turnCounter, endTurnButton, surrenderButton);
+        phaseLabel.setText("MOVEMENT PHASE");
+        phaseLabel.setStyle(phaseLabelFontSize);
+
+        rSidePanel.getChildren().addAll(phaseLabel,turnCounter, rSidePanelBtns);
         rSidePanel.setPrefWidth(650);
+        rSidePanel.setSpacing(10);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
         // IF INSERTS ARE ADDED THEN REMEMBER THAT THE OFFSET VALUE HAS TO WORK WITH THE TILES AND PIECES POSITION.
@@ -504,11 +514,11 @@ public class GameLogic extends Application {
 
                     selectedUnit.setPosition(nyPosX, nyPosY);
 
-
                     moveCounter++;
 
                     ////CHANGES PHASE////
                     movementPhase = false;
+                    phaseLabel.setText("ATTACK PHASE");
                     clearHighlight();
                     highlightPossibleAttacks();
                 }
@@ -550,7 +560,6 @@ public class GameLogic extends Application {
 
                         //If units health is zero. Remove it from the board.
                         if (unitPosition[attackPosY][attackPosX].getHp() <= 0) {
-                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                             pieceContainer.getChildren().removeAll(unitPosition[attackPosY][attackPosX].getPieceAvatar());
                             //unitPosition[attackPosY][attackPosX].setHp(0);
                             for (int i = 0; i < unitList.size(); i++) {
@@ -696,33 +705,13 @@ public class GameLogic extends Application {
         return false;
     }
 
+    //Returns true if enemy is within attack range of the selected unit.
     private boolean attackRange(int nyPosX, int nyPosY) {
 
-        ///////////////////////ORDINARY ATTACK RANGE == 1//////////////////////
-        if (selectedUnit.getMaxAttackRange() < 2) {
-            if ((Math.abs(nyPosX - selectedUnit.getPositionX()) < 2) && (Math.abs(nyPosY - selectedUnit.getPositionY()) < 2)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        double attackLocation = Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY);
 
-        ////////////////////////////////////////////////////////////////////
+        return selectedUnit.getMinAttackRange() <= attackLocation && attackLocation <= selectedUnit.getMaxAttackRange();
 
-        /////////////ATTACK RANGE > 1///////////////////////////////////////
-
-        if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= selectedUnit.getMaxAttackRange()) { //Beautiful math skills in progress.
-            return true;
-        }
-
-
-//        if (!(Math.abs(nyPosX - unitPosition[selectedPosY][selectedPosX].getOldPosX()) > unitPosition[selectedPosY][selectedPosX].getRange()) &&
-//                (!(Math.abs(nyPosY - unitPosition[selectedPosY][selectedPosX].getOldPosY()) > unitPosition[selectedPosY][selectedPosX].getRange()))) {
-//            return true;
-//        }
-
-        ////////////////////////////////////////////////////////////////////
-        return false;
     }
 
     private int getPosXFromEvent(MouseEvent event2) {
@@ -798,6 +787,7 @@ public class GameLogic extends Application {
     private void setUpNewTurn() {
         deSelect(rSidePanel, description);
         selectedUnit = null;
+        phaseLabel.setText("MOVEMENT PHASE");
         turn++;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
@@ -922,9 +912,9 @@ public class GameLogic extends Application {
                     e.printStackTrace();
                     System.out.println("load failed");
                 }
-                gameCleanUp();
                 winner_alert.close();
                 Main.window.setScene(new Scene(root));
+                gameCleanUp();
             });
 
             VBox content = new VBox();
@@ -1028,9 +1018,7 @@ public class GameLogic extends Application {
     private void gameCleanUp() {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        if (Variables.waitTurnThread.isAlive()) {
-            waitTurnRunnable.doStop();
-        }
+        waitTurnRunnable.doStop();
 
         //Sets turns back to 1 for next match.
         turn = 1;
