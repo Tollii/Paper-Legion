@@ -29,6 +29,13 @@ import static database.Variables.*;
 
         private boolean findGameClicked, gameEntered, threadStarted = false;
 
+        //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
+        //TODO: UNNCOMMENT TO ENABLE FEATURES
+        //TODO: FIX ENTERGAME SO IT WORKS
+        //TODO: DESPAGHETTI
+        //TODO: ALTER TABLE AND ADD COLUMN FOR PASSWORD, ALSO CHANGE EVERY DB METHOD THAT USES IT.
+
+
 
         @FXML
         private ResourceBundle resources;
@@ -84,10 +91,10 @@ import static database.Variables.*;
 
             joinGameButton.setOnAction(event -> {
               Match selectedMatch = table.getSelectionModel().getSelectedItem();
-              if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){ //Switched these to these input of password, this is false, and vice versa
+              if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){
                   db.joinGame(selectedMatch.getMatch_id(),user_id);
                   enterGame();
-              } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){ // This should be changed to true afterwards.
+              } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){
                   // Enter password
                   StackPane stackpane = new StackPane();
                   VBox vBox = new VBox();
@@ -122,9 +129,9 @@ import static database.Variables.*;
 
                   join.setOnAction(event1 -> {
                       String passwordUserInput = inputPassword.getText().trim().toString();
-                      if(passwordUserInput.equalsIgnoreCase(selectedMatch.getPassword())){
-                          //TODO: NEEDS TO CHECK AGAINST MATCH PASSWORD
-                          System.out.println("joining game");
+                      if(passwordUserInput.equals(selectedMatch.getPassword())){
+                          window.close();
+                          enterGame();
                       } else {
                           dialog.setText("Wrong password, try again");
                       }
@@ -143,7 +150,6 @@ import static database.Variables.*;
                 JFXButton no_button = new JFXButton("No");
                 HBox hBox = new HBox();
                 JFXButton abort = new JFXButton("Abort");
-
 
                 hBox.setAlignment(Pos.CENTER);
                 hBox.getChildren().addAll(yes_button,no_button, abort);
@@ -175,6 +181,7 @@ import static database.Variables.*;
 
                 submitPassword.setOnAction(event1 -> {
                     String passwordInserted = inputPassword.getText().trim().toString();
+                    //TODO: ADD TO DATABASE AND WAIT POLL, AND ENTER GAME WHEN PLAYER JOINED
                     System.out.println(passwordInserted);
                 });
 
