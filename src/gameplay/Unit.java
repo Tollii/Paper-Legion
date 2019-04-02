@@ -55,22 +55,18 @@ public class Unit extends Rectangle {
         this.pieceID = pieceID;
 
         setPositionArray(column,row);
+
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
+        healthbar.setPrefWidth(GameLogic.tileSize);
+        healthbar.setAlignment(Pos.CENTER);
+        healthbar.setTranslateX(this.getTranslateX());
+        healthbar.setTranslateY(this.getTranslateY()+40);
+        healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
+
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(this, healthbar);
         pieceAvatar.getChildren().add(stackPane);
-        healthbar.setPrefWidth(GameLogic.tileSize);
-        healthbar.setAlignment(Pos.CENTER);
-
-
-
-        healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY()+40);
-
-
-        healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
-
 
         ///SETS UNIT IMAGE////
         switch (type.getType()){
