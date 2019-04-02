@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import static database.Variables.*;
 
 public class GameLogic extends Application {
@@ -229,7 +230,7 @@ public class GameLogic extends Application {
         description.setPadding(new Insets(0, 0, 350, 0));
 
         rSidePanel.setPrefWidth(250);
-        rSidePanel.getChildren().addAll(turnCounter,endTurnButton,surrenderButton);
+        rSidePanel.getChildren().addAll(turnCounter, endTurnButton, surrenderButton);
         rSidePanel.setPrefWidth(650);
         rSidePanel.setAlignment(Pos.BOTTOM_CENTER);
 
@@ -239,7 +240,7 @@ public class GameLogic extends Application {
         scene = new Scene(root, initialWindowSizeX, initialWindowSizeY);
     }
 
-    private void endTurn(){
+    private void endTurn() {
         if (yourTurn) {
 
             //Increments turn. Opponents Turn.
@@ -263,7 +264,7 @@ public class GameLogic extends Application {
 
             /////SEND ATTACKS////
 
-            if(attackList.size() != 0){
+            if (attackList.size() != 0) {
                 db.exportAttackList(attackList);
                 attackList = new ArrayList<>(); //Resets the attackList for the next turn.
             }
@@ -316,7 +317,7 @@ public class GameLogic extends Application {
         });
 
         HBox buttons = new HBox();
-        buttons.getChildren().addAll(surrender_yes,surrender_no);
+        buttons.getChildren().addAll(surrender_yes, surrender_no);
         buttons.setAlignment(Pos.CENTER);
         buttons.setSpacing(50);
 
@@ -324,7 +325,7 @@ public class GameLogic extends Application {
         content.setAlignment(Pos.CENTER);
         content.setSpacing(20);
 
-        content.getChildren().addAll(surrender_text,buttons);
+        content.getChildren().addAll(surrender_text, buttons);
         Scene scene = new Scene(content, 250, 150);
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
@@ -446,7 +447,7 @@ public class GameLogic extends Application {
 
             //Decides based on the phase and whether or not it's your turn, what will happen when you select a unit.
             //If it's not your turn, you will have the ability to see the units info and description, but not the movement/attach highlight
-            if(yourTurn){
+            if (yourTurn) {
                 if (movementPhase) {
                     highlightPossibleMoves();
                 } else if (!selectedUnit.getHasAttackedThisTurn()) {
@@ -570,9 +571,9 @@ public class GameLogic extends Application {
 
 
     private void highlightPossibleMoves() {
-        int posX = selectedPosX;
-        int posY = selectedPosY;
-        int movementRange = selectedUnit.getMovementRange();
+//        int posX = selectedPosX;
+//        int posY = selectedPosY;
+//        int movementRange = selectedUnit.getMovementRange();
 
         ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
 //        if (selectedPosX - 1 >= 0) {
@@ -614,24 +615,39 @@ public class GameLogic extends Application {
 
         //////////////IF PIECE HAS LONGER RANGE THAN 1////////////////////////////
         //if (selectedUnit.getMovementRange() > 1) {
-            if (selectedPosX - movementRange >= 0) {
-                grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
-            }
-
-            if (selectedPosX + movementRange < boardSize) {
-                grid.liste[posY][posX + movementRange].setFill(movementHighlightColor);
-            }
-
-            if (selectedPosY - movementRange >= 0) {
-                grid.liste[posY - movementRange][posX].setFill(movementHighlightColor);
-            }
-
-            if (selectedPosY + movementRange < boardSize) {
-                grid.liste[posY + movementRange][posX].setFill(movementHighlightColor);
-            }
+//            if (selectedPosX - movementRange >= 0) {
+//                grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
+//            }
+//
+//            if (selectedPosX + movementRange < boardSize) {
+//                grid.liste[posY][posX + movementRange].setFill(movementHighlightColor);
+//            }
+//
+//            if (selectedPosY - movementRange >= 0) {
+//                grid.liste[posY - movementRange][posX].setFill(movementHighlightColor);
+//            }
+//
+//            if (selectedPosY + movementRange < boardSize) {
+//                grid.liste[posY + movementRange][posX].setFill(movementHighlightColor);
+//            }
         //}
-        ///////////////////////////////////////////////////////////////////
+
+
+        //Goes through the grid and paints all the squared that is within movement range. Does not paint itself or ones containing units or obstacles.
+        for (int i = 0; i < unitPosition.length; i++) {
+            for (int j = 0; j < unitPosition[i].length; j++) {
+                if (unitPosition[i][j] == null && unitPosition[i][j] != selectedUnit) {
+                    // Currently shows swordsman attack range wrong.
+                    //(((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) <= selectedUnit.getMaxAttackRange())
+                    //                            && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) >= selectedUnit.getMinAttackRange()
+                    if (movementRange(j, i)) {
+                        grid.liste[i][j].setFill(movementHighlightColor);
+                    }
+                }
+            }
+        }
     }
+
 
     private void highlightPossibleAttacks() {
 
@@ -730,7 +746,7 @@ public class GameLogic extends Application {
 
             @Override
             public void run() {
-                while(keepRunning()){
+                while (keepRunning()) {
                     try {
                         while (!yourTurn) {
                             //Wait time for polling.
@@ -748,7 +764,7 @@ public class GameLogic extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        Platform.runLater(()->{
+                        Platform.runLater(() -> {
 
                             setUpNewTurn();
 
@@ -763,12 +779,12 @@ public class GameLogic extends Application {
             }
 
             @Override
-            public synchronized void doStop(){
+            public synchronized void doStop() {
                 this.doStop = true;
             }
 
             @Override
-            public synchronized boolean keepRunning(){
+            public synchronized boolean keepRunning() {
                 return !this.doStop;
             }
         };
@@ -778,15 +794,15 @@ public class GameLogic extends Application {
 
     }
 
-    private void setUpNewTurn(){
+    private void setUpNewTurn() {
         deSelect(rSidePanel, description);
         selectedUnit = null;
         turn++;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
 
-        importedMovementList = db.importMoveList(turn-1, match_id);
-        importedAttackList = db.importAttackList(turn-1, match_id, opponent_id);
+        importedMovementList = db.importMoveList(turn - 1, match_id);
+        importedAttackList = db.importAttackList(turn - 1, match_id, opponent_id);
 
         System.out.println("importedAttackList size is: " + importedAttackList.size());
 
@@ -807,7 +823,7 @@ public class GameLogic extends Application {
 
             for (int j = 0; j < unitList.size(); j++) {
 
-                if(!unitList.get(j).getEnemy() && unitList.get(j).getPieceID() == importedAttackList.get(i).getReceiverPieceID()){
+                if (!unitList.get(j).getEnemy() && unitList.get(j).getPieceID() == importedAttackList.get(i).getReceiverPieceID()) {
                     System.out.println(importedAttackList.get(i).getDamage());
 
                     System.out.println("DOING AN ATTACK!" + unitList.get(j).getHp());
@@ -884,7 +900,7 @@ public class GameLogic extends Application {
 
             if (loser == user_id) {
                 win_loseText = "You Lose!\n";
-            } else if (loser == opponent_id){
+            } else if (loser == opponent_id) {
                 win_loseText = "You Win!\n";
             } else {
                 win_loseText = "Something went wrong\n";
@@ -1022,7 +1038,7 @@ public class GameLogic extends Application {
     }
 
     public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (user_id > 0) {
                 db.logout(user_id);
             }
