@@ -433,7 +433,7 @@ public class GameLogic extends Application {
         }
         //Tegner obstacles inn på samma måte inn i obstaclePosition
         for(int i = 0; i < obstacles.size(); i++){
-            pieceContainer.getChildren().add(obstacles.get(i).getPieceAvatar());
+            pieceContainer.getChildren().add(obstacles.get(i));
             posX = obstacles.get(i).getPosX();
             posY = obstacles.get(i).getPosY();
             obstaclePosition[posY][posX] = obstacles.get(i);

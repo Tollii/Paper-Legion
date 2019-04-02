@@ -11,8 +11,6 @@ public class Obstacle extends Rectangle {
     private int posY;
     private int obsticleID;
     private Image obstacle = new Image("/gameplay/assets/obstacle.png");
-    private GridPane pieceAvatar = new GridPane();
-    StackPane stackPane = new StackPane();
 
 
     public Obstacle(int posX, int posY, int obsticleID){
@@ -21,7 +19,6 @@ public class Obstacle extends Rectangle {
         this.posY = posY;
         this.obsticleID = obsticleID;
         this.setFill(new ImagePattern(obstacle));
-        pieceAvatar.getChildren().add(stackPane);
         setTranslate();
     }
 
@@ -30,7 +27,6 @@ public class Obstacle extends Rectangle {
         super.setTranslateY(posY*100);
     }
 
-    public GridPane getPieceAvatar(){return pieceAvatar;}
 
     public int getPosX() { return posX; }
 
