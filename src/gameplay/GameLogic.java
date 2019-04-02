@@ -18,6 +18,7 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
+import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -34,19 +35,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import menus.Controller.Controller;
+import menus.Controller.mainMenuController;
 import menus.Main;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import static database.Variables.*;
 import java.util.ArrayList;
 import java.util.Collections;
-
-
+import static database.Variables.*;
 
 public class GameLogic extends Application {
 
@@ -64,7 +64,6 @@ public class GameLogic extends Application {
     private final int descriptionOffsetBottom = 350;
     private final int initialWindowSizeX = 1024;
     private final int initialWindowSizeY = 768;
-    private Thread waitTurnThread;
 
     ////SCENE ELEMENTS////
     private Stage window;                               //Main stage for the game.
@@ -129,7 +128,7 @@ public class GameLogic extends Application {
         if (user_id == player1) {
             db.insertPieces();
         } else {
-            int number = 0;
+            int number;
             do {
                 number = db.pollForUnits();
                 Thread.sleep(5000);
@@ -287,9 +286,8 @@ public class GameLogic extends Application {
 
             }
 
-
             //Check if you have won
-            winner();
+            checkForGameOver();
 
             //Wait for you next turn
             waitForTurn();
@@ -310,8 +308,8 @@ public class GameLogic extends Application {
 
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
+            checkForGameOver();
             endTurn();
-            winner();
             confirm_alert.close();
         });
 
@@ -406,7 +404,6 @@ public class GameLogic extends Application {
                     }
 
                 }
-            } else {
             }
             System.out.println(i + " enemy: " + unitList.get(i).getEnemy() + " pos X: " + unitList.get(i).getPositionX() + " pos y: "
                     + unitList.get(i).getPositionY() + " hp: " + unitList.get(i).getHp() + " piece id: "
@@ -748,30 +745,6 @@ public class GameLogic extends Application {
         return (int) (Math.ceil(movementY1 / tileSize)); // Runder til nærmeste 100 for snap to grid funksjonalitet
     }
 
-    // method that checks if the game has been won by either player. Returns 1 if you lost, 0 if you won or -1 if noone has won yet.
-    private int checkForWinner() {
-        int yourPieces = 0;
-        int opponentsPieces = 0;
-        //Goes through all units and counts how many are alive for each player.
-        for (int i = 0; i < unitList.size(); i++) {
-            if (unitList.get(i).getHp() > 0) {
-                if (unitList.get(i).getEnemy()) {
-                    opponentsPieces++;
-                } else {
-                    yourPieces++;
-                }
-            }
-        }
-        System.out.println("YourPiceces " + yourPieces + " opponent: " + opponentsPieces);
-        if (yourPieces == 0) {
-            return 1;
-        } else if (opponentsPieces == 0) {
-            return 0;
-        } else {
-            return -1;
-        }
-    }
-
     private void waitForTurn() {
 
         // Runnable lambda implementation for turn waiting with it's own thread
@@ -783,6 +756,7 @@ public class GameLogic extends Application {
                 while(keepRunning()){
                     try {
                         while (!yourTurn) {
+                            //Wait time for polling.
                             System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
@@ -793,7 +767,6 @@ public class GameLogic extends Application {
                                 this.doStop();
                             }
                         }
-
 
                         //What will happen when it is your turn again.
 
@@ -864,11 +837,8 @@ public class GameLogic extends Application {
 
                     unitList.get(j).takeDamage(importedAttackList.get(i).getDamage());
 
-
-
                     //If units health is zero. Remove it from the board.
                     if (unitList.get(j).getHp() <= 0) {
-                        //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
                         pieceContainer.getChildren().removeAll(unitList.get(j).getPieceAvatar());
 
                         unitPosition[unitList.get(j).getPositionY()][unitList.get(j).getPositionX()] = null;
@@ -882,7 +852,7 @@ public class GameLogic extends Application {
         ////Old methods////
         //deDrawUnits();
         //drawUnits();
-        winner();
+        checkForGameOver();
     }
 
 
@@ -892,6 +862,12 @@ public class GameLogic extends Application {
         if (user_id > 0) {
             db.logout(user_id);
         }
+        if (Variables.searchGameThread.isAlive()) {
+            Variables.searchGameThread.stop();
+        }
+        if (Variables.waitTurnThread.isAlive()) {
+            Variables.waitTurnThread.stop();
+        }
         try {
             db.close();
         } catch (SQLException e) {
@@ -899,8 +875,75 @@ public class GameLogic extends Application {
         }
     }
 
-    // Opens the winner/loser pop-up on the screen and ends the game.
-    public void winner(){
+    // Opens the win/lose pop-up on the screen and ends the game.
+    public void checkForGameOver() {
+        String win_loseText;
+        String gameSummary = "";
+        int loser = -1;
+        int eliminationResult = checkForEliminationVictory();
+        int surrenderResult = db.checkForSurrender();
+
+        if (eliminationResult != -1) {
+            gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
+            loser = eliminationResult;
+        } else if (surrenderResult == user_id || surrenderResult == opponent_id) {
+            gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
+            loser = surrenderResult;
+        }
+
+        if (loser != -1) {
+            //Game is won or lost.
+            gameCleanUp();
+            //Open alert window.
+            Stage winner_alert = new Stage();
+            winner_alert.initModality(Modality.APPLICATION_MODAL);
+            winner_alert.setTitle("Game over!");
+
+            Text winnerTextHeader = new Text();
+            Text winnerText = new Text();
+            winnerTextHeader.setStyle("-fx-font-size:32px;");
+            winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
+            //db.incrementGamesPlayed();
+
+            if (loser == user_id) {
+                win_loseText = "You Lose!\n";
+            } else if (loser == opponent_id){
+                win_loseText = "You Win!\n";
+            } else {
+                win_loseText = "Something went wrong\n";
+            }
+
+            winnerTextHeader.setText(win_loseText);
+            winnerText.setText(gameSummary);
+
+            JFXButton endGameBtn = new JFXButton("Return to menu");
+
+            endGameBtn.setOnAction(event -> {
+                String fxmlDir = "/menus/View/mainMenu.fxml";
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(this.getClass().getResource(fxmlDir));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("load failed");
+                }
+                winner_alert.close();
+                Main.window.setScene(new Scene(root));
+            });
+
+            VBox content = new VBox();
+            content.setAlignment(Pos.CENTER);
+            content.setSpacing(20);
+            content.getChildren().addAll(winnerTextHeader, winnerText, endGameBtn);
+            Scene scene = new Scene(content, 450, 200);
+            winner_alert.initStyle(StageStyle.UNDECORATED);
+            winner_alert.setScene(scene);
+            winner_alert.showAndWait();
+        }
+    }
+
+    /*
+        public void winner(){
         int winnerOrLoser = checkForWinner();
         int surrendered = db.checkForSurrender();
         if(surrendered == opponent_id){
@@ -961,17 +1004,54 @@ public class GameLogic extends Application {
             winner_alert.showAndWait();
         }
     }
+     */
+
+    // method that checks if the game has been won by eliminating other player's units. Returns the user_id of the winning player.
+    private int checkForEliminationVictory() {
+        int yourPieces = 0;
+        int opponentsPieces = 0;
+        //Goes through all units and counts how many are alive for each player.
+        for (int i = 0; i < unitList.size(); i++) {
+            if (unitList.get(i).getHp() > 0) {
+                if (unitList.get(i).getEnemy()) {
+                    opponentsPieces++;
+                } else {
+                    yourPieces++;
+                }
+            }
+        }
+        if (yourPieces == 0) {
+            return opponent_id;
+        } else if (opponentsPieces == 0) {
+            return user_id;
+        } else {
+            return -1;
+        }
+    }
 
     private void gameCleanUp() {
 
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        waitTurnThread.stop();
+        Variables.waitTurnThread.stop();
+
+        //Sets turns back to 1 for next match.
+        turn = 1;
+        match_id = -1;
+        player1 = -1;
+        player2 = -1;
+        opponent_id = -1;
     }
 
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
             if (user_id > 0) {
                 db.logout(user_id);
+            }
+            if (Variables.searchGameThread.isAlive()) {
+                Variables.searchGameThread.stop();
+            }
+            if (Variables.waitTurnThread.isAlive()) {
+                Variables.waitTurnThread.stop();
             }
             try {
                 db.close();

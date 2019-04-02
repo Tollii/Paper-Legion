@@ -1,11 +1,14 @@
 package menus;
 
 import database.Database;
+import database.Variables;
+import gameplay.GameLogic;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import menus.Controller.mainMenuController;
 
 import java.sql.SQLException;
 
@@ -40,6 +43,9 @@ public class Main extends Application {
             if (user_id > 0) {
                 db.logout(user_id);
             }
+            if (Variables.searchGameThread.isAlive()) {
+                Variables.searchGameThread.stop();
+            }
             try {
                 db.close();
             } catch (SQLException e) {
@@ -54,6 +60,9 @@ public class Main extends Application {
         // Executed when the application shuts down. User is logged out and database connection is closed.
         if (user_id > 0) {
             db.logout(user_id);
+        }
+        if (Variables.searchGameThread.isAlive()) {
+            Variables.searchGameThread.stop();
         }
         try {
             db.close();
