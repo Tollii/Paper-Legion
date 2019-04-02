@@ -374,6 +374,7 @@ public class Database {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
+
         try {
                 preparedStatement = myConn.prepareStatement(sqlSetning);
 
@@ -403,7 +404,7 @@ public class Database {
 
 
 
-
+/*
     //Inserts pieces into database
     public void insertPieces() {
         Connection myConn = connectionPool.getConnection();
@@ -491,7 +492,9 @@ public class Database {
             connectionPool.releaseConnection(myConn2);
         }
     }
+    */
 
+    /*
     //puts the units from the database into an arraylist
     public ArrayList<PieceSetup> importPlacementPieces() {
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
@@ -540,6 +543,7 @@ public class Database {
         }
         return null;
     }
+    */
     /*
        ___                           _
       / _ \__ _ _ __ ___   ___ _ __ | | __ _ _   _
