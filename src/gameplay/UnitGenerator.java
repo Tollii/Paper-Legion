@@ -58,12 +58,20 @@ public class  UnitGenerator {
             "Big angry man with stick, sometimes turns green";
     private static String juggernautDescriptionTag =
             "Juggernaut";
+    //TODO
+    private static Image juggernautImage = null;
+    //TODO
+    private static AudioClip juggernautSound = null;
 
     ////Catapult////
     private static String catapultDescription=
             "Usurped by the clearly better trebuchet";
     private static String catapultDescriptionTag =
             "Throwy-McGig";
+    //TODO
+    private static Image catapultImage = null;
+    //TODO
+    private static AudioClip catapultSound = null;
 
 
     public UnitGenerator(){}
