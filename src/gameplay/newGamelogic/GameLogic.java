@@ -71,18 +71,18 @@ public class GameLogic extends Application {
   //PLACMENT PHASE SIDE PANEL//
   private final int recruitXPadding = gridXPadding + tileSize*boardSize + 150;
   private final int recruitYPadding = 150;
-  private final int placementButtonXPadding = 100;
+  private final int placementButtonXPadding = 150;
   private final int placementButtonYPadding = 500;
   //MOVEMENT AND ATTACK PHASE SIDE PANEL//
   private final int sidePanelXPadding = gridXPadding + tileSize*boardSize + 150;
   private final int sidePanelYPadding = 150;
   private final int descriptionXPadding = 0;
   private final int descriptionYPadding = 0;
-  private final int turnCounterXPadding = 0;
+  private final int turnCounterXPadding = 150;
   private final int turnCounterYPadding = 0;
-  private final int endTurnButtonXPadding = 100;
+  private final int endTurnButtonXPadding = 150;
   private final int endTurnButtonYPadding = 500;
-  private final int surrenderButtonXPadding = 100;
+  private final int surrenderButtonXPadding = 150;
   private final int surrenderButtonYPadding = 580;
 
   ////GAME CONTROL VARIABLES////
@@ -190,7 +190,7 @@ public class GameLogic extends Application {
     }
   }
 
-  private void movementAttackPhaseStart() {
+  private void movementActionPhaseStart() {
     Pane sidePanel = createSidePanel();
 
     JFXButton endTurnButton = new JFXButton("End turn");
@@ -208,6 +208,179 @@ public class GameLogic extends Application {
     surrenderButton.setLayoutY(surrenderButtonYPadding);
 
     sidePanel.getChildren().addAll(endTurnButton, surrenderButton);
+
+    //If you are player 2. Start polling the database for next turn.
+    if (!yourTurn) {
+        endTurnButton.setText("Waiting for other player");
+        waitForTurn();
+    } else {
+        //Enters turn 1 into database.
+        db.sendTurn(turn);
+    }
+
+    endTurnButton.setOnAction(event -> {
+      endTurn(endTurnButton);
+    });
+
+    surrenderButton.setOnAction(event -> {
+      surrender();
+    });
+
+    grid.addEventHandler(event -> {
+
+    });
+  }
+
+  private void endTurn(JFXButton endTurnButton) {
+    if (yourTurn) {
+
+        //Increments turn. Opponents Turn.
+        turn++;
+
+        turnCounter.setText("TURN: " + turn);
+        endTurnButton.setText("Waiting for other player");
+        yourTurn = false;
+
+
+        ////SEND MOVEMENT////
+
+        if (movementList.size() != 0) {
+            System.out.println("SENDING MOVE LIST!");
+            db.exportMoveList(movementList); //when we use movement table use this
+            ////Old method////
+            //db.exportPieceMoveList(movementList);
+            movementList = new ArrayList<>(); //Resets the movementList for the next turn.
+        }
+
+
+        /////SEND ATTACKS////
+
+        if(attackList.size() != 0){
+            db.exportAttackList(attackList);
+            attackList = new ArrayList<>(); //Resets the attackList for the next turn.
+        }
+
+        // Finds every enemy unit that was damaged and sends their new info the database.
+
+
+        //Add the next turn into the database.
+        db.sendTurn(turn);
+
+        //de-selects the currently selected unit
+        deselect();
+
+        //Resets hasAttackedThisTurn for all units
+        for (int i = 0; i < grid.tileList.length; i++) {
+            for (int j = 0; j < grid.tileList[i].length; j++) {
+              grid.tileList[i][j].getUnit().setHasAttackedThisTurn(false);
+            }
+        }
+
+        //Check if you have won
+        winner();
+
+        //Wait for you next turn
+        waitForTurn();
+    }
+  }
+
+  private void waitForTurn() {
+
+      // Runnable lambda implementation for turn waiting with it's own thread
+      RunnableInterface waitTurnRunnable = new RunnableInterface() {
+          private boolean doStop = false;
+
+          @Override
+          public void run() {
+              while(keepRunning()){
+                  try {
+                      while (!yourTurn) {
+                          System.out.println("Sleeps thread " + Thread.currentThread());
+                          Thread.sleep(1000);
+                          //When player in database matches your own user_id it is your turn again.
+                          System.out.println("Whose turn is it? " + db.getTurnPlayer());
+                          if (db.getTurnPlayer() == user_id) {
+                              System.out.println("yourTurn changes");
+                              yourTurn = true;
+                              this.doStop();
+                          }
+                      }
+
+
+                      //What will happen when it is your turn again.
+
+                      //Increments turn. Back to your turn.
+                      Platform.runLater(()->{
+
+                          setUpNewTurn();
+
+                      });
+
+                      movementPhase = true;
+
+                  } catch (InterruptedException e) {
+                      e.printStackTrace();
+                  }
+              }
+          }
+
+          @Override
+          public synchronized void doStop(){
+              this.doStop = true;
+          }
+
+          @Override
+          public synchronized boolean keepRunning(){
+              return !this.doStop;
+          }
+      };
+
+      waitTurnThread = new Thread(waitTurnRunnable);
+      waitTurnThread.start();
+  }
+
+  private void setUpNewTurn(){
+
+  }
+
+  private void surrender() {
+    //TODO: Surrender
+  }
+
+  private void winner() {
+    int winnerOrLoser = checkForWinner();
+    if (winnerOrLoser != -1) {
+        //Game is won or lost.
+        Stage winner_alert = new Stage();
+        winner_alert.initModality(Modality.APPLICATION_MODAL);
+        winner_alert.setTitle("Game over!");
+
+        Text winner = new Text();
+        winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+        db.incrementGamesPlayed();
+        if (winnerOrLoser == 1){
+            db.incrementGamesWon();
+            winner.setText("You Lose");
+        }
+        else {
+            winner.setText("You win!");
+        }
+        JFXButton endgame = new JFXButton("Return to menu");
+        // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER);
+        content.setSpacing(20);
+        content.getChildren().addAll(winner,endgame);
+        Scene scene = new Scene(content,250,150);
+        winner_alert.initStyle(StageStyle.UNDECORATED);
+        winner_alert.setScene(scene);
+        winner_alert.showAndWait();
+    }
+  }
+
+  private int checkForWinner() {
+
   }
 
   private int getPosXFromEvent(MouseEvent event) {
@@ -216,6 +389,14 @@ public class GameLogic extends Application {
 
   private int getPosYFromEvent(MouseEvent event) {
     return (int)Math.ceil((event.getY() - gridYPadding) / tileSize);
+  }
+
+  private void select() {
+
+  }
+
+  private void deselect() {
+
   }
 
   private Pane createGrid() { //adds grid and styles it
