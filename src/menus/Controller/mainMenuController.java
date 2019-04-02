@@ -64,10 +64,7 @@ public class mainMenuController extends Controller {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {
                         Platform.runLater(() -> {
-                            findGameClicked = false;
-                            mainMenuPlayButton.setText("Play");
-                            db.abortMatch(user_id);
-                            System.out.println("Game cancelled");
+                            cancelGame();
                             this.runAgain();
                         });
                         this.doStop();
@@ -131,18 +128,9 @@ public class mainMenuController extends Controller {
         };
 
         searchGameThread = new Thread(searchGameRunnable);
-
         mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
 
-        // Logs out the current user.
-        mainMenuExitButton.setOnAction(event -> {
-            db.logout(user_id);
-            changeScene("login.fxml");
-        });
-
-        //Displays Stats and tutorial information.
-        mainMenuGameInfoButton.setOnAction(e -> {
-        });
+        //Button handlers
 
         mainMenuPlayButton.setOnAction(event -> {
             if (!threadStarted) {
@@ -153,15 +141,24 @@ public class mainMenuController extends Controller {
             if (isPressed) {
                 isPressed = false;
             }
-
         });
 
+        // Logs out the current user.
+        mainMenuExitButton.setOnAction(event -> {
+            cancelGame();
+            db.logout(user_id);
+            changeScene("login.fxml");
+        });
+
+        //Displays Stats and tutorial information.
         mainMenuGameInfoButton.setOnAction(event -> {
+            cancelGame();
             changeScene("gameInfo.fxml");
 
         });
 
         mainMenuStatsButton.setOnAction(event -> {
+            cancelGame();
             changeScene("stats.fxml");
         });
 
@@ -182,5 +179,11 @@ public class mainMenuController extends Controller {
         }
     }
 
+    private void cancelGame() {
+        findGameClicked = false;
+        mainMenuPlayButton.setText("Play");
+        db.abortMatch(user_id);
+        System.out.println("Game cancelled");
+    }
 
 }
