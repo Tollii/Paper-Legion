@@ -938,6 +938,70 @@ public class GameLogic extends Application {
         }
     }
 
+    /*
+        public void winner(){
+        int winnerOrLoser = checkForWinner();
+        int surrendered = db.checkForSurrender();
+        if(surrendered == opponent_id){
+            winnerOrLoser = 0;
+        }
+        if(surrendered == user_id){
+            winnerOrLoser = 1;
+        }
+        if (winnerOrLoser != -1) {
+            //Game is won or lost.
+
+            gameCleanUp();
+            Stage winner_alert = new Stage();
+            winner_alert.initModality(Modality.APPLICATION_MODAL);
+            winner_alert.setTitle("Game over!");
+
+            Text winner = new Text();
+            //winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
+            winner.setStyle("-fx-font-size:32px;");
+            db.incrementGamesPlayed();
+            if (winnerOrLoser == 1){
+                winner.setText("You Lose");
+            }
+            else {
+                db.incrementGamesWon();
+                winner.setText("You win!");
+            }
+            JFXButton endGameBtn = new JFXButton("Return to menu");
+
+
+
+            // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
+
+            endGameBtn.setOnAction(event -> {
+                String fxmlDir = "/menus/View/mainMenu.fxml";
+                FXMLLoader loader = new FXMLLoader();
+                Parent root = null;
+                try {
+                    root =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
+                    // loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("load failed");
+                }
+                winner_alert.close();
+                winner_alert.hide();
+                Main.window.setScene(new Scene(root));
+
+            });
+
+            VBox content = new VBox();
+            content.setAlignment(Pos.CENTER);
+            content.setSpacing(20);
+            content.getChildren().addAll(winner,endGameBtn);
+            Scene scene = new Scene(content,250,150);
+            winner_alert.initStyle(StageStyle.UNDECORATED);
+            winner_alert.setScene(scene);
+            winner_alert.showAndWait();
+        }
+    }
+     */
+
     // method that checks if the game has been won by eliminating other player's units. Returns the user_id of the winning player.
     private int checkForEliminationVictory() {
         int yourPieces = 0;
