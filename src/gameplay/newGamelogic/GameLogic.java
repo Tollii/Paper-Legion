@@ -264,6 +264,26 @@ public class GameLogic extends Application {
     });
   }
 
+  private void attack(MouseEvent event) {
+
+  }
+
+  private void move(MouseEvent event) {
+
+  }
+
+  private void highlightPossibleAttacks() {
+
+  }
+
+  private void highlightPossibleMoves() {
+
+  }
+
+  private void cleaHighLight() {
+
+  }
+
   private void endTurn(JFXButton endTurnButton) {
     if (yourTurn) {
 
@@ -587,7 +607,7 @@ public class GameLogic extends Application {
       grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
       grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(3);
 
-      //displays possible move or attack
+      //displays possible moves or attacks
       if(yourTurn){
           if (movementPhase) {
               highlightPossibleMoves();
@@ -595,14 +615,29 @@ public class GameLogic extends Application {
               highlightPossibleAttacks();
           }
       }
-
+      //displays the description of the unit
       description.setText(selectedUnit.getDescription());
       description.setVisible(true);
     }
   }
 
   private void deselect() {
+    //removes selection of unit tile
+    grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+    grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+    grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
 
+    //removes unit selection and position
+    selectedUnit = null;
+    unitSelected = false;
+    selectedPosX = 0;
+    selectedPosY = 0;
+
+    //removes unit description
+    description.setText("");
+    description.setVisible(false);
+
+    cleaHighLight();
   }
 
   private Pane createGrid() { //adds grid and styles it
