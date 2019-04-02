@@ -29,12 +29,8 @@ public class GameLogicTest {
 
         Database db = new Database();
 
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-        GameLogic game = new GameLogic();
-
         user_id = 3;
-        Variables.opponent_id = 2;
+        Variables.opponent_id = 51;
         db.createGame(user_id);
 
         ConnectionPool connectionPool;
@@ -59,6 +55,11 @@ public class GameLogicTest {
 
 
         db.joinGame(match_id, opponent_id);
+
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+        GameLogic game = new GameLogic();
+
     }
 
     @AfterClass
