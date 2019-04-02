@@ -73,4 +73,16 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
     public void setFill(Paint color) {
       rect.setFill(color);
     }
+
+    public void setStroke(Paint color) {
+      rect.setStroke(color);
+    }
+
+    public void setStrokeType(StrokeType value) {
+      rect.setStrokeType(value);
+    }
+
+    public void setStrokeWidth(double value) {
+      rect.setStrokeWidth(value);
+    }
 }

@@ -97,6 +97,8 @@ public class GameLogic extends Application {
   private int moveCounter = 0;                                         // Counter for movement phase.
   private int attackCount = 0;                                        // Counter for attack phase.
   private Unit selectedUnit;
+  private int selectedPosX;
+  private int selectedPosY;
   private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
   private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
   private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
@@ -235,8 +237,30 @@ public class GameLogic extends Application {
       surrender(endTurnButton);
     });
 
-    grid.addEventHandler(event -> {
+    grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+      //selects unit if there is none selected
+      if (!unitSelected) {
+        select(event);
+      }
 
+      //deselects unit if selected and right button is pressed
+      if (unitSelected && event.getButton() == MouseButton.SECONDARY) {
+        deselect();
+      }
+
+      //moves unit if left button is pressed once and it is the movement phase
+      if (event.getClickCount() == 1) {
+        if (unitSelected && movementPhase && event.getButton() == MouseButton.PRIMARY) {
+          move(event);
+        }
+      }
+
+      //attacks if left button is pressed twice and the unit selected hasn't attacked
+      if (event.getClickCount() == 2) {
+        if (unitSelected && !movementPhase && !selectedUnit.getHasAttackedThisTurn() && event.getButton() == MouseButton.PRIMARY) {
+          attack(event);
+        }
+      }
     });
   }
 
@@ -549,8 +573,32 @@ public class GameLogic extends Application {
     return (int)Math.ceil((event.getY() - gridYPadding) / tileSize);
   }
 
-  private void select() {
+  private void select(MouseEvent event) {
+    //checks if clicked tile has unit
+    if(grid.tileList[getPosYFromEvent(event)][getPosXFromEvent(event)] != null) {
+      //selects unit and unitposition
+      unitSelected = true;
+      selectedPosX = getPosXFromEvent(event);
+      selectedPosY = getPosYFromEvent(event);
+      selectedUnit = grid.tileList[selectedPosY][selectedPosX].getUnit();
 
+      //colors selected tile
+      grid.tileList[selectedPosY][selectedPosX].setStroke(selectionOutlineColor);
+      grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+      grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(3);
+
+      //displays possible move or attack
+      if(yourTurn){
+          if (movementPhase) {
+              highlightPossibleMoves();
+          } else if (!selectedUnit.getHasAttackedThisTurn()) {
+              highlightPossibleAttacks();
+          }
+      }
+
+      description.setText(selectedUnit.getDescription());
+      description.setVisible(true);
+    }
   }
 
   private void deselect() {
