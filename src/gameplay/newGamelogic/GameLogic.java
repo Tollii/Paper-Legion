@@ -277,11 +277,11 @@ public class GameLogic extends Application {
   ////MOVEMENT AND ATTACK METHODS////
   private void move(MouseEvent event) {
     if (movementPhase) { //checks if movement phase
-      //
-      int newPosX = getPosXFromEvent(event), newPosY = getPosYFromEvent(event); //position of click
+      int newPosX = getPosXFromEvent(event);
+      int newPosY = getPosYFromEvent(event); //position of click
       ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
-      for (int i = 0; i < movementTargets.size(); i++) {
+      for (int i = 0; i < movementTargets.size(); i++) { //goes through all movement targets and finds the one clicked on
         if (movementTargets.get(i) == grid.tileList[newPosY][newPosX]) {
           //moves unit from old tile to new
           grid.tileList[selectedPosY][selectedPosX].removeUnit();
@@ -295,10 +295,12 @@ public class GameLogic extends Application {
           selectedPosY = newPosY;
 
           movementPhase = false; //sets phase to attack
-          moveCounter++; //increaments move counter
+          moveCounter++; //increments move counter
 
           deselect();
           select(event);
+
+          break;
         }
       }
     }
@@ -306,7 +308,34 @@ public class GameLogic extends Application {
 
   private void attack(MouseEvent event) {
     if (!movementPhase) { //checks if attack phase
+      int attackPosX = getPosXFromEvent(event);
+      int attackPosY = getPosYFromEvent(event); //sets position attacked
+      ArrayList<Tile> attackTargets = getAttackableTiles();
 
+      for (int i = 0; i < attackTargets.size(); i++) {
+        if (attackTargets.get(i) == grid.tileList[attackPosY][attackPosX]) {
+          //damages enemy unit
+          grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
+
+          //adds the attack to attacklist
+          attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceId(), grid.tileList[attackPosY][attackPosX].getUnit().getPieceId(), selectedUnit.getAttack()));
+
+          attackCount++; //increments attack counter
+
+          selectedUnit.getAudio().play(); //plays the audio clip associated with the unit type
+
+          //removes unit if killed
+          if (grid.tileList[attackPosY][attackPosX].getUnit().getHp() <= 0) {
+            grid.tileList[attackPosY][attackPosX].removeUnit();
+          }
+
+          selectedUnit.setHasAttackedThisTurn(true); //stops unit from attacking again this turn
+
+          deselect();
+
+          break;
+        }
+      }
     }
   }
 
@@ -337,11 +366,11 @@ public class GameLogic extends Application {
     ArrayList<Tile> movementTargets = new ArrayList<Tile>();
 
     //goes throug all tiles and adds those which isn't occupied and are within movement distance
-    for (int i = 0; i < grid.tileList.lenght; i++) {
+    for (int i = 0; i < grid.tileList.length; i++) {
       for (int j = 0; j < grid.tileList[i].length; j++) {
         if (grid.tileList[i][j].getUnit() == null) { //checks if there is a unit on the tile
           if (Math.abs(selectedPosY - i) + Math.abs(selectedPosX - j) <= selectedUnit.getMovementRange()) { //checks if tile within movement range
-            movementList.add(grid.tileList[i][j]);
+            movementTargets.add(grid.tileList[i][j]);
           }
         }
       }
@@ -352,7 +381,7 @@ public class GameLogic extends Application {
   private ArrayList<Tile> getAttackableTiles() {
     ArrayList<Tile> attackTargets = new ArrayList<Tile>();
 
-    for (int i = 0; i < grid.tileList.lenght; i++) {
+    for (int i = 0; i < grid.tileList.length; i++) {
       for (int j = 0; j < grid.tileList[i].length; j++) {
         if (grid.tileList[i][j].getUnit() != null) { //checks if there is a unit on the tile
           if (grid.tileList[i][j].getUnit().getEnemy()) { //checks if unit is enemy
