@@ -61,8 +61,8 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
 
     //method for removing unit when moved or killed
     public void removeUnit() {
-      unit = null;
       this.getChildren().remove(unit);
+      unit = null;
     }
 
     public void setUntargetable() {
