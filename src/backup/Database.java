@@ -1,5 +1,7 @@
-//package database;
+//package backup;
 //
+//import database.Cleaner;
+//import database.ConnectionPool;
 //import gameplay.Attack;
 //import gameplay.Move;
 //import gameplay.PieceSetup;
@@ -457,7 +459,7 @@
 //    }
 //
 //    //puts the units from the database into an arraylist
-//    public ArrayList<backup.PieceSetup> importPlacementPieces() {
+//    public ArrayList<PieceSetup> importPlacementPieces() {
 //        ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
 //        ResultSet result = null;
 //        PreparedStatement preparedStatement = null;
@@ -707,7 +709,7 @@
 //        return true;
 //    }
 //
-//    public ArrayList<backup.Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
+//    public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
 //
 //        ArrayList<Move> outputList = new ArrayList<>();
 //
@@ -788,7 +790,7 @@
 //        return true;
 //    }
 //
-//    public ArrayList<backup.Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
+//    public ArrayList<Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
 //
 //        ArrayList<Attack> outputList = new ArrayList<>();
 //
