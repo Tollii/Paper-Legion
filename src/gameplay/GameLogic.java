@@ -525,7 +525,6 @@ public class GameLogic extends Application {
 
         clearHighLight();
     }
-    
 
     ////METHODS FOR GETTING CLICK POSITION////
     private int getPosXFromEvent(MouseEvent event) {
