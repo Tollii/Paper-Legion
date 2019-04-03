@@ -137,9 +137,9 @@ public class Database {
         return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
     }
 
-    public int matchMaking_search(int player_id) {
+    public int quickMatch_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
-        String sqlString = "SELECT * FROM Matches where game_started=0";
+        String sqlString = "SELECT * FROM Matches where game_started=0 and password is null";
         ResultSet results = null;
         PreparedStatement preparedStatement = null;
         try {

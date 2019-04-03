@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -38,6 +40,10 @@ public class signUpController extends Controller {
 
     @FXML
     private Label alertField;
+
+    @FXML
+    private ImageView paperLegionLogo;
+
 
     @FXML
     void initialize() {

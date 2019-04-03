@@ -1,10 +1,12 @@
 package menus.Controller;
 
+import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import database.Database;
 import gameplay.GameLogic;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,12 +30,10 @@ import static database.Variables.*;
     public class MatchSetupController extends Controller {
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
+        private Thread matchSetupThread;
 
         //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
-        //TODO: UNNCOMMENT TO ENABLE FEATURES
-        //TODO: FIX ENTERGAME SO IT WORKS
         //TODO: DESPAGHETTI
-        //TODO: ALTER TABLE AND ADD COLUMN FOR PASSWORD, ALSO CHANGE EVERY DB METHOD THAT USES IT.
 
 
 
@@ -72,6 +72,34 @@ import static database.Variables.*;
 
         @FXML
         void initialize() {
+
+
+
+
+            Runnable matchSetupRunnable = new RunnableInterface() {
+
+                private boolean doStop = false;
+
+                @Override
+                public void doStop() {
+                    this.doStop = true;
+                }
+
+                @Override
+                public boolean keepRunning() {
+                    return !this.doStop;
+                }
+
+                @Override
+                public void run() {
+                    while(keepRunning()){
+                        // Kode som skal kjøres av threaden her
+                    }
+                }
+            };
+
+
+
             //Sets up variables for connecting Match class with Table Columns
             table.setPlaceholder(new Label("No available matches found"));
             player_table.setCellValueFactory(new PropertyValueFactory<>("player"));
@@ -96,6 +124,8 @@ import static database.Variables.*;
               // IF NOT PASSWORD PROTECTED, JOIN AND ENTER GAME
               if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){
                   db.joinGame(selectedMatch.getMatch_id(),user_id);
+                  match_id =  selectedMatch.getMatch_id();
+                  yourTurn = false;
                   enterGame();
 
                   // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
@@ -141,6 +171,8 @@ import static database.Variables.*;
                       String passwordUserInput = inputPassword.getText().trim().toString();
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
                           window.close();
+                          match_id =  selectedMatch.getMatch_id();
+                          yourTurn = false;
                           enterGame();
                       } else {
                           dialog.setText("Wrong password, try again");
@@ -247,16 +279,7 @@ import static database.Variables.*;
 
 
     private void enterGame() {
-            try {
-                findGameClicked = false;
-                yourTurn = false;
-                GameLogic game = new GameLogic();
-                game.start(Main.window);
-                System.out.println("Success!!!!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
+        }
 
 }
