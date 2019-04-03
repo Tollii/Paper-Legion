@@ -47,6 +47,10 @@ public class mainMenuController extends Controller {
         searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
+            //TODO bug. Dosnt change scene after returning from a game.
+
+            //TODO bug. Starting a game and going to any other button will cancel it, but the scene switches quickly back mainmenu without prompt.
+
             @Override
             public void run() {
                 while (keepRunning()) {
@@ -174,10 +178,11 @@ public class mainMenuController extends Controller {
     }
 
     private void cancelGame() {
-        findGameClicked = false;
-        mainMenuPlayButton.setText("Play");
-        db.abortMatch(user_id);
-        System.out.println("Game cancelled");
+        if (findGameClicked) {
+            findGameClicked = false;
+            mainMenuPlayButton.setText("Play");
+            db.abortMatch(user_id);
+            System.out.println("Game cancelled");
+        }
     }
-
 }
