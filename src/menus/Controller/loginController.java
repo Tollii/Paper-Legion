@@ -87,7 +87,6 @@ public class loginController extends Controller {
                                 //gameTitleLabel.setText("Login Failed");
                                 loginPressed = false;
                                 System.out.println("User is already logged in");
-                                this.doStop();
                             });
                         }
                     }
