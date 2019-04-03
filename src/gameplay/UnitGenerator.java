@@ -45,7 +45,7 @@ public class  UnitGenerator {
     //TODO
     private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
     //TODO
-    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());;
+    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/juggernaut.wav").toString());;
 
     private static UnitType juggernautUnitType;
 
@@ -57,7 +57,7 @@ public class  UnitGenerator {
     //TODO
     private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);;
     //TODO
-    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());;
+    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/catapult.wav").toString());;
 
     private static UnitType catapultUnitType;
 

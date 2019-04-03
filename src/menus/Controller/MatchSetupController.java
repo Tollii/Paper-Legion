@@ -101,6 +101,8 @@ import static database.Variables.*;
                         if(!gameEntered){
                             gameEntered = db.pollGameStarted(match_id);
 
+                        } else if(!createGameClicked){
+                            doStop();
                         } else{
                             Platform.runLater(
                                     () -> {
@@ -287,6 +289,7 @@ import static database.Variables.*;
                     createGameButton.setText("Create Game");
                     table.setItems(getMatches()); //Refreshes tables.
                     matchSetupThread.stop();
+                    matchSetupThread = null;
                 }
 
 
