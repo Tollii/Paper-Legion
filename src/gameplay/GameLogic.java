@@ -685,7 +685,7 @@ public class GameLogic extends Application {
 
                         //If units health is zero. Remove it from the board.
                         if (grid.tileList[j][k].getUnit().getHp() <= 0) {
-                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0)
+                            //TODO legg til at uniten blir skada inn i databasen med en gang, før den blir slettet. (sett hp 0). Legg også til syncing av Unit stats mellom de to klientene(via Units i DB)
                             grid.tileList[j][k].removeUnit();
                         }
                     }

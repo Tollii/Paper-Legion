@@ -485,9 +485,6 @@ public class Database {
         }
     }
 
-
-
-
 /*
     //Inserts pieces into database
     public void insertPieces() {
@@ -703,7 +700,7 @@ public class Database {
         }
         return -1;
     }
-
+/*
     public int pollForUnits() { //Midlertidig metode for auto generert units
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -725,6 +722,7 @@ public class Database {
         }
         return -1;
     }
+
 
     public void sendHealthInfo(int pieceID, double currentHealth) {
         Connection myConn = connectionPool.getConnection();
@@ -749,6 +747,7 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+*/
 
     public boolean exportPieceMoveList(ArrayList<Move> movementList) {
 
