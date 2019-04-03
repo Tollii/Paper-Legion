@@ -675,7 +675,8 @@ public class GameLogic extends Application {
 
             for (int j = 0; j < grid.tileList.length; j++) {
                 for (int k = 0; k < grid.tileList[j].length; k++) {
-                    if(!grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == importedAttackList.get(i).getReceiverPieceID()){
+
+                    if(grid.tileList[j][k].getUnit() != null && !grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == importedAttackList.get(i).getReceiverPieceID()){
                         System.out.println(importedAttackList.get(i).getDamage());
 
                         System.out.println("DOING AN ATTACK!" + grid.tileList[j][k].getUnit().getHp());
