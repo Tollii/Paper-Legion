@@ -51,6 +51,10 @@ public class mainMenuController extends Controller {
         searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
+            //TODO bug. Dosnt change scene after returning from a game.
+
+            //TODO bug. Starting a game and going to any other button will cancel it, but the scene switches quickly back mainmenu without prompt.
+
             @Override
             public void run() {
                 while (keepRunning()) {
@@ -110,7 +114,6 @@ public class mainMenuController extends Controller {
                             }
                         }
                     }
-                    System.out.println("IM STILL RUNNING!");
                 }
             }
 
@@ -142,6 +145,7 @@ public class mainMenuController extends Controller {
         });
 
         mainMenuCustomMatchButton.setOnAction(event -> {
+            cancelGame();
             changeScene("MatchSetup.fxml");
         });
 
@@ -149,6 +153,7 @@ public class mainMenuController extends Controller {
         mainMenuExitButton.setOnAction(event -> {
             cancelGame();
             db.logout(user_id);
+            user_id = -1;
             changeScene("login.fxml");
         });
 
@@ -156,7 +161,6 @@ public class mainMenuController extends Controller {
         mainMenuGameInfoButton.setOnAction(event -> {
             cancelGame();
             changeScene("gameInfo.fxml");
-
         });
 
         mainMenuStatsButton.setOnAction(event -> {
@@ -178,11 +182,11 @@ public class mainMenuController extends Controller {
     }
 
     private void cancelGame() {
-        findGameClicked = false;
-        mainMenuPlayButton.setText("Play");
-        db.abortMatch(user_id);
-        searchGameRunnable.doStop();
-        System.out.println("Game cancelled");
+        if (findGameClicked) {
+            findGameClicked = false;
+            mainMenuPlayButton.setText("Play");
+            db.abortMatch(user_id);
+            System.out.println("Game cancelled");
+        }
     }
-
 }
