@@ -69,6 +69,7 @@ public class Unit extends StackPane {
 
 
         ///SETS UNIT IMAGE////
+
         if (enemy) { //sets gold if enemy, blue if friendly
           BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
           changeColor(imgBuf, 0, 0, 0, 155, 135, 65);

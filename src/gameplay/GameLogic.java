@@ -444,7 +444,10 @@ public class GameLogic extends Application {
             //Resets hasAttackedThisTurn for all units
             for (int i = 0; i < grid.tileList.length; i++) {
                 for (int j = 0; j < grid.tileList[i].length; j++) {
-                    grid.tileList[i][j].getUnit().setHasAttackedThisTurn(false);
+                    if(grid.tileList[i][j] != null){
+                        grid.tileList[i][j].getUnit().setHasAttackedThisTurn(false);
+                    }
+
                 }
             }
 
@@ -517,14 +520,16 @@ public class GameLogic extends Application {
             public void run() {
                 while(keepRunning()){
                     try {
-                        while (!yourTurn) {
+                        while (!opponentReady) {
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
+
+                            System.out.println(opponent_id + ": " + opponentReady);
 
                             if (db.checkIfOpponentReady()) {
                                 opponentReady = true;
 
-
+                                System.out.println(opponent_id + ": " + opponentReady);
                                 this.doStop();
                             }
                         }
@@ -533,8 +538,11 @@ public class GameLogic extends Application {
                         //What will happen when your opponent is ready.
 
                         Platform.runLater(()->{
-                            importOpponentplacementUnits();
-                            movementActionPhaseStart();
+                            System.out.println("RUN LATER!!!");
+
+                                importOpponentplacementUnits();
+                                movementActionPhaseStart();
+
 
                         });
 
@@ -561,10 +569,11 @@ public class GameLogic extends Application {
 
     private void importOpponentplacementUnits(){
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
+        System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
-        for (int i = 0; i < importList.size(); i++) {
-
-
+        for (PieceSetup piece: importList) {
+            System.out.println("ADDING OPPONENT UNIT");
+            grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
 
         }
     }
@@ -764,11 +773,11 @@ public class GameLogic extends Application {
     }
 
     private int getPosXFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getX() - gridXPadding) / tileSize);
+        return (int)Math.ceil((event.getX() - gridXPadding) / tileSize) - 1;
     }
 
     private int getPosYFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getY() - gridYPadding) / tileSize);
+        return (int)Math.ceil((event.getY() - gridYPadding) / tileSize) - 1;
     }
 
     ////UNIT SELECTOR AND DESELECTORS////
