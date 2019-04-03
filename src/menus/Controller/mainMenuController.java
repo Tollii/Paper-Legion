@@ -49,11 +49,6 @@ public class mainMenuController extends Controller {
 
             @Override
             public void run() {
-
-                //TODO Currently you can't create a new game after cancelling a game. Also "isPressed" is confusing.
-
-                //TODO Buttons do nothing when returning from a game.
-
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {
