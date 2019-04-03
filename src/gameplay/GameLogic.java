@@ -513,22 +513,24 @@ public class GameLogic extends Application {
     }
 
     private void deselect() {
-        //removes selection of unit tile
-        grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
-        grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
-        grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
+        if (unitSelected){
+            //removes selection of unit tile
+            grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
 
-        //removes unit selection and position
-        selectedUnit = null;
-        unitSelected = false;
-        selectedPosX = -1;
-        selectedPosY = -1;
+            //removes unit selection and position
+            selectedUnit = null;
+            unitSelected = false;
+            selectedPosX = -1;
+            selectedPosY = -1;
 
-        //removes unit description
-        description.setText("");
-        description.setVisible(false);
+            //removes unit description
+            description.setText("");
+            description.setVisible(false);
 
-        clearHighLight();
+            clearHighLight();
+        }
     }
 
     ////METHODS FOR GETTING CLICK POSITION////
