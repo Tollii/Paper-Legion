@@ -742,16 +742,7 @@ public class GameLogic extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
-        if (user_id > 0) {
-            db.logout(user_id);
-        }
-        searchGameRunnable.doStop();
-        waitTurnRunnable.doStop();
-        try {
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Main.closeAndLogout();
     }
 
     // Opens the win/lose pop-up on the screen and ends the game.
@@ -860,18 +851,7 @@ public class GameLogic extends Application {
     }
 
     public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            searchGameRunnable.doStop();
-            waitTurnRunnable.doStop();
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
         launch(args);
     }
 }
