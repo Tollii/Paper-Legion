@@ -575,7 +575,7 @@ public class GameLogic extends Application {
             //Resets hasAttackedThisTurn for all units
             for (int i = 0; i < grid.tileList.length; i++) {
                 for (int j = 0; j < grid.tileList[i].length; j++) {
-                    if(grid.tileList[i][j] != null){
+                    if(grid.tileList[i][j].getUnit() != null){
                         grid.tileList[i][j].getUnit().setHasAttackedThisTurn(false);
                     }
 
