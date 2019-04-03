@@ -30,10 +30,7 @@ import static database.Variables.*;
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
 
         //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
-        //TODO: UNNCOMMENT TO ENABLE FEATURES
-        //TODO: FIX ENTERGAME SO IT WORKS
         //TODO: DESPAGHETTI
-        //TODO: ALTER TABLE AND ADD COLUMN FOR PASSWORD, ALSO CHANGE EVERY DB METHOD THAT USES IT.
 
 
 
@@ -96,6 +93,7 @@ import static database.Variables.*;
               // IF NOT PASSWORD PROTECTED, JOIN AND ENTER GAME
               if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){
                   db.joinGame(selectedMatch.getMatch_id(),user_id);
+                  match_id =  selectedMatch.getMatch_id();
                   enterGame();
 
                   // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
@@ -141,7 +139,9 @@ import static database.Variables.*;
                       String passwordUserInput = inputPassword.getText().trim().toString();
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
                           window.close();
+                          match_id =  selectedMatch.getMatch_id();
                           enterGame();
+                          yourTurn = false;
                       } else {
                           dialog.setText("Wrong password, try again");
                       }
