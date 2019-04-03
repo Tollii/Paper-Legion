@@ -145,7 +145,7 @@ public class GameLogic extends Application {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
         } else {
-            //Enters turn 1 into database.
+            //If you are player 1. Enters turn 1 into database.
             db.sendTurn(turn);
         }
 
@@ -174,14 +174,12 @@ public class GameLogic extends Application {
             /////////////////////////////////ATTACK///////////////////////////////////////////////
             if (event.getClickCount() == 2) {
                 if (selected && !movementPhase && !selectedUnit.getHasAttackedThisTurn()) {
-
                     attack(event);
 
                 }
             }
             //////////////////////////////DESELECT/////////////////////////////////////////////
             if (event.getButton() == MouseButton.SECONDARY) {
-
                 deSelect(rSidePanel, description);
             }
         });
@@ -336,7 +334,6 @@ public class GameLogic extends Application {
         for (int i = 0; i < setupPieces.size(); i++) {
 
             int pieceId = setupPieces.get(i).getPieceId();
-            int matchId = setupPieces.get(i).getMatchId();
             int playerId = setupPieces.get(i).getPlayerId();
             int positionX = setupPieces.get(i).getPositionX();
             int positionY = setupPieces.get(i).getPositionY();
@@ -373,7 +370,6 @@ public class GameLogic extends Application {
 
                 PieceSetup correspondingPiece = null;
 
-                //TODO review this for-loop
                 for (int j = 0; j < pieces.size(); j++) {
                     if (unitList.get(i).getEnemy()) {
                         if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
@@ -454,7 +450,6 @@ public class GameLogic extends Application {
                 }
             }
 
-
             description.setText(selectedUnit.getDescription());
             vBox.getChildren().add(description);
             description.toBack();
@@ -465,7 +460,6 @@ public class GameLogic extends Application {
     private void deSelect(VBox sidePanel, Label description) {
 
         for (int i = 0; i < unitPosition.length; i++) {
-
             for (int j = 0; j < unitPosition[i].length; j++) {
                 if (unitPosition[i][j] != null) {
                     unitPosition[i][j].setStroke(Color.TRANSPARENT);
@@ -751,12 +745,8 @@ public class GameLogic extends Application {
         if (user_id > 0) {
             db.logout(user_id);
         }
-        if (Variables.searchGameThread.isAlive()) {
-            searchGameRunnable.doStop();
-        }
-        if (Variables.waitTurnThread.isAlive()) {
-            waitTurnRunnable.doStop();
-        }
+        searchGameRunnable.doStop();
+        waitTurnRunnable.doStop();
         try {
             db.close();
         } catch (SQLException e) {
@@ -874,12 +864,8 @@ public class GameLogic extends Application {
             if (user_id > 0) {
                 db.logout(user_id);
             }
-            if (Variables.searchGameThread.isAlive()) {
-                Variables.searchGameThread.stop();
-            }
-            if (Variables.waitTurnThread.isAlive()) {
-                Variables.waitTurnThread.stop();
-            }
+            searchGameRunnable.doStop();
+            waitTurnRunnable.doStop();
             try {
                 db.close();
             } catch (SQLException e) {

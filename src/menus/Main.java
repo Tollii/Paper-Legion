@@ -60,9 +60,8 @@ public class Main extends Application {
         if (user_id > 0) {
             db.logout(user_id);
         }
-        if (Variables.searchGameThread.isAlive()) {
-            searchGameRunnable.doStop();
-        }
+        //Stops runnables.
+        searchGameRunnable.doStop();
         try {
             db.close();
         } catch (SQLException e) {
