@@ -462,7 +462,18 @@ public class Database {
 
             preparedStatement = myConn.prepareStatement(sqlSetning);
 
-            preparedStatement.setInt(1, ready);
+            if(ready){
+
+                preparedStatement.setInt(1, 1);
+
+            }else{
+
+                preparedStatement.setInt(1, 0);
+
+            }
+
+
+            preparedStatement.executeUpdate();
 
 
         }catch(SQLException e){

@@ -2,13 +2,11 @@ package menus;
 
 import database.Database;
 import database.Variables;
-import gameplay.GameLogic;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import menus.Controller.mainMenuController;
 
 import java.sql.SQLException;
 

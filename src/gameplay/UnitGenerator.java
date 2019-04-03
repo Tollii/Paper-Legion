@@ -43,9 +43,9 @@ public class  UnitGenerator {
     private static String juggernautDescriptionTag =
             "Juggernaut";
     //TODO
-    private static Image juggernautImage = null;
+    private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
     //TODO
-    private static AudioClip juggernautSound = null;
+    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());;
 
     private static UnitType juggernautUnitType;
 
@@ -57,7 +57,7 @@ public class  UnitGenerator {
     //TODO
     private static Image catapultImage = null;
     //TODO
-    private static AudioClip catapultSound = null;
+    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());;
 
     private static UnitType catapultUnitType;
 
@@ -206,6 +206,12 @@ public class  UnitGenerator {
 
             case 2:
                 return new Recruit(archerUnitType);
+
+            case 3:
+                return new Recruit(juggernautUnitType);
+
+            case 4:
+                return new Recruit(catapultUnitType);
         }
         return null;
     }

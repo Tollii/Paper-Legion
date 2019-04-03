@@ -1,14 +1,8 @@
 package tests;
 
-import database.Cleaner;
-import database.ConnectionPool;
-import database.Database;
 import gameplay.GameLogic;
-import javafx.stage.Stage;
 import org.junit.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
