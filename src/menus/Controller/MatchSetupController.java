@@ -1,10 +1,12 @@
 package menus.Controller;
 
+import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import database.Database;
 import gameplay.GameLogic;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -69,6 +71,7 @@ import static database.Variables.*;
 
         @FXML
         void initialize() {
+
             //Sets up variables for connecting Match class with Table Columns
             table.setPlaceholder(new Label("No available matches found"));
             player_table.setCellValueFactory(new PropertyValueFactory<>("player"));
@@ -94,6 +97,7 @@ import static database.Variables.*;
               if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){
                   db.joinGame(selectedMatch.getMatch_id(),user_id);
                   match_id =  selectedMatch.getMatch_id();
+                  yourTurn = false;
                   enterGame();
 
                   // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
@@ -140,8 +144,8 @@ import static database.Variables.*;
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
                           window.close();
                           match_id =  selectedMatch.getMatch_id();
-                          enterGame();
                           yourTurn = false;
+                          enterGame();
                       } else {
                           dialog.setText("Wrong password, try again");
                       }
@@ -249,7 +253,6 @@ import static database.Variables.*;
     private void enterGame() {
             try {
                 findGameClicked = false;
-                yourTurn = false;
                 GameLogic game = new GameLogic();
                 game.start(Main.window);
                 System.out.println("Success!!!!");
@@ -257,6 +260,5 @@ import static database.Variables.*;
                 e.printStackTrace();
             }
         }
-
 
 }
