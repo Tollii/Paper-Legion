@@ -23,14 +23,11 @@
                <children>
                       <VBox alignment="CENTER_LEFT" prefHeight="366.0" prefWidth="590.0" spacing="15.0">
                           <children>
-                              <Label fx:id="gameTitleLabel" text="Paper Legion">
-                                  <font>
-                                      <Font name="Avenir Light" size="39.0" />
-                                  </font>
-                                  <VBox.margin>
-                                      <Insets />
-                                  </VBox.margin>
-                              </Label>
+                        <ImageView fx:id="paperLegionLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="/menus/menuAssets/paperLegionLogo.png" />
+                           </image>
+                        </ImageView>
                               <Label fx:id="mainMenuLoggedInAsLabel" text="Logged in as ">
                                   <font>
                                       <Font size="22.0" />

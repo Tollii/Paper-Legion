@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -69,6 +70,10 @@ import static database.Variables.*;
 
         @FXML
         private JFXButton backToMenuButton;
+
+
+        @FXML
+        private ImageView paperLegionLogo;
 
         @FXML
         void initialize() {

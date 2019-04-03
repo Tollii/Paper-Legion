@@ -21,14 +21,14 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="574.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="gameTitleLabel" text="Paper Legion">
-                     <font>
-                        <Font name="Avenir Light" size="39.0" />
-                     </font>
+                  <ImageView fx:id="paperLegionLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/menus/menuAssets/paperLegionLogo.png" />
+                     </image>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
-                  </Label>
+                  </ImageView>
                   <TabPane prefHeight="289.0" prefWidth="574.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab text="Game info">

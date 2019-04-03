@@ -3,6 +3,7 @@ package menus.Controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,8 +21,10 @@ public class GameInfoController extends Controller {
     @FXML
     private JFXButton gameInfoBackButton;
 
+
     @FXML
-    private Label gameTitleLabel;
+    private ImageView paperLegionLogo;
+
 
 
     @FXML
