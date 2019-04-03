@@ -86,7 +86,7 @@ import static database.Variables.*;
                 private boolean doStop = false;
 
                 @Override
-                public void doStop() {
+                public synchronized void doStop() {
                     this.doStop = true;
                 }
 
@@ -108,7 +108,10 @@ import static database.Variables.*;
                                             yourTurn = true;
                                             enterGame();
                                             doStop();
+                                            gameEntered = false;
+                                            matchSetupThread = null;
                                         }
+
                                     });
                         }
 
