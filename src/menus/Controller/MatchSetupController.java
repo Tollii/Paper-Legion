@@ -193,6 +193,7 @@ import static database.Variables.*;
                       String passwordUserInput = inputPassword.getText().trim().toString();
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
                           window.close();
+                          db.joinGame(selectedMatch.getMatch_id(), user_id);
                           match_id =  selectedMatch.getMatch_id();
                           yourTurn = false;
                           enterGame();
@@ -262,8 +263,6 @@ import static database.Variables.*;
                         createGameButton.setText("Abort Match");
                         matchSetupThread = new Thread(matchSetupRunnable);
                         matchSetupThread.start();
-
-
                     });
 
                     // CREATE GAME WITHOUT PASSWORD
