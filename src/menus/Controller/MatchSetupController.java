@@ -30,6 +30,7 @@ import static database.Variables.*;
     public class MatchSetupController extends Controller {
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
+        private Thread matchSetupThread;
 
         //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
         //TODO: DESPAGHETTI
@@ -71,6 +72,33 @@ import static database.Variables.*;
 
         @FXML
         void initialize() {
+
+
+
+
+            Runnable matchSetupRunnable = new RunnableInterface() {
+
+                private boolean doStop = false;
+
+                @Override
+                public void doStop() {
+                    this.doStop = true;
+                }
+
+                @Override
+                public boolean keepRunning() {
+                    return !this.doStop;
+                }
+
+                @Override
+                public void run() {
+                    while(keepRunning()){
+                        // Kode som skal kjøres av threaden her
+                    }
+                }
+            };
+
+
 
             //Sets up variables for connecting Match class with Table Columns
             table.setPlaceholder(new Label("No available matches found"));
@@ -251,14 +279,7 @@ import static database.Variables.*;
 
 
     private void enterGame() {
-            try {
-                findGameClicked = false;
-                GameLogic game = new GameLogic();
-                game.start(Main.window);
-                System.out.println("Success!!!!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
 
 }
