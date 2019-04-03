@@ -773,11 +773,12 @@ public class GameLogic extends Application {
     }
 
     private int getPosXFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getX() - gridXPadding) / tileSize) - 1;
+        System.out.println();
+        return (int)Math.ceil((event.getX()) / tileSize) - 1;
     }
 
     private int getPosYFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getY() - gridYPadding) / tileSize) - 1;
+        return (int)Math.ceil((event.getY()) / tileSize) - 1;
     }
 
     ////UNIT SELECTOR AND DESELECTORS////
@@ -799,7 +800,7 @@ public class GameLogic extends Application {
             if(yourTurn){
                 if (movementPhase) {
                     highlightPossibleMoves();
-                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                } else if (selectedUnit != null && !selectedUnit.getHasAttackedThisTurn()) {
                     highlightPossibleAttacks();
                 }
             }
