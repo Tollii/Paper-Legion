@@ -39,7 +39,6 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import menus.Controller.mainMenuController;
 import menus.Main;
 
 import java.io.IOException;
@@ -72,9 +71,9 @@ public class GameLogic extends Application {
     private HBox root = new HBox();                     //Root container
     private StackPane pieceContainer = new StackPane(); //Unit and obstacle placement
     private VBox rSidePanel = new VBox();               //Sidepanel for unit description and End turn button
-    private HBox rSidePanelBtns = new HBox();
-    private Label description = new Label();
-    private Label phaseLabel = new Label();
+    private HBox rSidePanelBtns = new HBox();           //Box for the buttons "end turn" and "surrender"
+    private Label description = new Label();            //Displays unit info when selected
+    private Label phaseLabel = new Label();             //Displays what phase of the game you are in.
     private JFXButton endTurnButton = new JFXButton("End turn");
     private JFXButton surrenderButton = new JFXButton("Surrender");
     private Pane board = new Pane();                    // Holds all the tiles.
@@ -146,7 +145,7 @@ public class GameLogic extends Application {
             endTurnButton.setText("Waiting for other player");
             waitForTurn();
         } else {
-            //Enters turn 1 into database.
+            //If you are player 1. Enters turn 1 into database.
             db.sendTurn(turn);
         }
 
@@ -166,37 +165,24 @@ public class GameLogic extends Application {
             if (!selected) {
                 select(event, rSidePanel, description);
             }
-            ////////////////////////////SELECTION END/////////////////////////////////////////////
-
             /////////////////////////////////MOVE/////////////////////////////////////////////////
             if (event.getClickCount() == 1) {
                 if (selected && movementPhase && event.getButton() == MouseButton.PRIMARY) {
                     move(event);
                 }
             }
-            ///////////////////////////////MOVE END///////////////////////////////////////////////
-
             /////////////////////////////////ATTACK///////////////////////////////////////////////
             if (event.getClickCount() == 2) {
                 if (selected && !movementPhase && !selectedUnit.getHasAttackedThisTurn()) {
-
                     attack(event);
 
                 }
             }
-            //////////////////////////////ATTACK END////////////////////////////////////////////
-
             //////////////////////////////DESELECT/////////////////////////////////////////////
             if (event.getButton() == MouseButton.SECONDARY) {
-
                 deSelect(rSidePanel, description);
             }
-            //////////////////////////DESELECT END/////////////////////////////////////////////
-
-        }); // MOUSE EVENT END
-
-        ///////////////////////////////////////////////////////////////////////////////////////
-
+        });
 
         window.setTitle(gameTitle);
         window.setScene(scene);
@@ -296,7 +282,7 @@ public class GameLogic extends Application {
 
             }
 
-            //Check if you have won
+            //Check if you have won or lost.
             checkForGameOver();
 
             //Wait for you next turn
@@ -348,7 +334,6 @@ public class GameLogic extends Application {
         for (int i = 0; i < setupPieces.size(); i++) {
 
             int pieceId = setupPieces.get(i).getPieceId();
-            int matchId = setupPieces.get(i).getMatchId();
             int playerId = setupPieces.get(i).getPlayerId();
             int positionX = setupPieces.get(i).getPositionX();
             int positionY = setupPieces.get(i).getPositionY();
@@ -385,7 +370,6 @@ public class GameLogic extends Application {
 
                 PieceSetup correspondingPiece = null;
 
-                //TODO review this for-loop
                 for (int j = 0; j < pieces.size(); j++) {
                     if (unitList.get(i).getEnemy()) {
                         if (pieces.get(j).getPlayerId() != user_id && pieces.get(j).getPieceId() == unitList.get(i).getPieceID()) {
@@ -466,7 +450,6 @@ public class GameLogic extends Application {
                 }
             }
 
-
             description.setText(selectedUnit.getDescription());
             vBox.getChildren().add(description);
             description.toBack();
@@ -477,7 +460,6 @@ public class GameLogic extends Application {
     private void deSelect(VBox sidePanel, Label description) {
 
         for (int i = 0; i < unitPosition.length; i++) {
-
             for (int j = 0; j < unitPosition[i].length; j++) {
                 if (unitPosition[i][j] != null) {
                     unitPosition[i][j].setStroke(Color.TRANSPARENT);
@@ -581,68 +563,6 @@ public class GameLogic extends Application {
 
 
     private void highlightPossibleMoves() {
-//        int posX = selectedPosX;
-//        int posY = selectedPosY;
-//        int movementRange = selectedUnit.getMovementRange();
-
-        ///////////////////////LEFT, RIGHT, UP, DOWN//////////////////////////
-//        if (selectedPosX - 1 >= 0) {
-//            grid.liste[posY][posX - 1].setFill(movementHighlightColor);
-//        }
-//
-//        if (selectedPosX + 1 < boardSize) {
-//            grid.liste[posY][posX + 1].setFill(movementHighlightColor);
-//        }
-//
-//        if (selectedPosY - 1 >= 0) {
-//            grid.liste[posY - 1][posX].setFill(movementHighlightColor);
-//        }
-//
-//        if (selectedPosY + 1 < boardSize) {
-//            grid.liste[posY + 1][posX].setFill(movementHighlightColor);
-//        }
-
-
-        ////////////////////////////CORNERS///////////////////////////////////
-
-//        if (selectedPosX + 1 < boardSize && selectedPosY + 1 < boardSize) {
-//            grid.liste[posY + 1][posX + 1].setFill(movementHighlightColor);
-//        }
-//
-//        if (selectedPosX - 1 >= 0 && selectedPosY - 1 >= 0) {
-//            grid.liste[posY - 1][posX - 1].setFill(movementHighlightColor);
-//        }
-//
-//        if (selectedPosX - 1 >= 0 && selectedPosY + 1 < boardSize) {
-//            grid.liste[posY + 1][posX - 1].setFill(movementHighlightColor);
-//        }
-//
-//        if (selectedPosX + 1 < boardSize && selectedPosY - 1 >= 0) {
-//            grid.liste[posY - 1][posX + 1].setFill(movementHighlightColor);
-
-        //}
-        ////////////////////////////////////////////////////////////////////
-
-        //////////////IF PIECE HAS LONGER RANGE THAN 1////////////////////////////
-        //if (selectedUnit.getMovementRange() > 1) {
-//            if (selectedPosX - movementRange >= 0) {
-//                grid.liste[posY][posX - movementRange].setFill(movementHighlightColor);
-//            }
-//
-//            if (selectedPosX + movementRange < boardSize) {
-//                grid.liste[posY][posX + movementRange].setFill(movementHighlightColor);
-//            }
-//
-//            if (selectedPosY - movementRange >= 0) {
-//                grid.liste[posY - movementRange][posX].setFill(movementHighlightColor);
-//            }
-//
-//            if (selectedPosY + movementRange < boardSize) {
-//                grid.liste[posY + movementRange][posX].setFill(movementHighlightColor);
-//            }
-        //}
-
-
         //Goes through the grid and paints all the squared that is within movement range. Does not paint itself or ones containing units or obstacles.
         for (int i = 0; i < unitPosition.length; i++) {
             for (int j = 0; j < unitPosition[i].length; j++) {
@@ -660,16 +580,11 @@ public class GameLogic extends Application {
 
 
     private void highlightPossibleAttacks() {
-
+        // Uses attackrange to paint possible attacks. Changes can be done by editing attackRange.
         for (int i = 0; i < unitPosition.length; i++) {
             for (int j = 0; j < unitPosition[i].length; j++) {
                 if (unitPosition[i][j] != null && unitPosition[i][j] != selectedUnit) {
-
-                    // Currently shows swordsman attack range wrong.
-                    //(((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) <= selectedUnit.getMaxAttackRange())
-                    //                            && ((Math.abs(selectedPosX - unitPosition[i][j].getTranslateX() / tileSize)) + Math.abs(selectedPosY - unitPosition[i][j].getTranslateY() / tileSize)) >= selectedUnit.getMinAttackRange()
                     if (attackRange(j, i)) {
-
                         if (unitPosition[i][j].getEnemy()) {
                             grid.liste[i][j].setFill(attackHighlightColor);
                         }
@@ -683,26 +598,13 @@ public class GameLogic extends Application {
         for (int i = 0; i < grid.liste.length; i++) {
             for (int j = 0; j < grid.liste[i].length; j++) {
                 grid.liste[i][j].setFill(Color.TRANSPARENT);
-
             }
         }
-
     }
 
-
+    //Calculates the movement range for the selected unit. Used for movement and highlight movement.
     private boolean movementRange(int nyPosX, int nyPosY) {
-
-        if (Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= selectedUnit.getMovementRange()) { //Beautiful math skills in progress.
-            return true;
-        }
-
-//        if (!(Math.abs(nyPosX - unitPosition[selectedPosY][selectedPosX].getOldPosX()) > unitPosition[selectedPosY][selectedPosX].getRange()) &&
-//                (!(Math.abs(nyPosY - unitPosition[selectedPosY][selectedPosX].getOldPosY()) > unitPosition[selectedPosY][selectedPosX].getRange()))) {
-//            return true;
-//        }
-
-        ////////////////////////////////////////////////////////////////////
-        return false;
+        return Math.abs(nyPosX - selectedPosX) + Math.abs(nyPosY - selectedPosY) <= selectedUnit.getMovementRange();
     }
 
     //Returns true if enemy is within attack range of the selected unit.
@@ -729,7 +631,6 @@ public class GameLogic extends Application {
     }
 
     public void waitForTurn() {
-
         // Runnable lambda implementation for turn waiting with it's own thread
         waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
@@ -784,6 +685,7 @@ public class GameLogic extends Application {
 
     }
 
+    //Contains everything that needs to be done when the turn is returned to the player.
     private void setUpNewTurn() {
         deSelect(rSidePanel, description);
         selectedUnit = null;
@@ -833,9 +735,6 @@ public class GameLogic extends Application {
 
             }
         }
-        ////Old methods////
-        //deDrawUnits();
-        //drawUnits();
         checkForGameOver();
     }
 
@@ -843,20 +742,7 @@ public class GameLogic extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
-        if (user_id > 0) {
-            db.logout(user_id);
-        }
-        if (Variables.searchGameThread.isAlive()) {
-            searchGameRunnable.doStop();
-        }
-        if (Variables.waitTurnThread.isAlive()) {
-            waitTurnRunnable.doStop();
-        }
-        try {
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Main.closeAndLogout();
     }
 
     // Opens the win/lose pop-up on the screen and ends the game.
@@ -877,7 +763,6 @@ public class GameLogic extends Application {
 
         if (loser != -1) {
             //Game is won or lost.
-
             //Open alert window.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
@@ -928,70 +813,6 @@ public class GameLogic extends Application {
         }
     }
 
-    /*
-        public void winner(){
-        int winnerOrLoser = checkForWinner();
-        int surrendered = db.checkForSurrender();
-        if(surrendered == opponent_id){
-            winnerOrLoser = 0;
-        }
-        if(surrendered == user_id){
-            winnerOrLoser = 1;
-        }
-        if (winnerOrLoser != -1) {
-            //Game is won or lost.
-
-            gameCleanUp();
-            Stage winner_alert = new Stage();
-            winner_alert.initModality(Modality.APPLICATION_MODAL);
-            winner_alert.setTitle("Game over!");
-
-            Text winner = new Text();
-            //winner.setStyle("-webkit-flex-wrap: nowrap;-moz-flex-wrap: nowrap;-ms-flex-wrap: nowrap;-o-flex-wrap: nowrap;-khtml-flex-wrap: nowrap;flex-wrap: nowrap;t-size:32px;");
-            winner.setStyle("-fx-font-size:32px;");
-            db.incrementGamesPlayed();
-            if (winnerOrLoser == 1){
-                winner.setText("You Lose");
-            }
-            else {
-                db.incrementGamesWon();
-                winner.setText("You win!");
-            }
-            JFXButton endGameBtn = new JFXButton("Return to menu");
-
-
-
-            // maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Play"
-
-            endGameBtn.setOnAction(event -> {
-                String fxmlDir = "/menus/View/mainMenu.fxml";
-                FXMLLoader loader = new FXMLLoader();
-                Parent root = null;
-                try {
-                    root =  FXMLLoader.load(this.getClass().getResource(fxmlDir));
-                    // loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("load failed");
-                }
-                winner_alert.close();
-                winner_alert.hide();
-                Main.window.setScene(new Scene(root));
-
-            });
-
-            VBox content = new VBox();
-            content.setAlignment(Pos.CENTER);
-            content.setSpacing(20);
-            content.getChildren().addAll(winner,endGameBtn);
-            Scene scene = new Scene(content,250,150);
-            winner_alert.initStyle(StageStyle.UNDECORATED);
-            winner_alert.setScene(scene);
-            winner_alert.showAndWait();
-        }
-    }
-     */
-
     // method that checks if the game has been won by eliminating other player's units. Returns the user_id of the winning player.
     private int checkForEliminationVictory() {
         int yourPieces = 0;
@@ -1022,6 +843,7 @@ public class GameLogic extends Application {
 
         //Sets turns back to 1 for next match.
         turn = 1;
+        //Sets static variables to -1.
         match_id = -1;
         player1 = -1;
         player2 = -1;
@@ -1029,22 +851,7 @@ public class GameLogic extends Application {
     }
 
     public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            if (Variables.searchGameThread.isAlive()) {
-                Variables.searchGameThread.stop();
-            }
-            if (Variables.waitTurnThread.isAlive()) {
-                Variables.waitTurnThread.stop();
-            }
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
         launch(args);
     }
 }

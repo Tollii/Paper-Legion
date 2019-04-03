@@ -39,7 +39,7 @@
                                       <Insets bottom="15.0" />
                                   </VBox.margin>
                               </Label>
-                              <JFXButton fx:id="mainMenuPlayButton" maxHeight="50.0" maxWidth="257.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #000000;" text="Play" textFill="WHITE">
+                              <JFXButton fx:id="mainMenuPlayButton" maxHeight="50.0" maxWidth="257.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #000000;" text="Quick Match" textFill="WHITE">
                                   <VBox.margin>
                                       <Insets bottom="-10.0" />
                                   </VBox.margin>

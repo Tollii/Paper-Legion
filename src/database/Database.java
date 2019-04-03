@@ -52,7 +52,7 @@ public class Database {
 
     public ArrayList<Match> findGamesAvailable(){
         ArrayList<Match> matches = new ArrayList<Match>();
-        String sqlString = "select match_id, username from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
+        String sqlString = "select match_id, username, password from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -64,9 +64,15 @@ public class Database {
             while (resultSet.next()){
                 int match_id = resultSet.getInt("match_id");
                 String playername = resultSet.getString("username");
-                boolean password = false;
+                boolean passwordProtected;
+                String password = resultSet.getString("password");
+                if(password != null){
+                 passwordProtected = true;
+                } else{
+                    passwordProtected = false;
+                }
 
-                matches.add(new Match(match_id,playername, password));
+                matches.add(new Match(match_id,playername, passwordProtected, password));
 
             }
 
@@ -191,16 +197,23 @@ public class Database {
         return false;
     }
 
-    public int createGame(int player_id) {
+    public int createGame(int player_id, String password) {
         int match_id = -1;
         Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
+        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started, password) values (default,?,null,0, ?);";
         PreparedStatement preparedStatement = null;
         ResultSet match_id_result = null;
         try {
             myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player_id);
+            if(password.equalsIgnoreCase("null")){
+                preparedStatement.setString(2, null);
+            } else{
+                preparedStatement.setString(2, password);
+
+            }
+
             int result = preparedStatement.executeUpdate();
             myConn.commit();
             if (result > 0) {
