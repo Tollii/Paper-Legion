@@ -362,11 +362,12 @@ public class GameLogic extends Application {
                 grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
 
                 //adds the move to movementlist
-                movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosY, newPosY));
+                movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosX, newPosY));
 
                 movementPhase = false; //sets phase to attack
                 moveCounter++; //increments move counter
 
+                clearHighLight();
                 select(event);
                 break;
             }
@@ -485,10 +486,16 @@ public class GameLogic extends Application {
         selectedPosY = getPosYFromEvent(event);
 
         //checks if clicked tile has unit
-        if(grid.tileList[selectedPosX][selectedPosY].getUnit() != null && !grid.tileList[selectedPosX][selectedPosY].getUnit().getEnemy()) {
+        System.out.println("X " + selectedPosX);
+        System.out.println("Y " + selectedPosY);
+        System.out.println(grid.tileList[selectedPosY][selectedPosX].getUnit());
+        System.out.println(!grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy());
+        if(grid.tileList[selectedPosY][selectedPosX].getUnit() != null && !grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy()) {
             //selects unit and unitposition
             unitSelected = true;
             selectedUnit = grid.tileList[selectedPosY][selectedPosX].getUnit();
+
+            System.out.println("Is the selected unit an enemy? " + selectedUnit.getEnemy());
 
             //colors selected tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(selectionOutlineColor);
