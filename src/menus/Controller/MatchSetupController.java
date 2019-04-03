@@ -98,7 +98,21 @@ import static database.Variables.*;
                 @Override
                 public void run() {
                     while(keepRunning()){
-                        // Kode som skal kjøres av threaden her
+                        if(!gameEntered){
+                            gameEntered = db.pollGameStarted(match_id);
+                            doStop();
+
+                        } else{
+                            Platform.runLater(
+                                    () -> {
+                                        if(gameEntered){
+                                            yourTurn = true;
+                                            enterGame();
+                                            doStop();
+                                        }
+                                    });
+                        }
+
                     }
                 }
             };
@@ -132,6 +146,7 @@ import static database.Variables.*;
                   match_id =  selectedMatch.getMatch_id();
                   yourTurn = false;
                   enterGame();
+                  System.out.println(match_id);
 
                   // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
               } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){
@@ -179,6 +194,8 @@ import static database.Variables.*;
                           match_id =  selectedMatch.getMatch_id();
                           yourTurn = false;
                           enterGame();
+                          System.out.println(match_id);
+
                       } else {
                           dialog.setText("Wrong password, try again");
                       }
@@ -241,7 +258,10 @@ import static database.Variables.*;
                         window.close();
                         createGameClicked = true;
                         createGameButton.setText("Abort Match");
-                        //TODO: ADD POLLING AND CHANGE BUTTON TEXT AND LIMIT HOW MANY TIMES ONE CAN CREATE GAME
+                        matchSetupThread = new Thread(matchSetupRunnable);
+                        matchSetupThread.run();
+
+
                     });
 
                     // CREATE GAME WITHOUT PASSWORD
@@ -251,6 +271,9 @@ import static database.Variables.*;
                         window.close();
                         createGameClicked = true;
                         createGameButton.setText("Abort Match");
+                        matchSetupThread = new Thread(matchSetupRunnable);
+                        matchSetupThread.run();
+
                     });
 
                     //CANCEL
@@ -284,7 +307,13 @@ import static database.Variables.*;
 
 
     private void enterGame() {
-
+        try {
+            GameLogic game = new GameLogic();
+            game.start(Main.window);
+            System.out.println("Success!!!!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
 }
