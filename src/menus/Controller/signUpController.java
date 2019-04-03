@@ -54,7 +54,12 @@ public class signUpController extends Controller {
 
         signUpButton.setOnAction(event -> {
             //Checks if both password fields are the same.
-            if (passwordInput.getText().equals(confirmPasswordInput.getText())) {
+
+            boolean usernameAtLeast3chars = usernameInput.getText().length() >= 3;
+            boolean passwordsAtLeast3chars = usernameInput.getText().length() >= 3;
+            boolean passwordsMatch = passwordInput.getText().equals(confirmPasswordInput.getText());
+
+            if (usernameAtLeast3chars && passwordsAtLeast3chars && passwordsMatch) {
                 // Tries to register user in database.
                 int signup = db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText());
                 if (signup > 0) {
@@ -64,11 +69,12 @@ public class signUpController extends Controller {
                     alertField.setText("User already exists");
                 }
             }
-            alertField.setText("Error while signing up.");
-
+            String errorMsg = "";
+            if (!usernameAtLeast3chars) { errorMsg += "Username has to have at least 3 characters!\n";}
+            if (!passwordsAtLeast3chars) { errorMsg += "Password has to have at least 3 characters!\n";}
+            if (!passwordsMatch) { errorMsg += "Passwords do not match!";}
+            alertField.setText(errorMsg);
         });
     }
-
-
 
 }
