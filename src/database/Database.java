@@ -567,7 +567,9 @@ public class Database {
             preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
             myConn.commit();
-            rs.next();
+            if (!rs.next()) {
+                return -1;
+            }
             return rs.getInt("player");
         } catch (SQLException e) {
             e.printStackTrace();

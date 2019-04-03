@@ -1,14 +1,11 @@
 package menus;
 
 import database.Database;
-import database.Variables;
-import gameplay.GameLogic;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import menus.Controller.mainMenuController;
 
 import java.sql.SQLException;
 
@@ -51,10 +48,14 @@ public class Main extends Application {
     public static void closeAndLogout() {
         if (user_id > 0) {
             db.logout(user_id);
+            System.out.println("You were logged out");
         }
         //Stops runnables.
-        if (searchGameRunnable != null && searchGameRunnable.keepRunning()) {
-            searchGameRunnable.doStop();
+        if (searchGameThread != null) {
+            searchGameThread.stop();
+        }
+        if (waitTurnThread != null) {
+            waitTurnThread.stop();
         }
         try {
             db.close();

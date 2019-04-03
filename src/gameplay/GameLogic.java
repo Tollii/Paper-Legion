@@ -95,6 +95,7 @@ public class GameLogic extends Application {
     private UnitGenerator unitGenerator = new UnitGenerator();
     ArrayList<PieceSetup> setupPieces;
     ArrayList<Unit> unitList = new ArrayList<>();
+    private boolean surrendered = false;
 
     ////AUDIO ELEMENTS////
     private AudioClip sword = new AudioClip(this.getClass().getResource("/gameplay/assets/hitSword.wav").toString());
@@ -285,8 +286,10 @@ public class GameLogic extends Application {
             //Check if you have won or lost.
             checkForGameOver();
 
-            //Wait for you next turn
-            waitForTurn();
+            //Wait for you next turn. Does not trigger if you have surrendered.
+            if (!surrendered) {
+                waitForTurn();
+            }
         }
     }
 
@@ -304,7 +307,7 @@ public class GameLogic extends Application {
 
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
-            checkForGameOver();
+            surrendered = true;
             endTurn();
             confirm_alert.close();
         });
@@ -644,24 +647,19 @@ public class GameLogic extends Application {
                             System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
-                            System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                            if (db.getTurnPlayer() == user_id) {
-                                System.out.println("yourTurn endres");
+                            int getTurnPlayerResult = db.getTurnPlayer();
+                            // If its your turn or you have left the game.
+                            System.out.println("Whose turn is it? " + getTurnPlayerResult);
+                            if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
                                 yourTurn = true;
                                 this.doStop();
                             }
                         }
 
                         //What will happen when it is your turn again.
-
-                        //Increments turn. Back to your turn.
                         Platform.runLater(() -> {
-
                             setUpNewTurn();
-
                         });
-
-                        movementPhase = true;
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -689,8 +687,10 @@ public class GameLogic extends Application {
     private void setUpNewTurn() {
         deSelect(rSidePanel, description);
         selectedUnit = null;
-        phaseLabel.setText("MOVEMENT PHASE");
+
         turn++;
+        movementPhase = true;
+        phaseLabel.setText("MOVEMENT PHASE");
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
 
@@ -742,6 +742,7 @@ public class GameLogic extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
+        surrender();
         Main.closeAndLogout();
     }
 
@@ -763,9 +764,10 @@ public class GameLogic extends Application {
 
         if (loser != -1) {
             //Game is won or lost.
+            gameCleanUp();
             //Open alert window.
             Stage winner_alert = new Stage();
-            winner_alert.initModality(Modality.APPLICATION_MODAL);
+            //winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
 
             Text winnerTextHeader = new Text();
@@ -799,7 +801,6 @@ public class GameLogic extends Application {
                 }
                 winner_alert.close();
                 Main.window.setScene(new Scene(root));
-                gameCleanUp();
             });
 
             VBox content = new VBox();
@@ -837,21 +838,19 @@ public class GameLogic extends Application {
     }
 
     private void gameCleanUp() {
-
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        waitTurnRunnable.doStop();
-
-        //Sets turns back to 1 for next match.
+        if (waitTurnThread != null) {
+            waitTurnThread.stop();
+        }
+        //Resets turns to 1 for next game.
         turn = 1;
-        //Sets static variables to -1.
-        match_id = -1;
-        player1 = -1;
-        player2 = -1;
-        opponent_id = -1;
     }
 
-    public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
+    public void main(String[] args) {
+        System.out.println("SHUTDOWN HOOK CALLED");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Main.closeAndLogout();
+        }));
         launch(args);
     }
 }
