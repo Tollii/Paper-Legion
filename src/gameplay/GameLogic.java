@@ -635,7 +635,7 @@ public class GameLogic extends Application {
                             setUpNewTurn(endTurnButton);
 
                         });
-                        
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
