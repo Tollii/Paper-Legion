@@ -343,32 +343,33 @@ public class GameLogic extends Application {
 
     ////MOVEMENT AND ATTACK METHODS////
     private void move(MouseEvent event) {
-        if (movementPhase) { //checks if movement phase
-            int newPosX = getPosXFromEvent(event);
-            int newPosY = getPosYFromEvent(event); //position of click
-            ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
-            for (int i = 0; i < movementTargets.size(); i++) { //goes through all movement targets and finds the one clicked on
-                if (movementTargets.get(i) == grid.tileList[newPosY][newPosX]) {
-                    //moves unit from old tile to new
-                    grid.tileList[selectedPosY][selectedPosX].removeUnit();
-                    grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
+        int newPosX = getPosXFromEvent(event);
+        int newPosY = getPosYFromEvent(event); //position of click
 
-                    //adds the move to movementlist
-                    movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosY, newPosY));
+        ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
-                    //sets selected pos to new pos
-                    selectedPosX = newPosX;
-                    selectedPosY = newPosY;
+        for (int i = 0; i < movementTargets.size(); i++) { //goes through all movement targets and finds the one clicked on
+            if (movementTargets.get(i) == grid.tileList[newPosY][newPosX]) {
 
-                    movementPhase = false; //sets phase to attack
-                    moveCounter++; //increments move counter
+                //moves unit from old tile to new
+                grid.tileList[selectedPosY][selectedPosX].removeUnit();
+                grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
 
-                    deselect();
-                    select(event);
+                //De-colours previous tile
+                grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+                grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+                grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
 
-                    break;
-                }
+                //adds the move to movementlist
+                movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosY, newPosY));
+
+                movementPhase = false; //sets phase to attack
+                moveCounter++; //increments move counter
+
+                select(event);
+
+                break;
             }
         }
     }
