@@ -480,12 +480,14 @@ public class GameLogic extends Application {
 
     ////UNIT SELECTOR AND DESELECTORS////
     private void select(MouseEvent event) {
+
+        selectedPosX = getPosXFromEvent(event);
+        selectedPosY = getPosYFromEvent(event);
+
         //checks if clicked tile has unit
-        if(grid.tileList[getPosYFromEvent(event)][getPosXFromEvent(event)] != null) {
+        if(grid.tileList[selectedPosX][selectedPosY].getUnit() != null && !grid.tileList[selectedPosX][selectedPosY].getUnit().getEnemy()) {
             //selects unit and unitposition
             unitSelected = true;
-            selectedPosX = getPosXFromEvent(event);
-            selectedPosY = getPosYFromEvent(event);
             selectedUnit = grid.tileList[selectedPosY][selectedPosX].getUnit();
 
             //colors selected tile
@@ -504,6 +506,9 @@ public class GameLogic extends Application {
             //displays the description of the unit
             description.setText(selectedUnit.getDescription());
             description.setVisible(true);
+        }else{
+            selectedPosX = -1;
+            selectedPosY = -1;
         }
     }
 
