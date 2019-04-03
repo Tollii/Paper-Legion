@@ -106,6 +106,7 @@ public class mainMenuController extends Controller {
                             }
                         }
                     }
+                    System.out.println("IM STILL RUNNING!");
                 }
             }
 

@@ -308,7 +308,12 @@ public class GameLogic extends Application {
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
             surrendered = true;
-            endTurn();
+
+            if (yourTurn) {
+                endTurn();
+            } else {
+                checkForGameOver();
+            }
             confirm_alert.close();
         });
 
