@@ -63,7 +63,7 @@ public class mainMenuController extends Controller {
                         Platform.runLater(() -> {
                             mainMenuPlayButton.setText("Abort");
                         });
-                        match_id = db.matchMaking_search(user_id);
+                        match_id = db.quickMatch_search(user_id);
                         findGameClicked = true;
                         if (match_id > 0) {
                             // If you join a game, you are player 2.
