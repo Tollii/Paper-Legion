@@ -44,6 +44,8 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.sql.SQLException;
 import static database.Variables.*;
+import static database.Variables.waitTurnThread;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.geometry.Orientation;
@@ -72,14 +74,17 @@ public class GameLogic extends Application {
     private final int buttonHeight = 75;
 
     ////PANE PADDINGS////
+
     //GRID//
     private final int gridXPadding = 300;
     private final int gridYPadding = 100;
+
     //PLACMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize*boardSize + 150;
     private final int recruitYPadding = 150;
     private final int placementButtonXPadding = 150;
     private final int placementButtonYPadding = 500;
+
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize*boardSize + 150;
     private final int sidePanelYPadding = 150;
@@ -104,8 +109,9 @@ public class GameLogic extends Application {
     private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
     private ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
+    private boolean surrendered = false;
+
     private UnitGenerator unitGenerator = new UnitGenerator();
-    ArrayList<PieceSetup> setupPieces;
 
     ////STYLING////
     private String gameTitle = "PAPER LEGION";
@@ -592,8 +598,10 @@ public class GameLogic extends Application {
             //Check if you have won
             checkForGameOver();
 
-            //Wait for you next turn
-            waitForTurn(endTurnButton);
+            //Wait for you next turn. Does not trigger if you have surrendered.
+            if (!surrendered) {
+                waitForTurn(endTurnButton);
+            }
         }
     }
 
@@ -610,8 +618,10 @@ public class GameLogic extends Application {
                             System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
+                            int getTurnPlayerResult = db.getTurnPlayer();
+                            // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                            if (db.getTurnPlayer() == user_id) {
+                            if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
                                 System.out.println("yourTurn changes");
                                 yourTurn = true;
                                 this.doStop();
@@ -625,8 +635,7 @@ public class GameLogic extends Application {
                             setUpNewTurn(endTurnButton);
 
                         });
-
-                        movementPhase = true;
+                        
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -653,6 +662,7 @@ public class GameLogic extends Application {
         deselect();
         selectedUnit = null;
         turn++;
+        movementPhase = true;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
 
@@ -712,8 +722,13 @@ public class GameLogic extends Application {
 
         surrender_yes.setOnAction(event -> {
             db.surrenderGame();
-            checkForGameOver();
-            endTurn(endTurnButton);
+            surrendered = true;
+
+            if (yourTurn) {
+                endTurn(endTurnButton);
+            } else {
+                checkForGameOver();
+            }
             confirm_alert.close();
         });
 
@@ -722,7 +737,7 @@ public class GameLogic extends Application {
         });
 
         HBox buttons = new HBox();
-        buttons.getChildren().addAll(surrender_yes,surrender_no);
+        buttons.getChildren().addAll(surrender_yes, surrender_no);
         buttons.setAlignment(Pos.CENTER);
         buttons.setSpacing(50);
 
@@ -730,7 +745,7 @@ public class GameLogic extends Application {
         content.setAlignment(Pos.CENTER);
         content.setSpacing(20);
 
-        content.getChildren().addAll(surrender_text,buttons);
+        content.getChildren().addAll(surrender_text, buttons);
         Scene scene = new Scene(content, 250, 150);
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
@@ -765,12 +780,13 @@ public class GameLogic extends Application {
             Text winnerText = new Text();
             winnerTextHeader.setStyle("-fx-font-size:32px;");
             winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
-            //db.incrementGamesPlayed();
+            db.incrementGamesPlayed();
 
             if (loser == user_id) {
                 win_loseText = "You Lose!\n";
             } else if (loser == opponent_id){
                 win_loseText = "You Win!\n";
+                db.incrementGamesWon();
             } else {
                 win_loseText = "Something went wrong\n";
             }
@@ -819,7 +835,7 @@ public class GameLogic extends Application {
                 }
             }
         }
-        System.out.println("YourPiceces " + yourPieces + " opponent: " + opponentsPieces);
+
         if (yourPieces == 0) {
             return 1;
         } else if (opponentsPieces == 0) {
@@ -831,16 +847,11 @@ public class GameLogic extends Application {
 
     private void gameCleanUp() {
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        if (Variables.waitTurnThread.isAlive()) {
-            Variables.waitTurnThread.stop();
+        if (waitTurnThread != null) {
+            waitTurnThread.stop();
         }
-
-        //Sets turns back to 1 for next match.
+        //Resets turns to 1 for next game.
         turn = 1;
-        match_id = -1;
-        player1 = -1;
-        player2 = -1;
-        opponent_id = -1;
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
@@ -917,22 +928,10 @@ public class GameLogic extends Application {
     }
 
     ////MAIN USED FOR SHUTDOWN HOOK////
-    public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() ->  {
-            if (user_id > 0) {
-                db.logout(user_id);
-            }
-            if (Variables.searchGameThread.isAlive()) {
-                Variables.searchGameThread.stop();
-            }
-            if (Variables.waitTurnThread.isAlive()) {
-                Variables.waitTurnThread.stop();
-            }
-            try {
-                db.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public void main(String[] args) {
+        System.out.println("SHUTDOWN HOOK CALLED");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Main.closeAndLogout();
         }));
         launch(args);
     }
