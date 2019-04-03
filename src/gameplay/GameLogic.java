@@ -767,7 +767,7 @@ public class GameLogic extends Application {
             gameCleanUp();
             //Open alert window.
             Stage winner_alert = new Stage();
-            //winner_alert.initModality(Modality.APPLICATION_MODAL);
+            winner_alert.initModality(Modality.APPLICATION_MODAL);
             winner_alert.setTitle("Game over!");
 
             Text winnerTextHeader = new Text();
