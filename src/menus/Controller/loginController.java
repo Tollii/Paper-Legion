@@ -5,6 +5,8 @@ import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import static database.Variables.*;
@@ -43,6 +45,9 @@ public class loginController extends Controller {
 
     @FXML
     private Label gameTitleLabel;
+
+    @FXML
+    private ImageView paperLegionLogo;
 
     @FXML
     void initialize() {
