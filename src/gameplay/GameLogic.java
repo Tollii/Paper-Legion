@@ -516,8 +516,8 @@ public class GameLogic extends Application {
         //removes unit selection and position
         selectedUnit = null;
         unitSelected = false;
-        selectedPosX = 0;
-        selectedPosY = 0;
+        selectedPosX = -1;
+        selectedPosY = -1;
 
         //removes unit description
         description.setText("");
