@@ -368,7 +368,6 @@ public class GameLogic extends Application {
                 moveCounter++; //increments move counter
 
                 select(event);
-
                 break;
             }
         }
