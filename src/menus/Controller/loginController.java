@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import static database.Variables.*;
 
 public class loginController extends Controller {
@@ -69,27 +70,28 @@ public class loginController extends Controller {
 
             @Override
             public void run() {
-                while(keepRunning()){
-                    if(loginPressed){
+                while (keepRunning()) {
+                    if (loginPressed) {
                         //Logs user in and enter main menu. Currently no info about the user is sent along.
-                        int userId = db.login(usernameInput.getText(),passwordInput.getText());
+                        int userId = db.login(usernameInput.getText(), passwordInput.getText());
                         if (userId > 0) {
                             setUser_id(userId);
-                            Platform.runLater( () ->{
+                            Platform.runLater(() -> {
                                 changeScene("mainMenu.fxml");
                             });
                             loginPressed = false;
                             this.doStop();
                         } else {
                             //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
-                            Platform.runLater(() ->{
-                                gameTitleLabel.setText("Login Failed");
+                            Platform.runLater(() -> {
+                                //gameTitleLabel.setText("Login Failed");
                                 loginPressed = false;
+                                System.out.println("User is already logged in");
+                                this.doStop();
                             });
                         }
                     }
                 }
-
             }
         };
 
@@ -102,18 +104,16 @@ public class loginController extends Controller {
 
         loginEnterButton.setOnAction(event -> {
             loginPressed = true;
-            if(!executed){
+            if (!executed) {
                 executed = true;
                 loginThread.start();
             }
-
-
-
         });
 
         loginEnterButton.setDefaultButton(true);
 
     }
+
     private void setUser_id(int userIDFromLogin) {
         user_id = userIDFromLogin;
     }

@@ -106,7 +106,6 @@ public class mainMenuController extends Controller {
                             }
                         }
                     }
-                    System.out.println("IM STILL RUNNING!");
                 }
             }
 
@@ -138,6 +137,7 @@ public class mainMenuController extends Controller {
         });
 
         mainMenuCustomMatchButton.setOnAction(event -> {
+            cancelGame();
             changeScene("MatchSetup.fxml");
         });
 
@@ -145,6 +145,7 @@ public class mainMenuController extends Controller {
         mainMenuExitButton.setOnAction(event -> {
             cancelGame();
             db.logout(user_id);
+            user_id = -1;
             changeScene("login.fxml");
         });
 
@@ -152,7 +153,6 @@ public class mainMenuController extends Controller {
         mainMenuGameInfoButton.setOnAction(event -> {
             cancelGame();
             changeScene("gameInfo.fxml");
-
         });
 
         mainMenuStatsButton.setOnAction(event -> {
@@ -177,7 +177,6 @@ public class mainMenuController extends Controller {
         findGameClicked = false;
         mainMenuPlayButton.setText("Play");
         db.abortMatch(user_id);
-        searchGameRunnable.doStop();
         System.out.println("Game cancelled");
     }
 

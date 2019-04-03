@@ -921,8 +921,6 @@ public class Database {
                 preparedUpdate.executeUpdate();
                 myConn.commit();
                 return userId;
-            } else {
-                System.out.println("User is already logged in");
             }
         } catch (SQLException e) {
             //e.printStackTrace();
