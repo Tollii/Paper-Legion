@@ -203,7 +203,74 @@ public class GameLogic extends Application {
 
         db.setReady(true);
         waitForOpponentReady();
+    }
 
+    ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
+    private void waitForOpponentReady() {
+        // Runnable lambda implementation for turn waiting with it's own thread
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while(keepRunning()){
+                    try {
+                        while (!opponentReady) {
+                            Thread.sleep(1000);
+                            //When player in database matches your own user_id it is your turn again.
+
+                            System.out.println(opponent_id + ": " + opponentReady);
+
+                            if (db.checkIfOpponentReady()) {
+                                opponentReady = true;
+
+                                System.out.println(opponent_id + ": " + opponentReady);
+                                this.doStop();
+                            }
+                        }
+
+
+                        //What will happen when your opponent is ready.
+
+                        Platform.runLater(()->{
+                            System.out.println("RUN LATER!!!");
+
+                                importOpponentplacementUnits();
+                                movementActionPhaseStart();
+
+
+                        });
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public synchronized void doStop(){
+                this.doStop = true;
+            }
+
+            @Override
+            public synchronized boolean keepRunning(){
+                return !this.doStop;
+            }
+        };
+
+        waitTurnThread = new Thread(waitTurnRunnable);
+        waitTurnThread.start();
+    }
+
+    private void importOpponentplacementUnits(){
+        ArrayList<PieceSetup> importList = db.importPlacementUnits();
+        System.out.println("SIZE OF IMPORT LIST: " + importList.size());
+
+        for (PieceSetup piece: importList) {
+            System.out.println("ADDING OPPONENT UNIT");
+            grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
+
+        }
     }
 
     ////MOVEMENT AND ACTION PHASE STARTER////
@@ -411,6 +478,63 @@ public class GameLogic extends Application {
         }
     }
 
+    ////UNIT SELECTOR AND DESELECTORS////
+    private void select(MouseEvent event) {
+        //checks if clicked tile has unit
+        if(grid.tileList[getPosYFromEvent(event)][getPosXFromEvent(event)] != null) {
+            //selects unit and unitposition
+            unitSelected = true;
+            selectedPosX = getPosXFromEvent(event);
+            selectedPosY = getPosYFromEvent(event);
+            selectedUnit = grid.tileList[selectedPosY][selectedPosX].getUnit();
+
+            //colors selected tile
+            grid.tileList[selectedPosY][selectedPosX].setStroke(selectionOutlineColor);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(3);
+
+            //displays possible moves or attacks
+            if(yourTurn){
+                if (movementPhase) {
+                    highlightPossibleMoves();
+                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                    highlightPossibleAttacks();
+                }
+            }
+            //displays the description of the unit
+            description.setText(selectedUnit.getDescription());
+            description.setVisible(true);
+        }
+    }
+
+    private void deselect() {
+        //removes selection of unit tile
+        grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+        grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+        grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
+
+        //removes unit selection and position
+        selectedUnit = null;
+        unitSelected = false;
+        selectedPosX = 0;
+        selectedPosY = 0;
+
+        //removes unit description
+        description.setText("");
+        description.setVisible(false);
+
+        clearHighLight();
+    }
+
+    ////METHODS FOR GETTING CLICK POSITION////
+    private int getPosXFromEvent(MouseEvent event) {
+        return (int)Math.ceil((event.getX()) / tileSize) - 1;
+    }
+
+    private int getPosYFromEvent(MouseEvent event) {
+        return (int)Math.ceil((event.getY()) / tileSize) - 1;
+    }
+
     ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
     private void endTurn(JFXButton endTurnButton) {
         if (yourTurn) {
@@ -508,74 +632,6 @@ public class GameLogic extends Application {
 
         waitTurnThread = new Thread(waitTurnRunnable);
         waitTurnThread.start();
-    }
-
-    ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
-    private void waitForOpponentReady() {
-        // Runnable lambda implementation for turn waiting with it's own thread
-        RunnableInterface waitTurnRunnable = new RunnableInterface() {
-            private boolean doStop = false;
-
-            @Override
-            public void run() {
-                while(keepRunning()){
-                    try {
-                        while (!opponentReady) {
-                            Thread.sleep(1000);
-                            //When player in database matches your own user_id it is your turn again.
-
-                            System.out.println(opponent_id + ": " + opponentReady);
-
-                            if (db.checkIfOpponentReady()) {
-                                opponentReady = true;
-
-                                System.out.println(opponent_id + ": " + opponentReady);
-                                this.doStop();
-                            }
-                        }
-
-
-                        //What will happen when your opponent is ready.
-
-                        Platform.runLater(()->{
-                            System.out.println("RUN LATER!!!");
-
-                                importOpponentplacementUnits();
-                                movementActionPhaseStart();
-
-
-                        });
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public synchronized void doStop(){
-                this.doStop = true;
-            }
-
-            @Override
-            public synchronized boolean keepRunning(){
-                return !this.doStop;
-            }
-        };
-
-        waitTurnThread = new Thread(waitTurnRunnable);
-        waitTurnThread.start();
-    }
-
-    private void importOpponentplacementUnits(){
-        ArrayList<PieceSetup> importList = db.importPlacementUnits();
-        System.out.println("SIZE OF IMPORT LIST: " + importList.size());
-
-        for (PieceSetup piece: importList) {
-            System.out.println("ADDING OPPONENT UNIT");
-            grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
-
-        }
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
@@ -770,62 +826,6 @@ public class GameLogic extends Application {
         player1 = -1;
         player2 = -1;
         opponent_id = -1;
-    }
-
-    private int getPosXFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getX() - gridXPadding) / tileSize) - 1;
-    }
-
-    private int getPosYFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getY() - gridYPadding) / tileSize) - 1;
-    }
-
-    ////UNIT SELECTOR AND DESELECTORS////
-    private void select(MouseEvent event) {
-        //checks if clicked tile has unit
-        if(grid.tileList[getPosYFromEvent(event)][getPosXFromEvent(event)] != null) {
-            //selects unit and unitposition
-            unitSelected = true;
-            selectedPosX = getPosXFromEvent(event);
-            selectedPosY = getPosYFromEvent(event);
-            selectedUnit = grid.tileList[selectedPosY][selectedPosX].getUnit();
-
-            //colors selected tile
-            grid.tileList[selectedPosY][selectedPosX].setStroke(selectionOutlineColor);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(3);
-
-            //displays possible moves or attacks
-            if(yourTurn){
-                if (movementPhase) {
-                    highlightPossibleMoves();
-                } else if (!selectedUnit.getHasAttackedThisTurn()) {
-                    highlightPossibleAttacks();
-                }
-            }
-            //displays the description of the unit
-            description.setText(selectedUnit.getDescription());
-            description.setVisible(true);
-        }
-    }
-
-    private void deselect() {
-        //removes selection of unit tile
-        grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
-        grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
-        grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
-
-        //removes unit selection and position
-        selectedUnit = null;
-        unitSelected = false;
-        selectedPosX = 0;
-        selectedPosY = 0;
-
-        //removes unit description
-        description.setText("");
-        description.setVisible(false);
-
-        clearHighLight();
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
