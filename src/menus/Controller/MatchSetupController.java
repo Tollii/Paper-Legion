@@ -100,7 +100,6 @@ import static database.Variables.*;
                     while(keepRunning()){
                         if(!gameEntered){
                             gameEntered = db.pollGameStarted(match_id);
-                            doStop();
 
                         } else{
                             Platform.runLater(
@@ -253,27 +252,26 @@ import static database.Variables.*;
                     // ADD MATCH IN GAME AND WAIT FOR PLAYER TO JOIN
                     submitPassword.setOnAction(event1 -> {
                         String passwordInserted = inputPassword.getText().trim().toString();
-                        db.createGame(user_id, passwordInserted);
+                        match_id = db.createGame(user_id, passwordInserted);
                         table.setItems(getMatches()); //Refreshes tables.
                         window.close();
                         createGameClicked = true;
                         createGameButton.setText("Abort Match");
                         matchSetupThread = new Thread(matchSetupRunnable);
-                        matchSetupThread.run();
+                        matchSetupThread.start();
 
 
                     });
 
                     // CREATE GAME WITHOUT PASSWORD
                     no_button.setOnAction(event1 -> {
-                        db.createGame(user_id, "null");
+                        match_id = db.createGame(user_id, "null");
                         table.setItems(getMatches()); //Refreshes tables.
                         window.close();
                         createGameClicked = true;
                         createGameButton.setText("Abort Match");
                         matchSetupThread = new Thread(matchSetupRunnable);
-                        matchSetupThread.run();
-
+                        matchSetupThread.start();
                     });
 
                     //CANCEL
@@ -286,8 +284,7 @@ import static database.Variables.*;
                     createGameClicked = false;
                     createGameButton.setText("Create Game");
                     table.setItems(getMatches()); //Refreshes tables.
-
-
+                    matchSetupThread.stop();
                 }
 
 
