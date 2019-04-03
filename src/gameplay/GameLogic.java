@@ -532,9 +532,8 @@ public class GameLogic extends Application {
 
                         //What will happen when your opponent is ready.
 
-                        //Increments turn. Back to your turn.
                         Platform.runLater(()->{
-
+                            importOpponentplacementUnits();
                             movementActionPhaseStart();
 
                         });
@@ -558,6 +557,16 @@ public class GameLogic extends Application {
 
         waitTurnThread = new Thread(waitTurnRunnable);
         waitTurnThread.start();
+    }
+
+    private void importOpponentplacementUnits(){
+        ArrayList<PieceSetup> importList = db.importPlacementUnits();
+
+        for (int i = 0; i < importList.size(); i++) {
+
+
+
+        }
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////

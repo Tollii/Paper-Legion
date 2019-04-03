@@ -999,10 +999,6 @@ public class Database {
         return -1;
     }
 
-    //TODO
-    public boolean importAttackList() {
-        return false;
-    }
     /*
      __ _             _
     / _(_) __ _ _ __ (_)_ __

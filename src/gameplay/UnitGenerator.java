@@ -55,7 +55,7 @@ public class  UnitGenerator {
     private static String catapultDescriptionTag =
             "Throwy-McGig";
     //TODO
-    private static Image catapultImage = null;
+    private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);;
     //TODO
     private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());;
 
