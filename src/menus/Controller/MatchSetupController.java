@@ -27,7 +27,7 @@ import static database.Variables.*;
 
     public class MatchSetupController extends Controller {
 
-        private boolean findGameClicked, gameEntered, threadStarted = false;
+        private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
 
         //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
         //TODO: UNNCOMMENT TO ENABLE FEATURES
@@ -151,68 +151,85 @@ import static database.Variables.*;
             });
 
             createGameButton.setOnAction(event -> {
-                //SETS UP PANES FOR POPUP WINDOW
-                StackPane stackpane = new StackPane();
-                VBox vBox = new VBox();
-                Label dialog = new Label("Do you want to password protect this game?");
-                JFXButton yes_button = new JFXButton("Yes");
-                JFXButton no_button = new JFXButton("No");
-                HBox hBox = new HBox();
-                JFXButton abort = new JFXButton("Abort");
-                JFXButton submitPassword = new JFXButton("Submit");
-                JFXTextField inputPassword = new JFXTextField();
+                if(!createGameClicked){
+                    //SETS UP PANES FOR POPUP WINDOW
+                    StackPane stackpane = new StackPane();
+                    VBox vBox = new VBox();
+                    Label dialog = new Label("Do you want to password protect this game?");
+                    JFXButton yes_button = new JFXButton("Yes");
+                    JFXButton no_button = new JFXButton("No");
+                    HBox hBox = new HBox();
+                    JFXButton abort = new JFXButton("Abort");
+                    JFXButton submitPassword = new JFXButton("Submit");
+                    JFXTextField inputPassword = new JFXTextField();
 
-                //STYLING, ALIGNMENT AND SPACINGS FOR BUTTONS AND INPUT IN POPUP WINDOW
-                yes_button.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
-                no_button.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
-                abort.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
-                submitPassword.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
-                hBox.setSpacing(10);
-                hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(yes_button,no_button, abort);
-                vBox.getChildren().addAll(dialog,hBox);
-                vBox.setAlignment(Pos.CENTER);
-                vBox.setSpacing(20);
-                stackpane.getChildren().add(vBox);
-                inputPassword.setPromptText("Enter password");
-                inputPassword.setPrefWidth(150);
-                inputPassword.setMaxWidth(150);
+                    //STYLING, ALIGNMENT AND SPACINGS FOR BUTTONS AND INPUT IN POPUP WINDOW
+                    yes_button.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                    no_button.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                    abort.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                    submitPassword.setStyle("-fx-background-color: Black;" +"-fx-text-fill: White;");
+                    hBox.setSpacing(10);
+                    hBox.setAlignment(Pos.CENTER);
+                    hBox.getChildren().addAll(yes_button,no_button, abort);
+                    vBox.getChildren().addAll(dialog,hBox);
+                    vBox.setAlignment(Pos.CENTER);
+                    vBox.setSpacing(20);
+                    stackpane.getChildren().add(vBox);
+                    inputPassword.setPromptText("Enter password");
+                    inputPassword.setPrefWidth(150);
+                    inputPassword.setMaxWidth(150);
 
 
-                //CREATES POPUP WINDOW
-                Stage window = new Stage();
-                window.initStyle(StageStyle.UNDECORATED);
-                Scene scene = new Scene(stackpane, 300,150);
-                window.setScene(scene);
-                window.show();
+                    //CREATES POPUP WINDOW
+                    Stage window = new Stage();
+                    window.initStyle(StageStyle.UNDECORATED);
+                    Scene scene = new Scene(stackpane, 300,150);
+                    window.setScene(scene);
+                    window.show();
 
-                // IN CASE USER WANTS TO PASSWORD PROTECT GAME
-                yes_button.setOnAction(event1 -> {
-                    dialog.setText("Input password for game:");
-                    hBox.getChildren().removeAll(yes_button,no_button, abort);
-                    vBox.getChildren().removeAll(hBox);
-                    hBox.getChildren().addAll(submitPassword, abort);
-                    vBox.getChildren().addAll(inputPassword, hBox);
-                });
+                    // IN CASE USER WANTS TO PASSWORD PROTECT GAME
+                    yes_button.setOnAction(event1 -> {
+                        dialog.setText("Input password for game:");
+                        hBox.getChildren().removeAll(yes_button,no_button, abort);
+                        vBox.getChildren().removeAll(hBox);
+                        hBox.getChildren().addAll(submitPassword, abort);
+                        vBox.getChildren().addAll(inputPassword, hBox);
+                    });
 
-                // ADD MATCH IN GAME AND WAIT FOR PLAYER TO JOIN
-                submitPassword.setOnAction(event1 -> {
-                    String passwordInserted = inputPassword.getText().trim().toString();
-                    //TODO: ADD TO DATABASE AND WAIT POLL, AND ENTER GAME WHEN PLAYER JOINED
-                    System.out.println(passwordInserted);
-                });
+                    // ADD MATCH IN GAME AND WAIT FOR PLAYER TO JOIN
+                    submitPassword.setOnAction(event1 -> {
+                        String passwordInserted = inputPassword.getText().trim().toString();
+                        db.createGame(user_id, passwordInserted);
+                        table.setItems(getMatches()); //Refreshes tables.
+                        window.close();
+                        createGameClicked = true;
+                        createGameButton.setText("Abort Match");
+                        //TODO: ADD POLLING AND CHANGE BUTTON TEXT AND LIMIT HOW MANY TIMES ONE CAN CREATE GAME
+                    });
 
-                // CREATE GAME WITHOUT PASSWORD
-                no_button.setOnAction(event1 -> {
-                    db.createGame(user_id);
+                    // CREATE GAME WITHOUT PASSWORD
+                    no_button.setOnAction(event1 -> {
+                        db.createGame(user_id, "null");
+                        table.setItems(getMatches()); //Refreshes tables.
+                        window.close();
+                        createGameClicked = true;
+                        createGameButton.setText("Abort Match");
+                    });
+
+                    //CANCEL
+                    abort.setOnAction(event1 -> {
+                        window.close();
+                    });
+
+                } else{
+                    db.abortMatch(user_id);
+                    createGameClicked = false;
+                    createGameButton.setText("Create Game");
                     table.setItems(getMatches()); //Refreshes tables.
-                    window.close();
-                });
 
-                //CANCEL
-                abort.setOnAction(event1 -> {
-                    window.close();
-                });
+
+                }
+
 
             });
 

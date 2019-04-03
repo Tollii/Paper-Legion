@@ -76,7 +76,7 @@ public class mainMenuController extends Controller {
                         }
                         //if none available create own game
                         if (match_id < 0) {
-                            match_id = db.createGame(user_id);
+                            match_id = db.createGame(user_id, "null");
                             // If you create the game, you are player 1.
                             yourTurn = true;
                             try {

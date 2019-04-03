@@ -31,7 +31,7 @@ public class GameLogicTest {
 
         user_id = 3;
         Variables.opponent_id = 51;
-        db.createGame(user_id);
+        db.createGame(user_id, "null");
 
         ConnectionPool connectionPool;
         connectionPool = ConnectionPool.create();
