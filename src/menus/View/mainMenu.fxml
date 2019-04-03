@@ -23,14 +23,11 @@
                <children>
                       <VBox alignment="CENTER_LEFT" prefHeight="366.0" prefWidth="590.0" spacing="15.0">
                           <children>
-                              <Label fx:id="gameTitleLabel" text="Paper Legion">
-                                  <font>
-                                      <Font name="Avenir Light" size="39.0" />
-                                  </font>
-                                  <VBox.margin>
-                                      <Insets />
-                                  </VBox.margin>
-                              </Label>
+                        <ImageView fx:id="paperLegionLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="/menus/menuAssets/paperLegionLogo.png" />
+                           </image>
+                        </ImageView>
                               <Label fx:id="mainMenuLoggedInAsLabel" text="Logged in as ">
                                   <font>
                                       <Font size="22.0" />
@@ -39,12 +36,12 @@
                                       <Insets bottom="15.0" />
                                   </VBox.margin>
                               </Label>
-                              <JFXButton fx:id="mainMenuPlayButton" maxHeight="50.0" maxWidth="257.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #000000;" text="Play" textFill="WHITE">
+                              <JFXButton fx:id="mainMenuPlayButton" maxHeight="50.0" maxWidth="257.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #000000;" text="Quick Match" textFill="WHITE">
                                   <VBox.margin>
                                       <Insets bottom="-10.0" />
                                   </VBox.margin>
                               </JFXButton>
-                              <JFXButton fx:id="mainMenuSettingsButton" maxHeight="50.0" maxWidth="256.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Settings">
+                              <JFXButton fx:id="mainMenuCustomMatchButton" maxHeight="50.0" maxWidth="256.0" minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0" style="-fx-background-color: #e3e4e5#e3e4e5;" text="Custom Match">
                                   <VBox.margin>
                                       <Insets bottom="-10.0" />
                                   </VBox.margin>

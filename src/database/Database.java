@@ -1,6 +1,7 @@
 package database;
 
 import gameplay.*;
+import menus.Controller.Match;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -43,6 +44,48 @@ public class Database {
 \/    \/\__,_|\__\___|_| |_|_| |_| |_|\__,_|_|\_\_|_| |_|\__, |
                                                          |___/
      */
+
+
+
+    public ArrayList<Match> findGamesAvailable(){
+        ArrayList<Match> matches = new ArrayList<Match>();
+        String sqlString = "select match_id, username, password from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = myConn.prepareStatement(sqlString);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                int match_id = resultSet.getInt("match_id");
+                String playername = resultSet.getString("username");
+                boolean passwordProtected;
+                String password = resultSet.getString("password");
+                if(password != null){
+                 passwordProtected = true;
+                } else{
+                    passwordProtected = false;
+                }
+
+                matches.add(new Match(match_id,playername, passwordProtected, password));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+
+        return matches;
+
+    }
 
     public static ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
@@ -91,9 +134,9 @@ public class Database {
         return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "", null, null);
     }
 
-    public int matchMaking_search(int player_id) {
+    public int quickMatch_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
-        String sqlString = "SELECT * FROM Matches where game_started=0";
+        String sqlString = "SELECT * FROM Matches where game_started=0 and password is null";
         ResultSet results = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -151,16 +194,23 @@ public class Database {
         return false;
     }
 
-    public int createGame(int player_id) {
+    public int createGame(int player_id, String password) {
         int match_id = -1;
         Connection myConn = connectionPool.getConnection();
-        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started) values (default,?,null,0);";
+        String sqlSetning = "insert into Matches(match_id, player1, player2, game_started, password) values (default,?,null,0, ?);";
         PreparedStatement preparedStatement = null;
         ResultSet match_id_result = null;
         try {
             myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(sqlSetning);
             preparedStatement.setInt(1, player_id);
+            if(password.equalsIgnoreCase("null")){
+                preparedStatement.setString(2, null);
+            } else{
+                preparedStatement.setString(2, password);
+
+            }
+
             int result = preparedStatement.executeUpdate();
             myConn.commit();
             if (result > 0) {
@@ -688,7 +738,9 @@ public class Database {
             preparedStatement.setInt(1, match_id);
             rs = preparedStatement.executeQuery();
             myConn.commit();
-            rs.next();
+            if (!rs.next()) {
+                return -1;
+            }
             return rs.getInt("player");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1038,8 +1090,6 @@ public class Database {
                 preparedUpdate.executeUpdate();
                 myConn.commit();
                 return userId;
-            } else {
-                System.out.println("User is already logged in");
             }
         } catch (SQLException e) {
             //e.printStackTrace();

@@ -3,6 +3,8 @@ package menus.Controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+
 import static database.Variables.*;
 
 public class StatsController extends Controller{
@@ -22,6 +24,9 @@ public class StatsController extends Controller{
 
     @FXML
     private JFXButton statsBackButton;
+
+    @FXML
+    private ImageView paperLegionLogo;
 
 
     @FXML
