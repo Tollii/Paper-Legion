@@ -15,8 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import static database.Variables.*;
+import static gameplay.GameLogic.boardSize;
 
 public class Database {
     //Test
@@ -675,6 +677,153 @@ public class Database {
         return null;
     }
     */
+
+    public void insertObstacles() {
+        Random rand = new Random();
+        int antallObstacles = 3 + rand.nextInt(5);
+        obstacles = new int[antallObstacles][2];
+        int xPos;
+        int yPos;
+        boolean position_exists;
+        for(int i = 0; i<antallObstacles; i++){
+            position_exists = true;
+            while(position_exists) {
+                xPos = rand.nextInt(boardSize);
+                yPos = 2 + rand.nextInt(boardSize-(2*2));
+                if (randGenNoRepeats(xPos, yPos, i)) {
+                    obstacles[i][0] = xPos;
+                    obstacles[i][1] = yPos;
+                    position_exists = false;
+                }
+            }
+        }
+        Connection myConn = connectionPool.getConnection();
+        Connection myConn2 = connectionPool.getConnection();
+        PreparedStatement player = null;
+        PreparedStatement matchUpdate = null;
+
+
+        //The statement
+        String sqlPlayerObstacle = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
+        String ObstacleAmounts = "UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;";
+
+        try {
+            //           myConn.setAutoCommit(false);
+            //         myConn2.setAutoCommit(false);
+
+            for (int i = 0; i < antallObstacles; i++) {
+                player = myConn.prepareStatement(sqlPlayerObstacle);
+                player.setInt(1, i+1);
+                player.setInt(2, match_id);
+                player.setInt(3, obstacles[i][0]);
+                player.setInt(4, obstacles[i][1]);
+
+                player.executeUpdate();
+            }
+
+            matchUpdate = myConn2.prepareStatement(ObstacleAmounts);
+            matchUpdate.setInt(1,antallObstacles);
+            matchUpdate.setInt(2,match_id);
+
+            matchUpdate.executeUpdate();
+
+
+
+            //           myConn.commit();
+            //         myConn2.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+//            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(player);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+    public ArrayList<Obstacle> importObstacles() {
+        ArrayList<Obstacle> ObstacleImport = new ArrayList<Obstacle>();
+        ResultSet result = null;
+        PreparedStatement preparedStatement = null;
+        int positionX;
+        int positionY;
+        int obstacleID;
+
+        Connection myConn = connectionPool.getConnection();
+        String sqlsetning = "SELECT obstacle_id, position_x, position_y FROM Obstacles WHERE match_id = ?";
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlsetning);
+            preparedStatement.setInt(1, match_id); //This is the correct one
+            result = preparedStatement.executeQuery();
+            myConn.commit();
+            while (result.next()) {
+                obstacleID = result.getInt("obstacle_id");
+                positionX = result.getInt("position_x");
+                positionY = result.getInt("position_y");
+
+                Obstacle piece = new Obstacle(positionX, positionY, obstacleID);
+                ObstacleImport.add(piece);
+            }
+
+
+            return ObstacleImport;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return null;
+    }
+
+    public Boolean importObstacleAmount() {
+        ResultSet result = null;
+        ResultSet result2 = null;
+
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+        Integer obstacle_amount;
+        int obstacle_in_db;
+
+        Connection myConn = connectionPool.getConnection();
+        Connection myConn2 = connectionPool.getConnection();
+        String sqlsetning = "SELECT obstacle_amount FROM Matches WHERE match_id = ?";
+        String sqlCount = "SELECT COUNT(*) AS counting FROM Obstacles WHERE match_id = ?";
+        try {
+            myConn.setAutoCommit(false);
+            myConn2.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(sqlsetning);
+            preparedStatement2 = myConn.prepareStatement(sqlCount);
+            preparedStatement.setInt(1, match_id); //This is the correct one
+            preparedStatement2.setInt(1,match_id);
+            result = preparedStatement.executeQuery();
+            result2 = preparedStatement2.executeQuery();
+            myConn.commit();
+            myConn2.commit();
+            result2.next();
+            result.next();
+            if (!result.wasNull()) {
+                obstacle_amount = result.getInt("obstacle_amount");
+                obstacle_in_db = result2.getInt("counting");
+
+                if (obstacle_amount == obstacle_in_db && obstacle_in_db != 0) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(result);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return null;
+    }
+
     /*
        ___                           _
       / _ \__ _ _ __ ___   ___ _ __ | | __ _ _   _
