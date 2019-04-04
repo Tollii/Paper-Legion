@@ -678,58 +678,37 @@ public class Database {
     }
     */
 
-    public void insertObstacles() {
-        Random rand = new Random();
-        int antallObstacles = 3 + rand.nextInt(5);
-        obstacles = new int[antallObstacles][2];
-        int xPos;
-        int yPos;
-        boolean position_exists;
-        for(int i = 0; i<antallObstacles; i++){
-            position_exists = true;
-            while(position_exists) {
-                xPos = rand.nextInt(boardSize);
-                yPos = 2 + rand.nextInt(boardSize-(2*2));
-                if (randGenNoRepeats(xPos, yPos, i)) {
-                    obstacles[i][0] = xPos;
-                    obstacles[i][1] = yPos;
-                    position_exists = false;
-                }
-            }
-        }
+    public void exportObstacles(ArrayList<Obstacle> obstacles) {
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();
         PreparedStatement player = null;
         PreparedStatement matchUpdate = null;
-
 
         //The statement
         String sqlPlayerObstacle = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
         String ObstacleAmounts = "UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;";
 
         try {
-            //           myConn.setAutoCommit(false);
+            //         myConn.setAutoCommit(false);
             //         myConn2.setAutoCommit(false);
 
-            for (int i = 0; i < antallObstacles; i++) {
+            for (int i = 0; i < obstacles.size(); i++) {
                 player = myConn.prepareStatement(sqlPlayerObstacle);
                 player.setInt(1, i+1);
                 player.setInt(2, match_id);
-                player.setInt(3, obstacles[i][0]);
-                player.setInt(4, obstacles[i][1]);
+                player.setInt(3, obstacles.get(i).getPosX());
+                player.setInt(4, obstacles.get(i).getPosY());
 
                 player.executeUpdate();
             }
 
             matchUpdate = myConn2.prepareStatement(ObstacleAmounts);
-            matchUpdate.setInt(1,antallObstacles);
+            matchUpdate.setInt(1,obstacles.size());
             matchUpdate.setInt(2,match_id);
 
             matchUpdate.executeUpdate();
 
-
-
-            //           myConn.commit();
+            //          myConn.commit();
             //         myConn2.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -739,6 +718,7 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+
     public ArrayList<Obstacle> importObstacles() {
         ArrayList<Obstacle> ObstacleImport = new ArrayList<Obstacle>();
         ResultSet result = null;
@@ -763,8 +743,6 @@ public class Database {
                 Obstacle piece = new Obstacle(positionX, positionY, obstacleID);
                 ObstacleImport.add(piece);
             }
-
-
             return ObstacleImport;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -8,7 +8,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.embed.swing.SwingFXUtils;
+
 import java.awt.image.BufferedImage;
+
 import javafx.scene.media.AudioClip;
 
 public class Unit extends StackPane {
@@ -36,7 +38,7 @@ public class Unit extends StackPane {
     private int healthbarPosY = 40;
     private int pieceId;
 
-    public Unit(boolean enemy, UnitType type, int unitId){
+    public Unit(boolean enemy, UnitType type, int unitId) {
         rect = new Rectangle();
         rect.setWidth(GameLogic.tileSize);
         rect.setHeight(GameLogic.tileSize);
@@ -71,17 +73,17 @@ public class Unit extends StackPane {
         ///SETS UNIT IMAGE////
 
         if (enemy) { //sets gold if enemy, blue if friendly
-          BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
-          changeColor(imgBuf, 0, 0, 0, 155, 135, 65);
-          rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
+            BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
+            changeColor(imgBuf, 0, 0, 0, 155, 135, 65);
+            rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
         } else {
-          BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
-          changeColor(imgBuf, 0, 0, 0, 56, 31, 217);
-          rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
+            BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
+            changeColor(imgBuf, 0, 0, 0, 56, 31, 217);
+            rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
         }
     }
 
-    public boolean getEnemy(){
+    public boolean getEnemy() {
         return enemy;
     }
 
@@ -94,23 +96,23 @@ public class Unit extends StackPane {
     }
 
     ////GET UNIT INFO////
-    public String getTypeString(){
+    public String getTypeString() {
         return type.getType();
     }
 
-    public UnitType getType(){
+    public UnitType getType() {
         return type;
     }
 
-    public int getUnitTypeId(){
+    public int getUnitTypeId() {
         return unitTypeId;
     }
 
-    public double getHp(){
+    public double getHp() {
         return hp;
     }
 
-    public int getAttack(){
+    public int getAttack() {
         return attack;
     }
 
@@ -135,10 +137,10 @@ public class Unit extends StackPane {
     }
 
     public int getPieceId() {
-      return pieceId;
+        return pieceId;
     }
 
-    public String getDescription(){
+    public String getDescription() {
 
         return descriptionTag + "\n" +
                 "\nHp: " + hp +
@@ -146,54 +148,54 @@ public class Unit extends StackPane {
                 "\nAttack: " + attack + "x\n" + "\n" + description;
     }
 
-    public void setHp(double hp){
+    public void setHp(double hp) {
         this.hp = hp;
 
         healthbar.setText(String.valueOf(hp));
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
-        if(hp <= LOW_HP_THRESHOLD){
+        if (hp <= LOW_HP_THRESHOLD) {
             healthbar.setStyle("-fx-background-color: Red");
         }
     }
 
-    public void takeDamage(double damageDealt){
+    public void takeDamage(double damageDealt) {
 
         this.hp -= damageDealt / defenceMultiplier;
 
         healthbar.setText(String.valueOf(hp));
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
-        if(hp <= LOW_HP_THRESHOLD){
+        if (hp <= LOW_HP_THRESHOLD) {
             healthbar.setStyle("-fx-background-color: Red");
         }
     }
 
     public Image getUnitImage() {
-      return type.getUnitImage();
+        return type.getUnitImage();
     }
 
     public AudioClip getAudio() {
-      return type.getAudio();
+        return type.getAudio();
     }
 
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
 
-      int RGB_MASK = 0x00ffffff;
-      int ALPHA_MASK = 0xff000000;
+        int RGB_MASK = 0x00ffffff;
+        int ALPHA_MASK = 0xff000000;
 
-      int oldRGB = oldRed << 16 | oldGreen << 8 | oldBlue;
-      int toggleRGB = oldRGB ^ (newRed << 16 | newGreen << 8 | newBlue);
+        int oldRGB = oldRed << 16 | oldGreen << 8 | oldBlue;
+        int toggleRGB = oldRGB ^ (newRed << 16 | newGreen << 8 | newBlue);
 
-      int w = imgBuf.getWidth();
-      int h = imgBuf.getHeight();
+        int w = imgBuf.getWidth();
+        int h = imgBuf.getHeight();
 
-      int[] rgb = imgBuf.getRGB(0, 0, w, h, null, 0, w);
-      for (int i = 0; i < rgb.length; i++) {
-          if ((rgb[i] & RGB_MASK) == oldRGB) {
-              rgb[i] ^= toggleRGB;
-          }
-      }
-      imgBuf.setRGB(0, 0, w, h, rgb, 0, w);
+        int[] rgb = imgBuf.getRGB(0, 0, w, h, null, 0, w);
+        for (int i = 0; i < rgb.length; i++) {
+            if ((rgb[i] & RGB_MASK) == oldRGB) {
+                rgb[i] ^= toggleRGB;
+            }
+        }
+        imgBuf.setRGB(0, 0, w, h, rgb, 0, w);
     }
 }

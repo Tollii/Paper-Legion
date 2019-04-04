@@ -12,78 +12,78 @@ import javafx.scene.paint.Paint;
 
 public class Tile extends StackPane { //each tile is a stackpane containing a rectangle
 
-  private Unit unit;
-  private Rectangle rect;
-  private boolean isTargetable = true;
+    private Unit unit;
+    private Rectangle rect;
+    private boolean isTargetable = true;
 
-    public Tile(int sizeX, int sizeY){
-      rect = new Rectangle(sizeX, sizeY, Color.WHITE);
-      rect.setStrokeType(StrokeType.INSIDE);
-      rect.setStroke(Color.BLACK);
-      rect.setStrokeWidth(1);
+    public Tile(int sizeX, int sizeY) {
+        rect = new Rectangle(sizeX, sizeY, Color.WHITE);
+        rect.setStrokeType(StrokeType.INSIDE);
+        rect.setStroke(Color.BLACK);
+        rect.setStrokeWidth(1);
 
-      this.getChildren().add(rect);
+        this.getChildren().add(rect);
 
-      //detects a dragevent over the tile, and readies the tile for accepting a copy transfer
-      this.setOnDragOver(event -> {
-        Dragboard dragboard = event.getDragboard();
+        //detects a dragevent over the tile, and readies the tile for accepting a copy transfer
+        this.setOnDragOver(event -> {
+            Dragboard dragboard = event.getDragboard();
 
-        if (event.getGestureSource() != this && dragboard.hasImage() && dragboard.hasString() && isTargetable) {
-          event.acceptTransferModes(TransferMode.COPY);
-        }
-      });
+            if (event.getGestureSource() != this && dragboard.hasImage() && dragboard.hasString() && isTargetable) {
+                event.acceptTransferModes(TransferMode.COPY);
+            }
+        });
 
-      //detects when a dragevent is dropped on the tile
-      this.setOnDragDropped(event -> {
-        Dragboard dragboard = event.getDragboard();
+        //detects when a dragevent is dropped on the tile
+        this.setOnDragDropped(event -> {
+            Dragboard dragboard = event.getDragboard();
 
-        boolean success = false;
-        if (dragboard.hasImage() && dragboard.hasString()) {
-          Unit newUnit = SetUp.unitGenerator.newFriendlyUnit(dragboard.getString()); //creates new friendly unit and adds to tile
+            boolean success = false;
+            if (dragboard.hasImage() && dragboard.hasString()) {
+                Unit newUnit = SetUp.unitGenerator.newFriendlyUnit(dragboard.getString()); //creates new friendly unit and adds to tile
 
-          setUnit(newUnit);
-          setUntargetable();
-          success = true;
-        }
-        event.setDropCompleted(success);
-      });
+                setUnit(newUnit);
+                setUntargetable();
+                success = true;
+            }
+            event.setDropCompleted(success);
+        });
     }
 
     //get and set methods
     public void setUnit(Unit unit) {
-      this.unit = unit;
-      this.getChildren().add(unit);
+        this.unit = unit;
+        this.getChildren().add(unit);
     }
 
     public Unit getUnit() {
-      return unit;
+        return unit;
     }
 
     //method for removing unit when moved or killed
     public void removeUnit() {
-      this.getChildren().remove(unit);
-      unit = null;
+        this.getChildren().remove(unit);
+        unit = null;
     }
 
     public void setUntargetable() {
-      if (isTargetable) {
-        isTargetable = false;
-      }
+        if (isTargetable) {
+            isTargetable = false;
+        }
     }
 
     public void setFill(Paint color) {
-      rect.setFill(color);
+        rect.setFill(color);
     }
 
     public void setStroke(Paint color) {
-      rect.setStroke(color);
+        rect.setStroke(color);
     }
 
     public void setStrokeType(StrokeType value) {
-      rect.setStrokeType(value);
+        rect.setStrokeType(value);
     }
 
     public void setStrokeWidth(double value) {
-      rect.setStrokeWidth(value);
+        rect.setStrokeWidth(value);
     }
 }

@@ -23,7 +23,6 @@ import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,7 +30,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
@@ -47,7 +45,8 @@ import static database.Variables.*;
 import static database.Variables.waitTurnThread;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Random;
+
 import javafx.geometry.Orientation;
 import menus.Main;
 
@@ -62,8 +61,7 @@ public class GameLogic extends Application {
     private Pane root;
     private Label description = new Label();                //description label for the selected unit
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
-
-    private Thread waitTurnThread;
+    ArrayList<Obstacle> obstacles;
 
     ////WINDOW SIZE////
     private final int windowWidth = 1920;
@@ -136,7 +134,7 @@ public class GameLogic extends Application {
 
         Pane gridPane = createGrid(); //creates the grid
 
-        //obstacles = db.importObstacles();
+        addObstacles();
 
         placementPhaseStart(); //starts the placement phase
 
@@ -145,8 +143,30 @@ public class GameLogic extends Application {
         window.show();
     }
 
+    private void addObstacles() {
 
-    ////PLACMENET PHASE STARTER AND FINISHER METHODS////
+        Random rand = new Random();
+        int antallObstacles = 3 + rand.nextInt(5);
+        //obstacles = new int[antallObstacles][2];
+        int xPos;
+        int yPos;
+        boolean position_exists;
+        for(int i = 0; i < antallObstacles; i++){
+            position_exists = true;
+            while(position_exists) {
+                xPos = rand.nextInt(boardSize);
+                yPos = 2 + rand.nextInt(boardSize-(2*2));
+//                if (randGenNoRepeats(xPos, yPos, i)) {
+//                    obstacles[i][0] = xPos;
+//                    obstacles[i][1] = yPos;
+//                    position_exists = false;
+//                }
+            }
+        }
+    }
+
+
+    ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
     private void placementPhaseStart() {
         Pane recruitPane = createRecruitPane();
 
@@ -216,7 +236,7 @@ public class GameLogic extends Application {
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
-        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+        waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -236,7 +256,6 @@ public class GameLogic extends Application {
                                 this.doStop();
                             }
                         }
-
 
                         //What will happen when your opponent is ready.
 
@@ -266,7 +285,7 @@ public class GameLogic extends Application {
             }
         };
 
-        waitTurnThread = new Thread(waitTurnRunnable);
+        waitTurnThread = new Thread(waitPlacementThread);
         waitTurnThread.start();
     }
 
@@ -609,7 +628,7 @@ public class GameLogic extends Application {
 
     private void waitForTurn(JFXButton endTurnButton) {
         // Runnable lambda implementation for turn waiting with it's own thread
-        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+        waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
