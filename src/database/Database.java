@@ -720,7 +720,7 @@ public class Database {
     }
 
     public ArrayList<Obstacle> importObstacles() {
-        ArrayList<Obstacle> ObstacleImport = new ArrayList<Obstacle>();
+        ArrayList<Obstacle> ObstacleImport = new ArrayList<>();
         ResultSet result = null;
         PreparedStatement preparedStatement = null;
         int positionX;
