@@ -13,6 +13,7 @@ import javafx.scene.paint.Paint;
 public class Tile extends StackPane { //each tile is a stackpane containing a rectangle
 
     private Unit unit;
+    private Obstacle obstacle;
     private Rectangle rect;
     private boolean isTargetable = true;
 
@@ -65,7 +66,12 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
         unit = null;
     }
 
+    public Obstacle getObstacle() {
+        return obstacle;
+    }
+
     public void setObstacle(Obstacle obstacle) {
+        this.obstacle = obstacle;
         this.getChildren().add(obstacle);
     }
 

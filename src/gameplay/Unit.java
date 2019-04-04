@@ -66,7 +66,6 @@ public class Unit extends StackPane {
         healthbar.setAlignment(Pos.CENTER);
         healthbar.setTranslateY(healthbarPosY);
 
-
         healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
 
 

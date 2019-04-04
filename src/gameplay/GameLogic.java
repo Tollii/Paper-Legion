@@ -153,6 +153,8 @@ public class GameLogic extends Application {
     }
 
     private void addObstacles() {
+        // Player 2 adds obstacles when he joins. This could probably be done more efficiently.
+        // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
             Random rand = new Random();
             int obstacleCount = 3 + rand.nextInt(5);
@@ -171,6 +173,7 @@ public class GameLogic extends Application {
 
         System.out.println("There are " + obstacles.size() + " obstacles");
 
+        //Adds obstacles to the board.
         for (int i = 0; i < obstacles.size(); i++) {
             System.out.println(i + " - X: " + obstacles.get(i).getPosX() + " - Y:" + obstacles.get(i).getPosY());
             grid.tileList[obstacles.get(i).getPosY()][obstacles.get(i).getPosX()].setObstacle(obstacles.get(i));
@@ -486,7 +489,7 @@ public class GameLogic extends Application {
         //goes throug all tiles and adds those which isn't occupied and are within movement distance
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
-                if (grid.tileList[i][j].getUnit() == null) { //checks if there is a unit on the tile
+                if (grid.tileList[i][j].getUnit() == null && grid.tileList[i][j].getObstacle() == null) { //checks if there is a unit or obstacle on the tile
                     if (Math.abs(selectedPosY - i) + Math.abs(selectedPosX - j) <= selectedUnit.getMovementRange()) { //checks if tile within movement range
                         movementTargets.add(grid.tileList[i][j]);
                     }
