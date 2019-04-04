@@ -145,7 +145,7 @@ public class GameLogic extends Application {
     }
 
     private void addObstacles() {
-        if (yourTurn) {
+        if (!yourTurn) {
             Random rand = new Random();
             int obstacleCount = 3 + rand.nextInt(5);
             obstacles = new ArrayList<>();
@@ -157,17 +157,15 @@ public class GameLogic extends Application {
                 obstacles.add(new Obstacle(xPos, yPos, i));
             }
             db.exportObstacles(obstacles);
-        }
-        while(!db.importObstacleAmount()){
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        } else {
+            obstacles = db.importObstacles();
         }
 
+        System.out.println("There are " + obstacles.size() + " obstacles");
+
         for (int i = 0; i < obstacles.size(); i++) {
-            grid.tileList[obstacles.get(i).getPosX()][obstacles.get(i).getPosY()].setObstacle(obstacles.get(i));
+            System.out.println(i + " - X: " + obstacles.get(i).getPosX() + " - Y:" + obstacles.get(i).getPosY());
+            grid.tileList[obstacles.get(i).getPosY()][obstacles.get(i).getPosX()].setObstacle(obstacles.get(i));
         }
     }
 

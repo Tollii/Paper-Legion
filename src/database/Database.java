@@ -756,29 +756,38 @@ public class Database {
     }
 
     public Boolean importObstacleAmount() {
-        ResultSet result = null;
-        ResultSet result2 = null;
 
-        PreparedStatement preparedStatement = null;
-        PreparedStatement preparedStatement2 = null;
         Integer obstacle_amount;
         int obstacle_in_db;
 
+        ResultSet result = null;
+        ResultSet result2 = null;
+        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
+
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();
+
         String sqlsetning = "SELECT obstacle_amount FROM Matches WHERE match_id = ?";
         String sqlCount = "SELECT COUNT(*) AS counting FROM Obstacles WHERE match_id = ?";
         try {
             myConn.setAutoCommit(false);
             myConn2.setAutoCommit(false);
+
             preparedStatement = myConn.prepareStatement(sqlsetning);
+
             preparedStatement2 = myConn.prepareStatement(sqlCount);
+
             preparedStatement.setInt(1, match_id); //This is the correct one
+
             preparedStatement2.setInt(1,match_id);
+
             result = preparedStatement.executeQuery();
             result2 = preparedStatement2.executeQuery();
+
             myConn.commit();
             myConn2.commit();
+
             result2.next();
             result.next();
             if (!result.wasNull()) {
@@ -795,8 +804,11 @@ public class Database {
             e.printStackTrace();
         } finally {
             Cleaner.setAutoCommit(myConn);
+            Cleaner.setAutoCommit(myConn2);
             Cleaner.closeResSet(result);
+            Cleaner.closeResSet(result2);
             Cleaner.closeStatement(preparedStatement);
+            Cleaner.closeStatement(preparedStatement2);
             connectionPool.releaseConnection(myConn);
         }
         return null;
