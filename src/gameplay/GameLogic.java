@@ -167,7 +167,7 @@ public class GameLogic extends Application {
         }
 
         for (int i = 0; i < obstacles.size(); i++) {
-            grid.tileList[obstacles.get(i).getPosX()][obstacles.get(i).getPosY()].getChildren().add(obstacles.get(i));
+            grid.tileList[obstacles.get(i).getPosX()][obstacles.get(i).getPosY()].setObstacle(obstacles.get(i));
         }
     }
 
