@@ -53,7 +53,7 @@ import menus.Main;
 
 public class GameLogic extends Application {
     ////BOARD SIZE CONTROLS////
-    private static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
+    public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
     public static final int tileSize = 100;      //sets size of each tile on the grid
     private static final int playerSideSize = 2; //Used to set width of the placement area
 
@@ -135,6 +135,8 @@ public class GameLogic extends Application {
         Scene scene = new Scene(root, windowWidth, windowHeight);
 
         Pane gridPane = createGrid(); //creates the grid
+
+        //obstacles = db.importObstacles();
 
         placementPhaseStart(); //starts the placement phase
 
@@ -241,7 +243,7 @@ public class GameLogic extends Application {
                         Platform.runLater(()->{
                             System.out.println("RUN LATER!!!");
 
-                                importOpponentplacementUnits();
+                                importOpponentPlacementUnits();
                                 movementActionPhaseStart();
 
 
@@ -268,7 +270,7 @@ public class GameLogic extends Application {
         waitTurnThread.start();
     }
 
-    private void importOpponentplacementUnits(){
+    private void importOpponentPlacementUnits(){
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
