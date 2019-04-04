@@ -313,6 +313,7 @@ public class GameLogic extends Application {
 
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
+            phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
             waitForTurn(endTurnButton);
         } else {
@@ -323,6 +324,8 @@ public class GameLogic extends Application {
         ////BUTTON EvenT HANDLERS////
         endTurnButton.setOnAction(event -> {
             endTurn(endTurnButton);
+            phaseLabel.setText("OPPONENT'S TURN");
+
         });
 
         surrenderButton.setOnAction(event -> {
