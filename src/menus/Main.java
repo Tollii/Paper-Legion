@@ -53,6 +53,9 @@ public class Main extends Application {
         if (searchGameThread != null) {
             searchGameThread.stop();
         }
+        if (waitPlacementThread != null) {
+            waitPlacementThread.stop();
+        }
         if (waitTurnThread != null) {
             waitTurnThread.stop();
         }

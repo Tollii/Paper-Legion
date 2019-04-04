@@ -8,3 +8,5 @@ set player2=?, game_started=1 where match_id=?;
 
 -- Deletes game if abort --
 delete from Matches where player1=2;
+
+delete from Matches where game_started=0;

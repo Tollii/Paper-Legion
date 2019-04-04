@@ -685,15 +685,15 @@ public class Database {
         PreparedStatement matchUpdate = null;
 
         //The statement
-        String sqlPlayerObstacle = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
-        String ObstacleAmounts = "UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;";
+        String obstaclesInsertStmt = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
+        String obstaclesAmountStmt = "UPDATE Matches SET obstacle_amount = ? WHERE  match_id = ?;";
 
         try {
             //         myConn.setAutoCommit(false);
             //         myConn2.setAutoCommit(false);
 
             for (int i = 0; i < obstacles.size(); i++) {
-                player = myConn.prepareStatement(sqlPlayerObstacle);
+                player = myConn.prepareStatement(obstaclesInsertStmt);
                 player.setInt(1, i+1);
                 player.setInt(2, match_id);
                 player.setInt(3, obstacles.get(i).getPosX());
@@ -702,7 +702,7 @@ public class Database {
                 player.executeUpdate();
             }
 
-            matchUpdate = myConn2.prepareStatement(ObstacleAmounts);
+            matchUpdate = myConn2.prepareStatement(obstaclesAmountStmt);
             matchUpdate.setInt(1,obstacles.size());
             matchUpdate.setInt(2,match_id);
 

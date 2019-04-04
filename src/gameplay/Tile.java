@@ -65,6 +65,10 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
         unit = null;
     }
 
+    public void setObstacle(Obstacle obstacle) {
+        this.getChildren().add(obstacle);
+    }
+
     public void setUntargetable() {
         if (isTargetable) {
             isTargetable = false;

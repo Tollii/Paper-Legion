@@ -41,6 +41,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
 import static database.Variables.*;
 import static database.Variables.waitTurnThread;
 
@@ -78,13 +79,13 @@ public class GameLogic extends Application {
     private final int gridYPadding = 100;
 
     //PLACMENT PHASE SIDE PANEL//
-    private final int recruitXPadding = gridXPadding + tileSize*boardSize + 150;
+    private final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
     private final int recruitYPadding = 150;
     private final int placementButtonXPadding = 150;
     private final int placementButtonYPadding = 500;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
-    private final int sidePanelXPadding = gridXPadding + tileSize*boardSize + 150;
+    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
     private final int sidePanelYPadding = 150;
     private final int descriptionXPadding = 0;
     private final int descriptionYPadding = 0;
@@ -120,7 +121,7 @@ public class GameLogic extends Application {
     private Paint buttonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
-    private Paint untargetableTileColor = Color.color(155.0/255.0, 135.0/255.0, 65.0/255.0);
+    private Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
 
     public void start(Stage window) throws Exception {
         // Sets static variables for players and opponent id.
@@ -134,7 +135,7 @@ public class GameLogic extends Application {
 
         Pane gridPane = createGrid(); //creates the grid
 
-        addObstacles();
+        //addObstacles();
 
         placementPhaseStart(); //starts the placement phase
 
@@ -144,27 +145,26 @@ public class GameLogic extends Application {
     }
 
     private void addObstacles() {
-
-        Random rand = new Random();
-        int antallObstacles = 3 + rand.nextInt(5);
-        //obstacles = new int[antallObstacles][2];
-        int xPos;
-        int yPos;
-        boolean position_exists;
-        for(int i = 0; i < antallObstacles; i++){
-            position_exists = true;
-            while(position_exists) {
+        if (yourTurn) {
+            Random rand = new Random();
+            int obstacleCount = 3 + rand.nextInt(5);
+            obstacles = new ArrayList<>();
+            int xPos;
+            int yPos;
+            for (int i = 0; i < obstacleCount; i++) {
                 xPos = rand.nextInt(boardSize);
-                yPos = 2 + rand.nextInt(boardSize-(2*2));
-//                if (randGenNoRepeats(xPos, yPos, i)) {
-//                    obstacles[i][0] = xPos;
-//                    obstacles[i][1] = yPos;
-//                    position_exists = false;
-//                }
+                yPos = 2 + rand.nextInt(boardSize - (2 * 2));
+                obstacles.add(new Obstacle(xPos, yPos, i));
             }
+            db.exportObstacles(obstacles);
+        } else {
+            obstacles = db.importObstacles();
+        }
+
+        for (int i = 0; i < obstacles.size(); i++) {
+            grid.tileList[obstacles.get(i).getPosX()][obstacles.get(i).getPosY()].getChildren().add(obstacles.get(i));
         }
     }
-
 
     ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
     private void placementPhaseStart() {
@@ -217,7 +217,7 @@ public class GameLogic extends Application {
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
 
-                if(grid.tileList[i][j].getUnit() != null){
+                if (grid.tileList[i][j].getUnit() != null) {
                     exportUnitList.add(grid.tileList[i][j].getUnit());
                     exportPositionXList.add(j);
                     exportPositionYList.add(i);
@@ -225,7 +225,7 @@ public class GameLogic extends Application {
             }
         }
 
-        if (exportUnitList != null){
+        if (exportUnitList != null) {
             db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
         }
 
@@ -241,7 +241,7 @@ public class GameLogic extends Application {
 
             @Override
             public void run() {
-                while(keepRunning()){
+                while (keepRunning()) {
                     try {
                         while (!opponentReady) {
                             Thread.sleep(1000);
@@ -259,11 +259,11 @@ public class GameLogic extends Application {
 
                         //What will happen when your opponent is ready.
 
-                        Platform.runLater(()->{
+                        Platform.runLater(() -> {
                             System.out.println("RUN LATER!!!");
 
-                                importOpponentPlacementUnits();
-                                movementActionPhaseStart();
+                            importOpponentPlacementUnits();
+                            movementActionPhaseStart();
 
 
                         });
@@ -275,25 +275,25 @@ public class GameLogic extends Application {
             }
 
             @Override
-            public synchronized void doStop(){
+            public synchronized void doStop() {
                 this.doStop = true;
             }
 
             @Override
-            public synchronized boolean keepRunning(){
+            public synchronized boolean keepRunning() {
                 return !this.doStop;
             }
         };
 
-        waitTurnThread = new Thread(waitPlacementThread);
-        waitTurnThread.start();
+        waitPlacementThread = new Thread(waitPlacementThread);
+        waitPlacementThread.start();
     }
 
-    private void importOpponentPlacementUnits(){
+    private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
-        for (PieceSetup piece: importList) {
+        for (PieceSetup piece : importList) {
             System.out.println("ADDING OPPONENT UNIT");
             grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
 
@@ -451,7 +451,7 @@ public class GameLogic extends Application {
             ArrayList<Tile> attackTargets = getAttackableTiles();
 
             //colors all attackable tiles red
-            for (int i= 0; i < attackTargets.size(); i++) {
+            for (int i = 0; i < attackTargets.size(); i++) {
                 attackTargets.get(i).setFill(attackHighlightColor);
             }
         }
@@ -517,7 +517,7 @@ public class GameLogic extends Application {
         System.out.println("Y " + selectedPosY);
         System.out.println(grid.tileList[selectedPosY][selectedPosX].getUnit());
         System.out.println(!grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy());
-        if(grid.tileList[selectedPosY][selectedPosX].getUnit() != null && !grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy()) {
+        if (grid.tileList[selectedPosY][selectedPosX].getUnit() != null && !grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy()) {
             //selects unit and unitposition
             unitSelected = true;
             selectedUnit = grid.tileList[selectedPosY][selectedPosX].getUnit();
@@ -530,7 +530,7 @@ public class GameLogic extends Application {
             grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(3);
 
             //displays possible moves or attacks
-            if(yourTurn){
+            if (yourTurn) {
                 if (movementPhase) {
                     highlightPossibleMoves();
                 } else if (!selectedUnit.getHasAttackedThisTurn()) {
@@ -540,14 +540,14 @@ public class GameLogic extends Application {
             //displays the description of the unit
             description.setText(selectedUnit.getDescription());
             description.setVisible(true);
-        }else{
+        } else {
             selectedPosX = -1;
             selectedPosY = -1;
         }
     }
 
     private void deselect() {
-        if (unitSelected){
+        if (unitSelected) {
             //removes selection of unit tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
             grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
@@ -569,11 +569,11 @@ public class GameLogic extends Application {
 
     ////METHODS FOR GETTING CLICK POSITION////
     private int getPosXFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getX()) / tileSize) - 1;
+        return (int) Math.ceil((event.getX()) / tileSize) - 1;
     }
 
     private int getPosYFromEvent(MouseEvent event) {
-        return (int)Math.ceil((event.getY()) / tileSize) - 1;
+        return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }
 
     ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
@@ -595,7 +595,7 @@ public class GameLogic extends Application {
             }
 
             /////SEND ATTACKS////
-            if(attackList.size() != 0){
+            if (attackList.size() != 0) {
                 db.exportAttackList(attackList);
                 attackList = new ArrayList<>(); //Resets the attackList for the next turn.
             }
@@ -609,7 +609,7 @@ public class GameLogic extends Application {
             //Resets hasAttackedThisTurn for all units
             for (int i = 0; i < grid.tileList.length; i++) {
                 for (int j = 0; j < grid.tileList[i].length; j++) {
-                    if(grid.tileList[i][j].getUnit() != null){
+                    if (grid.tileList[i][j].getUnit() != null) {
                         grid.tileList[i][j].getUnit().setHasAttackedThisTurn(false);
                     }
 
@@ -633,7 +633,7 @@ public class GameLogic extends Application {
 
             @Override
             public void run() {
-                while(keepRunning()){
+                while (keepRunning()) {
                     try {
                         while (!yourTurn) {
                             System.out.println("Sleeps thread " + Thread.currentThread());
@@ -651,7 +651,7 @@ public class GameLogic extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        Platform.runLater(()->{
+                        Platform.runLater(() -> {
 
                             setUpNewTurn(endTurnButton);
 
@@ -664,12 +664,12 @@ public class GameLogic extends Application {
             }
 
             @Override
-            public synchronized void doStop(){
+            public synchronized void doStop() {
                 this.doStop = true;
             }
 
             @Override
-            public synchronized boolean keepRunning(){
+            public synchronized boolean keepRunning() {
                 return !this.doStop;
             }
         };
@@ -679,7 +679,7 @@ public class GameLogic extends Application {
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
-    private void setUpNewTurn(JFXButton endTurnButton){
+    private void setUpNewTurn(JFXButton endTurnButton) {
         deselect();
         selectedUnit = null;
         turn++;
@@ -687,8 +687,8 @@ public class GameLogic extends Application {
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
 
-        importedMovementList = db.importMoveList(turn-1, match_id);
-        importedAttackList = db.importAttackList(turn-1, match_id, opponent_id);
+        importedMovementList = db.importMoveList(turn - 1, match_id);
+        importedAttackList = db.importAttackList(turn - 1, match_id, opponent_id);
 
         System.out.println("importedAttackList size is: " + importedAttackList.size());
 
@@ -707,7 +707,7 @@ public class GameLogic extends Application {
             for (int j = 0; j < grid.tileList.length; j++) {
                 for (int k = 0; k < grid.tileList[j].length; k++) {
 
-                    if(grid.tileList[j][k].getUnit() != null && !grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == importedAttackList.get(i).getReceiverPieceID()){
+                    if (grid.tileList[j][k].getUnit() != null && !grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == importedAttackList.get(i).getReceiverPieceID()) {
                         System.out.println(importedAttackList.get(i).getDamage());
 
                         System.out.println("DOING AN ATTACK!" + grid.tileList[j][k].getUnit().getHp());
@@ -805,7 +805,7 @@ public class GameLogic extends Application {
 
             if (loser == user_id) {
                 win_loseText = "You Lose!\n";
-            } else if (loser == opponent_id){
+            } else if (loser == opponent_id) {
                 win_loseText = "You Win!\n";
                 db.incrementGamesWon();
             } else {
@@ -840,6 +840,7 @@ public class GameLogic extends Application {
             winner_alert.showAndWait();
         }
     }
+
     ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
     private int checkForEliminationVictory() {
         int yourPieces = 0;
@@ -932,20 +933,7 @@ public class GameLogic extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
-        if (user_id > 0) {
-            db.logout(user_id);
-        }
-        if (Variables.searchGameThread.isAlive()) {
-            Variables.searchGameThread.stop();
-        }
-        if (Variables.waitTurnThread.isAlive()) {
-            Variables.waitTurnThread.stop();
-        }
-        try {
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Main.closeAndLogout();
     }
 
     ////MAIN USED FOR SHUTDOWN HOOK////
