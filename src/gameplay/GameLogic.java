@@ -135,7 +135,7 @@ public class GameLogic extends Application {
 
         Pane gridPane = createGrid(); //creates the grid
 
-        //addObstacles();
+        addObstacles();
 
         placementPhaseStart(); //starts the placement phase
 
@@ -285,7 +285,7 @@ public class GameLogic extends Application {
             }
         };
 
-        waitPlacementThread = new Thread(waitPlacementThread);
+        waitPlacementThread = new Thread(waitPlacementRunnable);
         waitPlacementThread.start();
     }
 
