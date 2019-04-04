@@ -188,6 +188,8 @@ public class GameLogic extends Application {
 
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
+        Pane phaseLabelPane = createPhaseLabelPane();
+        phaseLabel.setText("WAITING FOR OTHER PLAYER");
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
