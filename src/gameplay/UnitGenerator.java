@@ -39,25 +39,33 @@ public class  UnitGenerator {
 
     ////Juggernaut////
     private static String juggernautDescription =
-            "Big angry man with stick, sometimes turns green";
+            "After receiving notice of owing taxes to the IRS, \n" +
+            "he went into a raging killing frenzy. \n"+
+            "Known as as Berserker to some, and to others, \n"+
+            "a big angry man with a stick.\n"+
+            "Attacks all units in a line, but takes damage every attack";
     private static String juggernautDescriptionTag =
             "Juggernaut";
     //TODO
     private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
     //TODO
-    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());;
+    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/juggernaut.wav").toString());;
 
     private static UnitType juggernautUnitType;
 
     ////Catapult////
     private static String catapultDescription=
-            "Usurped by the clearly better trebuchet";
+            "The sharpest minds, created the greatest\n" +
+            "ballistic device the world has ever seen. \n" +
+            "This is not that device. \n"+
+            "It can launch a payload a great distance, \n"+
+            "and has splash damage to nearby enemies.";
     private static String catapultDescriptionTag =
             "Throwy-McGig";
     //TODO
     private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);;
     //TODO
-    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());;
+    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/catapult.wav").toString());;
 
     private static UnitType catapultUnitType;
 

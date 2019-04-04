@@ -135,12 +135,19 @@ public class mainMenuController extends Controller {
         //Button handlers
 
         mainMenuPlayButton.setOnAction(event -> {
+            if(threadStarted){
+                db.abortMatch(user_id);
+
+            }
+
             if (!threadStarted) {
                 searchGameThread = new Thread(searchGameRunnable);
                 threadStarted = true;
                 searchGameThread.start();
             }
             if(findGameClicked)findGameClicked = false;
+
+
 
         });
 

@@ -33,7 +33,6 @@ import static database.Variables.*;
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
         private Thread matchSetupThread;
 
-        //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
         //TODO: DESPAGHETTI
 
 
@@ -86,7 +85,7 @@ import static database.Variables.*;
                 private boolean doStop = false;
 
                 @Override
-                public void doStop() {
+                public synchronized void doStop() {
                     this.doStop = true;
                 }
 
@@ -101,6 +100,8 @@ import static database.Variables.*;
                         if(!gameEntered){
                             gameEntered = db.pollGameStarted(match_id);
 
+                        } else if(!createGameClicked){
+                            doStop();
                         } else{
                             Platform.runLater(
                                     () -> {
@@ -108,7 +109,10 @@ import static database.Variables.*;
                                             yourTurn = true;
                                             enterGame();
                                             doStop();
+                                            gameEntered = false;
+                                            matchSetupThread = null;
                                         }
+
                                     });
                         }
 
@@ -190,6 +194,7 @@ import static database.Variables.*;
                       String passwordUserInput = inputPassword.getText().trim().toString();
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
                           window.close();
+                          db.joinGame(selectedMatch.getMatch_id(), user_id);
                           match_id =  selectedMatch.getMatch_id();
                           yourTurn = false;
                           enterGame();
@@ -259,8 +264,6 @@ import static database.Variables.*;
                         createGameButton.setText("Abort Match");
                         matchSetupThread = new Thread(matchSetupRunnable);
                         matchSetupThread.start();
-
-
                     });
 
                     // CREATE GAME WITHOUT PASSWORD
@@ -285,6 +288,7 @@ import static database.Variables.*;
                     createGameButton.setText("Create Game");
                     table.setItems(getMatches()); //Refreshes tables.
                     matchSetupThread.stop();
+                    matchSetupThread = null;
                 }
 
 

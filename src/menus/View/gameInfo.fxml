@@ -35,7 +35,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="264.0" prefWidth="574.0">
                                  <children>
-                                    <JFXTextArea editable="false" prefHeight="266.0" prefWidth="574.0" text="Binary Warfare is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking.&#10;Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " wrapText="true" AnchorPane.bottomAnchor="-99.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <JFXTextArea editable="false" prefHeight="266.0" prefWidth="574.0" text="Paper Legion is a game made by group 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking.&#10;Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " wrapText="true" AnchorPane.bottomAnchor="-99.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <padding>
                                           <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                                        </padding>

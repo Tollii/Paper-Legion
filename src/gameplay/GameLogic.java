@@ -62,6 +62,7 @@ public class GameLogic extends Application {
     private Pane root;
     private Label description = new Label();                //description label for the selected unit
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
+    private Label phaseLabel = new Label();
     ArrayList<Obstacle> obstacles;
 
     ////WINDOW SIZE////
@@ -69,8 +70,10 @@ public class GameLogic extends Application {
     private final int windowHeight = 1080;
 
     ////SIZE VARIABLES////
-    private final int buttonWidth = 150;
+    private final int buttonWidth = 175;
     private final int buttonHeight = 75;
+    private final int phaseLabelWidth = 300;
+    private final int phaseLabelHeight = 50;
 
     ////PANE PADDINGS////
 
@@ -88,13 +91,17 @@ public class GameLogic extends Application {
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
     private final int sidePanelYPadding = 150;
     private final int descriptionXPadding = 0;
-    private final int descriptionYPadding = 0;
-    private final int turnCounterXPadding = 150;
+    private final int descriptionYPadding = 100;
+    private final int turnCounterXPadding = 0;
     private final int turnCounterYPadding = 0;
     private final int endTurnButtonXPadding = 150;
     private final int endTurnButtonYPadding = 500;
     private final int surrenderButtonXPadding = 150;
     private final int surrenderButtonYPadding = 580;
+
+    //PHASELABEL PANE//
+    private final int phaseLabelXPadding = gridXPadding + (int)((tileSize*boardSize - phaseLabelWidth) / 2);
+    private final int phaseLabelYPadding = (int)((gridYPadding - phaseLabelHeight) / 2);
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
@@ -117,6 +124,7 @@ public class GameLogic extends Application {
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String buttonBackgroundColor = "-fx-background-color: #000000";
     private String turnCounterFontSize = "-fx-font-size: 32px";
+    private String phaseLabelFontSize = "-fx-font-size: 32px";
     private Paint selectionOutlineColor = Color.RED;
     private Paint buttonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
@@ -205,6 +213,8 @@ public class GameLogic extends Application {
 
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
+        Pane phaseLabelPane = createPhaseLabelPane();
+        phaseLabel.setText("WAITING FOR OTHER PLAYER");
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
@@ -306,27 +316,34 @@ public class GameLogic extends Application {
     ////MOVEMENT AND ACTION PHASE STARTER////
     private void movementActionPhaseStart() {
         Pane sidePanel = createSidePanel();
+        Pane phaseLabelPane = createPhaseLabelPane();
 
         JFXButton endTurnButton = new JFXButton("End turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
-        endTurnButton.setLayoutX(endTurnButtonXPadding);
-        endTurnButton.setLayoutY(endTurnButtonYPadding);
+//        endTurnButton.setLayoutX(endTurnButtonXPadding);
+//        endTurnButton.setLayoutY(endTurnButtonYPadding);
 
         JFXButton surrenderButton = new JFXButton("Surrender");
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
-        surrenderButton.setLayoutX(surrenderButtonXPadding);
-        surrenderButton.setLayoutY(surrenderButtonYPadding);
+//        surrenderButton.setLayoutX(surrenderButtonXPadding);
+//        surrenderButton.setLayoutY(surrenderButtonYPadding);
 
-        sidePanel.getChildren().addAll(endTurnButton, surrenderButton);
+        HBox hboxSidePanelButtons = new HBox();
+        hboxSidePanelButtons.setSpacing(10);
+        hboxSidePanelButtons.getChildren().addAll(endTurnButton, surrenderButton);
+        sidePanel.getChildren().addAll(hboxSidePanelButtons);
+        hboxSidePanelButtons.setLayoutY(endTurnButtonYPadding);
 
         movementPhase = true;
+        phaseLabel.setText("MOVEMENT PHASE");
 
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
+            phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
             waitForTurn(endTurnButton);
         } else {
@@ -337,6 +354,8 @@ public class GameLogic extends Application {
         ////BUTTON EvenT HANDLERS////
         endTurnButton.setOnAction(event -> {
             endTurn(endTurnButton);
+            phaseLabel.setText("OPPONENT'S TURN");
+
         });
 
         surrenderButton.setOnAction(event -> {
@@ -396,6 +415,7 @@ public class GameLogic extends Application {
 
                 movementPhase = false; //sets phase to attack
                 moveCounter++; //increments move counter
+                phaseLabel.setText("ATTACK PHASE");
 
                 clearHighLight();
                 select(event);
@@ -689,6 +709,7 @@ public class GameLogic extends Application {
         movementPhase = true;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
+        phaseLabel.setText("MOVEMENT PHASE");
 
         importedMovementList = db.importMoveList(turn - 1, match_id);
         importedAttackList = db.importAttackList(turn - 1, match_id, opponent_id);
@@ -914,22 +935,38 @@ public class GameLogic extends Application {
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
+        turnCounter.setStyle(turnCounterFontSize);
+        turnCounter.setLayoutX(turnCounterXPadding);
+        turnCounter.setLayoutY(turnCounterYPadding);
+
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
         description.setLayoutY(descriptionYPadding);
         description.setVisible(false);
 
-        turnCounter.setStyle(turnCounterFontSize);
-        turnCounter.setLayoutX(descriptionXPadding);
-        turnCounter.setLayoutY(descriptionYPadding);
-
-        sidePanel.getChildren().addAll(description, turnCounter);
+        sidePanel.getChildren().addAll(turnCounter, phaseLabel, description);
 
         sidePanel.setLayoutX(sidePanelXPadding);
         sidePanel.setLayoutY(sidePanelYPadding);
         root.getChildren().add(sidePanel);
 
         return sidePanel;
+    }
+
+    private Pane createPhaseLabelPane() {
+      Pane phaseLabelPane = new Pane();
+
+      phaseLabel.setStyle(phaseLabelFontSize);
+      phaseLabel.setMinWidth(phaseLabelWidth);
+      phaseLabel.setMinHeight(phaseLabelHeight);
+
+      phaseLabelPane.getChildren().add(phaseLabel);
+
+      phaseLabelPane.setLayoutX(phaseLabelXPadding);
+      phaseLabelPane.setLayoutY(phaseLabelYPadding);
+      root.getChildren().add(phaseLabelPane);
+
+      return phaseLabelPane;
     }
 
     ////SHUTDOWN METHODS////
