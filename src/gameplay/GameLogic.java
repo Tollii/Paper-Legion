@@ -157,8 +157,13 @@ public class GameLogic extends Application {
                 obstacles.add(new Obstacle(xPos, yPos, i));
             }
             db.exportObstacles(obstacles);
-        } else {
-            obstacles = db.importObstacles();
+        }
+        while(!db.importObstacleAmount()){
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         for (int i = 0; i < obstacles.size(); i++) {
