@@ -23,7 +23,6 @@ import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,7 +30,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
@@ -44,10 +42,9 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.sql.SQLException;
 import static database.Variables.*;
-import static database.Variables.waitTurnThread;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import javafx.geometry.Orientation;
 import menus.Main;
 
@@ -406,30 +403,23 @@ public class GameLogic extends Application {
             int attackPosY = getPosYFromEvent(event); //sets position attacked
             ArrayList<Tile> attackTargets = getAttackableTiles();
 
-            for (int i = 0; i < attackTargets.size(); i++) {
-                if (attackTargets.get(i) == grid.tileList[attackPosY][attackPosX]) {
-                    //damages enemy unit
-                    grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
-
-                    //adds the attack to attacklist
-                    attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceId(), grid.tileList[attackPosY][attackPosX].getUnit().getPieceId(), selectedUnit.getAttack()));
-
-                    attackCount++; //increments attack counter
-
-                    selectedUnit.getAudio().play(); //plays the audio clip associated with the unit type
-
-                    //removes unit if killed
-                    if (grid.tileList[attackPosY][attackPosX].getUnit().getHp() <= 0) {
-                        grid.tileList[attackPosY][attackPosX].removeUnit();
-                    }
-
-                    selectedUnit.setHasAttackedThisTurn(true); //stops unit from attacking again this turn
-
-                    deselect();
-
+            switch (selectedUnit.getUnitTypeId()){
+                case 1: //Swordsman
+                    defaultAttack(attackTargets, attackPosX, attackPosY);
                     break;
-                }
+                case 2: //Archer
+                    defaultAttack(attackTargets, attackPosX, attackPosY);
+                    break;
+                case 3: //Juggernaut
+                    break;
+                case 4: // Catapult
+                    break;
+                default:
+                    break;
             }
+
+
+
         }
     }
 
@@ -495,6 +485,33 @@ public class GameLogic extends Application {
             }
         }
         return attackTargets;
+    }
+
+    public void defaultAttack(ArrayList<Tile> attackTargets, int attackPosX, int attackPosY){
+        for (int i = 0; i < attackTargets.size(); i++) {
+            if (attackTargets.get(i) == grid.tileList[attackPosY][attackPosX]) {
+                //damages enemy unit
+                grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
+
+                //adds the attack to attacklist
+                attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceId(), grid.tileList[attackPosY][attackPosX].getUnit().getPieceId(), selectedUnit.getAttack()));
+
+                attackCount++; //increments attack counter
+
+                selectedUnit.getAudio().play(); //plays the audio clip associated with the unit type
+
+                //removes unit if killed
+                if (grid.tileList[attackPosY][attackPosX].getUnit().getHp() <= 0) {
+                    grid.tileList[attackPosY][attackPosX].removeUnit();
+                }
+
+                selectedUnit.setHasAttackedThisTurn(true); //stops unit from attacking again this turn
+
+                deselect();
+
+                break;
+            }
+        }
     }
 
     private void clearHighLight() {
