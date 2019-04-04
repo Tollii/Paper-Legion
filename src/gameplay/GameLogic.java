@@ -411,8 +411,10 @@ public class GameLogic extends Application {
                     defaultAttack(attackTargets, attackPosX, attackPosY);
                     break;
                 case 3: //Juggernaut
+                    juggernautAttack(attackTargets, attackPosX, attackPosY);
                     break;
                 case 4: // Catapult
+                    catapultAttack(attackTargets, attackPosX, attackPosY);
                     break;
                 default:
                     break;
@@ -422,6 +424,8 @@ public class GameLogic extends Application {
 
         }
     }
+
+
 
     ////HIGHLIGHTING METHODS////
     private void highlightPossibleMoves() {
@@ -512,6 +516,14 @@ public class GameLogic extends Application {
                 break;
             }
         }
+    }
+
+    private void juggernautAttack(ArrayList<Tile> attackTargets, int attackPosX, int attackPosY) {
+        //TODO: ADD JUGGERNAUT ATTACK
+    }
+
+    private void catapultAttack(ArrayList<Tile> attackTargets, int attackPosX, int attackPosY) {
+        //TODO: ADD CATAPULT ATTACK
     }
 
     private void clearHighLight() {
