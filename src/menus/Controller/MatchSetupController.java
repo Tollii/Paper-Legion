@@ -33,7 +33,6 @@ import static database.Variables.*;
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
         private Thread matchSetupThread;
 
-        //TODO: ADD THREAD TO CHECK IF SOMEONE JOINED THE GAME YOU'VE CREATED
         //TODO: DESPAGHETTI
 
 
