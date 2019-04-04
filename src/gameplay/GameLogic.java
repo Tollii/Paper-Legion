@@ -71,7 +71,7 @@ public class GameLogic extends Application {
     private final int windowHeight = 1080;
 
     ////SIZE VARIABLES////
-    private final int buttonWidth = 150;
+    private final int buttonWidth = 175;
     private final int buttonHeight = 75;
     private final int phaseLabelWidth = 300;
     private final int phaseLabelHeight = 50;
@@ -296,17 +296,21 @@ public class GameLogic extends Application {
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
-        endTurnButton.setLayoutX(endTurnButtonXPadding);
-        endTurnButton.setLayoutY(endTurnButtonYPadding);
+//        endTurnButton.setLayoutX(endTurnButtonXPadding);
+//        endTurnButton.setLayoutY(endTurnButtonYPadding);
 
         JFXButton surrenderButton = new JFXButton("Surrender");
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
-        surrenderButton.setLayoutX(surrenderButtonXPadding);
-        surrenderButton.setLayoutY(surrenderButtonYPadding);
+//        surrenderButton.setLayoutX(surrenderButtonXPadding);
+//        surrenderButton.setLayoutY(surrenderButtonYPadding);
 
-        sidePanel.getChildren().addAll(endTurnButton, surrenderButton);
+        HBox hboxSidePanelButtons = new HBox();
+        hboxSidePanelButtons.setSpacing(10);
+        hboxSidePanelButtons.getChildren().addAll(endTurnButton, surrenderButton);
+        sidePanel.getChildren().addAll(hboxSidePanelButtons);
+        hboxSidePanelButtons.setLayoutY(endTurnButtonYPadding);
 
         movementPhase = true;
         phaseLabel.setText("MOVEMENT PHASE");
