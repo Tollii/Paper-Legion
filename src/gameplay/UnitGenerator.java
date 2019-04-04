@@ -1,16 +1,17 @@
 package gameplay;
 
-public class UnitGenerator {
+import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
+
+
+public class  UnitGenerator {
 
     //Variables
-    private static UnitType swordsmanUnitType;
-    private static double swordsmanMaxHP;
-    private static int swordsmanAttack;
-    private static int swordsmanAbilityCooldown;
-    private static double swordsmanDefenceMultiplier;
-    private static int swordsmanMinAttackRange;
-    private static int swordsmanMaxAttackRange;
-    private static int swordsmanMovementRange;
+
+    ////Unit ID generator////
+    private static int unitId = 0;
+
+    ////Swordsman////
     private static String swordsmanDescription =
             "Because he failed to get into clown college,\n" +
             "he was so distraught that he wowed to get stronger and faster,\n" +
@@ -18,15 +19,12 @@ public class UnitGenerator {
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
+    private static Image swordsmanImage = new Image(UnitGenerator.class.getResource("assets/swordsman.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
+    private static AudioClip swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
 
-    private static UnitType archerUnitType;
-    private static double archerMaxHP;
-    private static int archerAttack;
-    private static int archerAbilityCooldown;
-    private static double archerDefenceMultiplier;
-    private static int archerMinAttackRange;
-    private static int archerMaxAttackRange;
-    private static int archerMovementRange;
+    private static UnitType swordsmanUnitType;
+
+    ////Archer////
     private static String archerDescription =
             "He has mastered his Sodoku in such a ingenious way,\n"+
             "he is now considered godlike amongst his peers.\n"+
@@ -34,34 +32,85 @@ public class UnitGenerator {
             "Because of his bow, he has a longer range than others.";
     private static String archerDescriptionTag =
             "Heroic Archer";
+    private static Image archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
+    private static AudioClip archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
+
+    private static UnitType archerUnitType;
+
+    ////Juggernaut////
+    private static String juggernautDescription =
+            "Big angry man with stick, sometimes turns green";
+    private static String juggernautDescriptionTag =
+            "Juggernaut";
+    //TODO
+    private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);
+    //TODO
+    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());;
+
+    private static UnitType juggernautUnitType;
+
+    ////Catapult////
+    private static String catapultDescription=
+            "Usurped by the clearly better trebuchet";
+    private static String catapultDescriptionTag =
+            "Throwy-McGig";
+    //TODO
+    private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), GameLogic.tileSize, GameLogic.tileSize, false, false);;
+    //TODO
+    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());;
+
+    private static UnitType catapultUnitType;
 
 
     public UnitGenerator(){}
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
-                         ProtoUnitType archerProto){
+                         ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
+        
+        swordsmanUnitType = new Swordsman("Swordsman",
+                swordsmanProto.getUnitTypeId(),
+                swordsmanProto.getHp(),
+                swordsmanProto.getAttack(),
+                swordsmanProto.getAbilityCooldown(),
+                swordsmanProto.getDefenceMultiplier(),
+                swordsmanProto.getMinAttackRange(),
+                swordsmanProto.getMaxAttackRange(),
+                swordsmanProto.getMovementRange(),
+                swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
 
-        this.swordsmanMaxHP = swordsmanProto.getHp();
-        this.swordsmanAttack = swordsmanProto.getAttack();
-        this.swordsmanAbilityCooldown = swordsmanProto.getAbilityCooldown();
-        this.swordsmanDefenceMultiplier = swordsmanProto.getDefenceMultiplier();
-        this.swordsmanMinAttackRange = swordsmanProto.getMinAttackRange();
-        this.swordsmanMaxAttackRange = swordsmanProto.getMaxAttackRange();
-        this.swordsmanMovementRange = swordsmanProto.getMovementRange();
-        swordsmanUnitType = new Swordsman("Swordsman", swordsmanMaxHP, swordsmanAttack, swordsmanAbilityCooldown, swordsmanDefenceMultiplier, swordsmanMinAttackRange, swordsmanMaxAttackRange, swordsmanMovementRange, swordsmanDescription, swordsmanDescriptionTag);
+        archerUnitType =  new Archer("Archer",
+                archerProto.getUnitTypeId(),
+                archerProto.getHp(),
+                archerProto.getAttack(),
+                archerProto.getAbilityCooldown(),
+                archerProto.getDefenceMultiplier(),
+                archerProto.getMinAttackRange(),
+                archerProto.getMaxAttackRange(),
+                archerProto.getMovementRange(),
+                archerDescription, archerDescriptionTag, archerImage, archerSound);
 
+        juggernautUnitType = new Juggernaut("Juggernaut",
+                juggernautProto.getUnitTypeId(),
+                juggernautProto.getHp(),
+                juggernautProto.getAttack(),
+                juggernautProto.getAbilityCooldown(),
+                juggernautProto.getDefenceMultiplier(),
+                juggernautProto.getMinAttackRange(),
+                juggernautProto.getMaxAttackRange(),
+                juggernautProto.getMovementRange(),
+                juggernautDescription, juggernautDescriptionTag, juggernautImage, juggernautSound);
 
-        this.archerMaxHP = archerProto.getHp();
-        this.archerAttack = archerProto.getAttack();
-        this.archerAbilityCooldown = archerProto.getAbilityCooldown();
-        this.archerDefenceMultiplier = archerProto.getDefenceMultiplier();
-        this.archerMinAttackRange = archerProto.getMinAttackRange();
-        this.archerMaxAttackRange = archerProto.getMaxAttackRange();
-        this.archerMovementRange = archerProto.getMovementRange();
-        archerUnitType = new Archer("Archer", archerMaxHP, archerAttack, archerAbilityCooldown, archerDefenceMultiplier, archerMinAttackRange, archerMaxAttackRange, archerMovementRange, archerDescription, archerDescriptionTag);
-
+        catapultUnitType = new Catapult("Catapult",
+                catapultProto.getUnitTypeId(),
+                catapultProto.getHp(),
+                catapultProto.getAttack(),
+                catapultProto.getAbilityCooldown(),
+                catapultProto.getDefenceMultiplier(),
+                catapultProto.getMinAttackRange(),
+                catapultProto.getMaxAttackRange(),
+                catapultProto.getMovementRange(),
+                catapultDescription, catapultDescriptionTag, catapultImage, catapultSound);
     }
-
 
     public UnitType newArcher(){
 
@@ -73,5 +122,97 @@ public class UnitGenerator {
 
         return swordsmanUnitType;
 
+    }
+
+    public Unit newFriendlyUnit(int unitType) {
+
+      switch (unitType) {
+        case 1:
+            return new Unit( false, swordsmanUnitType, unitId++);
+
+        case 2:
+            return new Unit( false, archerUnitType, unitId++);
+
+          case 3:
+              return new Unit(false, juggernautUnitType, unitId++);
+
+          case 4:
+              return new Unit(false, catapultUnitType, unitId++);
+      }
+      return null;
+    }
+
+    public Unit newFriendlyUnit(String unitType) {
+
+        switch (unitType) {
+            case "Swordsman":
+                return new Unit( false, swordsmanUnitType, unitId++);
+
+            case "Archer":
+                return new Unit( false, archerUnitType, unitId++);
+
+            case "Juggernaut":
+                return new Unit(false, juggernautUnitType, unitId++);
+
+            case "Catapult":
+                return new Unit(false, catapultUnitType, unitId++);
+        }
+        return null;
+    }
+
+    public Unit newEnemyUnit(int unitType, int unitIdInput) {
+
+        switch (unitType) {
+            case 1:
+                return new Unit( true, swordsmanUnitType, unitIdInput);
+
+            case 2:
+                return new Unit( true, archerUnitType, unitIdInput);
+
+            case 3:
+                return new Unit(true, juggernautUnitType, unitIdInput);
+
+            case 4:
+                return new Unit(true, catapultUnitType, unitIdInput);
+        }
+        return null;
+    }
+
+    public Unit newEnemyUnit(String unitType, int unitIdInput) {
+
+        switch (unitType) {
+            case "Swordsman":
+                return new Unit( true, swordsmanUnitType, unitIdInput);
+
+            case "Archer":
+                return new Unit( true, archerUnitType, unitIdInput);
+
+            case "Juggernaut":
+                return new Unit(true, juggernautUnitType, unitIdInput);
+
+            case "Catapult":
+                return new Unit(true, catapultUnitType, unitIdInput);
+        }
+
+        return null;
+    }
+
+
+
+    public Recruit newRecruit(int unitType) {
+        switch (unitType) {
+            case 1:
+                return new Recruit(swordsmanUnitType);
+
+            case 2:
+                return new Recruit(archerUnitType);
+
+            case 3:
+                return new Recruit(juggernautUnitType);
+
+            case 4:
+                return new Recruit(catapultUnitType);
+        }
+        return null;
     }
 }

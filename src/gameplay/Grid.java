@@ -3,7 +3,7 @@ package gameplay;
 import javafx.scene.layout.GridPane;
 
 public class Grid extends GridPane {
-    Tile[][]liste;
+    public Tile[][] tileList;
     int columns;
     int rows;
 
@@ -12,13 +12,13 @@ public class Grid extends GridPane {
         this.columns = columns;
         this.rows = rows;
 
-        this.liste = new Tile[rows][columns];
+        this.tileList = new Tile[rows][columns];
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
                 Tile tile2 = new Tile(GameLogic.tileSize, GameLogic.tileSize);
                 tile2.setTranslateX(j * GameLogic.tileSize);
                 tile2.setTranslateY(i * GameLogic.tileSize);
-                this.liste[i][j] = tile2;
+                this.tileList[i][j] = tile2;
                 this.getChildren().add(tile2);
             }
         }

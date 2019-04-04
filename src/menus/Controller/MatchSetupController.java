@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -70,6 +71,10 @@ import static database.Variables.*;
         @FXML
         private JFXButton backToMenuButton;
 
+
+        @FXML
+        private ImageView paperLegionLogo;
+
         @FXML
         void initialize() {
 
@@ -93,7 +98,20 @@ import static database.Variables.*;
                 @Override
                 public void run() {
                     while(keepRunning()){
-                        // Kode som skal kjøres av threaden her
+                        if(!gameEntered){
+                            gameEntered = db.pollGameStarted(match_id);
+
+                        } else{
+                            Platform.runLater(
+                                    () -> {
+                                        if(gameEntered){
+                                            yourTurn = true;
+                                            enterGame();
+                                            doStop();
+                                        }
+                                    });
+                        }
+
                     }
                 }
             };
@@ -127,6 +145,7 @@ import static database.Variables.*;
                   match_id =  selectedMatch.getMatch_id();
                   yourTurn = false;
                   enterGame();
+                  System.out.println(match_id);
 
                   // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
               } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){
@@ -174,6 +193,8 @@ import static database.Variables.*;
                           match_id =  selectedMatch.getMatch_id();
                           yourTurn = false;
                           enterGame();
+                          System.out.println(match_id);
+
                       } else {
                           dialog.setText("Wrong password, try again");
                       }
@@ -231,21 +252,26 @@ import static database.Variables.*;
                     // ADD MATCH IN GAME AND WAIT FOR PLAYER TO JOIN
                     submitPassword.setOnAction(event1 -> {
                         String passwordInserted = inputPassword.getText().trim().toString();
-                        db.createGame(user_id, passwordInserted);
+                        match_id = db.createGame(user_id, passwordInserted);
                         table.setItems(getMatches()); //Refreshes tables.
                         window.close();
                         createGameClicked = true;
                         createGameButton.setText("Abort Match");
-                        //TODO: ADD POLLING AND CHANGE BUTTON TEXT AND LIMIT HOW MANY TIMES ONE CAN CREATE GAME
+                        matchSetupThread = new Thread(matchSetupRunnable);
+                        matchSetupThread.start();
+
+
                     });
 
                     // CREATE GAME WITHOUT PASSWORD
                     no_button.setOnAction(event1 -> {
-                        db.createGame(user_id, "null");
+                        match_id = db.createGame(user_id, "null");
                         table.setItems(getMatches()); //Refreshes tables.
                         window.close();
                         createGameClicked = true;
                         createGameButton.setText("Abort Match");
+                        matchSetupThread = new Thread(matchSetupRunnable);
+                        matchSetupThread.start();
                     });
 
                     //CANCEL
@@ -258,8 +284,7 @@ import static database.Variables.*;
                     createGameClicked = false;
                     createGameButton.setText("Create Game");
                     table.setItems(getMatches()); //Refreshes tables.
-
-
+                    matchSetupThread.stop();
                 }
 
 
@@ -279,7 +304,13 @@ import static database.Variables.*;
 
 
     private void enterGame() {
-
+        try {
+            GameLogic game = new GameLogic();
+            game.start(Main.window);
+            System.out.println("Success!!!!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
 }

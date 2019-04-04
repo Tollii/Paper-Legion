@@ -1,9 +1,6 @@
 package database;
 
-import gameplay.Attack;
-import gameplay.Move;
-import gameplay.PieceSetup;
-import gameplay.ProtoUnitType;
+import gameplay.*;
 import menus.Controller.Match;
 
 import javax.crypto.SecretKeyFactory;
@@ -99,6 +96,7 @@ public class Database {
 
         ////UNIT INFO////
         String type;
+        int unitTypeId;
         double hp;
         int attack;
         int abilityCooldown;
@@ -116,9 +114,8 @@ public class Database {
             myConn.commit();
             resultSet.next();
             type = resultSet.getString("unit_name");
-            System.out.println(type);
+            unitTypeId = resultSet.getInt("unit_type_id");
             hp = (double) resultSet.getFloat("max_health");
-            System.out.println(hp);
             attack = resultSet.getInt("attack");
             abilityCooldown = resultSet.getInt("ability_cooldown");
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
@@ -134,7 +131,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return new ProtoUnitType(type, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "");
+        return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "", null, null);
     }
 
     public int quickMatch_search(int player_id) {
@@ -368,6 +365,177 @@ public class Database {
         }
     }
 
+    public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetningPieces = "INSERT INTO Pieces VALUES(?,?,?,?,?);";
+        String sqlSetningUnits = "INSERT INTO Units VALUES(?,?,?,?,?,?,?,?,?);";
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            myConn.setAutoCommit(false);
+
+            for (int i = 0; i < exportUnitList.size(); i++) {
+
+                preparedStatement = myConn.prepareStatement(sqlSetningPieces);
+
+                preparedStatement.setInt(1, exportUnitList.get(i).getPieceId());    //"Arrays begin at 1"
+                preparedStatement.setInt(2, match_id);
+                preparedStatement.setInt(3, user_id);
+                preparedStatement.setInt(4, exportPositionXList.get(i));
+                preparedStatement.setInt(5, exportPositionYList.get(i));
+
+                preparedStatement.executeUpdate();
+
+                preparedStatement = myConn.prepareStatement(sqlSetningUnits);
+
+                preparedStatement.setInt(1, exportUnitList.get(i).getPieceId());
+                preparedStatement.setInt(2, match_id);
+                preparedStatement.setInt(3, user_id);
+                preparedStatement.setDouble(4, exportUnitList.get(i).getHp());
+                preparedStatement.setInt(5, exportUnitList.get(i).getAttack());
+                preparedStatement.setInt(6, exportUnitList.get(i).getMinAttackRange());
+                preparedStatement.setInt(7, exportUnitList.get(i).getMaxAttackRange());
+                preparedStatement.setInt(8, exportUnitList.get(i).getAbilityCooldown());
+                preparedStatement.setInt(9, exportUnitList.get(i).getUnitTypeId());
+
+                preparedStatement.executeUpdate();
+            }
+
+            //If the loop is successful, commit
+            myConn.commit();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            Cleaner.rollBack(myConn);
+        }finally {
+
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+    public ArrayList<PieceSetup> importPlacementUnits() {
+
+        ArrayList<PieceSetup> outputList = null;
+        Connection myConn = connectionPool.getConnection();
+        String sqlSetning = "SELECT Pieces.piece_id, Pieces.match_id, Pieces.player_id, position_x, position_y, unit_type_id FROM Pieces JOIN Units U ON Pieces.piece_id = U.piece_id AND Pieces.match_id = U.match_id AND Pieces.player_id = U.player_id WHERE Pieces.match_id = ? AND Pieces.player_id = ?;";
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+
+        try {
+                preparedStatement = myConn.prepareStatement(sqlSetning);
+
+                preparedStatement.setInt(1, match_id);    //"Arrays begin at 1"
+                preparedStatement.setInt(2, opponent_id);
+
+                resultSet = preparedStatement.executeQuery();
+
+                outputList = new ArrayList<>();
+
+                while(resultSet.next()){
+
+                    outputList.add(new PieceSetup(resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("player_id"), resultSet.getInt("position_x"), resultSet.getInt("position_y"), resultSet.getInt("unit_type_id")));
+                }
+
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return outputList;
+    }
+
+    public boolean checkIfOpponentReady(){
+
+        Boolean returnBoolean = false;
+
+        Connection myConn = connectionPool.getConnection();
+
+        String sqlSetning = "";
+        ResultSet resultSet = null;
+
+        if(opponent_id == player1){
+            sqlSetning = "SELECT player1_ready AS ready FROM Matches WHERE match_id = ?";
+        }else{
+            sqlSetning = "SELECT player2_ready AS ready FROM Matches WHERE match_id = ?";
+        }
+
+        PreparedStatement preparedStatement = null;
+
+        try{
+
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+
+            preparedStatement.setInt(1, match_id);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                returnBoolean = resultSet.getBoolean("ready");
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+
+        }finally{
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+
+        return returnBoolean;
+
+    }
+
+    public void setReady(boolean ready){
+
+        Connection myConn = connectionPool.getConnection();
+
+        String sqlSetning;
+
+        if(user_id == player1){
+            sqlSetning = "UPDATE Matches SET player1_ready = ?";
+        }else{
+            sqlSetning = "UPDATE Matches SET player2_ready = ?";
+        }
+
+        PreparedStatement preparedStatement = null;
+
+        try{
+
+            preparedStatement = myConn.prepareStatement(sqlSetning);
+
+            if(ready){
+
+                preparedStatement.setInt(1, 1);
+
+            }else{
+
+                preparedStatement.setInt(1, 0);
+
+            }
+
+
+            preparedStatement.executeUpdate();
+
+
+        }catch(SQLException e){
+            e.printStackTrace();
+
+        }finally{
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
+
+/*
     //Inserts pieces into database
     public void insertPieces() {
         Connection myConn = connectionPool.getConnection();
@@ -384,7 +552,7 @@ public class Database {
         String sqlPlayer1piece3 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(3,?,?,6,0);";
         String sqlPlayer1piece4 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(4,?,?,2,1);";
         String sqlPlayer1piece5 = "insert into Pieces(piece_id, match_id, player_id, position_x, position_y) values(5,?,?,4,1);";
-          String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
+        String unit_player1 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (1,?,?, 120, 50, 1,1,1,1);";
         String unit_player2 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (2,?,?, 120, 50, 1,1,1,1);";
         String unit_player3 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (3,?,?, 120, 50, 1,1,1,1);";
         String unit_player4 = "insert into Units (piece_id, match_id, player_id, current_health, current_attack, current_min_attack_range, current_max_attack_range, current_ability_cooldown, unit_type_id) values (4,?,?, 60, 50, 2,3,1,2);";
@@ -394,7 +562,7 @@ public class Database {
         piecesPlayer1.add(sqlPlayer1piece3);
         piecesPlayer1.add(sqlPlayer1piece4);
         piecesPlayer1.add(sqlPlayer1piece5);
-          piecesPlayer1.add(unit_player1);
+        piecesPlayer1.add(unit_player1);
         piecesPlayer1.add(unit_player2);
         piecesPlayer1.add(unit_player3);
         piecesPlayer1.add(unit_player4);
@@ -455,7 +623,9 @@ public class Database {
             connectionPool.releaseConnection(myConn2);
         }
     }
+    */
 
+    /*
     //puts the units from the database into an arraylist
     public ArrayList<PieceSetup> importPlacementPieces() {
         ArrayList<PieceSetup> piecesImport = new ArrayList<PieceSetup>();
@@ -504,6 +674,7 @@ public class Database {
         }
         return null;
     }
+    */
     /*
        ___                           _
       / _ \__ _ _ __ ___   ___ _ __ | | __ _ _   _
@@ -581,7 +752,7 @@ public class Database {
         }
         return -1;
     }
-
+/*
     public int pollForUnits() { //Midlertidig metode for auto generert units
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -603,6 +774,7 @@ public class Database {
         }
         return -1;
     }
+
 
     public void sendHealthInfo(int pieceID, double currentHealth) {
         Connection myConn = connectionPool.getConnection();
@@ -627,6 +799,7 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+*/
 
     public boolean exportPieceMoveList(ArrayList<Move> movementList) {
 
@@ -877,10 +1050,6 @@ public class Database {
         return -1;
     }
 
-    //TODO
-    public boolean importAttackList() {
-        return false;
-    }
     /*
      __ _             _
     / _(_) __ _ _ __ (_)_ __
@@ -1254,4 +1423,6 @@ public class Database {
     public void close() throws SQLException {
         connectionPool.shutdown();
     }
+
+
 }

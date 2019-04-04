@@ -7,16 +7,17 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.embed.swing.SwingFXUtils;
+import java.awt.image.BufferedImage;
+import javafx.scene.media.AudioClip;
 
-public class Unit extends Rectangle {
+public class Unit extends StackPane {
     private Label healthbar;
-
-    private int positionX;
-    private int positionY;
-
+    private Rectangle rect;
 
     ////UNIT INFO////
-    private UnitType type;
+    private final UnitType type;
+    private final int unitTypeId;
     private double hp;
     private int attack;
     private int abilityCooldown;
@@ -30,127 +31,58 @@ public class Unit extends Rectangle {
 
     ////UTILITIES////
     private final int LOW_HP_THRESHOLD = 20;
-    private int pieceID; //Same as pieceID in the database
     private boolean enemy;
     private boolean hasAttackedThisTurn;
-    private GridPane pieceAvatar =  new GridPane();
+    private int healthbarPosY = 40;
+    private int pieceId;
 
-
-    public Unit(double row, double column, boolean enemy, UnitType type, int pieceID){
-        super.setWidth(GameLogic.tileSize);
-        super.setHeight(GameLogic.tileSize);
+    public Unit(boolean enemy, UnitType type, int unitId){
+        rect = new Rectangle();
+        rect.setWidth(GameLogic.tileSize);
+        rect.setHeight(GameLogic.tileSize);
         this.enemy = enemy;
 
         ///SETS UNIT INFO////
         this.type = type;
-        this.hp = type.getHp();
+        unitTypeId = type.getUnitTypeId();
+        hp = type.getHp();
         attack = type.getAttack();
         abilityCooldown = type.getAbilityCooldown();
-        this.defenceMultiplier = type.getDefenceMultiplier();
+        defenceMultiplier = type.getDefenceMultiplier();
         minAttackRange = type.getMinAttackRange();
         maxAttackRange = type.getMaxAttackRange();
-        this.movementRange = type.getMovementRange();
+        movementRange = type.getMovementRange();
         description = type.getDescription();
         descriptionTag = type.getDescriptionTag();
-        this.pieceID = pieceID;
-
-        setPositionArray(column,row);
+        pieceId = unitId;
 
         String hpText = String.valueOf(hp);
         healthbar = new Label(hpText);
+
+        this.getChildren().addAll(rect, healthbar);
         healthbar.setPrefWidth(GameLogic.tileSize);
         healthbar.setAlignment(Pos.CENTER);
-        healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY()+40);
+        healthbar.setTranslateY(healthbarPosY);
+
+
         healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
 
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(this, healthbar);
-        pieceAvatar.getChildren().add(stackPane);
 
         ///SETS UNIT IMAGE////
-        switch (type.getType()){
 
-            case "Archer":
-                if(enemy){
-                    Image archerGold = new Image("/gameplay/assets/archer_gold.png");
-                    this.setFill(new ImagePattern(archerGold));
-                } else{
-                    Image archerBlue = new Image("/gameplay/assets/archer_blue.png");
-                    this.setFill(new ImagePattern(archerBlue));
-                }
-                break;
-
-            case "Swordsman":
-                if(enemy){
-                    Image swordsmanGold = new Image("/gameplay/assets/sword_gold.png");
-                    this.setFill(new ImagePattern(swordsmanGold));
-                } else{
-                    Image swordsmanBlue = new Image("/gameplay/assets/sword_blue.png");
-                    this.setFill(new ImagePattern(swordsmanBlue));
-                }
-                break;
+        if (enemy) { //sets gold if enemy, blue if friendly
+          BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
+          changeColor(imgBuf, 0, 0, 0, 155, 135, 65);
+          rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
+        } else {
+          BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
+          changeColor(imgBuf, 0, 0, 0, 56, 31, 217);
+          rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
         }
-    }
-
-    public void setPosition(int newPositionX, int newPositionY){
-        this.positionX = newPositionX;
-        this.positionY = newPositionY;
-        super.setTranslateX(newPositionX*100);
-        super.setTranslateY(newPositionY*100);
-        healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY()+40);
-    }
-
-    public void setHp(double hp){
-        this.hp = hp;
-
-        healthbar.setText(String.valueOf(hp));
-
-        ////CHANGES THE COLOUR OF THE HP-BAR////
-        if(hp <= LOW_HP_THRESHOLD){
-            healthbar.setStyle("-fx-background-color: Red");
-        }
-    }
-
-    public int getPositionX(){
-        return positionX;
-    }
-
-    public int getPositionY(){
-        return positionY;
-    }
-
-    public GridPane getPieceAvatar(){
-        return pieceAvatar;
-    }
-
-    public void setPositionArray(double x, double y){
-        super.setTranslateX(x);
-        super.setTranslateY(y);
-    }
-
-    public void setTranslate(double x, double y){
-        super.setTranslateX(x*100);
-        super.setTranslateY(y*100);
-        healthbar.setTranslateX(this.getTranslateX());
-        healthbar.setTranslateY(this.getTranslateY()+40);
     }
 
     public boolean getEnemy(){
         return enemy;
-    }
-
-    public void setEnemy(boolean enemy){
-        this.enemy = enemy;
-    }
-
-    public int getPieceID() {
-        return pieceID;
-    }
-
-    public void setPieceID(int pieceID) {
-        this.pieceID = pieceID;
     }
 
     public boolean getHasAttackedThisTurn() {
@@ -162,13 +94,20 @@ public class Unit extends Rectangle {
     }
 
     ////GET UNIT INFO////
-    public String getType(){
+    public String getTypeString(){
         return type.getType();
+    }
+
+    public UnitType getType(){
+        return type;
+    }
+
+    public int getUnitTypeId(){
+        return unitTypeId;
     }
 
     public double getHp(){
         return hp;
-
     }
 
     public int getAttack(){
@@ -195,18 +134,28 @@ public class Unit extends Rectangle {
         return movementRange;
     }
 
+    public int getPieceId() {
+      return pieceId;
+    }
+
     public String getDescription(){
 
         return descriptionTag + "\n" +
                 "\nHp: " + hp +
                 "\nMovement Range: " + movementRange +
-                "\nAttack: " + attack +
-                "\nAttack Range min: " + minAttackRange +
-                "\nAttack Range max " + maxAttackRange +
-                "\n" +
-                "\n" + description;
+                "\nAttack: " + attack + "x\n" + "\n" + description;
     }
 
+    public void setHp(double hp){
+        this.hp = hp;
+
+        healthbar.setText(String.valueOf(hp));
+
+        ////CHANGES THE COLOUR OF THE HP-BAR////
+        if(hp <= LOW_HP_THRESHOLD){
+            healthbar.setStyle("-fx-background-color: Red");
+        }
+    }
 
     public void takeDamage(double damageDealt){
 
@@ -220,4 +169,31 @@ public class Unit extends Rectangle {
         }
     }
 
+    public Image getUnitImage() {
+      return type.getUnitImage();
+    }
+
+    public AudioClip getAudio() {
+      return type.getAudio();
+    }
+
+    private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
+
+      int RGB_MASK = 0x00ffffff;
+      int ALPHA_MASK = 0xff000000;
+
+      int oldRGB = oldRed << 16 | oldGreen << 8 | oldBlue;
+      int toggleRGB = oldRGB ^ (newRed << 16 | newGreen << 8 | newBlue);
+
+      int w = imgBuf.getWidth();
+      int h = imgBuf.getHeight();
+
+      int[] rgb = imgBuf.getRGB(0, 0, w, h, null, 0, w);
+      for (int i = 0; i < rgb.length; i++) {
+          if ((rgb[i] & RGB_MASK) == oldRGB) {
+              rgb[i] ^= toggleRGB;
+          }
+      }
+      imgBuf.setRGB(0, 0, w, h, rgb, 0, w);
+    }
 }

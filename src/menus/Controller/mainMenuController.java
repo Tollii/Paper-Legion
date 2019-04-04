@@ -6,6 +6,7 @@ import gameplay.GameLogic;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import menus.Main;
 
 import java.net.URL;
@@ -39,6 +40,9 @@ public class mainMenuController extends Controller {
 
     @FXML
     private JFXButton mainMenuPlayButton;
+
+    @FXML
+    private ImageView paperLegionLogo;
 
 
     @FXML

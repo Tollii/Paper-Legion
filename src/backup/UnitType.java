@@ -1,14 +1,8 @@
-package gameplay;
-
-import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
-
+package backup;
 
 public interface UnitType {
 
     String getType();
-
-    int getUnitTypeId();
 
     double getHp();
 
@@ -27,8 +21,4 @@ public interface UnitType {
     String getDescription();
 
     String getDescriptionTag();
-
-    Image getUnitImage();
-
-    AudioClip getAudio();
-  }
+}
