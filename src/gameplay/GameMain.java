@@ -416,7 +416,7 @@ public class GameMain extends Application {
 
         ArrayList<Tile> movementTargets = game.getMovementPossibleTiles(selectedUnit, selectedPosY, selectedPosX);
 
-        if (game.move(newPosY, newPosX, movementTargets)) {
+        if (game.checkForLegalMove(newPosY, newPosX, movementTargets)) {
             grid.tileList[selectedPosY][selectedPosX].removeUnit();
             grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
 
@@ -443,7 +443,7 @@ public class GameMain extends Application {
             int attackPosY = getPosYFromEvent(event); //sets position attacked
             ArrayList<Tile> attackTargets = game.getAttackableTiles(selectedUnit, selectedPosY, selectedPosX);
 
-            if (game.attack(attackPosY,attackPosX,attackTargets)) {
+            if (game.checkForLegalAttack(attackPosY,attackPosX,attackTargets)) {
 
                 //damages enemy unit
                 grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
@@ -776,7 +776,7 @@ public class GameMain extends Application {
         String win_loseText;
         String gameSummary = "";
         int loser = -1;
-        int eliminationResult = checkForEliminationVictory();
+        int eliminationResult = game.checkForEliminationVictory();
         int surrenderResult = db.checkForSurrender();
 
         if (eliminationResult != -1) {
@@ -839,32 +839,6 @@ public class GameMain extends Application {
             winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
             winner_alert.showAndWait();
-        }
-    }
-
-    ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
-    private int checkForEliminationVictory() {
-        int yourPieces = 0;
-        int opponentsPieces = 0;
-        //Goes through all units and counts how many are alive for each player.
-        for (int i = 0; i < grid.tileList.length; i++) {
-            for (int j = 0; j < grid.tileList[i].length; j++) {
-                if (grid.tileList[i][j].getUnit() != null) {
-                    if (grid.tileList[i][j].getUnit().getEnemy()) {
-                        opponentsPieces++;
-                    } else {
-                        yourPieces++;
-                    }
-                }
-            }
-        }
-
-        if (yourPieces == 0) {
-            return 1;
-        } else if (opponentsPieces == 0) {
-            return 0;
-        } else {
-            return -1;
         }
     }
 

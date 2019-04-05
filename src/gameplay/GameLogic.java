@@ -17,26 +17,16 @@
 
 package gameplay;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeType;
-import javafx.stage.Stage;
-import menus.Main;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import static database.Variables.*;
 import static gameplay.GameMain.grid;
 import static gameplay.GameMain.boardSize;
 import static gameplay.GameMain.obstacles;
 
 public class GameLogic {
 
-    public boolean move(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
+    public boolean checkForLegalMove(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
         for (int i = 0; i < movementTargets.size(); i++) { //goes through all movement targets and finds the one clicked on
             if (movementTargets.get(i).equals(grid.tileList[newPosY][newPosX])) {
                 return true;
@@ -45,7 +35,7 @@ public class GameLogic {
         return false;
     }
 
-    public boolean attack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
+    public boolean checkForLegalAttack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
         for (int i = 0; i < attackTargets.size(); i++) {
             if(attackTargets.get(i).equals(grid.tileList[attackPosY][attackPosX])) {
                 return true;
@@ -93,6 +83,31 @@ public class GameLogic {
             }
         }
         return attackTargets;
+    }
+
+    ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
+    public int checkForEliminationVictory() {
+        int yourPieces = 0;
+        int opponentsPieces = 0;
+        //Goes through all units and counts how many are alive for each player.
+        for (int i = 0; i < grid.tileList.length; i++) {
+            for (int j = 0; j < grid.tileList[i].length; j++) {
+                if (grid.tileList[i][j].getUnit() != null) {
+                    if (grid.tileList[i][j].getUnit().getEnemy()) {
+                        opponentsPieces++;
+                    } else {
+                        yourPieces++;
+                    }
+                }
+            }
+        }
+        if (yourPieces == 0) {
+            return 1;
+        } else if (opponentsPieces == 0) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 
     public ArrayList<Obstacle> createObstacles(){
