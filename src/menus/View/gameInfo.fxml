@@ -32,7 +32,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </ImageView>
-                  <TabPane prefHeight="289.0" prefWidth="574.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane prefHeight="289.0" prefWidth="574.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                     <tabs>
                       <Tab text="Game info">
                         <content>
@@ -51,45 +51,38 @@
                         </content>
                       </Tab>
                       <Tab text="Plasement phase">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <content>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <ImageView fitHeight="253.0" fitWidth="610.0" layoutX="135.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../menuAssets/placement.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children></AnchorPane>
-                        </content>
+                                    <Pane fx:id="placementbackgroundImagePane" />
+                                    <JFXTextArea fx:id="placementText" editable="false" prefWidth="270.0" text="sample text bla bla bla bla bla bla bla bla bla bla bla bla balab lsdlasd asd asldasdl as dlasd asld asld a d asddasd" wrapText="true" />
+                                 </children>
+                              </HBox>
+                           </content>
                       </Tab>
                         <Tab text="Movement phase">
                            <content>
-                              <Pane>
+                              <HBox>
                                  <children>
-                                    <HBox spacing="15.0">
-                                       <children>
-                                          <ImageView fx:id="movementImage" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="/menus/menuAssets/movementInfo.png" />
-                                             </image>
-                                             <viewport>
-                                                <Rectangle2D />
-                                             </viewport>
-                                          </ImageView>
-                                          <JFXTextArea text="asdasdasdadssd" />
-                                       </children>
-                                       <padding>
-                                          <Insets left="15.0" right="15.0" />
-                                       </padding>
-                                    </HBox>
+                                    <JFXTextArea fx:id="movementText" editable="false" prefWidth="270.0" text="While you are in the movement phase, you can move one of your units within that unit's movement range. &#10;&#10;You can also skip the movement phase and go directly to attack. &#10;&#10;You are automatically taken to the attack phase after the movement phase." wrapText="true">
+                                       <HBox.margin>
+                                          <Insets left="15.0" right="15.0" top="15.0" />
+                                       </HBox.margin>
+                                    </JFXTextArea>
+                                    <Pane fx:id="backgroundImagePane" HBox.hgrow="ALWAYS" />
                                  </children>
-                              </Pane>
+                              </HBox>
                            </content>
                         </Tab>
                         <Tab text="Attack phase">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                          </content>
+                           <content>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Pane fx:id="attackbackgroundImagePane" />
+                                    <JFXTextArea fx:id="attackText" editable="false" prefWidth="270.0" text="asopdkaopsd asd asd  asd as d +ásd sad sad sap sadpkkpd saaspk sadpkokpasd as kpsadkpo sdaokp ask  as pdas d asd a d asdk" wrapText="true" />
+                                 </children>
+                              </HBox>
+                           </content>
                         </Tab>
                     </tabs>
                   </TabPane>
