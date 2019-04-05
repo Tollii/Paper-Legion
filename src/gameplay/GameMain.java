@@ -426,7 +426,7 @@ public class GameMain extends Application {
 
         ArrayList<Tile> movementTargets = game.getMovementPossibleTiles(selectedUnit, selectedPosY, selectedPosX);
 
-        if (game.checkForLegalmove(newPosY, newPosX, movementTargets)) {
+        if (game.checkForLegalMove(newPosY, newPosX, movementTargets)) {
             grid.tileList[selectedPosY][selectedPosX].removeUnit();
             grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
 
@@ -453,7 +453,7 @@ public class GameMain extends Application {
             int attackPosY = getPosYFromEvent(event); //sets position attacked
             ArrayList<Tile> attackTargets = game.getAttackableTiles(selectedUnit, selectedPosY, selectedPosX);
 
-            if (game.checkForLegalattack(attackPosY,attackPosX,attackTargets)) {
+            if (game.checkForLegalAttack(attackPosY,attackPosX,attackTargets)) {
 
                 //damages enemy unit
                 grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
