@@ -755,7 +755,7 @@ public class Database {
         return null;
     }
 
-    public Boolean importObstacleAmount() {
+    public Boolean obstaclesHaveBeenAdded() {
 
         Integer obstacle_amount;
         int obstacle_in_db;
@@ -794,9 +794,7 @@ public class Database {
                 obstacle_amount = result.getInt("obstacle_amount");
                 obstacle_in_db = result2.getInt("counting");
 
-                if (obstacle_amount == obstacle_in_db && obstacle_in_db != 0) {
-                    return true;
-                }
+                return obstacle_amount == obstacle_in_db && obstacle_in_db != 0;
             }
 
             return false;

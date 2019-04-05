@@ -153,7 +153,7 @@ public class GameLogic extends Application {
     }
 
     private void addObstacles() {
-        // Player 2 adds obstacles when he joins. This could probably be done more efficiently.
+        // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
             Random rand = new Random();
@@ -168,6 +168,14 @@ public class GameLogic extends Application {
             }
             db.exportObstacles(obstacles);
         } else {
+            //Player 1 continually checks if all the obstacles have been added to the match.
+            while(!db.obstaclesHaveBeenAdded()){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             obstacles = db.importObstacles();
         }
 
