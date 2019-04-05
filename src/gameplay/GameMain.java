@@ -165,7 +165,6 @@ public class GameMain extends Application {
         // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
-            movementPhase = false;
            obstacles = game.createObstacles();
         } else {
             //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
@@ -440,7 +439,7 @@ public class GameMain extends Application {
     }
 
     private void attack(MouseEvent event) {
-        if (!movementPhase) { //checks if attack phase
+        if (!movementPhase && yourTurn) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
             int attackPosY = getPosYFromEvent(event); //sets position attacked
             ArrayList<Tile> attackTargets = game.getAttackableTiles();
