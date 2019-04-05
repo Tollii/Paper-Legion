@@ -35,7 +35,7 @@ public class GameLogic {
 
     public boolean move(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
         for (int i = 0; i < movementTargets.size(); i++) { //goes through all movement targets and finds the one clicked on
-            if (movementTargets.get(i) == grid.tileList[newPosY][newPosX]) {
+            if (movementTargets.get(i).equals(grid.tileList[newPosY][newPosX])) {
                 return true;
             }
         }
@@ -44,7 +44,7 @@ public class GameLogic {
 
     public boolean attack(int attackPosX, int attackPosY, ArrayList<Tile> attackTargets) {
         for (int i = 0; i < attackTargets.size(); i++) {
-            if(attackTargets.get(i) == grid.tileList[attackPosY][attackPosX]) {
+            if(attackTargets.get(i).equals(grid.tileList[attackPosY][attackPosX])) {
                 return true;
             }
         }
