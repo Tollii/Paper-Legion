@@ -70,7 +70,7 @@
                                        <children>
                                           <ImageView fx:id="movementImage" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../menuAssets/movementInfo.png" />
+                                                <Image url="/menus/menuAssets/movementInfo.png" />
                                              </image>
                                              <viewport>
                                                 <Rectangle2D />
