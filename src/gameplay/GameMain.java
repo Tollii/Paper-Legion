@@ -428,7 +428,7 @@ public class GameMain extends Application {
 
         if (game.move(newPosY, newPosX, movementTargets)) {
             grid.tileList[selectedPosY][selectedPosX].removeUnit();
-            grid.tileList[selectedPosY][selectedPosX].setUnit(selectedUnit);
+            grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
 
             //De-colours previous tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
