@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import database.Database;
 import gameplay.GameLogic;
+import gameplay.GameMain;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,10 +33,6 @@ import static database.Variables.*;
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
         private Thread matchSetupThread;
-
-        //TODO: DESPAGHETTI
-
-
 
         @FXML
         private ResourceBundle resources;
@@ -309,7 +306,7 @@ import static database.Variables.*;
 
     private void enterGame() {
         try {
-            GameLogic game = new GameLogic();
+            GameMain game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

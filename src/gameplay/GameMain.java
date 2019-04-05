@@ -46,7 +46,7 @@ public class GameMain extends Application {
 
         game = new GameLogic();
 
-        Pane gridPane = game.createGrid(); //creates the grid
+        //Pane gridPane = game.createGrid(); //creates the grid
 
         game.addObstacles();
 

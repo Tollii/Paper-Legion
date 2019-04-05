@@ -3,6 +3,7 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import gameplay.GameLogic;
+import gameplay.GameMain;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -16,7 +17,7 @@ import static database.Variables.*;
 
 public class mainMenuController extends Controller {
     private boolean findGameClicked, gameEntered, threadStarted = false;
-    private GameLogic game;
+    private GameMain game;
     @FXML
     private ResourceBundle resources;
 
@@ -176,7 +177,7 @@ public class mainMenuController extends Controller {
     private void enterGame() {
         try {
             findGameClicked = false;
-            game = new GameLogic();
+            game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

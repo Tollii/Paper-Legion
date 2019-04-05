@@ -19,19 +19,16 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
@@ -40,94 +37,102 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import menus.Main;
 
 import java.io.IOException;
+
+import static database.Variables.*;
+import static database.Variables.waitTurnThread;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import static database.Variables.*;
+import javafx.geometry.Orientation;
+import menus.Main;
 
-public class GameLogic {
+public class GameLogic  {
 
     ////BOARD SIZE CONTROLS////
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
     public static final int tileSize = 100;      //sets size of each tile on the grid
-    private static final int playerSideSize = 2; //Used to set width of the placement area
+    public static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
-    private Grid grid = new Grid(boardSize, boardSize);
-    private Pane root;
-    private Label description = new Label();                //description label for the selected unit
-    private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
-    private Label phaseLabel = new Label();
-    private static Label resourceLabel = new Label();    //Static so that Tile can update the label
-    private JFXButton endTurnButton;                                //button for ending turn
-    private JFXButton surrenderButton;                              //button for surrendering
+    public Grid grid = new Grid(boardSize, boardSize);
+    public Pane root;
+    public Label description = new Label();                //description label for the selected unit
+    public Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
+    public Label phaseLabel = new Label();
+    public static Label resourceLabel = new Label();    //Static so that Tile can update the label
+    public JFXButton endTurnButton;                                //button for ending turn
+    public JFXButton surrenderButton;                              //button for surrendering
     ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
+    ////WINDOW SIZE////
+    public final double windowWidth = screenWidth;
+    public final double windowHeight = screenHeight;
+
     ////SIZE VARIABLES////
-    private final int buttonWidth = 175;
-    private final int buttonHeight = 75;
-    private final int phaseLabelWidth = 300;
-    private final int phaseLabelHeight = 50;
+    public final int buttonWidth = 175;
+    public final int buttonHeight = 75;
+    public final int phaseLabelWidth = 300;
+    public final int phaseLabelHeight = 50;
 
     ////PANE PADDINGS////
 
     //GRID//
-    private final int gridXPadding = 300;
-    private final int gridYPadding = 100;
+    public final int gridXPadding = 300;
+    public final int gridYPadding = 100;
 
     //PLACEMENT PHASE SIDE PANEL//
-    private final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
-    private final int recruitYPadding = 150;
-    private final int placementButtonXPadding = 150;
-    private final int placementButtonYPadding = 500;
+    public final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
+    public final int recruitYPadding = 150;
+    public final int placementButtonXPadding = 150;
+    public final int placementButtonYPadding = 500;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
-    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
-    private final int sidePanelYPadding = 150;
-    private final int descriptionXPadding = 0;
-    private final int descriptionYPadding = 100;
-    private final int turnCounterXPadding = 0;
-    private final int turnCounterYPadding = 0;
-    private final int endTurnButtonXPadding = 150;
-    private final int endTurnButtonYPadding = 500;
-    private final int surrenderButtonXPadding = 150;
-    private final int surrenderButtonYPadding = 580;
+    public final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
+    public final int sidePanelYPadding = 150;
+    public final int descriptionXPadding = 0;
+    public final int descriptionYPadding = 100;
+    public final int turnCounterXPadding = 0;
+    public final int turnCounterYPadding = 0;
+    public final int endTurnButtonXPadding = 150;
+    public final int endTurnButtonYPadding = 500;
+    public final int surrenderButtonXPadding = 150;
+    public final int surrenderButtonYPadding = 580;
 
     //PHASELABEL PANE//
-    private final int phaseLabelXPadding = gridXPadding + (int)((tileSize*boardSize - phaseLabelWidth) / 2);
-    private final int phaseLabelYPadding = (int)((gridYPadding - phaseLabelHeight) / 2);
+    public final int phaseLabelXPadding = gridXPadding + (int)((tileSize*boardSize - phaseLabelWidth) / 2);
+    public final int phaseLabelYPadding = (int)((gridYPadding - phaseLabelHeight) / 2);
 
     ////GAME CONTROL VARIABLES////
-    private boolean unitSelected = false;
-    private int moveCounter = 0;                                         // Counter for movement phase.
-    private int attackCount = 0;                                        // Counter for attack phase.
-    private Unit selectedUnit;
-    private int selectedPosX;
-    private int selectedPosY;
-    private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
-    private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
-    private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
-    private ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
-    private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
-    private boolean surrendered = false;
-    private boolean gameFinished = false;
+    public boolean unitSelected = false;
+    public int moveCounter = 0;                                         // Counter for movement phase.
+    public int attackCount = 0;                                        // Counter for attack phase.
+    public Unit selectedUnit;
+    public int selectedPosX;
+    public int selectedPosY;
+    public ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
+    public ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
+    public ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
+    public ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
+    public boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
+    public boolean surrendered = false;
+    public boolean gameFinished = false;
 
-    private UnitGenerator unitGenerator = new UnitGenerator();
+    public UnitGenerator unitGenerator = new UnitGenerator();
 
     ////STYLING////
-    private String descriptionFont = "-fx-font-family: 'Arial Black'";
-    private String buttonBackgroundColor = "-fx-background-color: #000000";
-    private String turnCounterFontSize = "-fx-font-size: 32px";
-    private String phaseLabelFontSize = "-fx-font-size: 32px";
-    private Paint selectionOutlineColor = Color.RED;
-    private Paint buttonTextColor = Color.WHITE;
-    private Paint movementHighlightColor = Color.GREENYELLOW;
-    private Paint attackHighlightColor = Color.DARKRED;
-    private Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
-
+    public String gameTitle = "PAPER LEGION";
+    public String descriptionFont = "-fx-font-family: 'Arial Black'";
+    public String buttonBackgroundColor = "-fx-background-color: #000000";
+    public String turnCounterFontSize = "-fx-font-size: 32px";
+    public String phaseLabelFontSize = "-fx-font-size: 32px";
+    public Paint selectionOutlineColor = Color.RED;
+    public Paint buttonTextColor = Color.WHITE;
+    public Paint movementHighlightColor = Color.GREENYELLOW;
+    public Paint attackHighlightColor = Color.DARKRED;
+    public Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
 
     public void addObstacles() {
         // Player 2 adds obstacles when he joins.
