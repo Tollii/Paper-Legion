@@ -5,10 +5,8 @@ import database.Cleaner;
 import database.ConnectionPool;
 import database.Database;
 import database.Variables;
-import database.Variables.*;
-import gameplay.GameLogic;
+import gameplay.GameMain;
 import gameplay.SetUp;
-import menus.Main;
 import org.junit.*;
 import org.junit.Test;
 
@@ -17,7 +15,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static database.Variables.*;
-import static org.junit.Assert.*;
 
 //testUser2 Password: testPassword2 id: 51
 //testUser password: testPassword id: 3
@@ -59,7 +56,7 @@ public class GameLogicTest {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
 
-        GameLogic game = new GameLogic();
+        GameMain game = new GameMain();
 
     }
 

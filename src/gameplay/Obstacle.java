@@ -15,8 +15,8 @@ public class Obstacle extends StackPane {
 
     public Obstacle(int posX, int posY, int obstacleID){
         rect = new Rectangle();
-        rect.setWidth(GameLogic.tileSize);
-        rect.setHeight(GameLogic.tileSize);
+        rect.setWidth(GameMain.tileSize);
+        rect.setHeight(GameMain.tileSize);
         this.posX = posX;
         this.posY = posY;
         this.obstacleID = obstacleID;

@@ -3,8 +3,6 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableView;
-import database.Database;
 import gameplay.GameLogic;
 import gameplay.GameMain;
 import javafx.application.Platform;

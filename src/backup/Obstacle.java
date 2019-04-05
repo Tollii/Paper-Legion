@@ -11,7 +11,7 @@
 //    private Image obstacle = new Image("/gameplay/assets/obstacle.png");
 //
 //    public Obstacle(int posX, int posY, int pieceId){
-//        super(GameLogic.tileSize, GameLogic.tileSize);
+//        super(GameMain.tileSize, GameMain.tileSize);
 //        this.posX = posX;
 //        this.posY = posY;
 //        this.pieceId = pieceId;
