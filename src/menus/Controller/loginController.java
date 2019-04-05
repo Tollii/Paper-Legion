@@ -45,9 +45,6 @@ public class loginController extends Controller {
     private Label alertField;
 
     @FXML
-    private Label gameTitleLabel;
-
-    @FXML
     private ImageView paperLegionLogo;
 
     @FXML
@@ -84,9 +81,8 @@ public class loginController extends Controller {
                         } else {
                             //If the user is not logged in this error is shown. More specificity to what went wrong can be implemented.
                             Platform.runLater(() -> {
-                                //gameTitleLabel.setText("Login Failed");
                                 loginPressed = false;
-                                System.out.println("User is already logged in");
+                                alertField.setText("Login failed");
                             });
                         }
                     }
@@ -97,7 +93,6 @@ public class loginController extends Controller {
         loginThread = new Thread(loginRunnable);
 
         newUserButton.setOnAction(event -> {
-            //newUserButton.getScene().getWindow().hide();
             changeScene("signUp.fxml");
         });
 

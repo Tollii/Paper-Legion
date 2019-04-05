@@ -63,11 +63,13 @@ public class GameLogic extends Application {
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private Label phaseLabel = new Label();
     private static Label resourceLabel = new Label();    //Static so that Tile can update the label
-    ArrayList<Obstacle> obstacles;
+    private JFXButton endTurnButton;                                //button for ending turn
+    private JFXButton surrenderButton;                              //button for surrendering
+    ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
     ////WINDOW SIZE////
-    private final int windowWidth = 1920;
-    private final int windowHeight = 1080;
+    private final double windowWidth = screenWidth;
+    private final double windowHeight = screenHeight;
 
     ////SIZE VARIABLES////
     private final int buttonWidth = 175;
@@ -81,7 +83,7 @@ public class GameLogic extends Application {
     private final int gridXPadding = 300;
     private final int gridYPadding = 100;
 
-    //PLACMENT PHASE SIDE PANEL//
+    //PLACEMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
     private final int recruitYPadding = 150;
     private final int placementButtonXPadding = 150;
@@ -134,6 +136,7 @@ public class GameLogic extends Application {
 
     public void start(Stage window) throws Exception {
         // Sets static variables for players and opponent id.
+
         db.getPlayers();
 
         SetUp setUp = new SetUp();
@@ -151,6 +154,7 @@ public class GameLogic extends Application {
         window.setTitle(gameTitle);
         window.setScene(scene);
         window.show();
+
     }
 
     private void addObstacles() {
@@ -169,7 +173,7 @@ public class GameLogic extends Application {
             }
             db.exportObstacles(obstacles);
         } else {
-            //Player 1 continually checks if all the obstacles have been added to the match.
+            //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while(!db.obstaclesHaveBeenAdded()){
                 try {
                     Thread.sleep(1000);
@@ -339,14 +343,14 @@ public class GameLogic extends Application {
         Pane sidePanel = createSidePanel();
         Pane phaseLabelPane = createPhaseLabelPane();
 
-        JFXButton endTurnButton = new JFXButton("End turn");
+        endTurnButton = new JFXButton("End turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
 //        endTurnButton.setLayoutX(endTurnButtonXPadding);
 //        endTurnButton.setLayoutY(endTurnButtonYPadding);
 
-        JFXButton surrenderButton = new JFXButton("Surrender");
+        surrenderButton = new JFXButton("Surrender");
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
@@ -923,9 +927,11 @@ public class GameLogic extends Application {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnThread.stop();
+            waitTurnThread = null;
         }
         if (waitPlacementThread != null) {
             waitPlacementThread.stop();
+            waitPlacementThread = null;
         }
         //Resets turns to 1 for next game.
         turn = 1;
@@ -1011,6 +1017,7 @@ public class GameLogic extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
+        surrender(endTurnButton);
         Main.closeAndLogout();
     }
 

@@ -4,6 +4,11 @@ import Runnables.RunnableInterface;
 
 public class Variables {
     public static Database db;
+
+    public static double screenWidth;
+    public static double screenHeight;
+
+    //Match info
     public static int user_id;
     public static int match_id;
     public static boolean yourTurn;
