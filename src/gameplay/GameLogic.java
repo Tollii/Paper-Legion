@@ -59,10 +59,12 @@ public class GameLogic extends Application {
     ////SCENE ELEMENTS////
     private Grid grid = new Grid(boardSize, boardSize);
     private Pane root;
-    private Label description = new Label();                //description label for the selected unit
-    private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
-    private Label phaseLabel = new Label();
-    ArrayList<Obstacle> obstacles;
+    private Label description = new Label();                        //description label for the selected unit
+    private Label turnCounter = new Label("TURN: " + turn);    //describe which turn it is
+    private Label phaseLabel = new Label();                         //describes which phase it is
+    private JFXButton endTurnButton;                                //button for ending turn
+    private JFXButton surrenderButton;                              //button for surrendering
+    ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -331,14 +333,14 @@ public class GameLogic extends Application {
         Pane sidePanel = createSidePanel();
         Pane phaseLabelPane = createPhaseLabelPane();
 
-        JFXButton endTurnButton = new JFXButton("End turn");
+        endTurnButton = new JFXButton("End turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
 //        endTurnButton.setLayoutX(endTurnButtonXPadding);
 //        endTurnButton.setLayoutY(endTurnButtonYPadding);
 
-        JFXButton surrenderButton = new JFXButton("Surrender");
+        surrenderButton = new JFXButton("Surrender");
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
@@ -998,6 +1000,7 @@ public class GameLogic extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
+        surrender(endTurnButton);
         Main.closeAndLogout();
     }
 
