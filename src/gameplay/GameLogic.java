@@ -49,92 +49,115 @@ import java.util.Random;
 import javafx.geometry.Orientation;
 import menus.Main;
 
-public class GameLogic  {
+public class GameLogic extends Application {
 
     ////BOARD SIZE CONTROLS////
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
     public static final int tileSize = 100;      //sets size of each tile on the grid
-    public static final int playerSideSize = 2; //Used to set width of the placement area
+    private static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
-    public Grid grid = new Grid(boardSize, boardSize);
-    public Pane root;
-    public Label description = new Label();                //description label for the selected unit
-    public Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
-    public Label phaseLabel = new Label();
-    public static Label resourceLabel = new Label();    //Static so that Tile can update the label
-    public JFXButton endTurnButton;                                //button for ending turn
-    public JFXButton surrenderButton;                              //button for surrendering
+    private Grid grid = new Grid(boardSize, boardSize);
+    private Pane root;
+    private Label description = new Label();                //description label for the selected unit
+    private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
+    private Label phaseLabel = new Label();
+    private static Label resourceLabel = new Label();    //Static so that Tile can update the label
+    private JFXButton endTurnButton;                                //button for ending turn
+    private JFXButton surrenderButton;                              //button for surrendering
     ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
     ////WINDOW SIZE////
-    public final double windowWidth = screenWidth;
-    public final double windowHeight = screenHeight;
+    private final double windowWidth = screenWidth;
+    private final double windowHeight = screenHeight;
 
     ////SIZE VARIABLES////
-    public final int buttonWidth = 175;
-    public final int buttonHeight = 75;
-    public final int phaseLabelWidth = 300;
-    public final int phaseLabelHeight = 50;
+    private final int buttonWidth = 175;
+    private final int buttonHeight = 75;
+    private final int phaseLabelWidth = 300;
+    private final int phaseLabelHeight = 50;
 
     ////PANE PADDINGS////
 
     //GRID//
-    public final int gridXPadding = 300;
-    public final int gridYPadding = 100;
+    private final int gridXPadding = 300;
+    private final int gridYPadding = 100;
 
     //PLACEMENT PHASE SIDE PANEL//
-    public final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
-    public final int recruitYPadding = 150;
-    public final int placementButtonXPadding = 150;
-    public final int placementButtonYPadding = 500;
+    private final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
+    private final int recruitYPadding = 150;
+    private final int placementButtonXPadding = 150;
+    private final int placementButtonYPadding = 500;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
-    public final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
-    public final int sidePanelYPadding = 150;
-    public final int descriptionXPadding = 0;
-    public final int descriptionYPadding = 100;
-    public final int turnCounterXPadding = 0;
-    public final int turnCounterYPadding = 0;
-    public final int endTurnButtonXPadding = 150;
-    public final int endTurnButtonYPadding = 500;
-    public final int surrenderButtonXPadding = 150;
-    public final int surrenderButtonYPadding = 580;
+    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
+    private final int sidePanelYPadding = 150;
+    private final int descriptionXPadding = 0;
+    private final int descriptionYPadding = 100;
+    private final int turnCounterXPadding = 0;
+    private final int turnCounterYPadding = 0;
+    private final int endTurnButtonXPadding = 150;
+    private final int endTurnButtonYPadding = 500;
+    private final int surrenderButtonXPadding = 150;
+    private final int surrenderButtonYPadding = 580;
 
     //PHASELABEL PANE//
-    public final int phaseLabelXPadding = gridXPadding + (int)((tileSize*boardSize - phaseLabelWidth) / 2);
-    public final int phaseLabelYPadding = (int)((gridYPadding - phaseLabelHeight) / 2);
+    private final int phaseLabelXPadding = gridXPadding + (int)((tileSize*boardSize - phaseLabelWidth) / 2);
+    private final int phaseLabelYPadding = (int)((gridYPadding - phaseLabelHeight) / 2);
 
     ////GAME CONTROL VARIABLES////
-    public boolean unitSelected = false;
-    public int moveCounter = 0;                                         // Counter for movement phase.
-    public int attackCount = 0;                                        // Counter for attack phase.
-    public Unit selectedUnit;
-    public int selectedPosX;
-    public int selectedPosY;
-    public ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
-    public ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
-    public ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
-    public ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
-    public boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
-    public boolean surrendered = false;
-    public boolean gameFinished = false;
+    private boolean unitSelected = false;
+    private int moveCounter = 0;                                         // Counter for movement phase.
+    private int attackCount = 0;                                        // Counter for attack phase.
+    private Unit selectedUnit;
+    private int selectedPosX;
+    private int selectedPosY;
+    private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
+    private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
+    private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
+    private ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
+    private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
+    private boolean surrendered = false;
+    private boolean gameFinished = false;
 
-    public UnitGenerator unitGenerator = new UnitGenerator();
+    private UnitGenerator unitGenerator = new UnitGenerator();
 
     ////STYLING////
-    public String gameTitle = "PAPER LEGION";
-    public String descriptionFont = "-fx-font-family: 'Arial Black'";
-    public String buttonBackgroundColor = "-fx-background-color: #000000";
-    public String turnCounterFontSize = "-fx-font-size: 32px";
-    public String phaseLabelFontSize = "-fx-font-size: 32px";
-    public Paint selectionOutlineColor = Color.RED;
-    public Paint buttonTextColor = Color.WHITE;
-    public Paint movementHighlightColor = Color.GREENYELLOW;
-    public Paint attackHighlightColor = Color.DARKRED;
-    public Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
+    private String gameTitle = "PAPER LEGION";
+    private String descriptionFont = "-fx-font-family: 'Arial Black'";
+    private String buttonBackgroundColor = "-fx-background-color: #000000";
+    private String turnCounterFontSize = "-fx-font-size: 32px";
+    private String phaseLabelFontSize = "-fx-font-size: 32px";
+    private Paint selectionOutlineColor = Color.RED;
+    private Paint buttonTextColor = Color.WHITE;
+    private Paint movementHighlightColor = Color.GREENYELLOW;
+    private Paint attackHighlightColor = Color.DARKRED;
+    private Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
 
-    public void addObstacles() {
+    public void start(Stage window) throws Exception {
+        // Sets static variables for players and opponent id.
+
+        db.getPlayers();
+
+        SetUp setUp = new SetUp();
+        setUp.importUnitTypes();
+
+        root = new Pane();
+        Scene scene = new Scene(root, windowWidth, windowHeight);
+
+        Pane gridPane = createGrid(); //creates the grid
+
+        addObstacles();
+
+        placementPhaseStart(); //starts the placement phase
+
+        window.setTitle(gameTitle);
+        window.setScene(scene);
+        window.show();
+
+    }
+
+    private void addObstacles() {
         // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
@@ -171,7 +194,7 @@ public class GameLogic  {
     }
 
     ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
-    public void placementPhaseStart() {
+    private void placementPhaseStart() {
 
         currentResources = startingResources; //Starts current resources to starting resources;
 
@@ -213,7 +236,7 @@ public class GameLogic  {
         resourceLabel.setText("Resources: " + currentResources);
     }
 
-    public void placementPhaseFinished(Pane recruitPane) {
+    private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
         Pane phaseLabelPane = createPhaseLabelPane();
         phaseLabel.setText("WAITING FOR OTHER PLAYER");
@@ -249,10 +272,10 @@ public class GameLogic  {
     }
 
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
-    public void waitForOpponentReady() {
+    private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitPlacementRunnable = new RunnableInterface() {
-            public boolean doStop = false;
+            private boolean doStop = false;
 
             @Override
             public void run() {
@@ -304,7 +327,7 @@ public class GameLogic  {
         waitPlacementThread.start();
     }
 
-    public void importOpponentPlacementUnits() {
+    private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
@@ -316,7 +339,7 @@ public class GameLogic  {
     }
 
     ////MOVEMENT AND ACTION PHASE STARTER////
-    public void movementActionPhaseStart() {
+    private void movementActionPhaseStart() {
         Pane sidePanel = createSidePanel();
         Pane phaseLabelPane = createPhaseLabelPane();
 
@@ -361,7 +384,7 @@ public class GameLogic  {
         });
 
         surrenderButton.setOnAction(event -> {
-            surrender();
+            surrender(endTurnButton);
         });
 
         ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
@@ -393,7 +416,7 @@ public class GameLogic  {
     }
 
     ////MOVEMENT AND ATTACK METHODS////
-    public void move(MouseEvent event) {
+    private void move(MouseEvent event) {
 
         int newPosX = getPosXFromEvent(event);
         int newPosY = getPosYFromEvent(event); //position of click
@@ -426,7 +449,7 @@ public class GameLogic  {
         }
     }
 
-    public void attack(MouseEvent event) {
+    private void attack(MouseEvent event) {
         if (!movementPhase) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
             int attackPosY = getPosYFromEvent(event); //sets position attacked
@@ -460,7 +483,7 @@ public class GameLogic  {
     }
 
     ////HIGHLIGHTING METHODS////
-    public void highlightPossibleMoves() {
+    private void highlightPossibleMoves() {
         if (unitSelected) { //checks if there is a unit selected
             ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
@@ -471,7 +494,7 @@ public class GameLogic  {
         }
     }
 
-    public void highlightPossibleAttacks() {
+    private void highlightPossibleAttacks() {
         if (unitSelected) { //checks if there is a unit selected
             ArrayList<Tile> attackTargets = getAttackableTiles();
 
@@ -482,7 +505,7 @@ public class GameLogic  {
         }
     }
 
-    public ArrayList<Tile> getMovementPossibleTiles() {
+    private ArrayList<Tile> getMovementPossibleTiles() {
         ArrayList<Tile> movementTargets = new ArrayList<Tile>();
 
         //goes throug all tiles and adds those which isn't occupied and are within movement distance
@@ -498,7 +521,7 @@ public class GameLogic  {
         return movementTargets;
     }
 
-    public ArrayList<Tile> getAttackableTiles() {
+    private ArrayList<Tile> getAttackableTiles() {
         ArrayList<Tile> attackTargets = new ArrayList<Tile>();
 
         for (int i = 0; i < grid.tileList.length; i++) {
@@ -523,7 +546,7 @@ public class GameLogic  {
         return attackTargets;
     }
 
-    public void clearHighLight() {
+    private void clearHighLight() {
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
                 grid.tileList[i][j].setFill(Color.WHITE);
@@ -532,7 +555,7 @@ public class GameLogic  {
     }
 
     ////UNIT SELECTOR AND DESELECTORS////
-    public void select(MouseEvent event) {
+    private void select(MouseEvent event) {
 
         selectedPosX = getPosXFromEvent(event);
         selectedPosY = getPosYFromEvent(event);
@@ -571,7 +594,7 @@ public class GameLogic  {
         }
     }
 
-    public void deselect() {
+    private void deselect() {
         if (unitSelected) {
             //removes selection of unit tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
@@ -593,16 +616,16 @@ public class GameLogic  {
     }
 
     ////METHODS FOR GETTING CLICK POSITION////
-    public int getPosXFromEvent(MouseEvent event) {
+    private int getPosXFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getX()) / tileSize) - 1;
     }
 
-    public int getPosYFromEvent(MouseEvent event) {
+    private int getPosYFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }
 
     ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
-    public void endTurn(JFXButton endTurnButton) {
+    private void endTurn(JFXButton endTurnButton) {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
@@ -651,10 +674,10 @@ public class GameLogic  {
         }
     }
 
-    public void waitForTurn(JFXButton endTurnButton) {
+    private void waitForTurn(JFXButton endTurnButton) {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitTurnRunnable = new RunnableInterface() {
-            public boolean doStop = false;
+            private boolean doStop = false;
 
             @Override
             public void run() {
@@ -708,7 +731,7 @@ public class GameLogic  {
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
-    public void setUpNewTurn(JFXButton endTurnButton) {
+    private void setUpNewTurn(JFXButton endTurnButton) {
         deselect();
         selectedUnit = null;
         turn++;
@@ -759,7 +782,7 @@ public class GameLogic  {
     }
 
     ////METHOD FOR HANDLING SURRENDER////
-    public void surrender() {
+    private void surrender(JFXButton endTurnButton) {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
         confirm_alert.setTitle("Game over!");
@@ -804,7 +827,7 @@ public class GameLogic  {
     }
 
     ////METHODS FOR ENDING THE GAME////
-    public void checkForGameOver() {
+    private void checkForGameOver() {
         String win_loseText;
         String gameSummary = "";
         int loser = -1;
@@ -875,7 +898,7 @@ public class GameLogic  {
     }
 
     ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
-    public int checkForEliminationVictory() {
+    private int checkForEliminationVictory() {
         int yourPieces = 0;
         int opponentsPieces = 0;
         //Goes through all units and counts how many are alive for each player.
@@ -900,7 +923,7 @@ public class GameLogic  {
         }
     }
 
-    public void gameCleanUp() {
+    private void gameCleanUp() {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnThread.stop();
@@ -915,7 +938,7 @@ public class GameLogic  {
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
-    public Pane createGrid() { //adds grid and styles it
+    private Pane createGrid() { //adds grid and styles it
         Pane gridPane = new Pane();
 
         gridPane.getChildren().add(grid);
@@ -927,7 +950,7 @@ public class GameLogic  {
         return gridPane;
     }
 
-    public Pane createRecruitPane() { //adds unit selector/recruiter and styles it
+    private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
 
         Pane unitPane = new Pane();
         FlowPane units = new FlowPane(Orientation.HORIZONTAL, 5, 5);
@@ -953,7 +976,7 @@ public class GameLogic  {
         return unitPane;
     }
 
-    public Pane createSidePanel() { //creates the side panel for movement/attack phase
+    private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
         turnCounter.setStyle(turnCounterFontSize);
@@ -974,19 +997,36 @@ public class GameLogic  {
         return sidePanel;
     }
 
-    public Pane createPhaseLabelPane() {
-      Pane phaseLabelPane = new Pane();
+    private Pane createPhaseLabelPane() {
+        Pane phaseLabelPane = new Pane();
 
-      phaseLabel.setStyle(phaseLabelFontSize);
-      phaseLabel.setMinWidth(phaseLabelWidth);
-      phaseLabel.setMinHeight(phaseLabelHeight);
+        phaseLabel.setStyle(phaseLabelFontSize);
+        phaseLabel.setMinWidth(phaseLabelWidth);
+        phaseLabel.setMinHeight(phaseLabelHeight);
 
-      phaseLabelPane.getChildren().add(phaseLabel);
+        phaseLabelPane.getChildren().add(phaseLabel);
 
-      phaseLabelPane.setLayoutX(phaseLabelXPadding);
-      phaseLabelPane.setLayoutY(phaseLabelYPadding);
-      root.getChildren().add(phaseLabelPane);
+        phaseLabelPane.setLayoutX(phaseLabelXPadding);
+        phaseLabelPane.setLayoutY(phaseLabelYPadding);
+        root.getChildren().add(phaseLabelPane);
 
-      return phaseLabelPane;
+        return phaseLabelPane;
+    }
+
+    ////SHUTDOWN METHODS////
+    @Override
+    public void stop() {
+        // Executed when the application shuts down. User is logged out and database connection is closed.
+        surrender(endTurnButton);
+        Main.closeAndLogout();
+    }
+
+    ////MAIN USED FOR SHUTDOWN HOOK////
+    public void main(String[] args) {
+        System.out.println("SHUTDOWN HOOK CALLED");
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Main.closeAndLogout();
+        }));
+        launch(args);
     }
 }
