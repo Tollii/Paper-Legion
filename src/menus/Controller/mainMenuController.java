@@ -16,7 +16,7 @@ import static database.Variables.*;
 
 public class mainMenuController extends Controller {
     private boolean findGameClicked, gameEntered, threadStarted = false;
-
+    private GameLogic game;
     @FXML
     private ResourceBundle resources;
 
@@ -47,7 +47,7 @@ public class mainMenuController extends Controller {
 
     @FXML
     void initialize() {
-
+        game = null;
         searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
@@ -180,7 +180,7 @@ public class mainMenuController extends Controller {
     private void enterGame() {
         try {
             findGameClicked = false;
-            GameLogic game = new GameLogic();
+            game = new GameLogic();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

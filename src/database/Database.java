@@ -839,8 +839,7 @@ public class Database {
             rs.next();
 
             preparedStatement = myConn.prepareStatement(stmt2);
-            preparedStatement.setInt(
-                    1, turn);
+            preparedStatement.setInt(1, turn);
             preparedStatement.setInt(2, match_id);
 
             //Exception case for turn 1. Has to add the first turn for player 1.

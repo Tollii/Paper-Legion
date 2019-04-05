@@ -19,7 +19,6 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
-import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -40,7 +39,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import static database.Variables.*;
 import static database.Variables.waitTurnThread;
@@ -52,6 +50,7 @@ import javafx.geometry.Orientation;
 import menus.Main;
 
 public class GameLogic extends Application {
+
     ////BOARD SIZE CONTROLS////
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
     public static final int tileSize = 100;      //sets size of each tile on the grid
@@ -116,6 +115,7 @@ public class GameLogic extends Application {
     private ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
     private boolean surrendered = false;
+    private boolean gameFinished = false;
 
     private UnitGenerator unitGenerator = new UnitGenerator();
 
@@ -662,6 +662,10 @@ public class GameLogic extends Application {
                 while (keepRunning()) {
                     try {
                         while (!yourTurn) {
+                            if(gameFinished){
+                                this.doStop();
+                                waitTurnThread = null;
+                            }
                             System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(1000);
                             //When player in database matches your own user_id it is your turn again.
@@ -809,9 +813,11 @@ public class GameLogic extends Application {
         int surrenderResult = db.checkForSurrender();
 
         if (eliminationResult != -1) {
+            gameFinished = true;
             gameSummary = "The game ended after a player's unit were all eliminated after " + turn + " turns\n";
             loser = eliminationResult;
         } else if (surrenderResult == user_id || surrenderResult == opponent_id) {
+            gameFinished = true;
             gameSummary = "The game ended after a player surrendered the match after " + turn + " turns\n";
             loser = surrenderResult;
         }
@@ -854,7 +860,8 @@ public class GameLogic extends Application {
                     System.out.println("load failed");
                 }
                 winner_alert.close();
-                Main.window.setScene(new Scene(root));
+                Main.rootScene.setRoot(root);
+                Main.window.setScene(Main.rootScene);
             });
 
             VBox content = new VBox();
@@ -898,6 +905,9 @@ public class GameLogic extends Application {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnThread.stop();
+        }
+        if (waitPlacementThread != null) {
+            waitPlacementThread.stop();
         }
         //Resets turns to 1 for next game.
         turn = 1;

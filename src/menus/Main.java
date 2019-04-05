@@ -25,11 +25,11 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/menus/View/login.fxml"));
         rootScene = new Scene(root, 850, 650);
 
-        primaryStage.setTitle("Paper Legion");
-        primaryStage.setScene(rootScene);
-        primaryStage.setMinWidth(850);
-        primaryStage.setMinHeight(650);
-        primaryStage.show();
+        window.setTitle("Paper Legion");
+        window.setScene(rootScene);
+        window.setMinWidth(850);
+        window.setMinHeight(650);
+        window.show();
     }
 
     public static void main(String[] args) {
