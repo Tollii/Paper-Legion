@@ -68,8 +68,8 @@ public class GameLogic extends Application {
     ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
     ////WINDOW SIZE////
-    private final double windowWidth = screenWidth;
-    private final double windowHeight = screenHeight;
+    private final double windowWidth = 100 /*screenWidth*/;
+    private final double windowHeight = 100 /*screenHeight*/;
 
     ////SIZE VARIABLES////
     private final int buttonWidth = 175;
@@ -80,7 +80,7 @@ public class GameLogic extends Application {
     ////PANE PADDINGS////
 
     //GRID//
-    private final int gridXPadding = 300;
+    private final int gridXPadding = (int)(windowWidth * 0.15);
     private final int gridYPadding = 100;
 
     //PLACEMENT PHASE SIDE PANEL//

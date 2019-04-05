@@ -45,7 +45,7 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
             if (dragboard.hasImage() && dragboard.hasString()) {
                 Unit newUnit = SetUp.unitGenerator.newFriendlyUnit(dragboard.getString()); //creates new friendly unit and adds to tile
 
-                if(currentResources - newUnit.getCost() > 0){
+                if(currentResources - newUnit.getCost() >= 0){
                     setUnit(newUnit);
                     setUntargetable();
                     success = true;
