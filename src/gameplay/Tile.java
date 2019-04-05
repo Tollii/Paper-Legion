@@ -10,6 +10,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Paint;
 
+import static database.Variables.currentResources;
+
 public class Tile extends StackPane { //each tile is a stackpane containing a rectangle
 
     private Unit unit;
@@ -39,15 +41,20 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
             Dragboard dragboard = event.getDragboard();
 
             boolean success = false;
+
             if (dragboard.hasImage() && dragboard.hasString()) {
                 Unit newUnit = SetUp.unitGenerator.newFriendlyUnit(dragboard.getString()); //creates new friendly unit and adds to tile
 
-                setUnit(newUnit);
-                setUntargetable();
-                success = true;
+                if(currentResources - newUnit.getCost() > 0){
+                    setUnit(newUnit);
+                    setUntargetable();
+                    success = true;
+                }
             }
 
             if(success){
+
+                currentResources -= getUnit().getCost();
                 GameLogic.updateResourceLabel();
             }
 

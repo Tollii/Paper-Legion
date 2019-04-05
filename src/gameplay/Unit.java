@@ -27,6 +27,7 @@ public class Unit extends StackPane {
     private int minAttackRange;
     private int maxAttackRange;
     private int movementRange;
+    private int cost;
     private String description;
     private String descriptionTag;
 
@@ -54,6 +55,7 @@ public class Unit extends StackPane {
         minAttackRange = type.getMinAttackRange();
         maxAttackRange = type.getMaxAttackRange();
         movementRange = type.getMovementRange();
+        cost = type.getCost();
         description = type.getDescription();
         descriptionTag = type.getDescriptionTag();
         pieceId = unitId;
@@ -133,6 +135,10 @@ public class Unit extends StackPane {
 
     public int getMovementRange() {
         return movementRange;
+    }
+
+    public int getCost() {
+        return cost;
     }
 
     public int getPieceId() {
