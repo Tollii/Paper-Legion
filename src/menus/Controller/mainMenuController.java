@@ -170,7 +170,6 @@ public class mainMenuController extends Controller {
             cancelGame();
             changeScene("stats.fxml");
         });
-
     }
 
     private void enterGame() {
