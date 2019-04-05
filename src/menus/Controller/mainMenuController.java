@@ -102,7 +102,6 @@ public class mainMenuController extends Controller {
                                             cancelGame();
                                             threadStarted = false;
                                             searchGameThread = null;
-                                            changeScene("mainMenu.fxml");
                                         });
                                             this.doStop();
                                     }
