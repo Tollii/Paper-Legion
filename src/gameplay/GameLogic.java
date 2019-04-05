@@ -42,7 +42,7 @@ public class GameLogic {
         return false;
     }
 
-    public boolean attack(int attackPosX, int attackPosY, ArrayList<Tile> attackTargets) {
+    public boolean attack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
         for (int i = 0; i < attackTargets.size(); i++) {
             if(attackTargets.get(i).equals(grid.tileList[attackPosY][attackPosX])) {
                 return true;
