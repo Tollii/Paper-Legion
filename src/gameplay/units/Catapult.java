@@ -1,10 +1,11 @@
-package gameplay;
+package gameplay.units;
 
+import gameplay.UnitType;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
 
-public class Swordsman implements UnitType {
+public class Catapult implements UnitType {
 
     private final String type;
     private final int unitTypeId;
@@ -21,7 +22,7 @@ public class Swordsman implements UnitType {
     private final Image image;
     private final AudioClip audio;
 
-    public Swordsman(String type, int unitTypeId, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, int cost, String description, String descriptionTag, Image image, AudioClip audio){
+    public Catapult(String type, int unitTypeId, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, int cost, String description, String descriptionTag, Image image, AudioClip audio){
         this.type = type;
         this.unitTypeId = unitTypeId;
         this.hp = hp;
