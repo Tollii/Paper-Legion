@@ -412,29 +412,30 @@ public class GameMain extends Application {
     }
 
     private void move(MouseEvent event) {
+        if(yourTurn) {
+            int newPosX = getPosXFromEvent(event);
+            int newPosY = getPosYFromEvent(event); //position of click
 
-        int newPosX = getPosXFromEvent(event);
-        int newPosY = getPosYFromEvent(event); //position of click
+            ArrayList<Tile> movementTargets = game.getMovementPossibleTiles();
 
-        ArrayList<Tile> movementTargets = game.getMovementPossibleTiles();
+            if (game.checkForLegalMove(newPosY, newPosX, movementTargets)) {
+                grid.tileList[selectedPosY][selectedPosX].removeUnit();
+                grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
 
-        if (game.checkForLegalMove(newPosY, newPosX, movementTargets)) {
-            grid.tileList[selectedPosY][selectedPosX].removeUnit();
-            grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
+                //De-colours previous tile
+                grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+                grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+                grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
 
-            //De-colours previous tile
-            grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
+                //adds the move to movementlist
+                movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosX, newPosY));
 
-            //adds the move to movementlist
-            movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosX, newPosY));
+                movementPhase = false; //sets phase to attack
+                phaseLabel.setText("ATTACK PHASE");
 
-            movementPhase = false; //sets phase to attack
-            phaseLabel.setText("ATTACK PHASE");
-
-            clearHighLight();
-            select(event);
+                clearHighLight();
+                select(event);
+            }
         }
     }
 
