@@ -107,11 +107,9 @@ public class GameMain extends Application {
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
-    private int moveCounter = 0;                                         // Counter for movement phase.
-    private int attackCount = 0;                                        // Counter for attack phase.
-    private Unit selectedUnit;
-    private int selectedPosX;
-    private int selectedPosY;
+    public static Unit selectedUnit;
+    public static int selectedPosX;
+    public static int selectedPosY;
     private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
     private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
     private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
@@ -414,7 +412,7 @@ public class GameMain extends Application {
         int newPosX = getPosXFromEvent(event);
         int newPosY = getPosYFromEvent(event); //position of click
 
-        ArrayList<Tile> movementTargets = game.getMovementPossibleTiles(selectedUnit, selectedPosY, selectedPosX);
+        ArrayList<Tile> movementTargets = game.getMovementPossibleTiles();
 
         if (game.checkForLegalMove(newPosY, newPosX, movementTargets)) {
             grid.tileList[selectedPosY][selectedPosX].removeUnit();
@@ -429,7 +427,6 @@ public class GameMain extends Application {
             movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosX, newPosY));
 
             movementPhase = false; //sets phase to attack
-            moveCounter++; //increments move counter
             phaseLabel.setText("ATTACK PHASE");
 
             clearHighLight();
@@ -441,26 +438,17 @@ public class GameMain extends Application {
         if (!movementPhase) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
             int attackPosY = getPosYFromEvent(event); //sets position attacked
-            ArrayList<Tile> attackTargets = game.getAttackableTiles(selectedUnit, selectedPosY, selectedPosX);
+            ArrayList<Tile> attackTargets = game.getAttackableTiles();
 
             if (game.checkForLegalAttack(attackPosY,attackPosX,attackTargets)) {
 
-                //damages enemy unit
-                grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
+                game.executeAttack(attackPosY,attackPosX);
 
                 //adds the attack to attacklist
                 attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceId(), grid.tileList[attackPosY][attackPosX].getUnit().getPieceId(), selectedUnit.getAttack()));
 
-                attackCount++; //increments attack counter
-
+                //play audio clip.
                 selectedUnit.getAudio().play(); //plays the audio clip associated with the unit type
-
-                //removes unit if killed
-                if (grid.tileList[attackPosY][attackPosX].getUnit().getHp() <= 0) {
-                    grid.tileList[attackPosY][attackPosX].removeUnit();
-                }
-
-                selectedUnit.setHasAttackedThisTurn(true); //stops unit from attacking again this turn
 
                 deselect();
             }
@@ -470,7 +458,7 @@ public class GameMain extends Application {
     ////HIGHLIGHTING METHODS////
     private void highlightPossibleMoves() {
         if (unitSelected) { //checks if there is a unit selected
-            ArrayList<Tile> movementTargets = game.getMovementPossibleTiles(selectedUnit, selectedPosY, selectedPosX);
+            ArrayList<Tile> movementTargets = game.getMovementPossibleTiles();
 
             //colors all tiles that are possible movement targets green
             //colors all tiles that are possible movement targets green
@@ -482,7 +470,7 @@ public class GameMain extends Application {
 
     private void highlightPossibleAttacks() {
         if (unitSelected) { //checks if there is a unit selected
-            ArrayList<Tile> attackTargets = game.getAttackableTiles(selectedUnit, selectedPosY, selectedPosX);
+            ArrayList<Tile> attackTargets = game.getAttackableTiles();
 
             //colors all attackable tiles red
             for (int i = 0; i < attackTargets.size(); i++) {

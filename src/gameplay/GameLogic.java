@@ -20,9 +20,7 @@ package gameplay;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static gameplay.GameMain.grid;
-import static gameplay.GameMain.boardSize;
-import static gameplay.GameMain.obstacles;
+import static gameplay.GameMain.*;
 
 public class GameLogic {
 
@@ -44,7 +42,7 @@ public class GameLogic {
         return false;
     }
 
-    public ArrayList<Tile> getMovementPossibleTiles(Unit selectedUnit, int selectedPosY, int selectedPosX) {
+    public ArrayList<Tile> getMovementPossibleTiles() {
         ArrayList<Tile> movementTargets = new ArrayList<>();
 
         //goes throug all tiles and adds those which isn't occupied and are within movement distance
@@ -60,8 +58,8 @@ public class GameLogic {
         return movementTargets;
     }
 
-    public ArrayList<Tile> getAttackableTiles(Unit selectedUnit, int selectedPosY, int selectedPosX) {
-        ArrayList<Tile> attackTargets = new ArrayList<Tile>();
+    public ArrayList<Tile> getAttackableTiles() {
+        ArrayList<Tile> attackTargets = new ArrayList<>();
 
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
@@ -108,6 +106,17 @@ public class GameLogic {
         } else {
             return -1;
         }
+    }
+
+    public void executeAttack(int attackPosY, int attackPosX) {
+        //damages enemy unit
+        grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());
+
+        //removes unit if killed
+        if (grid.tileList[attackPosY][attackPosX].getUnit().getHp() <= 0) {
+            grid.tileList[attackPosY][attackPosX].removeUnit();
+        }
+        selectedUnit.setHasAttackedThisTurn(true); //stops unit from attacking again this turn
     }
 
     public ArrayList<Obstacle> createObstacles(){
