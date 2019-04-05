@@ -24,6 +24,8 @@ public interface UnitType {
 
     int getMovementRange();
 
+    int getCost();
+
     String getDescription();
 
     String getDescriptionTag();

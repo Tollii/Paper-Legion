@@ -24,7 +24,8 @@ CREATE TABLE Unit_types(
   max_health int NOT NULL,
   attack int NOT NULL,
   attack_range int NOT NULL,
-  ability_cooldown int
+  ability_cooldown int,
+  cost int NOT NULL
 );
 
 CREATE TABLE Matches(

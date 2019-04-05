@@ -62,6 +62,7 @@ public class GameLogic extends Application {
     private Label description = new Label();                //description label for the selected unit
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private Label phaseLabel = new Label();
+    private static Label resourceLabel = new Label();    //Static so that Tile can update the label
     ArrayList<Obstacle> obstacles;
 
     ////WINDOW SIZE////
@@ -190,6 +191,11 @@ public class GameLogic extends Application {
 
     ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
     private void placementPhaseStart() {
+
+        currentResources = startingResources; //Starts current resources to starting resources;
+
+        resourceLabel.setText("Resources: " + currentResources);
+
         Pane recruitPane = createRecruitPane();
 
         JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
@@ -220,6 +226,10 @@ public class GameLogic extends Application {
         finishedPlacingButton.setOnAction(event -> { //when button pressed, finishes the placementphase
             placementPhaseFinished(recruitPane);
         });
+    }
+
+    static void updateResourceLabel() {
+        resourceLabel.setText("Resources: " + currentResources);
     }
 
     private void placementPhaseFinished(Pane recruitPane) {
@@ -935,6 +945,7 @@ public class GameLogic extends Application {
     }
 
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
+
         Pane unitPane = new Pane();
         FlowPane units = new FlowPane(Orientation.HORIZONTAL, 5, 5);
 
@@ -944,7 +955,13 @@ public class GameLogic extends Application {
             RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
             units.getChildren().add(tile);
         }
-        unitPane.getChildren().add(units);
+
+        units.setLayoutY(60);
+
+        resourceLabel.setMinWidth(260);
+        resourceLabel.setLayoutX((int)(units.getWidth()/2));
+
+        unitPane.getChildren().addAll(resourceLabel, units);
 
         unitPane.setLayoutX(recruitXPadding);
         unitPane.setLayoutY(recruitYPadding);

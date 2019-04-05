@@ -14,12 +14,13 @@ public class ProtoUnitType implements UnitType {
     private final int minAttackRange;
     private final int maxAttackRange;
     private final int movementRange;
+    private final int cost;
     private final String description;
     private final String descriptionTag;
     private final Image image;
     private final AudioClip audio;
 
-    public ProtoUnitType(String type, int unitTypeId, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, String description, String descriptionTag, Image image, AudioClip audio){
+    public ProtoUnitType(String type, int unitTypeId, double hp, int attack, int abilityCooldown, double defenceMultiplier, int minAttackRange, int maxAttackRange, int movementRage, int cost, String description, String descriptionTag, Image image, AudioClip audio){
         this.type = type;
         this.unitTypeId = unitTypeId;
         this.hp = hp;
@@ -29,6 +30,7 @@ public class ProtoUnitType implements UnitType {
         this.minAttackRange = minAttackRange;
         this.maxAttackRange = maxAttackRange;
         this.movementRange = movementRage;
+        this.cost = cost;
         this.description = description;
         this.descriptionTag = descriptionTag;
         this.image = image;
@@ -78,6 +80,11 @@ public class ProtoUnitType implements UnitType {
     @Override
     public int getMovementRange() {
         return movementRange;
+    }
+
+    @Override
+    public int getCost() {
+        return cost;
     }
 
     @Override

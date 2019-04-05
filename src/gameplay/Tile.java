@@ -46,6 +46,11 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
                 setUntargetable();
                 success = true;
             }
+
+            if(success){
+                GameLogic.updateResourceLabel();
+            }
+
             event.setDropCompleted(success);
         });
     }

@@ -106,6 +106,7 @@ public class Database {
         int minAttackRange;
         int maxAttackRange;
         int movementRange;
+        int cost;
 
         try {
             myConn.setAutoCommit(false);
@@ -124,6 +125,8 @@ public class Database {
             minAttackRange = resultSet.getInt("min_attack_range");
             maxAttackRange = resultSet.getInt("max_attack_range");
             movementRange = resultSet.getInt("movement_range");
+            cost = resultSet.getInt("cost");
+
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -133,7 +136,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, "", "", null, null);
+        return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, cost, "", "", null, null);
     }
 
     public int quickMatch_search(int player_id) {

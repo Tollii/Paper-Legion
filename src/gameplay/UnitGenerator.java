@@ -84,6 +84,7 @@ public class  UnitGenerator {
                 swordsmanProto.getMinAttackRange(),
                 swordsmanProto.getMaxAttackRange(),
                 swordsmanProto.getMovementRange(),
+                swordsmanProto.getCost(),
                 swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
 
         archerUnitType =  new Archer("Archer",
@@ -95,6 +96,7 @@ public class  UnitGenerator {
                 archerProto.getMinAttackRange(),
                 archerProto.getMaxAttackRange(),
                 archerProto.getMovementRange(),
+                archerProto.getCost(),
                 archerDescription, archerDescriptionTag, archerImage, archerSound);
 
         juggernautUnitType = new Juggernaut("Juggernaut",
@@ -106,6 +108,7 @@ public class  UnitGenerator {
                 juggernautProto.getMinAttackRange(),
                 juggernautProto.getMaxAttackRange(),
                 juggernautProto.getMovementRange(),
+                juggernautProto.getCost(),
                 juggernautDescription, juggernautDescriptionTag, juggernautImage, juggernautSound);
 
         catapultUnitType = new Catapult("Catapult",
@@ -117,19 +120,8 @@ public class  UnitGenerator {
                 catapultProto.getMinAttackRange(),
                 catapultProto.getMaxAttackRange(),
                 catapultProto.getMovementRange(),
+                catapultProto.getCost(),
                 catapultDescription, catapultDescriptionTag, catapultImage, catapultSound);
-    }
-
-    public UnitType newArcher(){
-
-        return archerUnitType;
-
-    }
-
-    public UnitType newSwordsMan(){
-
-        return swordsmanUnitType;
-
     }
 
     public Unit newFriendlyUnit(int unitType) {

@@ -13,6 +13,10 @@ public class Variables {
     public static int player2;
     public static int opponent_id;
 
+    //Resource(placement phase)
+    public static final int startingResources = 1000;
+    public static int currentResources;
+
     //Threads
     public static Thread searchGameThread;
     public static Thread waitTurnThread;
