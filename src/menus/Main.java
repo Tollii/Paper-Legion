@@ -3,8 +3,10 @@ package menus;
 import database.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -29,6 +31,13 @@ public class Main extends Application {
         window.setScene(rootScene);
         window.setMinWidth(850);
         window.setMinHeight(650);
+
+        //Finds screen size and sizes window to it.
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        screenWidth = screenSize.getWidth();
+        screenHeight = screenSize.getHeight();
+        window.setWidth(screenWidth);
+        window.setHeight(screenHeight);
         window.show();
     }
 

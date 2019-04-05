@@ -65,8 +65,8 @@ public class GameLogic extends Application {
     ArrayList<Obstacle> obstacles;
 
     ////WINDOW SIZE////
-    private final int windowWidth = 1920;
-    private final int windowHeight = 1080;
+    private final double windowWidth = screenWidth;
+    private final double windowHeight = screenHeight;
 
     ////SIZE VARIABLES////
     private final int buttonWidth = 175;
@@ -80,7 +80,7 @@ public class GameLogic extends Application {
     private final int gridXPadding = 300;
     private final int gridYPadding = 100;
 
-    //PLACMENT PHASE SIDE PANEL//
+    //PLACEMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
     private final int recruitYPadding = 150;
     private final int placementButtonXPadding = 150;
@@ -133,6 +133,7 @@ public class GameLogic extends Application {
 
     public void start(Stage window) throws Exception {
         // Sets static variables for players and opponent id.
+
         db.getPlayers();
 
         SetUp setUp = new SetUp();

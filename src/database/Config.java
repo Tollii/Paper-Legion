@@ -14,11 +14,11 @@ public class Config {
 
     private static Config config = new Config();
 
-    public Config(){
+    public Config() {
         init();
     }
 
-    private void init(){
+    private void init() {
         DB_USER_NAME = "thomabmo";
         DB_PASSWORD = "EEo6fscj";
         DB_URL = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo?autoReconnect=true&useUnicode=yes";
@@ -27,7 +27,7 @@ public class Config {
     }
     //jdbc:MySQL://MySQL.stud.iie.ntnu.no:3306/thomabmo/confluence?autoReconnect=true
 
-    public static Config getInstance(){
+    public static Config getInstance() {
         return config;
     }
 
