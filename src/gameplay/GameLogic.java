@@ -524,6 +524,26 @@ public class GameLogic extends Application {
 
     private void catapultAttack(ArrayList<Tile> attackTargets, int attackPosX, int attackPosY) {
         //TODO: ADD CATAPULT ATTACK
+        defaultAttack(attackTargets, attackPosX, attackPosY);
+
+        //Splash damage not working
+        defaultAttack(attackTargets, attackPosX+1,attackPosY);
+        defaultAttack(attackTargets, attackPosX-1,attackPosY);
+        defaultAttack(attackTargets, attackPosX, attackPosY+1);
+        defaultAttack(attackTargets, attackPosX, attackPosY-1);
+        defaultAttack(attackTargets, attackPosX-1, attackPosY-1);
+        defaultAttack(attackTargets, attackPosX+1, attackPosY-1);
+        defaultAttack(attackTargets, attackPosX-1, attackPosY+1);
+        defaultAttack(attackTargets, attackPosX+1, attackPosY+1);
+
+
+
+
+
+
+
+
+
     }
 
     private void clearHighLight() {
