@@ -19,16 +19,19 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
@@ -37,19 +40,15 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import menus.Main;
 
 import java.io.IOException;
-
-import static database.Variables.*;
-import static database.Variables.waitTurnThread;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.geometry.Orientation;
-import menus.Main;
+import static database.Variables.*;
 
-public class GameLogic extends Application {
+public class GameLogic {
 
     ////BOARD SIZE CONTROLS////
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
@@ -66,10 +65,6 @@ public class GameLogic extends Application {
     private JFXButton endTurnButton;                                //button for ending turn
     private JFXButton surrenderButton;                              //button for surrendering
     ArrayList<Obstacle> obstacles;                                  //list of obstacles
-
-    ////WINDOW SIZE////
-    private final double windowWidth = screenWidth;
-    private final double windowHeight = screenHeight;
 
     ////SIZE VARIABLES////
     private final int buttonWidth = 175;
@@ -123,7 +118,6 @@ public class GameLogic extends Application {
     private UnitGenerator unitGenerator = new UnitGenerator();
 
     ////STYLING////
-    private String gameTitle = "PAPER LEGION";
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String buttonBackgroundColor = "-fx-background-color: #000000";
     private String turnCounterFontSize = "-fx-font-size: 32px";
@@ -134,30 +128,8 @@ public class GameLogic extends Application {
     private Paint attackHighlightColor = Color.DARKRED;
     private Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
 
-    public void start(Stage window) throws Exception {
-        // Sets static variables for players and opponent id.
 
-        db.getPlayers();
-
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-
-        root = new Pane();
-        Scene scene = new Scene(root, windowWidth, windowHeight);
-
-        Pane gridPane = createGrid(); //creates the grid
-
-        addObstacles();
-
-        placementPhaseStart(); //starts the placement phase
-
-        window.setTitle(gameTitle);
-        window.setScene(scene);
-        window.show();
-
-    }
-
-    private void addObstacles() {
+    public void addObstacles() {
         // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
@@ -194,7 +166,7 @@ public class GameLogic extends Application {
     }
 
     ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
-    private void placementPhaseStart() {
+    public void placementPhaseStart() {
 
         currentResources = startingResources; //Starts current resources to starting resources;
 
@@ -236,7 +208,7 @@ public class GameLogic extends Application {
         resourceLabel.setText("Resources: " + currentResources);
     }
 
-    private void placementPhaseFinished(Pane recruitPane) {
+    public void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
         Pane phaseLabelPane = createPhaseLabelPane();
         phaseLabel.setText("WAITING FOR OTHER PLAYER");
@@ -272,10 +244,10 @@ public class GameLogic extends Application {
     }
 
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
-    private void waitForOpponentReady() {
+    public void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitPlacementRunnable = new RunnableInterface() {
-            private boolean doStop = false;
+            public boolean doStop = false;
 
             @Override
             public void run() {
@@ -327,7 +299,7 @@ public class GameLogic extends Application {
         waitPlacementThread.start();
     }
 
-    private void importOpponentPlacementUnits() {
+    public void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
@@ -339,7 +311,7 @@ public class GameLogic extends Application {
     }
 
     ////MOVEMENT AND ACTION PHASE STARTER////
-    private void movementActionPhaseStart() {
+    public void movementActionPhaseStart() {
         Pane sidePanel = createSidePanel();
         Pane phaseLabelPane = createPhaseLabelPane();
 
@@ -384,7 +356,7 @@ public class GameLogic extends Application {
         });
 
         surrenderButton.setOnAction(event -> {
-            surrender(endTurnButton);
+            surrender();
         });
 
         ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
@@ -416,7 +388,7 @@ public class GameLogic extends Application {
     }
 
     ////MOVEMENT AND ATTACK METHODS////
-    private void move(MouseEvent event) {
+    public void move(MouseEvent event) {
 
         int newPosX = getPosXFromEvent(event);
         int newPosY = getPosYFromEvent(event); //position of click
@@ -449,7 +421,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private void attack(MouseEvent event) {
+    public void attack(MouseEvent event) {
         if (!movementPhase) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
             int attackPosY = getPosYFromEvent(event); //sets position attacked
@@ -483,7 +455,7 @@ public class GameLogic extends Application {
     }
 
     ////HIGHLIGHTING METHODS////
-    private void highlightPossibleMoves() {
+    public void highlightPossibleMoves() {
         if (unitSelected) { //checks if there is a unit selected
             ArrayList<Tile> movementTargets = getMovementPossibleTiles();
 
@@ -494,7 +466,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private void highlightPossibleAttacks() {
+    public void highlightPossibleAttacks() {
         if (unitSelected) { //checks if there is a unit selected
             ArrayList<Tile> attackTargets = getAttackableTiles();
 
@@ -505,7 +477,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private ArrayList<Tile> getMovementPossibleTiles() {
+    public ArrayList<Tile> getMovementPossibleTiles() {
         ArrayList<Tile> movementTargets = new ArrayList<Tile>();
 
         //goes throug all tiles and adds those which isn't occupied and are within movement distance
@@ -521,7 +493,7 @@ public class GameLogic extends Application {
         return movementTargets;
     }
 
-    private ArrayList<Tile> getAttackableTiles() {
+    public ArrayList<Tile> getAttackableTiles() {
         ArrayList<Tile> attackTargets = new ArrayList<Tile>();
 
         for (int i = 0; i < grid.tileList.length; i++) {
@@ -546,7 +518,7 @@ public class GameLogic extends Application {
         return attackTargets;
     }
 
-    private void clearHighLight() {
+    public void clearHighLight() {
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
                 grid.tileList[i][j].setFill(Color.WHITE);
@@ -555,7 +527,7 @@ public class GameLogic extends Application {
     }
 
     ////UNIT SELECTOR AND DESELECTORS////
-    private void select(MouseEvent event) {
+    public void select(MouseEvent event) {
 
         selectedPosX = getPosXFromEvent(event);
         selectedPosY = getPosYFromEvent(event);
@@ -594,7 +566,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private void deselect() {
+    public void deselect() {
         if (unitSelected) {
             //removes selection of unit tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
@@ -616,16 +588,16 @@ public class GameLogic extends Application {
     }
 
     ////METHODS FOR GETTING CLICK POSITION////
-    private int getPosXFromEvent(MouseEvent event) {
+    public int getPosXFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getX()) / tileSize) - 1;
     }
 
-    private int getPosYFromEvent(MouseEvent event) {
+    public int getPosYFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }
 
     ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
-    private void endTurn(JFXButton endTurnButton) {
+    public void endTurn(JFXButton endTurnButton) {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
@@ -674,10 +646,10 @@ public class GameLogic extends Application {
         }
     }
 
-    private void waitForTurn(JFXButton endTurnButton) {
+    public void waitForTurn(JFXButton endTurnButton) {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitTurnRunnable = new RunnableInterface() {
-            private boolean doStop = false;
+            public boolean doStop = false;
 
             @Override
             public void run() {
@@ -731,7 +703,7 @@ public class GameLogic extends Application {
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
-    private void setUpNewTurn(JFXButton endTurnButton) {
+    public void setUpNewTurn(JFXButton endTurnButton) {
         deselect();
         selectedUnit = null;
         turn++;
@@ -782,7 +754,7 @@ public class GameLogic extends Application {
     }
 
     ////METHOD FOR HANDLING SURRENDER////
-    private void surrender(JFXButton endTurnButton) {
+    public void surrender() {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
         confirm_alert.setTitle("Game over!");
@@ -827,7 +799,7 @@ public class GameLogic extends Application {
     }
 
     ////METHODS FOR ENDING THE GAME////
-    private void checkForGameOver() {
+    public void checkForGameOver() {
         String win_loseText;
         String gameSummary = "";
         int loser = -1;
@@ -898,7 +870,7 @@ public class GameLogic extends Application {
     }
 
     ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
-    private int checkForEliminationVictory() {
+    public int checkForEliminationVictory() {
         int yourPieces = 0;
         int opponentsPieces = 0;
         //Goes through all units and counts how many are alive for each player.
@@ -923,7 +895,7 @@ public class GameLogic extends Application {
         }
     }
 
-    private void gameCleanUp() {
+    public void gameCleanUp() {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnThread.stop();
@@ -938,7 +910,7 @@ public class GameLogic extends Application {
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
-    private Pane createGrid() { //adds grid and styles it
+    public Pane createGrid() { //adds grid and styles it
         Pane gridPane = new Pane();
 
         gridPane.getChildren().add(grid);
@@ -950,7 +922,7 @@ public class GameLogic extends Application {
         return gridPane;
     }
 
-    private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
+    public Pane createRecruitPane() { //adds unit selector/recruiter and styles it
 
         Pane unitPane = new Pane();
         FlowPane units = new FlowPane(Orientation.HORIZONTAL, 5, 5);
@@ -976,7 +948,7 @@ public class GameLogic extends Application {
         return unitPane;
     }
 
-    private Pane createSidePanel() { //creates the side panel for movement/attack phase
+    public Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
         turnCounter.setStyle(turnCounterFontSize);
@@ -997,7 +969,7 @@ public class GameLogic extends Application {
         return sidePanel;
     }
 
-    private Pane createPhaseLabelPane() {
+    public Pane createPhaseLabelPane() {
       Pane phaseLabelPane = new Pane();
 
       phaseLabel.setStyle(phaseLabelFontSize);
@@ -1011,22 +983,5 @@ public class GameLogic extends Application {
       root.getChildren().add(phaseLabelPane);
 
       return phaseLabelPane;
-    }
-
-    ////SHUTDOWN METHODS////
-    @Override
-    public void stop() {
-        // Executed when the application shuts down. User is logged out and database connection is closed.
-        surrender(endTurnButton);
-        Main.closeAndLogout();
-    }
-
-    ////MAIN USED FOR SHUTDOWN HOOK////
-    public void main(String[] args) {
-        System.out.println("SHUTDOWN HOOK CALLED");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Main.closeAndLogout();
-        }));
-        launch(args);
     }
 }
