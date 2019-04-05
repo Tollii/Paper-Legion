@@ -27,9 +27,12 @@ import javafx.stage.Stage;
 import menus.Main;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static database.Variables.*;
 import static gameplay.GameMain.grid;
+import static gameplay.GameMain.boardSize;
+import static gameplay.GameMain.obstacles;
 
 public class GameLogic {
 
@@ -90,5 +93,20 @@ public class GameLogic {
             }
         }
         return attackTargets;
+    }
+
+    public ArrayList<Obstacle> createObstacles(){
+        Random rand = new Random();
+        int obstacleCount = 3 + rand.nextInt(5);
+        ArrayList<Obstacle> obstacles = new ArrayList<>();
+        int xPos;
+        int yPos;
+        for (int i = 0; i < obstacleCount; i++) {
+            xPos = rand.nextInt(boardSize);
+            yPos = 2 + rand.nextInt(boardSize - (2 * 2));
+            obstacles.add(new Obstacle(xPos, yPos, i));
+        }
+        db.exportObstacles(obstacles);
+        return obstacles;
     }
 }

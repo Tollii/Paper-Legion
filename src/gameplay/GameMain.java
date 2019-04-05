@@ -65,7 +65,7 @@ public class GameMain extends Application {
     private static Label resourceLabel = new Label();    //Static so that Tile can update the label
     private JFXButton endTurnButton;                                //button for ending turn
     private JFXButton surrenderButton;                              //button for surrendering
-    ArrayList<Obstacle> obstacles;                                  //list of obstacles
+    public static ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -165,17 +165,7 @@ public class GameMain extends Application {
         // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
-            Random rand = new Random();
-            int obstacleCount = 3 + rand.nextInt(5);
-            obstacles = new ArrayList<>();
-            int xPos;
-            int yPos;
-            for (int i = 0; i < obstacleCount; i++) {
-                xPos = rand.nextInt(boardSize);
-                yPos = 2 + rand.nextInt(boardSize - (2 * 2));
-                obstacles.add(new Obstacle(xPos, yPos, i));
-            }
-            db.exportObstacles(obstacles);
+           obstacles = game.createObstacles();
         } else {
             //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while (!db.obstaclesHaveBeenAdded()) {

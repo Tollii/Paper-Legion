@@ -79,4 +79,9 @@ public class GameLogicTest {
     public void test() {
 
     }
+
+    @Test
+    public void CreateObstacle(){
+        //asstert arraylist of obstacles to be greater in length than 0 or whatever
+    }
 }
