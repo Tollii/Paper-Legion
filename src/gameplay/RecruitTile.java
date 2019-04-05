@@ -38,6 +38,8 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
       content.putString(recruit.getType());
 
       dragboard.setContent(content);
+
+      GameMain.hasPlacedAUnit = true;
     });
   }
 

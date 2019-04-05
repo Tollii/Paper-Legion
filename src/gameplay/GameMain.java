@@ -117,6 +117,7 @@ public class GameMain extends Application {
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
     private boolean surrendered = false;
     private boolean gameFinished = false;
+    public static boolean hasPlacedAUnit = false;
 
     private UnitGenerator unitGenerator = new UnitGenerator();
 
@@ -220,7 +221,9 @@ public class GameMain extends Application {
         }
 
         finishedPlacingButton.setOnAction(event -> { //when button pressed, finishes the placementphase
-            placementPhaseFinished(recruitPane);
+            if (hasPlacedAUnit) {
+                placementPhaseFinished(recruitPane);
+            }
         });
     }
 
