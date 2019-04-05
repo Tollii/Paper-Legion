@@ -23,7 +23,7 @@ import static gameplay.GameMain.grid;
 
 public class GameLogic {
 
-    public boolean checkForLegalmove(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
+    public boolean checkForLegalMove(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
         for (int i = 0; i < movementTargets.size(); i++) { //goes through all movement targets and finds the one clicked on
             if (movementTargets.get(i).equals(grid.tileList[newPosY][newPosX])) {
                 return true;
@@ -32,7 +32,7 @@ public class GameLogic {
         return false;
     }
 
-    public boolean checkForLegalattack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
+    public boolean checkForLegalAttack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
         for (int i = 0; i < attackTargets.size(); i++) {
             if(attackTargets.get(i).equals(grid.tileList[attackPosY][attackPosX])) {
                 return true;
