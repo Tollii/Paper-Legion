@@ -150,6 +150,7 @@ public class GameLogic extends Application {
         window.setTitle(gameTitle);
         window.setScene(scene);
         window.show();
+
     }
 
     private void addObstacles() {
@@ -168,7 +169,7 @@ public class GameLogic extends Application {
             }
             db.exportObstacles(obstacles);
         } else {
-            //Player 1 continually checks if all the obstacles have been added to the match.
+            //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while(!db.obstaclesHaveBeenAdded()){
                 try {
                     Thread.sleep(1000);
@@ -913,9 +914,11 @@ public class GameLogic extends Application {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnThread.stop();
+            waitTurnThread = null;
         }
         if (waitPlacementThread != null) {
             waitPlacementThread.stop();
+            waitPlacementThread = null;
         }
         //Resets turns to 1 for next game.
         turn = 1;
