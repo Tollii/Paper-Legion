@@ -32,6 +32,7 @@ import static database.Variables.*;
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
         private Thread matchSetupThread;
+        private GameLogic game;
 
         //TODO: DESPAGHETTI
 
@@ -98,6 +99,11 @@ import static database.Variables.*;
                 public void run() {
                     while(keepRunning()){
                         if(!gameEntered){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             gameEntered = db.pollGameStarted(match_id);
 
                         } else if(!createGameClicked){
@@ -105,15 +111,12 @@ import static database.Variables.*;
                         } else{
                             Platform.runLater(
                                     () -> {
-                                        if(gameEntered){
-                                            yourTurn = true;
-                                            enterGame();
-                                            doStop();
-                                            gameEntered = false;
-                                            matchSetupThread = null;
-                                        }
-
+                                        yourTurn = true;
+                                        enterGame();
+                                        gameEntered = false;
                                     });
+                            this.doStop();
+                            matchSetupThread = null;
                         }
 
                     }
@@ -309,7 +312,7 @@ import static database.Variables.*;
 
     private void enterGame() {
         try {
-            GameLogic game = new GameLogic();
+            game = new GameLogic();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {
