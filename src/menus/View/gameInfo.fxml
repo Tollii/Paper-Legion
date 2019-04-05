@@ -54,8 +54,11 @@
                            <content>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Pane fx:id="placementbackgroundImagePane" />
-                                    <JFXTextArea fx:id="placementText" editable="false" prefWidth="270.0" text="sample text bla bla bla bla bla bla bla bla bla bla bla bla balab lsdlasd asd asldasdl as dlasd asld asld a d asddasd" wrapText="true" />
+                                    <Pane fx:id="placementbackgroundImagePane" HBox.hgrow="ALWAYS" />
+                                    <JFXTextArea fx:id="placementText" editable="false" prefWidth="270.0" text="The game starts with the placement phase, it is only in the beginning of the game, so make your placement choice wisely!&#10;&#10;You start off with a finite amount of resources that you can buy units with. &#10;&#10;Just drag and drop the units where you want.&#10;&#10;Pro tip: A good starting placement and unit type choice combination can be deadly!" wrapText="true">
+                                       <HBox.margin>
+                                          <Insets left="15.0" right="15.0" top="15.0" />
+                                       </HBox.margin></JFXTextArea>
                                  </children>
                               </HBox>
                            </content>
@@ -64,12 +67,12 @@
                            <content>
                               <HBox>
                                  <children>
+                                    <Pane fx:id="backgroundImagePane" HBox.hgrow="ALWAYS" />
                                     <JFXTextArea fx:id="movementText" editable="false" prefWidth="270.0" text="While you are in the movement phase, you can move one of your units within that unit's movement range. &#10;&#10;You can also skip the movement phase and go directly to attack. &#10;&#10;You are automatically taken to the attack phase after the movement phase." wrapText="true">
                                        <HBox.margin>
                                           <Insets left="15.0" right="15.0" top="15.0" />
                                        </HBox.margin>
                                     </JFXTextArea>
-                                    <Pane fx:id="backgroundImagePane" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </content>
@@ -78,8 +81,11 @@
                            <content>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Pane fx:id="attackbackgroundImagePane" />
-                                    <JFXTextArea fx:id="attackText" editable="false" prefWidth="270.0" text="asopdkaopsd asd asd  asd as d +ásd sad sad sap sadpkkpd saaspk sadpkokpasd as kpsadkpo sdaokp ask  as pdas d asd a d asdk" wrapText="true" />
+                                    <Pane fx:id="attackbackgroundImagePane" HBox.hgrow="ALWAYS" />
+                                    <JFXTextArea fx:id="attackText" editable="false" prefWidth="270.0" text="When in attack phase, you can attack as many of the opponents unit as long as you have units within attack range.&#10;&#10;After you have completed all your devious attacks, you hit end turn. And wait in suspense for your opponents move." wrapText="true">
+                                       <HBox.margin>
+                                          <Insets left="15.0" right="15.0" top="15.0" />
+                                       </HBox.margin></JFXTextArea>
                                  </children>
                               </HBox>
                            </content>
