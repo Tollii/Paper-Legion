@@ -74,6 +74,7 @@ public class GameLogicTest {
     public void tearDown() {
 
     }
+//TODO call Tile.SetUnit(unit) for å lage units til testing
 
     @Test
     public void test() {
