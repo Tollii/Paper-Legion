@@ -442,10 +442,10 @@ public class GameMain extends Application {
 
             if (game.checkForLegalAttack(attackPosY,attackPosX,attackTargets)) {
 
-                game.executeAttack(attackPosY,attackPosX);
-
                 //adds the attack to attacklist
                 attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceId(), grid.tileList[attackPosY][attackPosX].getUnit().getPieceId(), selectedUnit.getAttack()));
+
+                game.executeAttack(attackPosY,attackPosX);
 
                 //play audio clip.
                 selectedUnit.getAudio().play(); //plays the audio clip associated with the unit type
