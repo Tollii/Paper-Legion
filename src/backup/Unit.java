@@ -38,8 +38,8 @@
 //
 //
 //    public Unit(double row, double column, boolean enemy, UnitType type, int pieceID){
-//        super.setWidth(GameLogic.tileSize);
-//        super.setHeight(GameLogic.tileSize);
+//        super.setWidth(GameMain.tileSize);
+//        super.setHeight(GameMain.tileSize);
 //        this.enemy = enemy;
 //
 //        ///SETS UNIT INFO////
@@ -59,7 +59,7 @@
 //
 //        String hpText = String.valueOf(hp);
 //        healthbar = new Label(hpText);
-//        healthbar.setPrefWidth(GameLogic.tileSize);
+//        healthbar.setPrefWidth(GameMain.tileSize);
 //        healthbar.setAlignment(Pos.CENTER);
 //        healthbar.setTranslateX(this.getTranslateX());
 //        healthbar.setTranslateY(this.getTranslateY()+40);

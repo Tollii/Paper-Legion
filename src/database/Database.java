@@ -15,10 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import static database.Variables.*;
-import static gameplay.GameLogic.boardSize;
 
 public class Database {
     //Test

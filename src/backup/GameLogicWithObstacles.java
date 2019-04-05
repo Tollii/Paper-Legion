@@ -48,7 +48,7 @@
 //
 //
 //
-//public class GameLogic extends Application {
+//public class GameMain extends Application {
 //
 //
 //

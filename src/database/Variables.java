@@ -5,6 +5,7 @@ import Runnables.RunnableInterface;
 public class Variables {
     public static Database db;
 
+    //Screen info
     public static double screenWidth;
     public static double screenHeight;
 

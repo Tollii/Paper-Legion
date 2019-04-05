@@ -5,10 +5,8 @@ import database.Cleaner;
 import database.ConnectionPool;
 import database.Database;
 import database.Variables;
-import database.Variables.*;
-import gameplay.GameLogic;
+import gameplay.GameMain;
 import gameplay.SetUp;
-import menus.Main;
 import org.junit.*;
 import org.junit.Test;
 
@@ -17,7 +15,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static database.Variables.*;
-import static org.junit.Assert.*;
 
 //testUser2 Password: testPassword2 id: 51
 //testUser password: testPassword id: 3
@@ -59,7 +56,7 @@ public class GameLogicTest {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
 
-        GameLogic game = new GameLogic();
+        GameMain game = new GameMain();
 
     }
 
@@ -77,9 +74,15 @@ public class GameLogicTest {
     public void tearDown() {
 
     }
+//TODO call Tile.SetUnit(unit) for å lage units til testing
 
     @Test
     public void test() {
 
+    }
+
+    @Test
+    public void CreateObstacle(){
+        //asstert arraylist of obstacles to be greater in length than 0 or whatever
     }
 }

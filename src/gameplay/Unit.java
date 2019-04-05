@@ -41,8 +41,8 @@ public class Unit extends StackPane {
 
     public Unit(boolean enemy, UnitType type, int unitId) {
         rect = new Rectangle();
-        rect.setWidth(GameLogic.tileSize);
-        rect.setHeight(GameLogic.tileSize);
+        rect.setWidth(GameMain.tileSize);
+        rect.setHeight(GameMain.tileSize);
         this.enemy = enemy;
 
         ///SETS UNIT INFO////
@@ -64,7 +64,7 @@ public class Unit extends StackPane {
         healthbar = new Label(hpText);
 
         this.getChildren().addAll(rect, healthbar);
-        healthbar.setPrefWidth(GameLogic.tileSize);
+        healthbar.setPrefWidth(GameMain.tileSize);
         healthbar.setAlignment(Pos.CENTER);
         healthbar.setTranslateY(healthbarPosY);
 

@@ -3,9 +3,9 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableView;
-import database.Database;
 import gameplay.GameLogic;
+import gameplay.GameMain;
+import gameplay.GameMain;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,11 +32,7 @@ import static database.Variables.*;
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
         private Thread matchSetupThread;
-        private GameLogic game;
-
-        //TODO: DESPAGHETTI
-
-
+        private GameMain game;
 
         @FXML
         private ResourceBundle resources;
@@ -312,7 +308,7 @@ import static database.Variables.*;
 
     private void enterGame() {
         try {
-            game = new GameLogic();
+            GameMain game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

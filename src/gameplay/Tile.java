@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.layout.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Paint;
@@ -55,7 +54,7 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
             if(success){
 
                 currentResources -= getUnit().getCost();
-                GameLogic.updateResourceLabel();
+                GameMain.updateResourceLabel();
             }
 
             event.setDropCompleted(success);
