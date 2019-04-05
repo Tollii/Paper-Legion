@@ -53,7 +53,7 @@ public class GameMain extends Application {
 
     ////BOARD SIZE CONTROLS////
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
-    public static final int tileSize = 100;      //sets size of each tile on the grid
+    public static final int tileSize = (int)(screenWidth * 0.06);      //sets size of each tile on the grid
     private static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
@@ -80,17 +80,18 @@ public class GameMain extends Application {
     ////PANE PADDINGS////
 
     //GRID//
-    private final int gridXPadding = 300;
-    private final int gridYPadding = 100;
+    private final int gridXPadding = (int)(windowWidth * 0.15);
+    private final int gridYPadding = (int)(windowHeight * 0.10);
+
 
     //PLACEMENT PHASE SIDE PANEL//
-    private final int recruitXPadding = gridXPadding + tileSize * boardSize + 150;
+    private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
     private final int recruitYPadding = 150;
     private final int placementButtonXPadding = 150;
     private final int placementButtonYPadding = 500;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
-    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + 150;
+    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
     private final int sidePanelYPadding = 150;
     private final int descriptionXPadding = 0;
     private final int descriptionYPadding = 100;
@@ -117,6 +118,7 @@ public class GameMain extends Application {
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
     private boolean surrendered = false;
     private boolean gameFinished = false;
+    public static boolean hasPlacedAUnit = false;
 
     private UnitGenerator unitGenerator = new UnitGenerator();
 
@@ -221,7 +223,9 @@ public class GameMain extends Application {
         }
 
         finishedPlacingButton.setOnAction(event -> { //when button pressed, finishes the placementphase
-            placementPhaseFinished(recruitPane);
+            if (hasPlacedAUnit) {
+                placementPhaseFinished(recruitPane);
+            }
         });
     }
 

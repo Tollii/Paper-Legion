@@ -1,5 +1,9 @@
 package gameplay;
 
+import gameplay.units.Archer;
+import gameplay.units.Catapult;
+import gameplay.units.Juggernaut;
+import gameplay.units.Swordsman;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
