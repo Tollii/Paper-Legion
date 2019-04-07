@@ -39,8 +39,8 @@ public class Variables {
 
     //GameMain Variables;
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
-    public static final int tileSize = (int)(screenWidth * 0.06);      //sets size of each tile on the grid
-    public static Grid grid = new Grid(boardSize, boardSize);
+    public static int tileSize;   //sets size of each tile on the grid
+    public static Grid grid;
     public static ArrayList<Obstacle> obstacles;                                  //list of obstacles
     public static Unit selectedUnit;
     public static int selectedPosX;

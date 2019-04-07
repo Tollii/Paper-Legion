@@ -19,6 +19,7 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
+import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -132,7 +133,8 @@ public class GameMain extends Application {
 
     public void start(Stage window) throws Exception {
         // Sets static variables for players and opponent id.
-
+        tileSize = (int)(screenWidth * 0.06);
+        grid = new Grid(boardSize, boardSize);
         game = new GameLogic();
 
         db.getPlayers();
