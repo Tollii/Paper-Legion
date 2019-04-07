@@ -20,7 +20,7 @@ package gameplay;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static database.Variables.db;
+import static database.Variables.*;
 import static gameplay.GameMain.*;
 
 public class GameLogic {

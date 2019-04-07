@@ -5,26 +5,40 @@ import database.Cleaner;
 import database.ConnectionPool;
 import database.Database;
 import database.Variables;
-import gameplay.GameMain;
-import gameplay.SetUp;
+import gameplay.*;
 import org.junit.*;
 import org.junit.Test;
+import org.junit.Assert;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static database.Variables.*;
+import static gameplay.GameMain.*;
+
+import static org.junit.Assert.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import database.Cleaner;
 
 //testUser2 Password: testPassword2 id: 51
 //testUser password: testPassword id: 3
 
 public class GameLogicTest {
-
+    GameLogic game = new GameLogic();;
+    UnitGenerator units = new UnitGenerator();;
+    GameMain gameMain = new GameMain();
     @BeforeClass
     public static void setUpClass() throws SQLException {
 
+        Variables.screenWidth = 1500;
         Database db = new Database();
+        grid = new Grid(boardSize, boardSize);
+
 
         user_id = 3;
         Variables.opponent_id = 51;
@@ -56,7 +70,7 @@ public class GameLogicTest {
         SetUp setUp = new SetUp();
         setUp.importUnitTypes();
 
-        GameMain game = new GameMain();
+
 
     }
 
@@ -67,6 +81,7 @@ public class GameLogicTest {
 
     @Before
     public void setUp() {
+        GameLogic game = new GameLogic();
 
     }
 
@@ -78,7 +93,18 @@ public class GameLogicTest {
 
     @Test
     public void test() {
-
+        Unit testUnit = units.newFriendlyUnit(2);
+        grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
+        selectedUnit = grid.tileList[boardSize-1][boardSize-1].getUnit();
+        Tile[] compare = new Tile[2];
+        compare[0] = grid.tileList[boardSize-2][boardSize-1];
+        compare[1] = grid.tileList[boardSize-1][boardSize-2];
+        ArrayList<Tile> result = game.getMovementPossibleTiles();
+        Tile[] arrayResult = new Tile[result.size()];
+        for(int i = 0; i<result.size(); i++){
+            arrayResult[i] =  result.get(i);
+        }
+        assertArrayEquals(compare, arrayResult);
     }
 
     @Test

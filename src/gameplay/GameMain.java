@@ -52,12 +52,10 @@ import menus.Main;
 public class GameMain extends Application {
 
     ////BOARD SIZE CONTROLS////
-    public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
-    public static final int tileSize = (int)(screenWidth * 0.06);      //sets size of each tile on the grid
     private static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
-    public static Grid grid = new Grid(boardSize, boardSize);
+
     private Pane root;
     private Label description = new Label();                //description label for the selected unit
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
@@ -65,7 +63,6 @@ public class GameMain extends Application {
     private static Label resourceLabel = new Label();    //Static so that Tile can update the label
     private JFXButton endTurnButton;                                //button for ending turn
     private JFXButton surrenderButton;                              //button for surrendering
-    public static ArrayList<Obstacle> obstacles;                                  //list of obstacles
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -108,9 +105,6 @@ public class GameMain extends Application {
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
-    public static Unit selectedUnit;
-    public static int selectedPosX;
-    public static int selectedPosY;
     private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
     private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
     private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn

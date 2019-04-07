@@ -1,6 +1,11 @@
 package database;
 
 import Runnables.RunnableInterface;
+import gameplay.Grid;
+import gameplay.Obstacle;
+import gameplay.Unit;
+
+import java.util.ArrayList;
 
 public class Variables {
     public static Database db;
@@ -30,5 +35,15 @@ public class Variables {
     public static RunnableInterface searchGameRunnable;
     public static RunnableInterface waitTurnRunnable;
     public static RunnableInterface waitPlacementRunnable;
+
+
+    //GameMain Variables;
+    public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
+    public static final int tileSize = (int)(screenWidth * 0.06);      //sets size of each tile on the grid
+    public static Grid grid = new Grid(boardSize, boardSize);
+    public static ArrayList<Obstacle> obstacles;                                  //list of obstacles
+    public static Unit selectedUnit;
+    public static int selectedPosX;
+    public static int selectedPosY;
 
 }

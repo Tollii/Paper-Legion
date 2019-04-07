@@ -1,5 +1,6 @@
 package gameplay;
 
+import database.Variables;
 import gameplay.units.Archer;
 import gameplay.units.Catapult;
 import gameplay.units.Juggernaut;
@@ -23,7 +24,7 @@ public class  UnitGenerator {
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
-    private static Image swordsmanImage = new Image(UnitGenerator.class.getResource("assets/swordsman.png").toExternalForm(), GameMain.tileSize, GameMain.tileSize, false, false);
+    private static Image swordsmanImage = new Image(UnitGenerator.class.getResource("assets/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
     private static AudioClip swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
 
     private static UnitType swordsmanUnitType;
@@ -36,7 +37,7 @@ public class  UnitGenerator {
             "Because of his bow, he has a longer range than others.";
     private static String archerDescriptionTag =
             "Heroic Archer";
-    private static Image archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), GameMain.tileSize, GameMain.tileSize, false, false);
+    private static Image archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
     private static AudioClip archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
 
     private static UnitType archerUnitType;
@@ -51,7 +52,7 @@ public class  UnitGenerator {
     private static String juggernautDescriptionTag =
             "Juggernaut";
     //TODO
-    private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), GameMain.tileSize, GameMain.tileSize, false, false);
+    private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
     //TODO
     private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/juggernaut.wav").toString());;
 
@@ -67,7 +68,7 @@ public class  UnitGenerator {
     private static String catapultDescriptionTag =
             "Throwy-McGig";
     //TODO
-    private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), GameMain.tileSize, GameMain.tileSize, false, false);;
+    private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);;
     //TODO
     private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/catapult.wav").toString());;
 

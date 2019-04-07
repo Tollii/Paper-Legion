@@ -1,5 +1,6 @@
 package gameplay;
 
+import database.Variables;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
@@ -15,8 +16,8 @@ public class Obstacle extends StackPane {
 
     public Obstacle(int posX, int posY, int obstacleID){
         rect = new Rectangle();
-        rect.setWidth(GameMain.tileSize);
-        rect.setHeight(GameMain.tileSize);
+        rect.setWidth(Variables.tileSize);
+        rect.setHeight(Variables.tileSize);
         this.posX = posX;
         this.posY = posY;
         this.obstacleID = obstacleID;

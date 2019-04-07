@@ -1,6 +1,7 @@
 package gameplay;
 
 
+import database.Variables;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -41,8 +42,8 @@ public class Unit extends StackPane {
 
     public Unit(boolean enemy, UnitType type, int unitId) {
         rect = new Rectangle();
-        rect.setWidth(GameMain.tileSize);
-        rect.setHeight(GameMain.tileSize);
+        rect.setWidth(Variables.tileSize);
+        rect.setHeight(Variables.tileSize);
         this.enemy = enemy;
 
         ///SETS UNIT INFO////
@@ -64,7 +65,7 @@ public class Unit extends StackPane {
         healthbar = new Label(hpText);
 
         this.getChildren().addAll(rect, healthbar);
-        healthbar.setPrefWidth(GameMain.tileSize);
+        healthbar.setPrefWidth(Variables.tileSize);
         healthbar.setAlignment(Pos.CENTER);
         healthbar.setTranslateY(healthbarPosY);
 

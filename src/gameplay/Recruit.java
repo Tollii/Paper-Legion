@@ -1,6 +1,7 @@
 package gameplay;
 
 
+import database.Variables;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
@@ -16,8 +17,8 @@ public class Recruit extends StackPane {
     rect = new Rectangle();
     this.type = type;
 
-    rect.setWidth(GameMain.tileSize);
-    rect.setHeight(GameMain.tileSize);
+    rect.setWidth(Variables.tileSize);
+    rect.setHeight(Variables.tileSize);
     rect.setFill(new ImagePattern(getImage()));
     this.getChildren().add(rect);
   }

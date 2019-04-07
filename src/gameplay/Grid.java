@@ -1,5 +1,6 @@
 package gameplay;
 
+import database.Variables;
 import javafx.scene.layout.GridPane;
 
 public class Grid extends GridPane {
@@ -15,9 +16,9 @@ public class Grid extends GridPane {
         this.tileList = new Tile[rows][columns];
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
-                Tile tile2 = new Tile(GameMain.tileSize, GameMain.tileSize);
-                tile2.setTranslateX(j * GameMain.tileSize);
-                tile2.setTranslateY(i * GameMain.tileSize);
+                Tile tile2 = new Tile(Variables.tileSize, Variables.tileSize);
+                tile2.setTranslateX(j * Variables.tileSize);
+                tile2.setTranslateY(i * Variables.tileSize);
                 this.tileList[i][j] = tile2;
                 this.getChildren().add(tile2);
             }
