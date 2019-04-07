@@ -125,6 +125,7 @@ public class Unit extends StackPane {
      * Sets the boolean value of the unit if this unit has attack within his turn.
      * Is to be used to collect the information of only the units who has attacked,
      * and the information is sent to the Database.
+     * @param hasAttackedThisTurn Sets the boolean value if the unit has attacked within a turn.
      */
     public void setHasAttackedThisTurn(boolean hasAttackedThisTurn) {
         this.hasAttackedThisTurn = hasAttackedThisTurn;
@@ -257,7 +258,7 @@ public class Unit extends StackPane {
     }
 
     /**
-     * Reduces the healt of a unit by taking damage dealt by another unit.
+     * Reduces the health of a unit by taking damage dealt by another unit.
      * The amount of damage taken is calculated by using the units defence multiplier
      * against the Attackers damage multiplier.
      * @param damageDealt Gets the damage multiplier of the unit that attacked.
