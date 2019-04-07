@@ -6,9 +6,9 @@ import database.ConnectionPool;
 import database.Database;
 import database.Variables;
 import gameplay.*;
+
 import org.junit.*;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,9 +32,11 @@ public class GameLogicTest {
     GameLogic game;
     UnitGenerator units;
     SetUp setUp;
+
     @BeforeClass
     public static void setUpClass() throws SQLException {
         tileSize = 50;
+        testing = true;
         Variables.screenWidth = 1500;
         Database db = new Database();
         grid = new Grid(boardSize, boardSize);
@@ -95,10 +97,12 @@ public class GameLogicTest {
 //TODO call Tile.SetUnit(unit) for å lage units til testing
 
     @Test
-    public void test() {
+    public void testUnitPositions() {
         Unit testUnit = units.newFriendlyUnit(2);
         grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
         selectedUnit = grid.tileList[boardSize-1][boardSize-1].getUnit();
+        selectedPosX = 6;
+        selectedPosY = 6;
         Tile[] compare = new Tile[2];
         compare[0] = grid.tileList[boardSize-2][boardSize-1];
         compare[1] = grid.tileList[boardSize-1][boardSize-2];

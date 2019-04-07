@@ -10,6 +10,8 @@ import javafx.scene.media.AudioClip;
 
 import java.net.URL;
 
+import static database.Variables.testing;
+
 
 public class  UnitGenerator {
 
@@ -26,9 +28,8 @@ public class  UnitGenerator {
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
-        static URL url = UnitGenerator.class.getResource("./assets/swordsman.png");
-        private static Image swordsmanImage = new Image(url.toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-        private static AudioClip swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
+        private static Image swordsmanImage;
+        private static AudioClip swordsmanSound;
 
 
 
@@ -42,8 +43,8 @@ public class  UnitGenerator {
             "Because of his bow, he has a longer range than others.";
     private static String archerDescriptionTag =
             "Heroic Archer";
-    private static Image archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-    private static AudioClip archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
+    private static Image archerImage;
+    private static AudioClip archerSound;
 
     private static UnitType archerUnitType;
 
@@ -57,9 +58,9 @@ public class  UnitGenerator {
     private static String juggernautDescriptionTag =
             "Juggernaut";
     //TODO
-    private static Image juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+    private static Image juggernautImage;
     //TODO
-    private static AudioClip juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/juggernaut.wav").toString());;
+    private static AudioClip juggernautSound;
 
     private static UnitType juggernautUnitType;
 
@@ -73,9 +74,9 @@ public class  UnitGenerator {
     private static String catapultDescriptionTag =
             "Throwy-McGig";
     //TODO
-    private static Image catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);;
+    private static Image catapultImage;
     //TODO
-    private static AudioClip catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/catapult.wav").toString());;
+    private static AudioClip catapultSound;
 
     private static UnitType catapultUnitType;
 
@@ -84,7 +85,16 @@ public class  UnitGenerator {
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
                          ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
-        
+        if (!testing){
+            swordsmanImage= new Image(UnitGenerator.class.getResource("./assets/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
+            archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
+            archerImage = new Image(UnitGenerator.class.getResource("assets/archer.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            juggernautImage = new Image(UnitGenerator.class.getResource("assets/juggernaut.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            juggernautSound = new AudioClip(UnitGenerator.class.getResource("assets/juggernaut.wav").toString());
+            catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/catapult.wav").toString());
+        }
         swordsmanUnitType = new Swordsman("Swordsman",
                 swordsmanProto.getUnitTypeId(),
                 swordsmanProto.getHp(),

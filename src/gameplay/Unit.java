@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 
 import javafx.scene.media.AudioClip;
 
+import static database.Variables.testing;
+
 public class Unit extends StackPane {
     private Label healthbar;
     private Rectangle rect;
@@ -62,26 +64,28 @@ public class Unit extends StackPane {
         pieceId = unitId;
 
         String hpText = String.valueOf(hp);
-        healthbar = new Label(hpText);
+        if(!testing) {
+            healthbar = new Label(hpText);
 
-        this.getChildren().addAll(rect, healthbar);
-        healthbar.setPrefWidth(Variables.tileSize);
-        healthbar.setAlignment(Pos.CENTER);
-        healthbar.setTranslateY(healthbarPosY);
+            this.getChildren().addAll(rect, healthbar);
+            healthbar.setPrefWidth(Variables.tileSize);
+            healthbar.setAlignment(Pos.CENTER);
+            healthbar.setTranslateY(healthbarPosY);
 
-        healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
+            healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
 
 
-        ///SETS UNIT IMAGE////
+            ///SETS UNIT IMAGE////
 
-        if (enemy) { //sets gold if enemy, blue if friendly
-            BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
-            changeColor(imgBuf, 0, 0, 0, 155, 135, 65);
-            rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
-        } else {
-            BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
-            changeColor(imgBuf, 0, 0, 0, 56, 31, 217);
-            rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
+            if (enemy) { //sets gold if enemy, blue if friendly
+                BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
+                changeColor(imgBuf, 0, 0, 0, 155, 135, 65);
+                rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
+            } else {
+                BufferedImage imgBuf = SwingFXUtils.fromFXImage(type.getUnitImage(), null);
+                changeColor(imgBuf, 0, 0, 0, 56, 31, 217);
+                rect.setFill(new ImagePattern(SwingFXUtils.toFXImage(imgBuf, null)));
+            }
         }
     }
 
