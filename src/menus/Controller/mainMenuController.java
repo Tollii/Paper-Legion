@@ -4,6 +4,7 @@ import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import gameplay.GameLogic;
 import gameplay.GameMain;
+import gameplay.Grid;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -176,6 +177,8 @@ public class mainMenuController extends Controller {
         try {
             findGameClicked = false;
             game = new GameMain();
+            tileSize = (int)(screenWidth * 0.06);
+            grid = new Grid(boardSize, boardSize);
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

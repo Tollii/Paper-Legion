@@ -56,7 +56,6 @@ public class GameMain extends Application {
     private static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
-
     private Pane root;
     private Label description = new Label();                //description label for the selected unit
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
@@ -133,8 +132,6 @@ public class GameMain extends Application {
 
     public void start(Stage window) throws Exception {
         // Sets static variables for players and opponent id.
-        tileSize = (int)(screenWidth * 0.06);
-        grid = new Grid(boardSize, boardSize);
         game = new GameLogic();
 
         db.getPlayers();
