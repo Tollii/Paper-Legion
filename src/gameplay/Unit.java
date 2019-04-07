@@ -84,10 +84,20 @@ public class Unit extends StackPane {
         }
     }
 
+    /**
+     * Returns a boolean to show whether or not the unit is a enemy or not.
+     * @return boolean Returns boolean true if enemy, and false for friendly units.
+     */
     public boolean getEnemy() {
         return enemy;
     }
 
+    /**
+     * Returns a boolean to show whether or not the unit has attacked for the players turn.
+     * Used to find out which unit has attacked in the course of a turn, and is used to send
+     * the information to the database.
+     * @return boolean Returns true if the unit has attacked on the players turn.
+     */
     public boolean getHasAttackedThisTurn() {
         return hasAttackedThisTurn;
     }
@@ -96,11 +106,18 @@ public class Unit extends StackPane {
         this.hasAttackedThisTurn = hasAttackedThisTurn;
     }
 
-    ////GET UNIT INFO////
+    /**
+     * Returns the UnitType in the form of a String.
+     * @return String Returns the UnitType in the form of a String.
+     */
     public String getTypeString() {
         return type.getType();
     }
 
+    /**
+     * Returns the class UnitType of the unit.
+     * @return UnitType Returns the UnitType
+     */
     public UnitType getType() {
         return type;
     }
@@ -109,6 +126,10 @@ public class Unit extends StackPane {
         return unitTypeId;
     }
 
+    /**
+     * Returns the units current health.
+     * @return double Returns the units current health.
+     */
     public double getHp() {
         return hp;
     }
