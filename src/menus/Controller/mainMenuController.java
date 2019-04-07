@@ -68,7 +68,7 @@ public class mainMenuController extends Controller {
                         });
                     } else {
                         Platform.runLater(() -> {
-                            mainMenuPlayButton.setText("Abort");
+                            mainMenuPlayButton.setText("Abort Match");
                         });
                         match_id = db.quickMatch_search(user_id);
                         findGameClicked = true;
@@ -143,7 +143,12 @@ public class mainMenuController extends Controller {
                 threadStarted = true;
                 searchGameThread.start();
             }
-            if(findGameClicked)findGameClicked = false;
+            if(findGameClicked){
+                findGameClicked = false;
+                mainMenuPlayButton.setText("Quick Match");
+            } else{
+                mainMenuPlayButton.setText("Abort Match");
+            }
 
         });
 
