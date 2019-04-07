@@ -906,6 +906,8 @@ public class GameMain extends Application {
         sidePanel.setLayoutY(sidePanelYPadding);
         root.getChildren().add(sidePanel);
 
+
+
         return sidePanel;
     }
 

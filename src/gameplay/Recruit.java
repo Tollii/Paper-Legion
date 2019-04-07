@@ -1,6 +1,8 @@
 package gameplay;
 
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
@@ -11,6 +13,8 @@ import javafx.scene.shape.Rectangle;
 public class Recruit extends StackPane {
   private Rectangle rect;
   private UnitType type;
+  private int healthbarPosY = 40;
+
 
   public Recruit(UnitType type) {
     rect = new Rectangle();
@@ -20,6 +24,15 @@ public class Recruit extends StackPane {
     rect.setHeight(GameMain.tileSize);
     rect.setFill(new ImagePattern(getImage()));
     this.getChildren().add(rect);
+    Label costLabel = new Label(String.valueOf(type.getCost()));
+    this.getChildren().add(costLabel);
+
+    // Styling of costLabel.
+    costLabel.setPrefWidth(GameMain.tileSize);
+    costLabel.setAlignment(Pos.CENTER);
+    costLabel.setTranslateY(healthbarPosY);
+    costLabel.setStyle("-fx-background-color: Blue;" + "-fx-text-fill: White;");
+
   }
 
   public String getType() {
