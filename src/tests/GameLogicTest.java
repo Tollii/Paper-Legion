@@ -91,6 +91,7 @@ public class GameLogicTest {
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
+        grid = new Grid(boardSize, boardSize);
     }
 
     @After
@@ -142,7 +143,7 @@ public class GameLogicTest {
         //creates units, one in range, one out of it
         Unit testUnit = units.newFriendlyUnit(1);
         Unit testEnemy1 = units.newEnemyUnit(2,0);
-        Unit testEnemy2 = units.newEnemyUnit(2,0);
+        Unit testEnemy2 = units.newEnemyUnit(2,1);
         grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
         grid.tileList[boardSize-2][boardSize-2].setUnit(testEnemy1);
         grid.tileList[boardSize-1][boardSize-3].setUnit(testEnemy2);
@@ -162,18 +163,20 @@ public class GameLogicTest {
     @Test
     public void testAvailableAttacksLongRange(){
         //checks the knight, if he can attack diagonally
-        //creates units, one in range, one out of it
+        //creates units, one too close, one too far away, one in range
         Unit testUnit = units.newFriendlyUnit(2);
         Unit testEnemy1 = units.newEnemyUnit(2,0);
-        Unit testEnemy2 = units.newEnemyUnit(2,0);
+        Unit testEnemy2 = units.newEnemyUnit(2,1);
+        Unit testEnemy3 = units.newEnemyUnit(2,2);
         grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
-        grid.tileList[boardSize-2][boardSize-2].setUnit(testEnemy1);
-        grid.tileList[boardSize-1][boardSize-3].setUnit(testEnemy2);
+        grid.tileList[boardSize-2][boardSize-1].setUnit(testEnemy1);
+        grid.tileList[boardSize-3][boardSize-3].setUnit(testEnemy2);
+        grid.tileList[boardSize-2][boardSize-3].setUnit(testEnemy3);
         selectedUnit = testUnit;
         selectedPosX = 6;
         selectedPosY = 6;
         Tile[] compare = new Tile[1];
-        compare[0] = grid.tileList[boardSize-2][boardSize-2];
+        compare[0] = grid.tileList[boardSize-2][boardSize-3];
         ArrayList<Tile> result = game.getAttackableTiles();
         Tile[] resultArray = new Tile[result.size()];
         for(int i = 0; i < result.size(); i++){
@@ -181,4 +184,60 @@ public class GameLogicTest {
         }
         assertArrayEquals(compare, resultArray);
     }
+    @Test
+    public void testSpecificValidMovement(){
+        ArrayList<Tile> movements = new ArrayList<>();
+        movements.add(grid.tileList[2][2]);
+        int posX = 2;
+        int posY = 2;
+        assertTrue(game.checkForLegalMove(posY, posX, movements));
+    }
+    @Test
+    public void testSpecificInvalidMovement(){
+        ArrayList<Tile> movements = new ArrayList<>();
+        movements.add(grid.tileList[2][2]);
+        int posX = 3;
+        int posY = 2;
+        assertTrue(!game.checkForLegalMove(posY, posX, movements));
+    }
+    @Test
+    public void testSpecificValidAttack(){
+        ArrayList<Tile> attacks = new ArrayList<>();
+        attacks.add(grid.tileList[2][2]);
+        int posX = 2;
+        int posY = 2;
+        assertTrue(game.checkForLegalMove(posY, posX, attacks));
+    }
+
+    @Test
+    public void testSpecificInvalidAttack(){
+        ArrayList<Tile> attacks = new ArrayList<>();
+        attacks.add(grid.tileList[2][2]);
+        int posX = 3;
+        int posY = 2;
+        assertTrue(!game.checkForLegalMove(posY, posX, attacks));
+    }
+
+    @Test
+    public void testNoWinner(){
+        Unit testUnit = units.newFriendlyUnit(2);
+        Unit testEnemy1 = units.newEnemyUnit(2,0);
+        grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
+        grid.tileList[boardSize-2][boardSize-1].setUnit(testEnemy1);
+        assertEquals(-1, game.checkForEliminationVictory());
+    }
+    @Test
+    public void testLoss(){
+        Unit testEnemy1 = units.newEnemyUnit(2,0);
+        grid.tileList[boardSize-2][boardSize-1].setUnit(testEnemy1);
+        assertEquals(1, game.checkForEliminationVictory());
+    }
+    @Test
+    public void testWin(){
+        Unit testUnit = units.newFriendlyUnit(2);
+        grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
+        assertEquals(0, game.checkForEliminationVictory());
+    }
+
+
 }
