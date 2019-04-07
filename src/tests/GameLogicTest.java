@@ -29,12 +29,12 @@ import database.Cleaner;
 //testUser password: testPassword id: 3
 
 public class GameLogicTest {
-    GameLogic game = new GameLogic();;
-    UnitGenerator units = new UnitGenerator();;
-    GameMain gameMain = new GameMain();
+    GameLogic game;
+    UnitGenerator units;
+    SetUp setUp;
     @BeforeClass
     public static void setUpClass() throws SQLException {
-
+        tileSize = 50;
         Variables.screenWidth = 1500;
         Database db = new Database();
         grid = new Grid(boardSize, boardSize);
@@ -67,8 +67,8 @@ public class GameLogicTest {
 
         db.joinGame(match_id, opponent_id);
 
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
+
+
 
 
 
@@ -81,7 +81,10 @@ public class GameLogicTest {
 
     @Before
     public void setUp() {
-        GameLogic game = new GameLogic();
+        game = new GameLogic();
+        setUp = new SetUp();
+        setUp.importUnitTypes();
+        units = new UnitGenerator();
 
     }
 

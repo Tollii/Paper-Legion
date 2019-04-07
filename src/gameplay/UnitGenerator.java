@@ -8,6 +8,8 @@ import gameplay.units.Swordsman;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
+import java.net.URL;
+
 
 public class  UnitGenerator {
 
@@ -24,8 +26,11 @@ public class  UnitGenerator {
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
-    private static Image swordsmanImage = new Image(UnitGenerator.class.getResource("assets/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-    private static AudioClip swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
+        static URL url = UnitGenerator.class.getResource("./assets/swordsman.png");
+        private static Image swordsmanImage = new Image(url.toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+        private static AudioClip swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
+
+
 
     private static UnitType swordsmanUnitType;
 

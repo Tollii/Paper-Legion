@@ -2,6 +2,7 @@ package menus.Controller;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
+import database.Variables;
 import gameplay.GameLogic;
 import gameplay.GameMain;
 import gameplay.Grid;
@@ -176,9 +177,9 @@ public class mainMenuController extends Controller {
     private void enterGame() {
         try {
             findGameClicked = false;
-            game = new GameMain();
-            tileSize = (int)(screenWidth * 0.06);
+            Variables.tileSize = (int)(screenWidth * 0.06);
             grid = new Grid(boardSize, boardSize);
+            game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {
