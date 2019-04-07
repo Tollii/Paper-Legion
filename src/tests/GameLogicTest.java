@@ -87,7 +87,10 @@ public class GameLogicTest {
         setUp = new SetUp();
         setUp.importUnitTypes();
         units = new UnitGenerator();
-
+        obstacles = null;
+        selectedUnit = null;
+        selectedPosX = -1;
+        selectedPosY = -1;
     }
 
     @After
@@ -97,13 +100,16 @@ public class GameLogicTest {
 //TODO call Tile.SetUnit(unit) for å lage units til testing
 
     @Test
-    public void testUnitPositions() {
+    //tests if a unit gets the right available movements
+    public void testAvailableMovements() {
         Unit testUnit = units.newFriendlyUnit(2);
         grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
+        //sets up a unit in the corner posistion
         selectedUnit = grid.tileList[boardSize-1][boardSize-1].getUnit();
         selectedPosX = 6;
         selectedPosY = 6;
         Tile[] compare = new Tile[2];
+        //It should only be able to move left and up
         compare[0] = grid.tileList[boardSize-2][boardSize-1];
         compare[1] = grid.tileList[boardSize-1][boardSize-2];
         ArrayList<Tile> result = game.getMovementPossibleTiles();
@@ -116,6 +122,63 @@ public class GameLogicTest {
 
     @Test
     public void CreateObstacle(){
-        //asstert arraylist of obstacles to be greater in length than 0 or whatever
+        int lowerBound = 3;
+        int upperBound = 7;
+        ArrayList<Obstacle> obstacles;
+        obstacles = game.createObstacles();
+        boolean noObstaclesOutOfBounds = true;
+        //Goes through the arraylist and checks if all obstacles are out of the deployable zone
+        for(int i = 0; i<obstacles.size(); i++){
+            if (obstacles.get(i).getPosY()<1 && obstacles.get(i).getPosY()>boardSize-2){
+                noObstaclesOutOfBounds = false;
+            }
+        }
+        assertTrue(lowerBound<=obstacles.size() && upperBound>=obstacles.size() && noObstaclesOutOfBounds);
+    }
+
+    @Test
+    public void testAvailableAttacksShortRange(){
+        //checks the knight, if he can attack diagonally
+        //creates units, one in range, one out of it
+        Unit testUnit = units.newFriendlyUnit(1);
+        Unit testEnemy1 = units.newEnemyUnit(2,0);
+        Unit testEnemy2 = units.newEnemyUnit(2,0);
+        grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
+        grid.tileList[boardSize-2][boardSize-2].setUnit(testEnemy1);
+        grid.tileList[boardSize-1][boardSize-3].setUnit(testEnemy2);
+        selectedUnit = testUnit;
+        selectedPosX = 6;
+        selectedPosY = 6;
+        Tile[] compare = new Tile[1];
+        compare[0] = grid.tileList[boardSize-2][boardSize-2];
+        ArrayList<Tile> result = game.getAttackableTiles();
+        Tile[] resultArray = new Tile[result.size()];
+        for(int i = 0; i < result.size(); i++){
+          resultArray[i] = result.get(i);
+        }
+        assertArrayEquals(compare, resultArray);
+    }
+
+    @Test
+    public void testAvailableAttacksLongRange(){
+        //checks the knight, if he can attack diagonally
+        //creates units, one in range, one out of it
+        Unit testUnit = units.newFriendlyUnit(2);
+        Unit testEnemy1 = units.newEnemyUnit(2,0);
+        Unit testEnemy2 = units.newEnemyUnit(2,0);
+        grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
+        grid.tileList[boardSize-2][boardSize-2].setUnit(testEnemy1);
+        grid.tileList[boardSize-1][boardSize-3].setUnit(testEnemy2);
+        selectedUnit = testUnit;
+        selectedPosX = 6;
+        selectedPosY = 6;
+        Tile[] compare = new Tile[1];
+        compare[0] = grid.tileList[boardSize-2][boardSize-2];
+        ArrayList<Tile> result = game.getAttackableTiles();
+        Tile[] resultArray = new Tile[result.size()];
+        for(int i = 0; i < result.size(); i++){
+            resultArray[i] = result.get(i);
+        }
+        assertArrayEquals(compare, resultArray);
     }
 }

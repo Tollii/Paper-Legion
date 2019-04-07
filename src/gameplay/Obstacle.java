@@ -6,24 +6,29 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import static database.Variables.testing;
+
 public class Obstacle extends StackPane {
     private int posX;
     private int posY;
     private int obstacleID;
     private Rectangle rect;
-    private Image obstacleImg = new Image("/gameplay/assets/obstacle.png");
+    private Image obstacleImg;
 
 
     public Obstacle(int posX, int posY, int obstacleID){
+
         rect = new Rectangle();
         rect.setWidth(Variables.tileSize);
         rect.setHeight(Variables.tileSize);
         this.posX = posX;
         this.posY = posY;
         this.obstacleID = obstacleID;
-
-        rect.setFill(new ImagePattern(obstacleImg));
-        this.getChildren().add(rect);
+        if(!testing){
+            obstacleImg = new Image("/gameplay/assets/obstacle.png");
+            rect.setFill(new ImagePattern(obstacleImg));
+            this.getChildren().add(rect);
+        }
     }
 
     public void setTranslate(){
