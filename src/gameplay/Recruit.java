@@ -42,4 +42,8 @@ public class Recruit extends StackPane {
   public Image getImage() {
     return type.getUnitImage();
   }
+
+  public String getDescription(){
+    return type.getDescription();
+  }
 }
