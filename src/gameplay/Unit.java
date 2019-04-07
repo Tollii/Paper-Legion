@@ -12,7 +12,15 @@ import javafx.embed.swing.SwingFXUtils;
 import java.awt.image.BufferedImage;
 
 import javafx.scene.media.AudioClip;
-
+/**
+ * Creates a unit which holds several attributes; The units movement range,
+ * attack range, description, health, attack multiplier, UnitType etc.
+ * The unit is created with a StackPane to hold a image in accordance with the UnitType.
+ * Units are used to be placed within a tile on the Grid.
+ * @see Grid
+ * @see Tile
+ * @see UnitType
+ */
 public class Unit extends StackPane {
     private Label healthbar;
     private Rectangle rect;
@@ -39,6 +47,17 @@ public class Unit extends StackPane {
     private int healthbarPosY = 40;
     private int pieceId;
 
+    /**
+     * Sets the unit variables tile size, whether unit is enemy or not, attack multiplier, max-, min attack range,
+     * ability cooldown, defence multiplier, movement range, cost, description, description tag, piece id.
+     * The constructor sets the image to show for the Unit, the colors in accordance to the player who owns the unit, and
+     * also adds a health bar label on top of the unit image, to show current hp.
+     * It takes three parameters, boolean enemy, UnitType type, and int unitId.
+     * @param enemy   Sets the unit as either enemy or friendly
+     * @param type  Sets the UnitType for the unit.
+     * @param unitId  Sets the unitId for the unit.
+     * @see UnitType
+     */
     public Unit(boolean enemy, UnitType type, int unitId) {
         rect = new Rectangle();
         rect.setWidth(GameMain.tileSize);
@@ -102,6 +121,11 @@ public class Unit extends StackPane {
         return hasAttackedThisTurn;
     }
 
+    /**
+     * Sets the boolean value of the unit if this unit has attack within his turn.
+     * Is to be used to collect the information of only the units who has attacked,
+     * and the information is sent to the Database.
+     */
     public void setHasAttackedThisTurn(boolean hasAttackedThisTurn) {
         this.hasAttackedThisTurn = hasAttackedThisTurn;
     }
@@ -122,6 +146,11 @@ public class Unit extends StackPane {
         return type;
     }
 
+    /**
+     * Returns a integer with the UnitType Id nr.
+     * @return int Returns the UnitType id nr.
+     * @see UnitType
+     */
     public int getUnitTypeId() {
         return unitTypeId;
     }
@@ -134,22 +163,42 @@ public class Unit extends StackPane {
         return hp;
     }
 
+    /**
+     * Returns the units damage multiplier
+     * @return int Returns the units damage multiplier
+     */
     public int getAttack() {
         return attack;
     }
 
+    /**
+     * Returns a int with the ability cooldown of a unit.
+     * @return int Returns the ability cooldown of a unit.
+     */
     public int getAbilityCooldown() {
         return abilityCooldown;
     }
 
+    /**
+     * Returns a double with the defence multiplier of a unit.
+     * @return double Returns the defence multiplier of a unit.
+     */
     public double getDefenceMultiplier() {
         return defenceMultiplier;
     }
 
+    /**
+     * Returns a integer with the minimum attack range of a unit.
+     * @return int Returns the minimum attack range of a unit.
+     */
     public int getMinAttackRange() {
         return minAttackRange;
     }
 
+    /**
+     * Returns a integer with the max attack range of a unit.
+     * @return int Returns the max attack range of a unit.
+     */
     public int getMaxAttackRange() {
         return maxAttackRange;
     }
@@ -171,6 +220,10 @@ public class Unit extends StackPane {
         return cost;
     }
 
+    /**
+     * Returns a integer with the piece ID of the unit.
+     * @return int Returns the piece id of the unit.
+     */
     public int getPieceId() {
         return pieceId;
     }
@@ -187,6 +240,11 @@ public class Unit extends StackPane {
                 "\nAttack: " + attack + "x\n" + "\n" + description;
     }
 
+    /**
+     * Sets the current health for the unit.
+     * Also changes the health bar from green to red if hp is below threshold.
+     * @param hp Sets the current health for the unit
+     */
     public void setHp(double hp) {
         this.hp = hp;
 
