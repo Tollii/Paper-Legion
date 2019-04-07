@@ -2,12 +2,22 @@ package gameplay;
 
 import javafx.scene.layout.GridPane;
 
+/**
+ * Creates a visible grid with the number of rows and columns with the specified arguments
+ */
 public class Grid extends GridPane {
     public Tile[][] tileList;
     int columns;
     int rows;
 
-
+    /**
+     * When Object of Grid is created, constructor creates a visible grid (rows X columns)
+     * by adding tiles with position relative to tilesize, and adds them
+     * to a gridpane. When Grid is called upon, it will render a Grid for you.
+     *
+     * @param  rows  the number of rows wanted in the grid
+     * @param  columns the number of columns wanted in the grid
+     */
     public Grid(int rows, int columns){
         this.columns = columns;
         this.rows = rows;
@@ -24,10 +34,18 @@ public class Grid extends GridPane {
         }
     }
 
+    /**
+     * Returns the number of columns in the grid.
+     * @return returns a integer with the number of columns.
+     */
     public int getColumns(){
         return columns;
     }
 
+    /**
+     * Returns the number of rows in the grid.
+     * @return returns a integer with the number of rows.
+     */
     public int getRows(){
         return rows;
     }

@@ -177,6 +177,11 @@ public class mainMenuController extends Controller {
         });
     }
 
+
+    /**
+     * Changes the scene to GameMain when two players has joined the same game.
+     * @see GameMain
+     */
     private void enterGame() {
         try {
             findGameClicked = false;
@@ -188,6 +193,10 @@ public class mainMenuController extends Controller {
         }
     }
 
+
+    /**
+     * Aborts the game and resets the button text.
+     */
     private void cancelGame() {
         if (findGameClicked) {
             findGameClicked = false;

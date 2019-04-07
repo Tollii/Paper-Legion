@@ -559,11 +559,28 @@ public class GameMain extends Application {
         }
     }
 
-    ////METHODS FOR GETTING CLICK POSITION////
+    /**
+     * Returns X-coordinates which corresponds with the Grid Class by using
+     * MouseEvent.MouseClicked as argument and turns the pixel coordinates
+     * to grid coordinates by rounding up to nearest tile size.
+     *
+     * @param  event  Gets the coordinates from MouseEvent.MouseClicked.
+     * @return returns an X position integer which corresponds with the grid.
+     * @see         Grid
+     */
     private int getPosXFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getX()) / tileSize) - 1;
     }
 
+    /**
+     * Returns Y-coordinates which corresponds with the Grid Class by using
+     * MouseEvent.MouseClicked as argument and turns the pixel coordinates
+     * to grid coordinates by rounding up to nearest tile size.
+     *
+     * @param  event  Gets the coordinates from MouseEvent.MouseClicked.
+     * @return returns an Y position integer which corresponds with the grid.
+     * @see         Grid
+     */
     private int getPosYFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }

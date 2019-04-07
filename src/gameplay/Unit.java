@@ -133,10 +133,19 @@ public class Unit extends StackPane {
         return maxAttackRange;
     }
 
+    /**
+     * Returns the movement range of a unit.
+     * @return int Returns a integer of allowed movement range in any direction.
+     */
     public int getMovementRange() {
         return movementRange;
     }
 
+    /**
+     * Returns the cost of the Unit to use with the placement phase.
+     * @return  Returns the cost of the unit.
+     * @see GameMain
+     */
     public int getCost() {
         return cost;
     }
@@ -145,6 +154,10 @@ public class Unit extends StackPane {
         return pieceId;
     }
 
+    /**
+     * Returns the cost of the Unit to use with the placement phase.
+     * @return String Returns a string with the units attributes and description text and tags.
+     */
     public String getDescription() {
 
         return descriptionTag + "\n" +
@@ -164,6 +177,12 @@ public class Unit extends StackPane {
         }
     }
 
+    /**
+     * Reduces the healt of a unit by taking damage dealt by another unit.
+     * The amount of damage taken is calculated by using the units defence multiplier
+     * against the Attackers damage multiplier.
+     * @param damageDealt Gets the damage multiplier of the unit that attacked.
+     */
     public void takeDamage(double damageDealt) {
 
         this.hp -= damageDealt / defenceMultiplier;
@@ -176,13 +195,25 @@ public class Unit extends StackPane {
         }
     }
 
+    /**
+     * Returns the image associated with the UnitType
+     * @return Image  returns the Image of the UnitType
+     * @see Image
+     */
     public Image getUnitImage() {
         return type.getUnitImage();
     }
 
+
+    /**
+     * Returns the AudioClip associated with the UnitType
+     * @return AudioClip  returns the AudioClip of the UnitType
+     * @see AudioClip
+     */
     public AudioClip getAudio() {
         return type.getAudio();
     }
+
 
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
 
