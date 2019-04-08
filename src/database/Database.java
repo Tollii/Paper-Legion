@@ -575,6 +575,7 @@ public class Database {
     }
 
     /**
+     * Sets the status of the player as ready
      *
      * @param ready
      */
@@ -760,6 +761,11 @@ public class Database {
     }
     */
 
+    /**
+     * Sends a list of obstacles to the Obstacles table on the MYSQL database
+     *
+     * @param obstacles list of obstacles
+     */
     public void exportObstacles(ArrayList<Obstacle> obstacles) {
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();
@@ -801,6 +807,11 @@ public class Database {
         }
     }
 
+    /**
+     * Gets obstacles and their position from the MYSQL database.
+     *
+     * @return imported list of obstacles
+     */
     public ArrayList<Obstacle> importObstacles() {
         ArrayList<Obstacle> ObstacleImport = new ArrayList<>();
         ResultSet result = null;
@@ -837,6 +848,11 @@ public class Database {
         return null;
     }
 
+    /**
+     *  Checks if the correct amount of obstacles have been added in accordance with the # of obstacles in the database in a given match
+     *
+     * @return true if local obstacles and server obstacles are equal. False if not.
+     */
     public Boolean obstaclesHaveBeenAdded() {
 
         Integer obstacle_amount;
@@ -903,6 +919,13 @@ public class Database {
                               |_|            |___/
      */
 
+    /**
+     * Updates the database with a new turn. Handles exception case with round 1.
+     *
+     * @param turn turn #
+     * @return 1 on success, -1 on failure.
+     */
+
     public int sendTurn(int turn) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -939,6 +962,11 @@ public class Database {
         return -1;
     }
 
+    /**
+     * Imports the latest turn stored on the database.
+     *
+     * @return player id on success, -1 on failure.
+     */
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -1013,43 +1041,12 @@ public class Database {
     }
 */
 
-    public boolean exportPieceMoveList(ArrayList<Move> movementList) {
-
-        int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
-        int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
-
-        Connection myConn = connectionPool.getConnection();
-        String sqlString = "UPDATE Pieces SET position_x = ?, position_y = ?  WHERE match_id=? AND piece_id = ? AND player_id = ? ;";
-
-        PreparedStatement preparedStatement = null;
-        try {
-            myConn.setAutoCommit(false);
-            preparedStatement = myConn.prepareStatement(sqlString);
-
-            for (int i = 0; i < movementList.size(); i++) {
-                preparedStatement.setInt(1, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(2, movementList.get(i).getEndPosY());
-                preparedStatement.setInt(3, matchId);
-                preparedStatement.setInt(4, movementList.get(i).getPieceId());
-                preparedStatement.setInt(5, user_id);
-
-
-                preparedStatement.executeUpdate();
-            }
-            myConn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Cleaner.rollBack(myConn);
-            return false;
-        } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-            Cleaner.setAutoCommit(myConn);
-        }
-        return true;
-    }
-
+    /**
+     * Sends data for movement done locally in the gameplay phase, to the database.
+     *
+     * @param movementList list of movements.
+     * @return true on success, false on failure.
+     */
     public boolean exportMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
@@ -1092,6 +1089,13 @@ public class Database {
         return true;
     }
 
+    /**
+     * Imports your opponents movements.
+     *
+     * @param enemyTurnIDInput your opponents latest turn id.
+     * @param matchIdInput match id.
+     * @return List of movements on success, null on failure.
+     */
     public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
 
         ArrayList<Move> outputList = new ArrayList<>();
@@ -1130,6 +1134,12 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Sends attacks locally done to the database.
+     *
+     * @param attackList list of local attacks.
+     * @return true on success, false on failure.
+     */
     public boolean exportAttackList(ArrayList<Attack> attackList) {
 
         int turnId = attackList.get(0).getTurnId();                         //TurnId is the same for all entries in the list
@@ -1173,6 +1183,14 @@ public class Database {
         return true;
     }
 
+    /**
+     * Imports the latest attacks from your opponent.
+     *
+     * @param enemyTurnIDInput your opponents latest turn id.
+     * @param matchIdInput match id.
+     * @param otherPlayerIdInput your opponents player id.
+     * @return list of attacks on success, null on failure.
+     */
     public ArrayList<Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
 
         ArrayList<Attack> outputList = new ArrayList<>();
