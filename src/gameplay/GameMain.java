@@ -906,6 +906,10 @@ public class GameMain extends Application {
             waitPlacementThread.stop();
             waitPlacementThread = null;
         }
+        if (searchGameThread != null) {
+            searchGameThread.stop();
+            searchGameThread = null;
+        }
         //Resets variables to default.
         turn = 1;
         obstacles = null;

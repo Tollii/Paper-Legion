@@ -68,9 +68,6 @@ public class mainMenuController extends Controller {
 
             @Override
             public void run() {
-                findGameClicked = false;
-                gameEntered = false;
-                threadStarted = false;
                 turn = 1;
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
@@ -162,7 +159,7 @@ public class mainMenuController extends Controller {
                 mainMenuPlayButton.setText("Quick Match");
             } else{
                 mainMenuPlayButton.setText("Abort Match");
-                findGameClicked = true;
+                findGameClicked = true; //added this
             }
 
         });
