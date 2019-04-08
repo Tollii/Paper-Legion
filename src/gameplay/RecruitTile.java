@@ -31,7 +31,6 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
     this.setOnMouseClicked(event -> {
       GameMain.changeDescriptionLabel(recruit.getDescription());
       GameMain.descriptionVisible(true);
-
     });
 
 
