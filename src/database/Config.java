@@ -17,7 +17,7 @@ public class Config {
 
     private int DB_MAX_CONNECTIONS;
 
-    private static Config config = new Config();
+    private final static Config config = new Config();
 
     private Config() {
         init();
@@ -39,9 +39,6 @@ public class Config {
         return config;
     }
 
-    /**
-     * Sets up the MYSQL adress to be readily used
-     */
 
 
     /**

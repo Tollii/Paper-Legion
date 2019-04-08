@@ -3,7 +3,6 @@ package menus.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -66,16 +65,14 @@ public class GameInfoController extends Controller {
     private Pane placementbackgroundImagePane;
 
 
-    @FXML
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
+    @FXML
     private void initialize(){
 
-        gameInfoBackButton.setOnAction(event -> {
-            changeScene("mainMenu.fxml");
-        });
+        gameInfoBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
 
         backgroundImagePane.setStyle("-fx-background-image: url(/menus/menuAssets/movementInfo.png);" +
                 "-fx-background-size: cover;" +

@@ -20,7 +20,7 @@ public class Controller {
      * @see javafx.fxml.FXML
      * @see FXMLLoader
      */
-    public void changeScene(String fxml) {
+    void changeScene(String fxml) {
         Class currentClass = this.getClass();
 
         String fxmlDir = "/menus/View/"+fxml;

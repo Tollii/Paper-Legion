@@ -55,12 +55,12 @@ public class Variables {
     public static int selectedPosY;
 
     //Tile selection variables
-    public static Paint standardTileColor = Color.WHITE;
-    public static Paint standardStrokeColor = Color.BLACK;
-    public static StrokeType standardStrokePlacement = StrokeType.INSIDE;
-    public static Paint selectionOutlineColor = Color.RED;
-    public static int standardStrokeWidth = 1;
-    public static int selectedStrokeWidth = 3;
+    public static final Paint standardTileColor = Color.WHITE;
+    public static final Paint standardStrokeColor = Color.BLACK;
+    public static final StrokeType standardStrokePlacement = StrokeType.INSIDE;
+    public static final Paint selectionOutlineColor = Color.RED;
+    public static final int standardStrokeWidth = 1;
+    public static final int selectedStrokeWidth = 3;
 
     public static boolean testing = false;
 

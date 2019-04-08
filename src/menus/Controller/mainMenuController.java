@@ -3,7 +3,6 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import database.Variables;
-import gameplay.GameLogic;
 import gameplay.GameMain;
 import gameplay.Grid;
 import javafx.application.Platform;
@@ -77,9 +76,7 @@ public class mainMenuController extends Controller {
                             this.doStop();
                         });
                     } else {
-                        Platform.runLater(() -> {
-                            mainMenuPlayButton.setText("Abort Match");
-                        });
+                        Platform.runLater(() -> mainMenuPlayButton.setText("Abort Match"));
                         match_id = db.quickMatch_search(user_id);
                         findGameClicked = true;
                         if (match_id > 0) {

@@ -15,7 +15,7 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
 
     private Unit unit;
     private Obstacle obstacle;
-    private Rectangle rect;
+    private final Rectangle rect;
     private boolean isTargetable = true;
 
     public Tile(int sizeX, int sizeY) {

@@ -4,12 +4,12 @@ package gameplay;
 /* Units/Pieces, and is intended to use with static positions especially for mvp */
 
 public class PieceSetup {
-    private int pieceId;
-    private int matchId;
-    private int playerId;
-    private int positionX;
-    private int positionY;
-    private int unit_type_id;
+    private final int pieceId;
+    private final int matchId;
+    private final int playerId;
+    private final int positionX;
+    private final int positionY;
+    private final int unit_type_id;
 
     public PieceSetup(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id){
 

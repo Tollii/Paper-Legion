@@ -12,13 +12,13 @@ import java.util.List;
  */
 
 public class ConnectionPool {
-    private List<Connection> connectionPool;
+    private final List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
     private static final int INITIAL_POOL_SIZE = 5;
     private static final int MAX_POOL_SIZE = 10;
 
 
-    public ConnectionPool(List<Connection> pool){
+    private ConnectionPool(List<Connection> pool){
         this.connectionPool = pool;
     }
 
@@ -87,12 +87,11 @@ public class ConnectionPool {
      * Puts the connection back into the connectionPool after usage.
      *
      * @param con A connection
-     * @return boolean value of whether usedConnections.remove was successfull
      */
-    public boolean releaseConnection(Connection con){
+    public void releaseConnection(Connection con){
         connectionPool.add(con);
         //System.out.println("Connection released");
-        return usedConnections.remove(con);
+        usedConnections.remove(con);
     }
 
     /**

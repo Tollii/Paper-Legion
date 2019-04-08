@@ -1,6 +1,6 @@
 package backup;
 
-public class Attack {
+class Attack {
 
     ////VARIABLES////
     private final int turnId;

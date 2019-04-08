@@ -8,8 +8,6 @@ import gameplay.units.Swordsman;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
-import java.net.URL;
-
 import static database.Variables.testing;
 
 
@@ -28,56 +26,21 @@ public class  UnitGenerator {
     ////Unit ID generator////
     private static int unitId = 0;
 
-    ////Swordsman////
-    private static String swordsmanDescription =
-            "Because he failed to get into clown college,\n" +
-            "he was so distraught that he wowed \n" +
-            "to get stronger and faster, but incidentally \n" +
-            "he was now better suited to be a legendary swordsman. \n" +
-            "Has a longsword, which can slay even the most dangerous of foes.";
-    private static String swordsmanDescriptionTag =
-            "Legendary swordsman";
     private static Image swordsmanImage;
     private static AudioClip swordsmanSound;
 
     private static UnitType swordsmanUnitType;
 
-    ////Archer////
-    private static String archerDescription =
-            "He has mastered his Sodoku in such a ingenious way,\n"+
-            "he is now considered godlike amongst his peers.\n"+
-            "Too bad this doesn't help him in battle though.\n"+
-            "Because of his bow, he has a longer range than others.";
-    private static String archerDescriptionTag =
-            "Heroic Archer";
     private static Image archerImage;
     private static AudioClip archerSound;
 
     private static UnitType archerUnitType;
 
-    ////Juggernaut////
-    private static String juggernautDescription =
-            "After receiving notice of owing taxes to the IRS, \n" +
-            "he went into a raging killing frenzy. \n"+
-            "Known as as Berserker to some, and to others, \n"+
-            "a big angry man with a stick.\n"+
-            "Attacks all units in a line, but takes damage every attack";
-    private static String juggernautDescriptionTag =
-            "Juggernaut";
     private static Image juggernautImage;
     private static AudioClip juggernautSound;
 
     private static UnitType juggernautUnitType;
 
-    ////Catapult////
-    private static String catapultDescription=
-            "The sharpest minds, created the greatest\n" +
-            "ballistic device the world has ever seen. \n" +
-            "This is not that device. \n"+
-            "It can launch a payload a great distance, \n"+
-            "and has splash damage to nearby enemies.";
-    private static String catapultDescriptionTag =
-            "Throwy-McGig";
     private static Image catapultImage;
     private static AudioClip catapultSound;
 
@@ -113,6 +76,12 @@ public class  UnitGenerator {
             catapultImage = new Image(UnitGenerator.class.getResource("assets/catapult.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
             catapultSound = new AudioClip(UnitGenerator.class.getResource("assets/catapult.wav").toString());
         }
+        String swordsmanDescriptionTag = "Legendary swordsman";////Swordsman////
+        String swordsmanDescription = "Because he failed to get into clown college,\n" +
+                "he was so distraught that he wowed \n" +
+                "to get stronger and faster, but incidentally \n" +
+                "he was now better suited to be a legendary swordsman. \n" +
+                "Has a longsword, which can slay even the most dangerous of foes.";
         swordsmanUnitType = new Swordsman("Swordsman",
                 swordsmanProto.getUnitTypeId(),
                 swordsmanProto.getHp(),
@@ -124,6 +93,11 @@ public class  UnitGenerator {
                 swordsmanProto.getCost(),
                 swordsmanDescription, swordsmanDescriptionTag, swordsmanImage, swordsmanSound);
 
+        String archerDescriptionTag = "Heroic Archer";////Archer////
+        String archerDescription = "He has mastered his Sodoku in such a ingenious way,\n" +
+                "he is now considered godlike amongst his peers.\n" +
+                "Too bad this doesn't help him in battle though.\n" +
+                "Because of his bow, he has a longer range than others.";
         archerUnitType =  new Archer("Archer",
                 archerProto.getUnitTypeId(),
                 archerProto.getHp(),
@@ -135,6 +109,12 @@ public class  UnitGenerator {
                 archerProto.getCost(),
                 archerDescription, archerDescriptionTag, archerImage, archerSound);
 
+        String juggernautDescriptionTag = "Juggernaut";////Juggernaut////
+        String juggernautDescription = "After receiving notice of owing taxes to the IRS, \n" +
+                "he went into a raging killing frenzy. \n" +
+                "Known as as Berserker to some, and to others, \n" +
+                "a big angry man with a stick.\n" +
+                "Attacks all units in a line, but takes damage every attack";
         juggernautUnitType = new Juggernaut("Juggernaut",
                 juggernautProto.getUnitTypeId(),
                 juggernautProto.getHp(),
@@ -146,6 +126,12 @@ public class  UnitGenerator {
                 juggernautProto.getCost(),
                 juggernautDescription, juggernautDescriptionTag, juggernautImage, juggernautSound);
 
+        String catapultDescriptionTag = "Throwy-McGig";////Catapult////
+        String catapultDescription = "The sharpest minds, created the greatest\n" +
+                "ballistic device the world has ever seen. \n" +
+                "This is not that device. \n" +
+                "It can launch a payload a great distance, \n" +
+                "and has splash damage to nearby enemies.";
         catapultUnitType = new Catapult("Catapult",
                 catapultProto.getUnitTypeId(),
                 catapultProto.getHp(),

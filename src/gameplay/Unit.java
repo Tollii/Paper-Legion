@@ -28,29 +28,27 @@ import static database.Variables.testing;
 
 public class Unit extends StackPane {
     private Label healthbar;
-    private Rectangle rect;
 
     ////UNIT INFO////
     private final UnitType type;
     private final int unitTypeId;
     private double hp;
-    private int attack;
-    private double defenceMultiplier;
-    private int minAttackRange;
-    private int maxAttackRange;
-    private int movementRange;
-    private int cost;
-    private String description;
-    private String descriptionTag;
+    private final int attack;
+    private final double defenceMultiplier;
+    private final int minAttackRange;
+    private final int maxAttackRange;
+    private final int movementRange;
+    private final int cost;
+    private final String description;
+    private final String descriptionTag;
 
 
     ////UTILITIES////
     private final int LOW_HP_THRESHOLD = 20;
-    private boolean enemy;
+    private final boolean enemy;
     private boolean hasAttackedThisTurn;
-    private int healthbarHeight = 10;
-    private int healthbarPosY = (int)((Variables.tileSize - healthbarHeight) / 2);
-    private int pieceId;
+    private final int healthbarHeight = 10;
+    private final int pieceId;
 
     /**
      * Sets the unit variables tile size, whether unit is enemy or not, attack multiplier, max-, min attack range,
@@ -64,7 +62,7 @@ public class Unit extends StackPane {
      * @see UnitType
      */
     public Unit(boolean enemy, UnitType type, int unitId) {
-        rect = new Rectangle();
+        Rectangle rect = new Rectangle();
         rect.setWidth(Variables.tileSize);
         rect.setHeight(Variables.tileSize);
         this.enemy = enemy;
@@ -91,6 +89,7 @@ public class Unit extends StackPane {
             healthbar.setPrefWidth(Variables.tileSize);
             healthbar.setAlignment(Pos.CENTER);
             healthbar.setMinHeight(healthbarHeight);
+            int healthbarPosY = ((Variables.tileSize - healthbarHeight) / 2);
             healthbar.setTranslateY(healthbarPosY);
 
             healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
@@ -125,7 +124,7 @@ public class Unit extends StackPane {
      * @return boolean Returns true if the unit has attacked on the players turn.
      */
     public boolean getHasAttackedThisTurn() {
-        return hasAttackedThisTurn;
+        return !hasAttackedThisTurn;
     }
 
     /**

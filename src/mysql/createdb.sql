@@ -1,3 +1,11 @@
+# noinspection SyntaxErrorForFile
+
+# noinspection SyntaxErrorForFile
+
+# noinspection SyntaxErrorForFile
+
+# noinspection SyntaxErrorForFile
+
 SET foreign_key_checks = 0;
 DROP TABLE IF EXISTS Users, Statistics, Unit_types, Matches, Turns, Pieces, Obstacles, Units, Movements, Attacks, Abilities;
 SET foreign_key_checks = 1;
@@ -36,9 +44,11 @@ CREATE TABLE Matches(
   FOREIGN KEY(player1) REFERENCES Users(user_id),
   FOREIGN KEY(player2) REFERENCES Users(user_id)
 );
---legg inn dette
+#--legg inn dette
 ALTER TABLE `Matches` ADD `player1_ready` TINYINT(1) NULL DEFAULT NULL AFTER `surrendered`,
  ADD `player2_ready` TINYINT(1) NULL DEFAULT NULL AFTER `player1_ready`;
+
+# noinspection SyntaxError
 
 CREATE TABLE Turns(
   turn_id int NOT NULL,
