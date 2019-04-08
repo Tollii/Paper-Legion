@@ -1,37 +1,39 @@
 package database;
 
-/**
- *
- *
- * We can also use a connection pool framework, so we don't have to make everything from scratch.
- * It's a good idea to make it from scratch to learn, but we can use the frameworks as a backup if it gets too complicated,
- * or for testing purposes
- * Not all methods are tested yet
- *
- * Import MySQL-connector
- *
- */
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A simple connection pool that is made to be initialized at the start of the program to minimize resource usage
+ * during the programs run-time. Starts off with a size of 5 connections.
+ * Adds new connections when needed until it reaches 10 connections.
+ */
+
+
 public class ConnectionPool {
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
-    private static int INITIAL_POOL_SIZE = 5;
-    private static int MAX_POOL_SIZE = 10;
+    private static final int INITIAL_POOL_SIZE = 5;
+    private static final int MAX_POOL_SIZE = 10;
 
 
-    public ConnectionPool(List<Connection> pool){
+    private ConnectionPool(List<Connection> pool){
         this.connectionPool = pool;
     }
 
-    // Initializes an ArrayList, then fills it with connections. This is the connectionPool.
+    /**
+     * Initializes the connection pool. Creates # of connections as INITIAL_POOL_SIZE indicates
+     * Gets driver information from the local config object class.
+     *
+     * @return null on error, or new ConnectionPool on success
+     * @throws SQLException
+     */
     public static ConnectionPool create() throws SQLException{
         try{
             Config config = Config.getInstance();
-            Class.forName(config.DB_DRIVER);
+            Class.forName(config.getDB_USER_NAME());
             List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
             for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
                 pool.add(createConnection());
@@ -43,8 +45,25 @@ public class ConnectionPool {
         return null;
     }
 
-    // Fetches a connection from the connection pool
-    // If connection pool is empty, it will create a new connection
+    /**
+     * Creates a new connection. This is used during initialization or
+     * when INITIAL_POOL_SIZE < # of connections < MAX_POOL_SIZE
+     *
+     * @return a newly created connection
+     * @throws SQLException
+     */
+    private static Connection createConnection() throws SQLException{
+        Config config = Config.getInstance();
+        return DriverManager.getConnection(config.getDB_URL(), config.getDB_USER_NAME(), config.getDB_PASSWORD());
+    }
+
+    /**
+     * Fetches a connection from the connection pool
+     * If connection pool is empty, it will create a new connection
+     * Puts the used connection in the usedConnections list, and removes it from the connectionPool list
+     *
+     * @return a connection on success, null on failure
+     */
     public Connection getConnection(){
 
         try{
@@ -53,6 +72,7 @@ public class ConnectionPool {
                     connectionPool.add(createConnection());
                 } else{
                     System.out.println("Max pool size reached");
+                    return null;
                 }
             }
         } catch (SQLException sqle){
@@ -65,29 +85,32 @@ public class ConnectionPool {
         return con;
     }
 
-    // Will put the connection back into the connection pool and remove it from the usedConnections list
+    /**
+     * Puts the connection back into the connectionPool after usage.
+     *
+     * @param con A connection
+     * @return boolean value of whether usedConnections.remove was successfull
+     */
     public boolean releaseConnection(Connection con){
         connectionPool.add(con);
         //System.out.println("Connection released");
         return usedConnections.remove(con);
     }
 
-    // Creates a connection
-    private static Connection createConnection() throws SQLException{
-        Config config = Config.getInstance();
-        return DriverManager.getConnection(config.DB_URL, config.DB_USER_NAME, config.DB_PASSWORD);
-    }
-
-    // Gets total amount of connections (used and unused)
+    /**
+     * A simple getter that returns # of initialized connections.
+     * @return # of connections
+     */
     public int getSize(){
         return connectionPool.size() + usedConnections.size();
     }
 
 
     /**
-     *
-     * Possible to find a better solution
-     *
+     * Shuts down all connections.
+     * Adds all used connections back into the connection pool, then proceeds to close all of them.
+     * Clears the lists to make sure they are all empty.
+     * Used during the shutdown of the program
      */
 
     public void shutdown() throws SQLException{
@@ -104,7 +127,6 @@ public class ConnectionPool {
 
     }
 
-
     public List<Connection> getConnectionPool() {
         return connectionPool;
     }
@@ -120,59 +142,4 @@ public class ConnectionPool {
     public static int getMaxPoolSize() {
         return MAX_POOL_SIZE;
     }
-
-    // Small test that finds ISBN and forfatter from one of the programming exercises and then shuts down the connection pools
-    public static void main(String[]args){
-/*
-        // Does not work with Thomas' database
-
-        ConnectionPool pool;
-
-        try{
-            pool = create();
-
-            Connection con = pool.getConnection();
-
-            if(con.isValid(1)){
-                System.out.println("Success connection 1");
-            } else{
-                System.out.println("Failure connection 1");
-            }
-
-
-            Statement st = con.createStatement();
-            String query = "SELECT username FROM Users";
-
-
-            ResultSet rs = st.executeQuery(query);
-
-            while(rs.next()){
-                System.out.println(rs.getString("username"));
-            }
-            rs.close();
-
-//            Connection con2 = pool.getConnection();
-//            Statement st2 = con2.createStatement();
-//            String query2 = "SELECT forfatter FROM boktittel";
-//            ResultSet rs2 = st2.executeQuery(query2);
-//
-//            while(rs2.next()){
-//                System.out.println(rs2.getString("forfatter"));
-//            }
-//            rs2.close();
-
-
-            pool.shutdown();
-            System.out.println("Shutdown");
-
-        }   catch (SQLException sqle){
-            sqle.printStackTrace();
-        }
-
-
-*/
-    }
-
-
-
 }
