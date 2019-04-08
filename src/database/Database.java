@@ -53,10 +53,11 @@ public class Database {
      */
 
     /**
-     *???
+     * Imports the values for a unit type and returns them as a ProtoUnitType
      *
-     * @param unitIdInput
-     * @return
+     * @param unitIdInput int to identify which unit type to import
+     * @return ProtoUnitType
+     * @see ProtoUnitType
      */
     public static ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
@@ -352,8 +353,8 @@ public class Database {
     }
 
     /**
-     * ???
-     * @return
+     * Imports a list of UnitTypeIds. This is used to identify which Units to import.
+     * @return ArrayList. Returns an integer ArrayList of the different UnitTypeIds
      */
     public ArrayList<Integer> fetchUnitTypeList() {
 
@@ -425,11 +426,13 @@ public class Database {
     }
 
     /**
-     * ???
+     * Used at the end of the placement phase, this method is used to export the placed units and their position to the database.
      *
-     * @param exportUnitList
-     * @param exportPositionXList
-     * @param exportPositionYList
+     * @param exportUnitList ArrayList. A list of Units
+     * @param exportPositionXList ArrayList. Position x for the exported units
+     * @param exportPositionYList ArrayList. Position Y for the exported units
+     * @see Unit
+     * @see GameMain placementPhaseFinished
      */
 
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
@@ -483,9 +486,11 @@ public class Database {
     }
 
     /**
-     * ???
+     * Imports the result of the opponents players placement phase.
+     * The values are imported as a List of PieceSetup.
      *
-     * @return
+     * @return ArrayList. List of PieceSetup, contains Unit values and position X, Y.
+     * @see PieceSetup
      */
     public ArrayList<PieceSetup> importPlacementUnits() {
 
@@ -1125,6 +1130,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
+
 
         System.out.println("Imported move list size: " + outputList.size());
 
