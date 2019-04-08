@@ -18,7 +18,7 @@ import static database.Variables.*;
  * @see database.Database
  * @see Controller
  */
-public class signUpController1 extends Controller {
+public class SignUpController extends Controller {
 
     @FXML
     private ResourceBundle resources;

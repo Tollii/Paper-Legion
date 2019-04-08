@@ -12,7 +12,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="650.0" minWidth="850.0" prefHeight="650.0"
             prefWidth="850.0" style="-fx-background-color: #3e3e3e;"
-            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="menus.Controller.loginController1">
+            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="menus.Controller.LoginController">
     <AnchorPane layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0"
                 style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0"
                 AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
