@@ -292,9 +292,13 @@ public class Unit extends StackPane {
         return type.getAudio();
     }
 
-//TODO JavaDoc
+    /**
+    * Takes a jawa awt BufferedImage and changes the color
+    * of pixels with a given RGB Value with that of an other RGB Value.
+    * Used to change the color of unit image to match either friendly or enemy color. (Blue/Gold)
+    * @return BufferedImage
+    */
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
-
         int RGB_MASK = 0x00ffffff;
         int ALPHA_MASK = 0xff000000;
 
