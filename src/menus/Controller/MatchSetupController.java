@@ -3,10 +3,8 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import gameplay.GameLogic;
+import gameplay.*;
 import gameplay.GameMain;
-import gameplay.GameMain;
-import gameplay.Grid;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +26,13 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import static database.Variables.*;
 
-
+/**
+ * Controller class for Custom Match scene. It is used to gather information from database, show
+ * in TableView and and one is able to create custom game with or without password, join a selected game, and abort game.
+ * This class uses Match to store game information in a ObservableList.
+ * @see Match
+ * @see ObservableList
+ */
     public class MatchSetupController extends Controller {
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
@@ -73,6 +77,10 @@ import static database.Variables.*;
         private ImageView paperLegionLogo;
 
         @FXML
+        /**
+         * Initialize variables, and is a sort of constructor for the scene setup.
+         * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
+         */
         void initialize() {
 
 

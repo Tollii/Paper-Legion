@@ -12,6 +12,12 @@ import java.util.ResourceBundle;
 
 import static database.Variables.*;
 
+/**
+ * Controller class for Sign Up scene. Uses methods changeScene() and db.signUp().
+ * Sets up variables, and layout for the scene.
+ * @see database.Database
+ * @see Controller
+ */
 public class signUpController extends Controller {
 
     @FXML
@@ -46,6 +52,10 @@ public class signUpController extends Controller {
 
 
     @FXML
+    /**
+     * Initialize variables, and is a sort of constructor for the scene setup.
+     * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
+     */
     void initialize() {
 
         goBackButton.setOnAction(event -> {

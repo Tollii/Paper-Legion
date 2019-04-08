@@ -49,7 +49,8 @@ public class Unit extends StackPane {
     private final int LOW_HP_THRESHOLD = 20;
     private boolean enemy;
     private boolean hasAttackedThisTurn;
-    private int healthbarPosY = 40;
+    private int healthbarHeight = 10;
+    private int healthbarPosY = (int)((Variables.tileSize - healthbarHeight) / 2);
     private int pieceId;
 
     /**
@@ -91,6 +92,7 @@ public class Unit extends StackPane {
             this.getChildren().addAll(rect, healthbar);
             healthbar.setPrefWidth(Variables.tileSize);
             healthbar.setAlignment(Pos.CENTER);
+            healthbar.setMinHeight(healthbarHeight);
             healthbar.setTranslateY(healthbarPosY);
 
             healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");

@@ -49,6 +49,10 @@ public class mainMenuController extends Controller {
 
 
     @FXML
+    /**
+     * Initialize variables, and is a sort of constructor for the scene setup.
+     * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
+     */
     void initialize() {
         game = null;
         searchGameRunnable = new RunnableInterface() {
