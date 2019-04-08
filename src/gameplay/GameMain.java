@@ -947,7 +947,7 @@ public class GameMain extends Application {
         turnCounter.setLayoutX(turnCounterXPadding);
         turnCounter.setLayoutY(turnCounterYPadding);
 
-        description.setStyle(fontSize32);
+        description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
         description.setLayoutY(descriptionYPadding);
         description.setVisible(false);
