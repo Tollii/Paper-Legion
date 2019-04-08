@@ -845,6 +845,13 @@ public class GameMain extends Application {
                 opponentReady = false;
                 movementList = new ArrayList<>();
                 attackList = new ArrayList<>();
+                //Resets turns to 1 for next game.
+                turn = 1;
+                unitGenerator = null;
+                selectedUnit = null;
+                selectedPosX = -1;
+                selectedPosY = -1;
+                yourTurn = false;
                 Main.rootScene.setRoot(root);
                 Main.window.setScene(Main.rootScene);
             });
@@ -870,8 +877,7 @@ public class GameMain extends Application {
             waitPlacementThread.stop();
             waitPlacementThread = null;
         }
-        //Resets turns to 1 for next game.
-        turn = 1;
+
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
