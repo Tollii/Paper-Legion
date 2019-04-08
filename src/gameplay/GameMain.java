@@ -905,15 +905,10 @@ public class GameMain extends Application {
         player2 = -1;
         match_id = -1;
         opponent_id = -1;
-        opponentReady = false;
         unitGenerator = null;
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
-<<<<<<< HEAD
-=======
-
->>>>>>> 0822a7afae9d757d66d378d45ef8918529c0135d
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
