@@ -666,8 +666,8 @@ public class GameMain extends Application {
                     try {
                         while (!yourTurn) {
                             if (gameFinished) {
-                                System.out.println("Game finished caused dostop");
-                                this.doStop();
+                                //this.doStop();
+                                checkForGameOver();
                                 waitTurnThread = null;
                             }
                             System.out.println("Sleeps thread " + Thread.currentThread());
@@ -677,7 +677,6 @@ public class GameMain extends Application {
                             // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
                             if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
-                                System.out.println("yourTurn changes Caused dostop Variable: " + getTurnPlayerResult);
                                 yourTurn = true;
                                 this.doStop();
                             }
@@ -899,14 +898,11 @@ public class GameMain extends Application {
         match_id = -1;
         opponent_id = -1;
         opponentReady = false;
-        movementList = new ArrayList<>();
-        attackList = new ArrayList<>();
         unitGenerator = null;
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
-        yourTurn = false;
-        gameFinished = false;
+
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
