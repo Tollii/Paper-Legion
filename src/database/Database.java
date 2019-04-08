@@ -1517,10 +1517,9 @@ public class Database {
     /**
      * Gets a given user's username.
      *
-     * @param used_id user id of users' username.
      * @return user's username on success, "error" on failure.
      */
-    public String getMyName(int used_id) {
+    public String getMyName() {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -1547,10 +1546,9 @@ public class Database {
     /**
      * Gets a given user's e-mail.
      *
-     * @param used_id user id of user's e-mail.
      * @return user's e-mail on success, "error" on failure.
      */
-    public String getMyEmail(int used_id) {
+    public String getMyEmail() {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;

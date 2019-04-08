@@ -48,11 +48,11 @@ public class mainMenuController extends Controller {
     private ImageView paperLegionLogo;
 
 
-    @FXML
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
+    @FXML
     void initialize() {
         game = null;
         RunnableInterface searchGameRunnable = new RunnableInterface() {
@@ -137,7 +137,7 @@ public class mainMenuController extends Controller {
         };
 
 
-        mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName(user_id));
+        mainMenuLoggedInAsLabel.setText("Logged in as " + db.getMyName());
 
         //Button handlers
 

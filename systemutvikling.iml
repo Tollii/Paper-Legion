@@ -10,5 +10,6 @@
     <orderEntry type="library" name="jfoenix-8.0.8" level="project" />
     <orderEntry type="library" name="ant:ant-junit:1.6.5" level="application" />
     <orderEntry type="library" name="mysql-connector-java-8.0.15" level="application" />
+    <orderEntry type="library" name="mysql-connector-java-8.0.13" level="application" />
   </component>
 </module>
