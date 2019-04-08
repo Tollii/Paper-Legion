@@ -83,9 +83,9 @@ public class mainMenuController extends Controller {
                         findGameClicked = true;
                         if (match_id > 0) {
                             // If you join a game, you are player 2.
-                            yourTurn = false;
                             Platform.runLater(
                                     () -> {
+                                        yourTurn = false;
                                         enterGame();
                                     });
                             this.doStop();
@@ -94,14 +94,13 @@ public class mainMenuController extends Controller {
                         if (match_id < 0) {
                             match_id = db.createGame(user_id, "null");
                             // If you create the game, you are player 1.
-                            yourTurn = true;
                             try {
                                 while (!gameEntered && findGameClicked) {
                                     Thread.sleep(1000);
                                     gameEntered = db.pollGameStarted(match_id);
-
                                     if (gameEntered) {
                                         Platform.runLater(() -> {
+                                            yourTurn = true;
                                             enterGame();
                                         });
                                         this.doStop();
