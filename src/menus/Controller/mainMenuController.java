@@ -70,7 +70,7 @@ public class mainMenuController extends Controller {
                         });
                     } else {
                         Platform.runLater(() -> {
-                            mainMenuPlayButton.setText("Abort");
+                            mainMenuPlayButton.setText("Abort Match");
                         });
                         match_id = db.quickMatch_search(user_id);
                         findGameClicked = true;
@@ -145,7 +145,12 @@ public class mainMenuController extends Controller {
                 threadStarted = true;
                 searchGameThread.start();
             }
-            if(findGameClicked)findGameClicked = false;
+            if(findGameClicked){
+                findGameClicked = false;
+                mainMenuPlayButton.setText("Quick Match");
+            } else{
+                mainMenuPlayButton.setText("Abort Match");
+            }
 
         });
 
@@ -174,6 +179,11 @@ public class mainMenuController extends Controller {
         });
     }
 
+
+    /**
+     * Changes the scene to GameMain when two players has joined the same game.
+     * @see GameMain
+     */
     private void enterGame() {
         try {
             findGameClicked = false;
@@ -187,6 +197,10 @@ public class mainMenuController extends Controller {
         }
     }
 
+
+    /**
+     * Aborts the game and resets the button text.
+     */
     private void cancelGame() {
         if (findGameClicked) {
             findGameClicked = false;

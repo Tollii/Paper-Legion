@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import gameplay.GameLogic;
 import gameplay.GameMain;
 import gameplay.GameMain;
+import gameplay.Grid;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -295,6 +296,12 @@ import static database.Variables.*;
 
         }
 
+    /**
+     * Returns an ObservableList with matches where the game has not started.
+     * To use with TableView.
+     * @return ObservableList   Returns an observable list with matches to use with TableView.
+     * @see ObservableList
+     */
     public ObservableList<Match> getMatches(){
         ArrayList<Match> matches =  db.findGamesAvailable();
         ObservableList<Match> match_ids = FXCollections.observableArrayList();
@@ -306,6 +313,10 @@ import static database.Variables.*;
     }
 
 
+        /**
+         * Changes the scene to GameMain when two players has joined the same game.
+         * @see GameMain
+         */
     private void enterGame() {
         try {
             GameMain game = new GameMain();

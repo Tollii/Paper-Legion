@@ -28,6 +28,17 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
     this.getChildren().add(rect);
     this.getChildren().add(this.recruit);
 
+    this.setOnMouseClicked(event -> {
+      GameMain.changeDescriptionLabel(recruit.getDescription());
+      GameMain.descriptionVisible(true);
+
+    });
+
+
+
+
+
+
     //starts a dragevent with an image for appearances and an identifying string for identifying unit type
     this.setOnDragDetected(event -> {
       Dragboard dragboard = this.startDragAndDrop(TransferMode.COPY);
@@ -46,4 +57,5 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
   public Recruit getRecruit() { //possibly unnecessary
     return recruit;
   }
+
 }

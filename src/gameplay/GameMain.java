@@ -57,7 +57,7 @@ public class GameMain extends Application {
 
     ////SCENE ELEMENTS////
     private Pane root;
-    private Label description = new Label();                //description label for the selected unit
+    public static Label description = new Label();                //description label for the selected unit
     private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private Label phaseLabel = new Label();
     private static Label resourceLabel = new Label();    //Static so that Tile can update the label
@@ -189,6 +189,12 @@ public class GameMain extends Application {
 
         Pane recruitPane = createRecruitPane();
 
+        description.setStyle(descriptionFont);
+        description.setLayoutX(descriptionXPadding);
+        description.setLayoutY(descriptionYPadding+100);
+        descriptionVisible(true);
+
+
         JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
         finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
         finishedPlacingButton.setTextFill(buttonTextColor);
@@ -196,7 +202,7 @@ public class GameMain extends Application {
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
         finishedPlacingButton.setLayoutY(placementButtonYPadding);
 
-        recruitPane.getChildren().add(finishedPlacingButton);
+        recruitPane.getChildren().addAll(description,finishedPlacingButton);
 
         int playerSideTop, playerSideBottom; //sets paddings depending on player side (to the coloring of the boardtiles as well as untargetability)
         if (user_id == player1) {
@@ -546,11 +552,28 @@ public class GameMain extends Application {
         }
     }
 
-    ////METHODS FOR GETTING CLICK POSITION////
+    /**
+     * Returns X-coordinates which corresponds with the Grid Class by using
+     * MouseEvent.MouseClicked as argument and turns the pixel coordinates
+     * to grid coordinates by rounding up to nearest tile size.
+     *
+     * @param  event  Gets the coordinates from MouseEvent.MouseClicked.
+     * @return returns an X position integer which corresponds with the grid.
+     * @see         Grid
+     */
     private int getPosXFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getX()) / tileSize) - 1;
     }
 
+    /**
+     * Returns Y-coordinates which corresponds with the Grid Class by using
+     * MouseEvent.MouseClicked as argument and turns the pixel coordinates
+     * to grid coordinates by rounding up to nearest tile size.
+     *
+     * @param  event  Gets the coordinates from MouseEvent.MouseClicked.
+     * @return returns an Y position integer which corresponds with the grid.
+     * @see         Grid
+     */
     private int getPosYFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }
@@ -862,6 +885,8 @@ public class GameMain extends Application {
         return gridPane;
     }
 
+
+
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
 
         Pane unitPane = new Pane();
@@ -873,6 +898,7 @@ public class GameMain extends Application {
             RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
             units.getChildren().add(tile);
         }
+
 
         units.setLayoutY(60);
 
@@ -906,6 +932,8 @@ public class GameMain extends Application {
         sidePanel.setLayoutY(sidePanelYPadding);
         root.getChildren().add(sidePanel);
 
+
+
         return sidePanel;
     }
 
@@ -933,6 +961,14 @@ public class GameMain extends Application {
         Main.closeAndLogout();
     }
 
+    public static void changeDescriptionLabel(String newDescription){
+        description.setText(newDescription);
+    }
+
+    public static void descriptionVisible(boolean visible){
+        description.setVisible(visible);
+    }
+
     ////MAIN USED FOR SHUTDOWN HOOK////
     public void main(String[] args) {
         System.out.println("SHUTDOWN HOOK CALLED");
@@ -942,3 +978,4 @@ public class GameMain extends Application {
         launch(args);
     }
 }
+
