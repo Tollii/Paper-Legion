@@ -293,7 +293,7 @@ public class Unit extends StackPane {
         return type.getAudio();
     }
 
-
+//TODO JavaDoc
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
 
         int RGB_MASK = 0x00ffffff;
