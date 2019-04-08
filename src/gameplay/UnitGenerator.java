@@ -23,8 +23,9 @@ public class  UnitGenerator {
     ////Swordsman////
     private static String swordsmanDescription =
             "Because he failed to get into clown college,\n" +
-            "he was so distraught that he wowed to get stronger and faster,\n" +
-            "but incidentally he was now better suited to be a legendary swordsman. \n" +
+            "he was so distraught that he wowed \n" +
+            "to get stronger and faster, but incidentally \n" +
+            "he was now better suited to be a legendary swordsman. \n" +
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
