@@ -1229,6 +1229,11 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Sets a match to being surrendered.
+     *
+     * @return true if game has been surrendered, false if an error occurred.
+     */
     public boolean surrenderGame() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set surrendered=? where match_id=?";
@@ -1256,6 +1261,11 @@ public class Database {
         return false;
     }
 
+    /**
+     * Checks if a game has been surrendered.
+     *
+     * @return returns 1 if game has been surrendered, -1 if not.
+     */
     public int checkForSurrender() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -1289,7 +1299,13 @@ public class Database {
           |___/
      */
 
-    //Should probably return more than a boolean so we can identify who is logged in.
+    /**
+     * Takes given username and password to log in.
+     *
+     * @param username username to account
+     * @param password password to account
+     * @return user id if login is successful, -1 if not.
+     */
     public int login(String username, String password) {
 
         Connection myConn = connectionPool.getConnection();
@@ -1333,6 +1349,12 @@ public class Database {
         return -1;
     }
 
+    /**
+     * Logs out a user.
+     *
+     * @param userId user id of user to log out of.
+     * @return true if logged out, false if not.
+     */
     public boolean logout(int userId) {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
@@ -1355,6 +1377,15 @@ public class Database {
         return false;
     }
 
+    /**
+     * Creates a new user using user name, password and e-mail.
+     * Password gets a hash using SALT and then stored on the database.
+     *
+     * @param user new account user name.
+     * @param password new account password.
+     * @param email new account email.
+     * @return 1 for registration success, 0 if account exists, -1 if error.
+     */
     public int signUp(String user, String password, String email) {
 
         Connection con = connectionPool.getConnection();
@@ -1386,8 +1417,6 @@ public class Database {
                 rs.next();
                 addUserToStatistics(rs.getInt("user_id"));
                 return 1;
-                //-1 feil
-                //1 registrering godkjent
             }
         } catch (SQLException e) {
             e.printStackTrace();
