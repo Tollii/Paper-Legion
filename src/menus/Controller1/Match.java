@@ -1,4 +1,4 @@
-package menus.Controller;
+package menus.Controller1;
 
 /**
  * This class is a holder object for Matches with 1/2 players, and

@@ -1,4 +1,4 @@
-package menus.Controller;
+package menus.Controller1;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 import static database.Variables.*;
 
 /**
- * Controller class for Sign Up scene. Uses methods changeScene() and db.signUp().
+ * Controller1 class for Sign Up scene. Uses methods changeScene() and db.signUp().
  * Sets up variables, and layout for the scene.
  * @see database.Database
  * @see Controller

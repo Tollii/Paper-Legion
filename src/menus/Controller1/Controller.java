@@ -1,4 +1,4 @@
-package menus.Controller;
+package menus.Controller1;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +7,7 @@ import menus.Main;
 import java.io.IOException;
 
 /**
- * Controller to hold a shared method changeScene.
+ * Controller1 to hold a shared method changeScene.
  * It's function is to avoid duplicate code, and have a method
  * that can be called from other classes.
  */

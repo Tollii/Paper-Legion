@@ -1,4 +1,4 @@
-package menus.Controller;
+package menus.Controller1;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controller class for Game Info scene.
+ * Controller1 class for Game Info scene.
  * Sets up the scene layout, buttons, paddings etc.
  * Uses images and texts to show information about how to play the game,
  * as well as show images whose function serves as a game tutorial.

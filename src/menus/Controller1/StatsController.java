@@ -1,4 +1,4 @@
-package menus.Controller;
+package menus.Controller1;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 
 import static database.Variables.*;
 /**
- * Controller class for Statistics scene in main menu. Uses methods db.getMyName(),
+ * Controller1 class for Statistics scene in main menu. Uses methods db.getMyName(),
  * db.getMyEmail(), db.getGamesPlayed(), db.getGamesWon().
  * This class is used to show the information of a player's previous games.
  * @see database.Database
