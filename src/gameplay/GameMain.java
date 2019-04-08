@@ -800,7 +800,6 @@ public class GameMain extends Application {
 
         if (loser != -1) {
             //Game is won or lost.
-            gameCleanUp();
             //Open alert window.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
@@ -836,15 +835,7 @@ public class GameMain extends Application {
                     System.out.println("load failed");
                 }
                 winner_alert.close();
-                obstacles = null;
-                grid = null;
-                player1 = -1;
-                player2 = -1;
-                match_id = -1;
-                opponent_id = -1;
-                opponentReady = false;
-                movementList = new ArrayList<>();
-                attackList = new ArrayList<>();
+                gameCleanUp();
                 Main.rootScene.setRoot(root);
                 Main.window.setScene(Main.rootScene);
             });
@@ -870,8 +861,17 @@ public class GameMain extends Application {
             waitPlacementThread.stop();
             waitPlacementThread = null;
         }
-        //Resets turns to 1 for next game.
+        //Resets variables to default.
         turn = 1;
+        obstacles = null;
+        grid = null;
+        player1 = -1;
+        player2 = -1;
+        match_id = -1;
+        opponent_id = -1;
+        opponentReady = false;
+        movementList = new ArrayList<>();
+        attackList = new ArrayList<>();
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
