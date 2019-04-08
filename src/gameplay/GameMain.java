@@ -942,10 +942,7 @@ public class GameMain extends Application {
             waitPlacementRunnable.doStop();
             waitPlacementThread = null;
         }
-        if (searchGameThread != null) {
-            searchGameRunnable.doStop();
-            searchGameThread = null;
-        }
+
         //Resets variables to default.
         turn = 1;
         obstacles = null;
