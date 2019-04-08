@@ -58,15 +58,18 @@ public class Main extends Application {
             db.logout(user_id);
             System.out.println("You were logged out");
         }
-        //Stops runnables.
-        if (searchGameThread != null) {
-            searchGameThread.stop();
+        //Stops threads.
+        if (waitTurnThread != null) {
+            waitTurnThread.stop();
+            waitTurnThread = null;
         }
         if (waitPlacementThread != null) {
             waitPlacementThread.stop();
+            waitPlacementThread = null;
         }
-        if (waitTurnThread != null) {
-            waitTurnThread.stop();
+        if (searchGameThread != null) {
+            searchGameThread.stop();
+            searchGameThread = null;
         }
         try {
             db.close();

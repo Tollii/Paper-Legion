@@ -17,6 +17,12 @@ import java.util.ResourceBundle;
 
 import static database.Variables.*;
 
+/**
+ * Controller class for the main menu scene.
+ * Sets up the scene layout, buttons, paddings etc.
+ * this class Extends to Controller, in able to gain access to ChangeScene method.
+ * @see Controller
+ */
 public class mainMenuController extends Controller {
     private boolean findGameClicked, gameEntered, threadStarted = false;
     private GameMain game;
@@ -141,7 +147,6 @@ public class mainMenuController extends Controller {
         mainMenuPlayButton.setOnAction(event -> {
             if(threadStarted){
                 db.abortMatch(user_id);
-
             }
 
             if (!threadStarted) {
@@ -154,6 +159,7 @@ public class mainMenuController extends Controller {
                 mainMenuPlayButton.setText("Quick Match");
             } else{
                 mainMenuPlayButton.setText("Abort Match");
+                findGameClicked = true;
             }
 
         });
