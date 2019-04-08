@@ -583,7 +583,7 @@ public class GameMain extends Application {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
-
+            System.out.println("Turn increased in endTurn");
             turnCounter.setText("TURN: " + turn);
             endTurnButton.setText("Waiting for other player");
             yourTurn = false;
@@ -689,6 +689,7 @@ public class GameMain extends Application {
         deselect();
         selectedUnit = null;
         turn++;
+        System.out.println("Turn increased in setUpNewTurn");
         movementPhase = true;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
