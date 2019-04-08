@@ -63,7 +63,6 @@ public class GameMain extends Application {
     private static Label resourceLabel = new Label();    //Static so that Tile can update the label
     private JFXButton endTurnButton;                                //button for ending turn
     private JFXButton surrenderButton;                              //button for surrendering
-    private static FlowPane recruitUnits;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -87,6 +86,10 @@ public class GameMain extends Application {
     private final int phaseLabelWidth = 300;
     private final int phaseLabelHeight = 50;
     private final int resourceLabelWidth = 300;
+
+    //TILE STROKES//
+    private final int standardStrokeWidth = 1;
+    private final int selectedStrokeWidth = 3;
 
     //RECRUIT PANE UNIT TILES WIDTH//
     private final int unitPadding = 5;
@@ -149,6 +152,8 @@ public class GameMain extends Application {
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String buttonBackgroundColor = "-fx-background-color: #000000";
     private String fontSize32 = "-fx-font-size:32px;";
+    private Paint standardTileColor = Color.WHITE;
+    private Paint selectionOutlineColor = Color.RED;
     private Paint buttonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
     private Paint attackHighlightColor = Color.DARKRED;
@@ -184,7 +189,7 @@ public class GameMain extends Application {
         // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
-           obstacles = game.createObstacles();
+            obstacles = game.createObstacles();
         } else {
             //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while (!db.obstaclesHaveBeenAdded()) {
@@ -257,14 +262,6 @@ public class GameMain extends Application {
         resourceLabel.setText("Resources: " + currentResources);
     }
 
-    static void deselectRecruitTiles() {
-      RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
-      for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
-        tile.setStrokeWidth(standardStrokeWidth);
-        tile.setStroke(standardStrokeColor);
-      }
-    }
-
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
         Pane phaseLabelPane = createPhaseLabelPane();
@@ -303,7 +300,7 @@ public class GameMain extends Application {
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
-        waitPlacementRunnable = new RunnableInterface() {
+        RunnableInterface waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -363,6 +360,7 @@ public class GameMain extends Application {
         for (PieceSetup piece : importList) {
             System.out.println("ADDING OPPONENT UNIT");
             grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
+
         }
     }
 
@@ -451,9 +449,9 @@ public class GameMain extends Application {
                 grid.tileList[newPosY][newPosX].setUnit(selectedUnit);
 
                 //De-colours previous tile
-                grid.tileList[selectedPosY][selectedPosX].setStroke(standardStrokeColor);
-                grid.tileList[selectedPosY][selectedPosX].setStrokeType(standardStrokePlacement);
-                grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(standardStrokeWidth);
+                grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+                grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
+                grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
 
                 //adds the move to movementlist
                 movementList.add(new Move(turn, selectedUnit.getPieceId(), match_id, selectedPosX, selectedPosY, newPosX, newPosY));
@@ -540,7 +538,7 @@ public class GameMain extends Application {
 
             //colors selected tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(selectionOutlineColor);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeType(standardStrokePlacement);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
             grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(selectedStrokeWidth);
 
             //displays possible moves or attacks
@@ -571,8 +569,8 @@ public class GameMain extends Application {
     private void deselect() {
         if (unitSelected) {
             //removes selection of unit tile
-            grid.tileList[selectedPosY][selectedPosX].setStroke(standardStrokeColor);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeType(standardStrokePlacement);
+            grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
             grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(standardStrokeWidth);
 
             //removes unit selection and position
@@ -620,7 +618,7 @@ public class GameMain extends Application {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
-
+            System.out.println("Turn increased in endTurn");
             turnCounter.setText("TURN: " + turn);
             endTurnButton.setText("Waiting for other player");
             yourTurn = false;
@@ -667,7 +665,7 @@ public class GameMain extends Application {
 
     private void waitForTurn(JFXButton endTurnButton) {
         // Runnable lambda implementation for turn waiting with it's own thread
-        waitTurnRunnable = new RunnableInterface() {
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -726,6 +724,7 @@ public class GameMain extends Application {
         deselect();
         selectedUnit = null;
         turn++;
+        System.out.println("Turn increased in setUpNewTurn");
         movementPhase = true;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
@@ -911,6 +910,10 @@ public class GameMain extends Application {
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0822a7afae9d757d66d378d45ef8918529c0135d
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
@@ -930,22 +933,22 @@ public class GameMain extends Application {
 
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
-        recruitUnits = new FlowPane(Orientation.HORIZONTAL, unitPadding, unitPadding);
+        FlowPane units = new FlowPane(Orientation.HORIZONTAL, unitPadding, unitPadding);
 
-        recruitUnits.setMinWidth(unitTilesWidth);
+        units.setPrefWidth(unitTilesWidth);
 
         for (int i = 0; i < SetUp.unitTypeList.size(); i++) {
             RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
-            recruitUnits.getChildren().add(tile);
+            units.getChildren().add(tile);
         }
 
-        recruitUnits.setLayoutY(unitTilesYPadding);
+        units.setLayoutY(unitTilesYPadding);
 
         resourceLabel.setMinWidth(resourceLabelWidth);
         resourceLabel.setLayoutX(resourceLabelXPadding);
         resourceLabel.setStyle(fontSize32);
 
-        unitPane.getChildren().addAll(resourceLabel, recruitUnits);
+        unitPane.getChildren().addAll(resourceLabel, units);
 
         unitPane.setLayoutX(recruitXPadding);
         unitPane.setLayoutY(recruitYPadding);
@@ -971,6 +974,8 @@ public class GameMain extends Application {
         sidePanel.setLayoutX(sidePanelXPadding);
         sidePanel.setLayoutY(sidePanelYPadding);
         root.getChildren().add(sidePanel);
+
+
 
         return sidePanel;
     }
@@ -999,10 +1004,21 @@ public class GameMain extends Application {
         Main.closeAndLogout();
     }
 
+    /**
+     * Is a static method which sets the description used in the sidebar.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param newDescription Takes a String with the description that should show in the sidebar.
+     * @see Recruit
+     */
     public static void changeDescriptionLabel(String newDescription){
         description.setText(newDescription);
     }
 
+    /**
+     * Is a static method which controls if the description used in the sidebar is visible.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param visible Takes a boolean to control whether the description is visible or not.
+     */
     public static void descriptionVisible(boolean visible){
         description.setVisible(visible);
     }
