@@ -1,15 +1,29 @@
 package gameplay;
 
+/**
+ * Holds information about a move that has been made during the players or the opponents turn.
+ * Used to import or export movement information to/from the database.
+ * @see database.Database
+ */
 public class Move {
 
-    private int turnId;
-    private int pieceId;
-    private int matchId;
-    private int startPosX;
-    private int startPosY;
-    private int endPosX;
-    private int endPosY;
+    private final int turnId;
+    private final int pieceId;
+    private final int matchId;
+    private final int startPosX;
+    private final int startPosY;
+    private final int endPosX;
+    private final int endPosY;
 
+    /**
+     * @param turnId Int. Which turn the move took place
+     * @param pieceId Int. The ID of the unit that made the move
+     * @param matchId Int. The match the move took place in
+     * @param startPosX Int.
+     * @param startPosY Int.
+     * @param endPosX Int.
+     * @param endPosY Int.
+     */
     public Move(int turnId, int pieceId, int matchId, int startPosX, int startPosY, int endPosX, int endPosY){
         this.turnId = turnId;
         this.pieceId = pieceId;
@@ -20,59 +34,60 @@ public class Move {
         this.endPosY = endPosY;
     }
 
+    /**
+     * Returns the TurnId when the move took place
+     * @return Int.
+     */
+
     public int getTurnId() {
         return turnId;
     }
 
-    public void setTurnId(int turnId) {
-        this.turnId = turnId;
-    }
-
+    /**
+     * Returns the PieceId of the piece that moved
+     * @return Int.
+     */
     public int getPieceId() {
         return pieceId;
     }
 
-    public void setPieceId(int pieceId) {
-        this.pieceId = pieceId;
-    }
-
+    /**
+     * Returns the MatchId of which match the move took place in
+     * @return Int.
+     */
     public int getMatchId() {
         return matchId;
     }
 
-    public void setMatchId(int matchId) {
-        this.matchId = matchId;
-    }
-
+    /**
+     * Returns the StartPosX
+     * @return Int.
+     */
     public int getStartPosX() {
         return startPosX;
     }
 
-    public void setStartPosX(int startPosX) {
-        this.startPosX = startPosX;
-    }
-
+    /**
+     * Returns the StartPosY
+     * @return Int.
+     */
     public int getStartPosY() {
         return startPosY;
     }
 
-    public void setStartPosY(int startPosY) {
-        this.startPosY = startPosY;
-    }
-
+    /**
+     * Returns the EndPosX
+     * @return Int.
+     */
     public int getEndPosX() {
         return endPosX;
     }
 
-    public void setEndPosX(int endPosX) {
-        this.endPosX = endPosX;
-    }
-
+    /**
+     * Returns the EndPosY
+     * @return Int.
+     */
     public int getEndPosY() {
         return endPosY;
-    }
-
-    public void setEndPosY(int endPosY) {
-        this.endPosY = endPosY;
     }
 }

@@ -149,8 +149,13 @@ public class GameMain extends Application {
 
     }
 
+    /**
+     * Player 2 adds obstacles when he joins the game, this method calls upon the
+     * method  (GameLogic) game.createObstacles() which creates obstacles and give them a random placement
+     * by using a Random number generator.
+     * @see GameLogic
+     */
     private void addObstacles() {
-        // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
            obstacles = game.createObstacles();
@@ -224,6 +229,11 @@ public class GameMain extends Application {
         });
     }
 
+    /**
+     * It is a static method that updates the resource label, when called upon.
+     * It sets the text of the resourceLabel to a static variable :"currentResources".
+     * @see Variables
+     */
     static void updateResourceLabel() {
         resourceLabel.setText("Resources: " + currentResources);
     }
@@ -876,6 +886,10 @@ public class GameMain extends Application {
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
             waitPlacementThread = null;
+        }
+        if (searchGameThread != null) {
+            searchGameThread.stop();
+            searchGameThread = null;
         }
         //Resets variables to default.
         turn = 1;

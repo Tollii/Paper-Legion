@@ -51,7 +51,7 @@ public class Recruit extends StackPane {
 
   /**
    * Returns a String of which UnitType the recruit is.
-   * @return String Returns the UnitType in a String.
+   * @return String
    */
   public String getType() {
     return type.getType();
@@ -60,7 +60,7 @@ public class Recruit extends StackPane {
 
   /**
    * Returns the image associated with the recruit.
-   * @return Image Returns the Image associated with the recruit.
+   * @return Image
    */
   public Image getImage() {
     return type.getUnitImage();
@@ -69,7 +69,7 @@ public class Recruit extends StackPane {
   /**
    * Returns the attributes like health, movement range, attack, description tag, and description in a single String.
    * Very similar to a toString method(). It is used in the sidepanel to show recruit information on mouse click.
-   * @return String Returns the the attributes of a unit, and also it's description. Similar to toString().
+   * @return String
    * @see Unit
    */
   public String getDescription(){

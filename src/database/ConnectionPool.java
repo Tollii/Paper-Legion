@@ -108,6 +108,7 @@ public class ConnectionPool {
      * Adds all used connections back into the connection pool, then proceeds to close all of them.
      * Clears the lists to make sure they are all empty.
      * Used during the shutdown of the program
+     * @throws SQLException
      */
 
     public void shutdown() throws SQLException{

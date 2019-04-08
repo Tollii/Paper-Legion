@@ -111,7 +111,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns a boolean to show whether or not the unit is a enemy or not.
-     * @return boolean Returns boolean true if enemy, and false for friendly units.
+     * @return boolean
      */
     public boolean getEnemy() {
         return enemy;
@@ -139,7 +139,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns the UnitType in the form of a String.
-     * @return String Returns the UnitType in the form of a String.
+     * @return String
      */
     public String getTypeString() {
         return type.getType();
@@ -147,7 +147,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns the class UnitType of the unit.
-     * @return UnitType Returns the UnitType
+     * @return UnitType
      */
     public UnitType getType() {
         return type;
@@ -155,7 +155,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns a integer with the UnitType Id nr.
-     * @return int Returns the UnitType id nr.
+     * @return int
      * @see UnitType
      */
     public int getUnitTypeId() {
@@ -164,7 +164,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns the units current health.
-     * @return double Returns the units current health.
+     * @return double
      */
     public double getHp() {
         return hp;
@@ -172,7 +172,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns the units damage multiplier
-     * @return int Returns the units damage multiplier
+     * @return int
      */
     public int getAttack() {
         return attack;
@@ -180,7 +180,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns a double with the defence multiplier of a unit.
-     * @return double Returns the defence multiplier of a unit.
+     * @return double
      */
     public double getDefenceMultiplier() {
         return defenceMultiplier;
@@ -188,7 +188,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns a integer with the minimum attack range of a unit.
-     * @return int Returns the minimum attack range of a unit.
+     * @return int
      */
     public int getMinAttackRange() {
         return minAttackRange;
@@ -196,7 +196,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns a integer with the max attack range of a unit.
-     * @return int Returns the max attack range of a unit.
+     * @return int
      */
     public int getMaxAttackRange() {
         return maxAttackRange;
@@ -204,7 +204,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns the movement range of a unit.
-     * @return int Returns a integer of allowed movement range in any direction.
+     * @return int
      */
     public int getMovementRange() {
         return movementRange;
@@ -212,7 +212,7 @@ public class Unit extends StackPane {
 
     /**
      * Returns the cost of the Unit to use with the placement phase.
-     * @return  Returns the cost of the unit.
+     * @return int
      * @see GameMain
      */
     public int getCost() {
@@ -221,15 +221,15 @@ public class Unit extends StackPane {
 
     /**
      * Returns a integer with the piece ID of the unit.
-     * @return int Returns the piece id of the unit.
+     * @return int
      */
     public int getPieceId() {
         return pieceId;
     }
 
     /**
-     * Returns the cost of the Unit to use with the placement phase.
-     * @return String Returns a string with the units attributes and description text and tags.
+     * Returns a string with the units attributes and description text and tags.
+     * @return String
      */
     public String getDescription() {
 
@@ -275,8 +275,8 @@ public class Unit extends StackPane {
 
     /**
      * Returns the image associated with the UnitType
-     * @return Image  returns the Image of the UnitType
-     * @see Image
+     * @return Image
+     * @see UnitType
      */
     public Image getUnitImage() {
         return type.getUnitImage();
@@ -285,14 +285,14 @@ public class Unit extends StackPane {
 
     /**
      * Returns the AudioClip associated with the UnitType
-     * @return AudioClip  returns the AudioClip of the UnitType
-     * @see AudioClip
+     * @return AudioClip
+     * @see UnitType
      */
     public AudioClip getAudio() {
         return type.getAudio();
     }
 
-
+//TODO JavaDoc
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
 
         int RGB_MASK = 0x00ffffff;

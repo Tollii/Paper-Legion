@@ -37,7 +37,7 @@ public class Grid extends GridPane {
 
     /**
      * Returns the number of columns in the grid.
-     * @return returns a integer with the number of columns.
+     * @return int
      */
     public int getColumns(){
         return columns;
@@ -45,7 +45,7 @@ public class Grid extends GridPane {
 
     /**
      * Returns the number of rows in the grid.
-     * @return returns a integer with the number of rows.
+     * @return int
      */
     public int getRows(){
         return rows;
