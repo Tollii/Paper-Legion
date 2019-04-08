@@ -21,7 +21,7 @@ import static database.Variables.*;
  * @see Controller Change Scenes
  * @see Thread
  */
-public class loginController extends Controller {
+public class loginController1 extends Controller {
 
     private boolean loginPressed = false;
     private boolean changeScene = false;

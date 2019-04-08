@@ -22,7 +22,7 @@ import static database.Variables.*;
  * this class Extends to Controller, in able to gain access to ChangeScene method.
  * @see Controller
  */
-public class mainMenuController extends Controller {
+public class mainMenuController1 extends Controller {
     private boolean findGameClicked, gameEntered, threadStarted = false;
     private GameMain game;
     @FXML
