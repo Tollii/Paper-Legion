@@ -85,7 +85,7 @@ public class GameMain extends Application {
     //LABELS SIZES//
     private final int phaseLabelWidth = 300;
     private final int phaseLabelHeight = 50;
-    private final int resourceLabelWidth = 260;
+    private final int resourceLabelWidth = 300;
 
     //TILE STROKES//
     private final int standardStrokeWidth = 1;
@@ -93,7 +93,7 @@ public class GameMain extends Application {
 
     //RECRUIT PANE UNIT TILES WIDTH//
     private final int unitPadding = 5;
-    private final int unitTilesWidth = Variables.tileSize * 5 + unitPadding * 4;
+    private final int unitTilesWidth = tileSize * 5 + unitPadding * 4;
 
     ////PANE PADDINGS////
     private final int buttonYPadding = 500;
@@ -915,11 +915,10 @@ public class GameMain extends Application {
 
 
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
-
         Pane unitPane = new Pane();
         FlowPane units = new FlowPane(Orientation.HORIZONTAL, unitPadding, unitPadding);
 
-        units.setMinWidth(unitTilesWidth);
+        units.setPrefWidth(unitTilesWidth);
 
         for (int i = 0; i < SetUp.unitTypeList.size(); i++) {
             RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
@@ -930,6 +929,7 @@ public class GameMain extends Application {
 
         resourceLabel.setMinWidth(resourceLabelWidth);
         resourceLabel.setLayoutX(resourceLabelXPadding);
+        resourceLabel.setStyle(fontSize32);
 
         unitPane.getChildren().addAll(resourceLabel, units);
 
