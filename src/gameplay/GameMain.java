@@ -300,7 +300,7 @@ public class GameMain extends Application {
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
-        waitPlacementRunnable = new RunnableInterface() {
+        RunnableInterface waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -657,7 +657,7 @@ public class GameMain extends Application {
 
     private void waitForTurn(JFXButton endTurnButton) {
         // Runnable lambda implementation for turn waiting with it's own thread
-        waitTurnRunnable = new RunnableInterface() {
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -906,6 +906,7 @@ public class GameMain extends Application {
         selectedPosX = -1;
         selectedPosY = -1;
         yourTurn = false;
+        gameFinished = false;
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
