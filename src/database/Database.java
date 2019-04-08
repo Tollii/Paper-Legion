@@ -53,7 +53,7 @@ public class Database {
      */
 
     /**
-     *
+     *???
      *
      * @param unitIdInput
      * @return
@@ -233,7 +233,7 @@ public class Database {
      *
      * @param player_id player id of the player creating the game
      * @param password if game is password protected, use a string. If not, it will default to null.
-     * @return
+     * @return match_id on success, -1 on failure
      */
     public int createGame(int player_id, String password) {
         int match_id = -1;
@@ -282,7 +282,7 @@ public class Database {
      * Polls once whether the game has started or not. Used when a game has been created to check
      * if another player has joined your game.
      *
-     * @param match_id id of the match being polled
+     * @param match_id id of the match being polled.
      * @return true when an opponent has been found, false if not.
      */
     public boolean pollGameStarted(int match_id) {
@@ -326,6 +326,12 @@ public class Database {
                       |_|
      */
 
+    /**
+     * Deletes game(s) that has been created by the player_id given as a parameter.
+     *
+     * @param player_id id of the player's match that'll be deleted
+     * @return true on success, false on failure.
+     */
     public boolean abortMatch(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "delete from Matches where player1=?;";
@@ -347,6 +353,10 @@ public class Database {
         }
     }
 
+    /**
+     * ???
+     * @return
+     */
     public ArrayList<Integer> fetchUnitTypeList() {
 
         ArrayList<Integer> outputList = new ArrayList<>();
@@ -377,6 +387,9 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Updates the variable class with your opponents player_id
+     */
     public void getPlayers() {
 
         Connection myConn = connectionPool.getConnection();
@@ -412,6 +425,14 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+
+    /**
+     * ???
+     *
+     * @param exportUnitList
+     * @param exportPositionXList
+     * @param exportPositionYList
+     */
 
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
         Connection myConn = connectionPool.getConnection();
@@ -464,6 +485,11 @@ public class Database {
         }
     }
 
+    /**
+     * ???
+     *
+     * @return
+     */
     public ArrayList<PieceSetup> importPlacementUnits() {
 
         ArrayList<PieceSetup> outputList = null;
@@ -500,6 +526,12 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Checks if your opponent is ready during the placement phase of the game.
+     *
+     *
+     * @return true if opponent is ready, false if not.
+     */
     public boolean checkIfOpponentReady(){
 
         Boolean returnBoolean = false;
@@ -542,6 +574,10 @@ public class Database {
 
     }
 
+    /**
+     *
+     * @param ready
+     */
     public void setReady(boolean ready){
 
         Connection myConn = connectionPool.getConnection();
