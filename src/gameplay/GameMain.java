@@ -258,7 +258,7 @@ public class GameMain extends Application {
     }
 
     static void deselectRecruitTiles() {
-        RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
+      RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
       for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
         tile.setStrokeWidth(standardStrokeWidth);
         tile.setStroke(standardStrokeColor);
