@@ -906,14 +906,10 @@ public class GameMain extends Application {
         player2 = -1;
         match_id = -1;
         opponent_id = -1;
-        opponentReady = false;
-        movementList = new ArrayList<>();
-        attackList = new ArrayList<>();
         unitGenerator = null;
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
-        yourTurn = false;
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
