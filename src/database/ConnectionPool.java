@@ -33,7 +33,7 @@ public class ConnectionPool {
     public static ConnectionPool create() throws SQLException{
         try{
             Config config = Config.getInstance();
-            Class.forName(config.getDB_USER_NAME());
+            Class.forName(config.getDB_DRIVER());
             List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
             for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
                 pool.add(createConnection());
