@@ -471,7 +471,7 @@ public class Database {
                 preparedStatement.executeUpdate();
             }
 
-            //If the loop is successful, commit
+            //If the loop is successful, commit.
             myConn.commit();
 
         }catch(SQLException e){
