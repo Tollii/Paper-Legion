@@ -190,7 +190,6 @@ public class GameMain extends Application {
         }
     }
 
-    ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
     /**
      * Starts the placement phase by setting variables currentResources = startingResources, calling upon
      * the method createRecruitPane() which enables Dragboard to work with recruit, recruit tiles,
@@ -260,6 +259,13 @@ public class GameMain extends Application {
         resourceLabel.setText("Resources: " + currentResources);
     }
 
+    /**
+     * Deselects the other recruit tiles in the sidebar when selecting
+     * another recruit tile. This method unstrokes the recruitTiles which is
+     * not selected.
+     * @see Recruit
+     * @see RecruitTile
+     */
     static void deselectRecruitTiles() {
       RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
       for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
@@ -268,6 +274,18 @@ public class GameMain extends Application {
       }
     }
 
+    /**
+     * When placement phase is finished, this method is called upon to remove the panes and
+     * calls upon the method exportPlaceMentUnits() to export the position of the units placed in
+     * the placement phase, and setReady() to indicate to the other player that opponent has finished placement
+     * phase and is ready to start the game in Movement phase.
+     * Finally this method calls upon the method waitForOpponentReady() which polls
+     * to check if opponent is read.
+     * @param recruitPane Takes in a Pane
+     * @see database.Database
+     * @see Recruit
+     * @see RecruitTile
+     */
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
         Pane phaseLabelPane = createPhaseLabelPane();
