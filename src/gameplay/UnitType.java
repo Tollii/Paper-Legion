@@ -21,8 +21,6 @@ public interface UnitType {
 
     int getAttack();
 
-    int getAbilityCooldown();
-
     double getDefenceMultiplier();
 
     int getMinAttackRange();

@@ -35,7 +35,6 @@ public class Unit extends StackPane {
     private final int unitTypeId;
     private double hp;
     private int attack;
-    private int abilityCooldown;
     private double defenceMultiplier;
     private int minAttackRange;
     private int maxAttackRange;
@@ -75,7 +74,6 @@ public class Unit extends StackPane {
         unitTypeId = type.getUnitTypeId();
         hp = type.getHp();
         attack = type.getAttack();
-        abilityCooldown = type.getAbilityCooldown();
         defenceMultiplier = type.getDefenceMultiplier();
         minAttackRange = type.getMinAttackRange();
         maxAttackRange = type.getMaxAttackRange();
@@ -179,14 +177,6 @@ public class Unit extends StackPane {
      */
     public int getAttack() {
         return attack;
-    }
-
-    /**
-     * Returns a int with the ability cooldown of a unit.
-     * @return int Returns the ability cooldown of a unit.
-     */
-    public int getAbilityCooldown() {
-        return abilityCooldown;
     }
 
     /**

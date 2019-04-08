@@ -70,7 +70,6 @@ public class Database {
         int unitTypeId;
         double hp;
         int attack;
-        int abilityCooldown;
         double defenceMultiplier;
         int minAttackRange;
         int maxAttackRange;
@@ -89,7 +88,6 @@ public class Database {
             unitTypeId = resultSet.getInt("unit_type_id");
             hp = (double) resultSet.getFloat("max_health");
             attack = resultSet.getInt("attack");
-            abilityCooldown = resultSet.getInt("ability_cooldown");
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
             minAttackRange = resultSet.getInt("min_attack_range");
             maxAttackRange = resultSet.getInt("max_attack_range");
@@ -105,7 +103,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, cost, "", "", null, null);
+        return new ProtoUnitType(type, unitTypeId, hp, attack, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, cost, "", "", null, null);
     }
 
     /**
@@ -465,8 +463,7 @@ public class Database {
                 preparedStatement.setInt(5, exportUnitList.get(i).getAttack());
                 preparedStatement.setInt(6, exportUnitList.get(i).getMinAttackRange());
                 preparedStatement.setInt(7, exportUnitList.get(i).getMaxAttackRange());
-                preparedStatement.setInt(8, exportUnitList.get(i).getAbilityCooldown());
-                preparedStatement.setInt(9, exportUnitList.get(i).getUnitTypeId());
+                preparedStatement.setInt(8, exportUnitList.get(i).getUnitTypeId());
 
                 preparedStatement.executeUpdate();
             }

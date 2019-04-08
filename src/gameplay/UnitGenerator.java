@@ -103,7 +103,7 @@ public class  UnitGenerator {
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
                          ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
-        if (!testing){
+        if (!testing){ //if not testing, images and sounds are initilized
             swordsmanImage= new Image(UnitGenerator.class.getResource("./assets/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
             swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
             archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
@@ -117,7 +117,6 @@ public class  UnitGenerator {
                 swordsmanProto.getUnitTypeId(),
                 swordsmanProto.getHp(),
                 swordsmanProto.getAttack(),
-                swordsmanProto.getAbilityCooldown(),
                 swordsmanProto.getDefenceMultiplier(),
                 swordsmanProto.getMinAttackRange(),
                 swordsmanProto.getMaxAttackRange(),
@@ -129,7 +128,6 @@ public class  UnitGenerator {
                 archerProto.getUnitTypeId(),
                 archerProto.getHp(),
                 archerProto.getAttack(),
-                archerProto.getAbilityCooldown(),
                 archerProto.getDefenceMultiplier(),
                 archerProto.getMinAttackRange(),
                 archerProto.getMaxAttackRange(),
@@ -141,7 +139,6 @@ public class  UnitGenerator {
                 juggernautProto.getUnitTypeId(),
                 juggernautProto.getHp(),
                 juggernautProto.getAttack(),
-                juggernautProto.getAbilityCooldown(),
                 juggernautProto.getDefenceMultiplier(),
                 juggernautProto.getMinAttackRange(),
                 juggernautProto.getMaxAttackRange(),
@@ -153,7 +150,6 @@ public class  UnitGenerator {
                 catapultProto.getUnitTypeId(),
                 catapultProto.getHp(),
                 catapultProto.getAttack(),
-                catapultProto.getAbilityCooldown(),
                 catapultProto.getDefenceMultiplier(),
                 catapultProto.getMinAttackRange(),
                 catapultProto.getMaxAttackRange(),
