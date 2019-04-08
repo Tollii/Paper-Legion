@@ -159,7 +159,7 @@ public class mainMenuController extends Controller {
                 mainMenuPlayButton.setText("Quick Match");
             } else{
                 mainMenuPlayButton.setText("Abort Match");
-                findGameClicked = true;
+                findGameClicked = true; //added this
             }
 
         });
