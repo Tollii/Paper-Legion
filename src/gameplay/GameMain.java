@@ -232,7 +232,7 @@ public class GameMain extends Application {
     /**
      * It is a static method that updates the resource label, when called upon.
      * It sets the text of the resourceLabel to a static variable :"currentResources".
-     * @see Variables
+     * @see database.Variables
      */
     static void updateResourceLabel() {
         resourceLabel.setText("Resources: " + currentResources);
@@ -514,7 +514,15 @@ public class GameMain extends Application {
         }
     }
 
-    ////UNIT SELECTOR AND DESELECTORS////
+    /**
+     * Selects a unit, and depending on whether it is player's turn, or player unit, it does different actions.
+     * This method uses getPosXFromEvent and getPosYFromEvent to get coordinates relative to Grid/Board, and uses those
+     * coordinates to target the tile.
+     * If unit is friendly, it sets a stroke around the tile, sets description for the tile in the sidebar,
+     * if player is in attack phase, it will call upon highlightPossibleAttacks, or if player is in movement phase
+     * it will call upon the method highlightPossibleMoves().
+     * @param  event Takes in a MouseEvent to use with getPosXFromEvent and getPosYFromEvent.
+     */
     private void select(MouseEvent event) {
 
         selectedPosX = getPosXFromEvent(event);
@@ -911,9 +919,12 @@ public class GameMain extends Application {
         selectedPosX = -1;
         selectedPosY = -1;
     }
-
-    ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
-    private Pane createGrid() { //adds grid and styles it
+    /**
+     * Method for setting up different panes containing the UI elements.
+     * Sets up Grid and styles it.
+     * @see Grid
+     */
+    private Pane createGrid() {
         Pane gridPane = new Pane();
 
         gridPane.getChildren().add(grid);
