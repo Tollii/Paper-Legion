@@ -23,6 +23,13 @@ public class Config {
         init();
     }
 
+    private void init() {
+        DB_USER_NAME = "thomabmo";
+        DB_PASSWORD = "EEo6fscj";
+        DB_URL = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo?autoReconnect=true&useUnicode=yes";
+        DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+        DB_MAX_CONNECTIONS = 10;
+    }
     public static Config getConfig() {
         return config;
     }
@@ -36,30 +43,43 @@ public class Config {
      * Sets up the MYSQL adress to be readily used
      */
 
-    private void init() {
-        DB_USER_NAME = "thomabmo";
-        DB_PASSWORD = "EEo6fscj";
-        DB_URL = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo?autoReconnect=true&useUnicode=yes";
-        DB_DRIVER = "com.mysql.cj.jdbc.Driver";
-        DB_MAX_CONNECTIONS = 10;
-    }
 
+    /**
+     *
+     * @return database username as a String variable
+     */
     public  String getDB_USER_NAME() {
         return DB_USER_NAME;
     }
 
+    /**
+     *
+     * @return database password as a String
+     */
     public String getDB_PASSWORD() {
         return DB_PASSWORD;
     }
 
+    /**
+     *
+     * @return database URL as a String
+     */
     public String getDB_URL() {
         return DB_URL;
     }
 
+    /**
+     *
+     * @return database driver as a String
+     */
     public String getDB_DRIVER() {
         return DB_DRIVER;
     }
 
+    /**
+     *
+     * @return max connections as an integer
+     */
     public int getDB_MAX_CONNECTIONS() {
         return DB_MAX_CONNECTIONS;
     }
