@@ -4,9 +4,6 @@ import Runnables.RunnableInterface;
 import gameplay.Grid;
 import gameplay.Obstacle;
 import gameplay.Unit;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.StrokeType;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -54,13 +51,7 @@ public class Variables {
     public static int selectedPosX;
     public static int selectedPosY;
 
-    //Tile selection variables
-    public static Paint standardTileColor = Color.WHITE;
-    public static Paint standardStrokeColor = Color.BLACK;
-    public static StrokeType standardStrokePlacement = StrokeType.INSIDE;
-    public static Paint selectionOutlineColor = Color.RED;
-    public static int standardStrokeWidth = 1;
-    public static int selectedStrokeWidth = 3;
+
 
     public static boolean testing = false;
 

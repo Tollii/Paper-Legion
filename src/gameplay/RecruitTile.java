@@ -12,20 +12,16 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.paint.Paint;
-
-import static database.Variables.*;
 
 //own tile class for unit selector to avoid conflicts with gridtile class
 public class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsuled rectangle
 
   private Recruit recruit;
-  private Rectangle rect;
 
   public RecruitTile(int sizeX, int sizeY, Recruit recruit) {
     this.recruit = recruit;
 
-    rect = new Rectangle(sizeX, sizeY, Color.WHITE);
+    Rectangle rect = new Rectangle(sizeX, sizeY, Color.WHITE);
     rect.setStrokeType(StrokeType.INSIDE);
     rect.setStroke(Color.BLACK);
 
@@ -36,11 +32,12 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
       GameMain.changeDescriptionLabel(recruit.getDescription());
       GameMain.descriptionVisible(true);
 
-      GameMain.deselectRecruitTiles();
-
-      setStroke(selectionOutlineColor);
-      setStrokeWidth(selectedStrokeWidth);
     });
+
+
+
+
+
 
     //starts a dragevent with an image for appearances and an identifying string for identifying unit type
     this.setOnDragDetected(event -> {
@@ -59,18 +56,6 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
 
   public Recruit getRecruit() { //possibly unnecessary
     return recruit;
-  }
-
-  public void setStroke(Paint color) {
-      rect.setStroke(color);
-  }
-
-  public void setStrokeType(StrokeType value) {
-      rect.setStrokeType(value);
-  }
-
-  public void setStrokeWidth(double value) {
-      rect.setStrokeWidth(value);
   }
 
 }
