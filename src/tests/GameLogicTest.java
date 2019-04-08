@@ -1,3 +1,5 @@
+package tests;
+
 import java.sql.ResultSet;
 
 import database.ConnectionPool;
@@ -22,9 +24,8 @@ import database.Cleaner;
 //testUser password: testPassword id: 3
 
 public class GameLogicTest {
-    private GameLogic game;
-    private UnitGenerator units;
-    private SetUp setUp;
+    GameLogic game;
+    UnitGenerator units;
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
@@ -69,8 +70,6 @@ public class GameLogicTest {
     @Before
     public void setUp() {
         game = new GameLogic();
-        setUp = new SetUp();
-        setUp.importUnitTypes();
         units = new UnitGenerator();
         obstacles = null;
         selectedUnit = null;
