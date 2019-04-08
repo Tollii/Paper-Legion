@@ -812,9 +812,9 @@ public class GameMain extends Application {
             winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
             db.incrementGamesPlayed();
 
-            if (loser == user_id || eliminationResult == 0) {
+            if (loser == user_id || eliminationResult == 1) {
                 win_loseText = "You Lose!\n";
-            } else if (loser == opponent_id || eliminationResult == 1) {
+            } else if (loser == opponent_id || eliminationResult == 0) {
                 win_loseText = "You Win!\n";
                 db.incrementGamesWon();
             } else {
@@ -843,6 +843,8 @@ public class GameMain extends Application {
                 match_id = -1;
                 opponent_id = -1;
                 opponentReady = false;
+                movementList = new ArrayList<>();
+                attackList = new ArrayList<>();
                 Main.rootScene.setRoot(root);
                 Main.window.setScene(Main.rootScene);
             });
