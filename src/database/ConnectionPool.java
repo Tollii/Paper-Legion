@@ -11,7 +11,6 @@ import java.util.List;
  * Adds new connections when needed until it reaches 10 connections.
  */
 
-
 public class ConnectionPool {
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
@@ -19,7 +18,7 @@ public class ConnectionPool {
     private static final int MAX_POOL_SIZE = 10;
 
 
-    private ConnectionPool(List<Connection> pool){
+    public ConnectionPool(List<Connection> pool){
         this.connectionPool = pool;
     }
 
@@ -28,12 +27,12 @@ public class ConnectionPool {
      * Gets driver information from the local config object class.
      *
      * @return null on error, or new ConnectionPool on success
-     * @throws SQLException
+     * @throws SQLException if something goes wrong
      */
     public static ConnectionPool create() throws SQLException{
         try{
             Config config = Config.getInstance();
-            Class.forName(config.getDB_USER_NAME());
+            Class.forName(config.getDB_DRIVER());
             List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
             for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
                 pool.add(createConnection());
@@ -50,7 +49,7 @@ public class ConnectionPool {
      * when INITIAL_POOL_SIZE < # of connections < MAX_POOL_SIZE
      *
      * @return a newly created connection
-     * @throws SQLException
+     * @throws SQLException if something goes wrong
      */
     private static Connection createConnection() throws SQLException{
         Config config = Config.getInstance();
@@ -65,7 +64,6 @@ public class ConnectionPool {
      * @return a connection on success, null on failure
      */
     public Connection getConnection(){
-
         try{
             if(connectionPool.isEmpty()){
                 if(usedConnections.size() < MAX_POOL_SIZE){
@@ -127,19 +125,35 @@ public class ConnectionPool {
 
     }
 
-    public List<Connection> getConnectionPool() {
-        return connectionPool;
-    }
-
-    public List<Connection> getUsedConnections() {
-        return usedConnections;
-    }
-
+    /**
+     *
+     * @return initial pool size
+     */
     public static int getInitialPoolSize() {
         return INITIAL_POOL_SIZE;
     }
 
+    /**
+     *
+     * @return max pool size
+     */
     public static int getMaxPoolSize() {
         return MAX_POOL_SIZE;
+    }
+
+    /**
+     *
+     * @return list of unused connections
+     */
+    public List<Connection> getConnectionPool() {
+        return connectionPool;
+    }
+
+    /**
+     *
+     * @return list of used connections
+     */
+    public List<Connection> getUsedConnections() {
+        return usedConnections;
     }
 }

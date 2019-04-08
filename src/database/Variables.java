@@ -7,6 +7,11 @@ import gameplay.Unit;
 
 import java.util.ArrayList;
 
+/**
+ * Contains all important variables that needs to be accessed throughout the programs lifespan.
+ * These are static so they can be accessed and modified everywhere.
+ */
+
 public class Variables {
     public static Database db;
 

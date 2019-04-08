@@ -2,7 +2,6 @@ package database;
 
 import gameplay.*;
 import menus.Controller.Match;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -18,13 +17,21 @@ import java.util.Arrays;
 
 import static database.Variables.*;
 
-public class Database {
-    //Test
+/**
+ * This class contains all of the MYSQL statements that is used for the whole program, from login to gameplay.
+ * All methods conatining any SQL lines use the Cleaner class for cleanup at the end of it's execution.
+ * Most if, not all statements uses preparedStatement.
+ */
 
-    //Class variables
+
+public class Database {
+
 
     private static ConnectionPool connectionPool = null;
 
+    /**
+     * Initializes the connection pool on creation of a Database object
+     */
     public Database() {
 
         try {
@@ -45,48 +52,12 @@ public class Database {
                                                          |___/
      */
 
-
-
-    public ArrayList<Match> findGamesAvailable(){
-        ArrayList<Match> matches = new ArrayList<Match>();
-        String sqlString = "select match_id, username, password from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            preparedStatement = myConn.prepareStatement(sqlString);
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()){
-                int match_id = resultSet.getInt("match_id");
-                String playername = resultSet.getString("username");
-                boolean passwordProtected;
-                String password = resultSet.getString("password");
-                if(password != null){
-                 passwordProtected = true;
-                } else{
-                    passwordProtected = false;
-                }
-
-                matches.add(new Match(match_id,playername, passwordProtected, password));
-
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.closeResSet(resultSet);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-
-
-        return matches;
-
-    }
-
+    /**
+     *
+     *
+     * @param unitIdInput
+     * @return
+     */
     public static ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
         Connection myConn = connectionPool.getConnection();
@@ -137,6 +108,56 @@ public class Database {
         return new ProtoUnitType(type, unitTypeId, hp, attack, abilityCooldown, defenceMultiplier, minAttackRange, maxAttackRange, movementRange, cost, "", "", null, null);
     }
 
+    /**
+     * A select statement that puts all created matches that has not been started yet in a list.
+     * Checks if the match is password protected or not, and updates the value in that specified match accordingly.
+     *
+     * @return a list of current matches that has been created, but not started.
+     */
+    public ArrayList<Match> findGamesAvailable(){
+        ArrayList<Match> matches = new ArrayList<Match>();
+        String sqlString = "select match_id, username, password from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = myConn.prepareStatement(sqlString);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                int match_id = resultSet.getInt("match_id");
+                String playername = resultSet.getString("username");
+                boolean passwordProtected;
+                String password = resultSet.getString("password");
+                if(password != null){
+                 passwordProtected = true;
+                } else{
+                    passwordProtected = false;
+                }
+
+                matches.add(new Match(match_id,playername, passwordProtected, password));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(resultSet);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+        return matches;
+    }
+
+    /**
+     * Searches through all the games that has been created and not started that is NOT password protected.
+     * Joins the first one available.
+     *
+     * @param player_id id of the player that is searching for games.
+     * @return -1 on error, returns match_id on success.
+     */
     public int quickMatch_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlString = "SELECT * FROM Matches where game_started=0 and password is null";
@@ -171,6 +192,14 @@ public class Database {
         }
     }
 
+    /**
+     * A method to join selected match, using match_id to identify match.
+     *
+     * @param match_id match id of the match that is being joined.
+     * @param player2 player id of the user joining the game.
+     * @return false on failure, true on success.
+     */
+
     public boolean joinGame(int match_id, int player2) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
@@ -197,6 +226,15 @@ public class Database {
         return false;
     }
 
+    /**
+     *
+     * Creates a game. If no password is given as a parameter, it will default to null and be an open game
+     * which everyone can join.
+     *
+     * @param player_id player id of the player creating the game
+     * @param password if game is password protected, use a string. If not, it will default to null.
+     * @return
+     */
     public int createGame(int player_id, String password) {
         int match_id = -1;
         Connection myConn = connectionPool.getConnection();
@@ -240,6 +278,13 @@ public class Database {
         }
     }
 
+    /**
+     * Polls once whether the game has started or not. Used when a game has been created to check
+     * if another player has joined your game.
+     *
+     * @param match_id id of the match being polled
+     * @return true when an opponent has been found, false if not.
+     */
     public boolean pollGameStarted(int match_id) {
         int gameStarted = 0;
         Connection myConn = connectionPool.getConnection();
