@@ -64,23 +64,37 @@ public class GameMain extends Application {
     private final double windowWidth = screenWidth;
     private final double windowHeight = screenHeight;
 
+    ////GAME OVER WINDWOW SIZE////
+    private final int gameOverHeight = 200;
+    private final int gameOverWidth = 450;
+
+    ////SURRENDER WINDOW SIZE////
+    private final int surrenderHeight = 180;
+    private final int surrenderWidth = 250;
+
     ////SIZE VARIABLES////
+
+    //GAME OVER WINDOW//
+    private final int gameOverContentSpacing = 20;
+
+    //SURRENDER WINDOW//
+    private final int surrenderButtonSpacing = 50;
+    private final int surrenderContentSpacing = 20;
 
     //BUTTONS SIZE//
     private final int buttonWidth = 175;
     private final int buttonHeight = 75;
 
     //LABELS SIZES//
-    private final int phaseLabelWidth = 300;
     private final int phaseLabelHeight = 50;
-    private final int resourceLabelWidth = 300;
 
     //RECRUIT PANE UNIT TILES WIDTH//
-    private final int unitPadding = 5;
-    private final int unitTilesWidth = tileSize * 5 + unitPadding * 4;
+    private static final int unitPadding = 5;
+    private static final int unitTilesWidth = tileSize * 5 + unitPadding * 4;
 
     ////PANE PADDINGS////
     private final int buttonYPadding = 500;
+    private final int buttonSpacing = 10;
 
     //GRID//
     private final int gridXPadding = (int)(windowWidth * 0.15);
@@ -88,14 +102,20 @@ public class GameMain extends Application {
 
     //PLACEMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
-    private final int resourceLabelXPadding = ((unitTilesWidth - resourceLabelWidth) / 2);
+    private final int recruitYPadding = 150;
+    private final int unitTilesYPadding = 60;
+    private final int placementDescriptionYPadding = 200;
+    private final int placementButtonXPadding = 150;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
+    private final int sidePanelYPadding = 150;
+    private final int turnCounterXPadding = 0;
+    private final int turnCounterYPadding = 0;
     private final int descriptionXPadding = 0;
+    private final int descriptionYPadding = 100;
 
     //PHASELABEL PANE//
-    private final int phaseLabelXPadding = gridXPadding + ((tileSize * boardSize - phaseLabelWidth) / 2);
     private final int phaseLabelYPadding = ((gridYPadding - phaseLabelHeight) / 2);
 
     ////GAME CONTROL VARIABLES////
@@ -203,13 +223,10 @@ public class GameMain extends Application {
 
         currentResources = startingResources; //Starts current resources to starting resources;
 
-        resourceLabel.setText("Resources: " + currentResources);
-
         Pane recruitPane = createRecruitPane();
 
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
-        int placementDescriptionYPadding = 200;
         description.setLayoutY(placementDescriptionYPadding);
         descriptionVisible(true);
 
@@ -218,7 +235,6 @@ public class GameMain extends Application {
         finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
         finishedPlacingButton.setTextFill(buttonTextColor);
         finishedPlacingButton.setStyle(buttonBackgroundColor);
-        int placementButtonXPadding = 150;
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
         finishedPlacingButton.setLayoutY(buttonYPadding);
 
@@ -254,6 +270,7 @@ public class GameMain extends Application {
      */
     static void updateResourceLabel() {
         resourceLabel.setText("Resources: " + currentResources);
+        resourceLabel.setLayoutX((unitTilesWidth - resourceLabel.getWidth()) / 2);
     }
 
     /**
@@ -287,6 +304,7 @@ public class GameMain extends Application {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
         Pane phaseLabelPane = createPhaseLabelPane();
         phaseLabel.setText("WAITING FOR OTHER PLAYER");
+        phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
@@ -398,7 +416,6 @@ public class GameMain extends Application {
         surrenderButton.setStyle(buttonBackgroundColor);
 
         HBox hboxSidePanelButtons = new HBox();
-        int buttonSpacing = 10;
         hboxSidePanelButtons.setSpacing(buttonSpacing);
         hboxSidePanelButtons.getChildren().addAll(endTurnButton, surrenderButton);
         sidePanel.getChildren().addAll(hboxSidePanelButtons);
@@ -406,12 +423,14 @@ public class GameMain extends Application {
 
         movementPhase = true;
         phaseLabel.setText("MOVEMENT PHASE");
+        phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
 
         //If you are player 2. Start polling the database for next turn.
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
+            phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
             endTurnButton.setText("Waiting for other player");
-            waitForTurn(endTurnButton);
+            waitForTurn(endTurnButton, phaseLabelPane);
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -419,12 +438,12 @@ public class GameMain extends Application {
 
         ////BUTTON EvenT HANDLERS////
         endTurnButton.setOnAction(event -> {
-            endTurn(endTurnButton);
+            endTurn(endTurnButton, phaseLabelPane);
             phaseLabel.setText("OPPONENT'S TURN");
-
+            phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
         });
 
-        surrenderButton.setOnAction(event -> surrender(endTurnButton));
+        surrenderButton.setOnAction(event -> surrender(endTurnButton, phaseLabelPane));
 
         ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
         grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -441,7 +460,7 @@ public class GameMain extends Application {
             //moves unit if left button is pressed once and it is the movement phase
             if (event.getClickCount() == 1) {
                 if (unitSelected && movementPhase && event.getButton() == MouseButton.PRIMARY) {
-                    move(event);
+                    move(event, phaseLabelPane);
                 }
             }
 
@@ -454,7 +473,7 @@ public class GameMain extends Application {
         });
     }
 
-    private void move(MouseEvent event) {
+    private void move(MouseEvent event, Pane phaseLabelPane) {
         if(yourTurn) {
             int newPosX = getPosXFromEvent(event);
             int newPosY = getPosYFromEvent(event); //position of click
@@ -475,6 +494,7 @@ public class GameMain extends Application {
 
                 movementPhase = false; //sets phase to attack
                 phaseLabel.setText("ATTACK PHASE");
+                phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
 
                 clearHighLight();
                 select(event);
@@ -655,7 +675,7 @@ public class GameMain extends Application {
     }
 
     ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
-    private void endTurn(JFXButton endTurnButton) {
+    private void endTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
@@ -699,12 +719,12 @@ public class GameMain extends Application {
 
             //Wait for you next turn. Does not trigger if you have surrendered.
             if (!surrendered) {
-                waitForTurn(endTurnButton);
+                waitForTurn(endTurnButton, phaseLabelPane);
             }
         }
     }
 
-    private void waitForTurn(JFXButton endTurnButton) {
+    private void waitForTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
@@ -733,7 +753,7 @@ public class GameMain extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        Platform.runLater(() -> setUpNewTurn(endTurnButton));
+                        Platform.runLater(() -> setUpNewTurn(endTurnButton, phaseLabelPane));
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -757,7 +777,7 @@ public class GameMain extends Application {
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
-    private void setUpNewTurn(JFXButton endTurnButton) {
+    private void setUpNewTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
         deselect();
         selectedUnit = null;
         turn++;
@@ -765,6 +785,7 @@ public class GameMain extends Application {
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
         phaseLabel.setText("MOVEMENT PHASE");
+        phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
 
         //Keeps track of the moves made during the opponents turn
         ArrayList<Move> importedMovementList = db.importMoveList(turn - 1, match_id);
@@ -806,7 +827,7 @@ public class GameMain extends Application {
     }
 
     ////METHOD FOR HANDLING SURRENDER////
-    private void surrender(JFXButton endTurnButton) {
+    private void surrender(JFXButton endTurnButton, Pane phaseLabelPane) {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
         confirm_alert.setTitle("Game over!");
@@ -823,7 +844,7 @@ public class GameMain extends Application {
             surrendered = true;
 
             if (yourTurn) {
-                endTurn(endTurnButton);
+                endTurn(endTurnButton, phaseLabelPane);
             } else {
                 checkForGameOver();
             }
@@ -835,18 +856,13 @@ public class GameMain extends Application {
         HBox buttons = new HBox();
         buttons.getChildren().addAll(surrender_yes, surrender_no);
         buttons.setAlignment(Pos.CENTER);
-        //SURRENDER WINDOW//
-        int surrenderButtonSpacing = 50;
         buttons.setSpacing(surrenderButtonSpacing);
 
         VBox content = new VBox();
         content.setAlignment(Pos.CENTER);
-        int surrenderContentSpacing = 20;
         content.setSpacing(surrenderContentSpacing);
 
         content.getChildren().addAll(surrender_text, buttons);
-        int surrenderHeight = 180;////SURRENDER WINDOW SIZE////
-        int surrenderWidth = 250;
         Scene scene = new Scene(content, surrenderWidth, surrenderHeight);
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
@@ -915,12 +931,8 @@ public class GameMain extends Application {
 
             VBox content = new VBox();
             content.setAlignment(Pos.CENTER);
-            //GAME OVER WINDOW//
-            int gameOverContentSpacing = 20;
             content.setSpacing(gameOverContentSpacing);
             content.getChildren().addAll(winnerTextHeader, winnerText, endGameBtn);
-            int gameOverHeight = 200;////GAME OVER WINDWOW SIZE////
-            int gameOverWidth = 450;
             Scene scene = new Scene(content, gameOverWidth, gameOverHeight);
             winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
@@ -969,30 +981,25 @@ public class GameMain extends Application {
         return gridPane;
     }
 
-
-
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
-        recruitUnits = new FlowPane(Orientation.HORIZONTAL, unitPadding, unitPadding);
 
+        resourceLabel.setStyle(fontSize32);
+        resourceLabel.setText("Resources: " + currentResources);
+        resourceLabel.setLayoutX((unitTilesWidth - resourceLabel.getWidth()) / 2);
+
+        recruitUnits = new FlowPane(Orientation.HORIZONTAL, unitPadding, unitPadding);
         recruitUnits.setMinWidth(unitTilesWidth);
 
         for (int i = 0; i < unitTypeList.size(); i++) {
             RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(unitTypeList.get(i)));
             recruitUnits.getChildren().add(tile);
         }
-
-        int unitTilesYPadding = 60;
         recruitUnits.setLayoutY(unitTilesYPadding);
-
-        resourceLabel.setMinWidth(resourceLabelWidth);
-        resourceLabel.setLayoutX(resourceLabelXPadding);
-        resourceLabel.setStyle(fontSize32);
 
         unitPane.getChildren().addAll(resourceLabel, recruitUnits);
 
         unitPane.setLayoutX(recruitXPadding);
-        int recruitYPadding = 150;
         unitPane.setLayoutY(recruitYPadding);
         root.getChildren().add(unitPane);
 
@@ -1003,21 +1010,17 @@ public class GameMain extends Application {
         Pane sidePanel = new Pane();
 
         turnCounter.setStyle(fontSize32);
-        int turnCounterXPadding = 0;
         turnCounter.setLayoutX(turnCounterXPadding);
-        int turnCounterYPadding = 0;
         turnCounter.setLayoutY(turnCounterYPadding);
 
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
-        int descriptionYPadding = 100;
         description.setLayoutY(descriptionYPadding);
         description.setVisible(false);
 
         sidePanel.getChildren().addAll(turnCounter, phaseLabel, description);
 
         sidePanel.setLayoutX(sidePanelXPadding);
-        int sidePanelYPadding = 150;
         sidePanel.setLayoutY(sidePanelYPadding);
         root.getChildren().add(sidePanel);
 
@@ -1028,12 +1031,11 @@ public class GameMain extends Application {
         Pane phaseLabelPane = new Pane();
 
         phaseLabel.setStyle(fontSize32);
-        phaseLabel.setMinWidth(phaseLabelWidth);
         phaseLabel.setMinHeight(phaseLabelHeight);
 
         phaseLabelPane.getChildren().add(phaseLabel);
 
-        phaseLabelPane.setLayoutX(phaseLabelXPadding);
+        phaseLabelPane.setLayoutX(gridXPadding + ((tileSize * boardSize - phaseLabel.getWidth()) / 2));
         phaseLabelPane.setLayoutY(phaseLabelYPadding);
         root.getChildren().add(phaseLabelPane);
 
