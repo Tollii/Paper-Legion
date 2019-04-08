@@ -277,7 +277,7 @@ public class Unit extends StackPane {
     /**
      * Returns the image associated with the UnitType
      * @return Image
-     * @see Image
+     * @see UnitType
      */
     public Image getUnitImage() {
         return type.getUnitImage();
@@ -287,7 +287,7 @@ public class Unit extends StackPane {
     /**
      * Returns the AudioClip associated with the UnitType
      * @return AudioClip
-     * @see AudioClip
+     * @see UnitType
      */
     public AudioClip getAudio() {
         return type.getAudio();
