@@ -557,7 +557,15 @@ public class GameMain extends Application {
             selectedPosY = -1;
         }
     }
-
+    /**
+     * Deselects the unit by resetting variables and change styling of tiles to go back to
+     * default settings. Styles the tiles (Rectangle) in the Grid.list. It also removes description and clears onClick
+     * items from sidebar. Uses static variables: selectedUnit, selectedPosX, selectedPosY, description, grid.
+     * This method also calls on clearHighlight() method which sets the fill on every tile back to default settings.
+     * @see Grid
+     * @see Tile
+     * @see javafx.scene.shape.Rectangle
+     */
     private void deselect() {
         if (unitSelected) {
             //removes selection of unit tile
