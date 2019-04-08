@@ -17,11 +17,18 @@
 
 package gameplay;
 
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import static database.Variables.*;
 
+/**
+ * <h1>GameLogic</h1>
+ * denne klassen er shit
+ * @author teamXX
+ * @since i dag
+ */
 public class GameLogic {
 
     public boolean checkForLegalMove(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
@@ -120,6 +127,18 @@ public class GameLogic {
         selectedUnit.setHasAttackedThisTurn(true); //stops unit from attacking again this turn
     }
 
+    /**
+     * Creates Obstacles to be placed within the middle region of the grid.
+     * Obstacle bound are the size of the grid -4 rows. 2 rows at the top for player 1,
+     * and 2 rows at the bottom for player 2.
+     * Player 2 creates the obstacle in the method addObstacles() in GameMain.
+     * This method uses a random generated number to place the obstacles.
+     * Finally this method calls upon db.exportObstacles() to export the obstacle postion
+     * to the database, so it will be synchronized for both players.
+     * @see database.Database
+     * @see GameMain
+     * @see Obstacle
+     */
     public ArrayList<Obstacle> createObstacles(){
         Random rand = new Random();
         int obstacleCount = 3 + rand.nextInt(5);

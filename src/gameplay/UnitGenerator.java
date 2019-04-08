@@ -256,7 +256,6 @@ public class  UnitGenerator {
      * @return Unit. Returns a unit of the specified type with the specified ID
      * @see Unit
      */
-
     public Unit newEnemyUnit(String unitType, int unitIdInput) {
 
         switch (unitType) {
