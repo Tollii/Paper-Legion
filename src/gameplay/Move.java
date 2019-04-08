@@ -2,7 +2,8 @@ package gameplay;
 
 /**
  * Holds information about a move that has been made during the players or the opponents turn.
- * Used to import or export movement information to/from the database
+ * Used to import or export movement information to/from the database.
+ * @see database.Database
  */
 public class Move {
 
@@ -34,7 +35,7 @@ public class Move {
     }
 
     /**
-     * Returns the TurnId
+     * Returns the TurnId when the move took place
      * @return Int.
      */
 
@@ -43,7 +44,7 @@ public class Move {
     }
 
     /**
-     * Returns the PieceId
+     * Returns the PieceId of the piece that moved
      * @return Int.
      */
     public int getPieceId() {
@@ -51,7 +52,7 @@ public class Move {
     }
 
     /**
-     * Returns the MatchId
+     * Returns the MatchId of which match the move took place in
      * @return Int.
      */
     public int getMatchId() {
