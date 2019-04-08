@@ -308,7 +308,7 @@ import static database.Variables.*;
     /**
      * Returns an ObservableList with matches where the game has not started.
      * To use with TableView.
-     * @return ObservableList   Returns an observable list with matches to use with TableView.
+     * @return ObservableList
      * @see ObservableList
      */
     public ObservableList<Match> getMatches(){

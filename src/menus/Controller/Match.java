@@ -36,7 +36,7 @@ public class Match{
     }
     /**
      * Returns a integer with the match id.
-     * @return int Returns the match id.
+     * @return int
      */
     public int getMatch_id() {
         return match_id;
@@ -44,7 +44,7 @@ public class Match{
 
     /**
      * Returns a String with the username for player 1.
-     * @return String Returns the username for player 1.
+     * @return String
      */
     public String getPlayer() {
         return player;
@@ -60,7 +60,7 @@ public class Match{
 
     /**
      * Returns a String containing the password for the match.
-     * @return String Returns the password for the match.
+     * @return String
      */
     public String getPassword(){
         return password;
@@ -68,7 +68,7 @@ public class Match{
 
     /**
      * Returns all the variables for the Match in a ToString. Mainly used for test purposes.
-     * @return String Returns all the variables for Match in a ToString method.
+     * @return String
      */
     public String toString(){
         return match_id + " : " + player + " : " + password;

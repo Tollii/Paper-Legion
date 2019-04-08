@@ -42,7 +42,7 @@ public class PieceSetup {
 
     /**
      * Returns a integer with the pieceID.
-     * @return int Returns the pieceID.
+     * @return int
      */
     public int getPieceId() {
         return pieceId;
@@ -50,7 +50,7 @@ public class PieceSetup {
 
     /**
      * Returns a integer with the matchID.
-     * @return int Returns the matchID.
+     * @return int
      */
     public int getMatchId() {
         return matchId;
@@ -58,7 +58,7 @@ public class PieceSetup {
 
     /**
      * Returns a integer with the playerID associated with the piece.
-     * @return int Returns the playerID associated with the piece.
+     * @return int
      */
     public int getPlayerId() {
         return playerId;
@@ -66,7 +66,7 @@ public class PieceSetup {
 
     /**
      * Returns the piece X-position in accordance with Grid coordinates.
-     * @return int Returns the piece's X-position relative to Grid Coordinates.
+     * @return int
      * @see Grid
      */
     public int getPositionX() {
@@ -75,7 +75,7 @@ public class PieceSetup {
 
     /**
      * Returns the piece Y-position in accordance with Grid coordinates.
-     * @return int Returns the piece's Y-position relative to Grid Coordinates.
+     * @return int
      * @see Grid
      */
     public int getPositionY() {
@@ -84,7 +84,7 @@ public class PieceSetup {
 
     /**
      * Returns a integer with the piece's unit_type_id .
-     * @return int Returns the piece's unit_type_id.
+     * @return int
      * @see Grid
      */
     public int getUnit_type_id(){ return unit_type_id; }

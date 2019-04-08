@@ -59,14 +59,14 @@ public class Obstacle extends StackPane {
 
     /**
      * Returns a Integer with the X-position in relation to the game Grid.
-     * @return int Returns the x-position for the obstacle in the grid.
+     * @return int
      * @see Grid
      */
     public int getPosX() { return posX; }
 
     /**
      * Returns a Integer with the Y-position in relation to the game Grid.
-     * @return int Returns the Y-position for the obstacle in the grid.
+     * @return int
      * @see Grid
      */
     public int getPosY() { return posY; }
