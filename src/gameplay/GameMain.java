@@ -666,6 +666,7 @@ public class GameMain extends Application {
                     try {
                         while (!yourTurn) {
                             if (gameFinished) {
+                                System.out.println("Game finished caused dostop");
                                 this.doStop();
                                 waitTurnThread = null;
                             }
@@ -675,8 +676,8 @@ public class GameMain extends Application {
                             int getTurnPlayerResult = db.getTurnPlayer();
                             // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                            if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
-                                System.out.println("yourTurn changes");
+                            if (getTurnPlayerResult == user_id ) {
+                                System.out.println("yourTurn changes Caused dostop Variable: " + getTurnPlayerResult);
                                 yourTurn = true;
                                 this.doStop();
                             }
@@ -685,7 +686,7 @@ public class GameMain extends Application {
 
                         //Increments turn. Back to your turn.
                         Platform.runLater(() -> {
-
+                            if()
                             setUpNewTurn(endTurnButton);
 
                         });
