@@ -23,6 +23,7 @@ public class Match{
      * It is also used with an ObservableList to list the information in TableView.
      * Uses db.findAvailableGames() method.
      * @param match_id Takes in a match id
+     * @param player Takes the username of match creator.
      * @param passwordProtected Takes a boolean to show whether match is password protected or not.
      * @param password Takes in a String with the password for the match.
      * @see database.Database
