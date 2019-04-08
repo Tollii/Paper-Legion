@@ -907,18 +907,12 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
-        String stmt = "SELECT player1,player2 FROM Matches WHERE match_id = ?";
-        String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
+        String stmt = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
 
         try {
             myConn.setAutoCommit(false);
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1, match_id);
-            rs = preparedStatement.executeQuery();
-            myConn.commit();
-            rs.next();
 
-            preparedStatement = myConn.prepareStatement(stmt2);
+            preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, turn);
             preparedStatement.setInt(2, match_id);
 

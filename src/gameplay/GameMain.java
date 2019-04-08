@@ -675,7 +675,7 @@ public class GameMain extends Application {
                             int getTurnPlayerResult = db.getTurnPlayer();
                             // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                            if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
+                            if (getTurnPlayerResult == user_id) {
                                 System.out.println("yourTurn changes");
                                 yourTurn = true;
                                 this.doStop();
