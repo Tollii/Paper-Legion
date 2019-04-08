@@ -43,5 +43,3 @@ update Statistics set games_played=games_played + 1 where user_id = 1;
 -- increments games won
 update Statistics set games_won=games_won + 1 where user_id = ?;
 update Statistics set games_won=games_won + 1 where user_id = 1;
-
-SHOW VARIABLES LIKE 'wait_timeout';

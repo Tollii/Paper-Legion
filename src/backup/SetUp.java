@@ -1,6 +1,6 @@
 //package backup;
 //
-//import database.Database;
+//import database.database;
 //
 //import java.util.ArrayList;
 //
@@ -15,7 +15,7 @@
 //    public SetUp(){
 //
 //        if(db == null){
-//            db = new Database();
+//            db = new database();
 //        }
 //
 //        unitTypeList = db.fetchUnitTypeList();

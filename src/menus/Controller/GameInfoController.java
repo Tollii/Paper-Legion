@@ -11,6 +11,13 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for Game Info scene.
+ * Sets up the scene layout, buttons, paddings etc.
+ * Uses images and texts to show information about how to play the game,
+ * as well as show images whose function serves as a game tutorial.
+ * @see javafx.scene.image.Image
+ */
 public class GameInfoController extends Controller {
 
 
@@ -60,6 +67,10 @@ public class GameInfoController extends Controller {
 
 
     @FXML
+    /**
+     * Initialize variables, and is a sort of constructor for the scene setup.
+     * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
+     */
     private void initialize(){
 
         gameInfoBackButton.setOnAction(event -> {
