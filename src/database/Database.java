@@ -1400,7 +1400,6 @@ public class Database {
 
             if (rs.next()) {
                 return 0;
-                // Brukeren finnes
             } else {
                 //random is used to generate salt by creating a unique set of bytes.
                 byte[] salt = new byte[16];
@@ -1429,6 +1428,13 @@ public class Database {
         return -1;
     }
 
+    /**
+     * ???
+     *
+     * @param password
+     * @param salt
+     * @return
+     */
     private byte[] generateHash(String password, byte[] salt) {
         try {
             //PBKDF is used to create the hashed password. The salt is used as parameter.
@@ -1441,7 +1447,15 @@ public class Database {
         return null;
     }
 
-    //Compares entered password with the one stored in the DB.
+    /**
+     * Compares the given password with the one stored on the database .
+     *
+     * @param password given password.
+     * @param hash hash from database.
+     * @param salt users' SALT.
+     * @return
+     */
+
     private boolean verifyPassword(String password, byte[] hash, byte[] salt) {
 
         byte[] enteredPassword;
@@ -1455,6 +1469,15 @@ public class Database {
         return Arrays.equals(enteredPassword, hash);
     }
 
+    /**
+     * Adds user to database.
+     *
+     * @param username new users' username.
+     * @param email new users' email.
+     * @param hash new users' hashed password.
+     * @param salt new users' SALT.
+     * @return 1 if successful, -1 on failure.
+     */
     private int addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
@@ -1482,7 +1505,21 @@ public class Database {
         return -1;
     }
 
+    /*
+     __ _        _
+    / _\ |_ __ _| |_ ___
+    \ \| __/ _` | __/ __|
+    _\ \ || (_| | |_\__ \
+    \__/\__\__,_|\__|___/
+    Stats
+     */
 
+    /**
+     * Gets a given user's username.
+     *
+     * @param used_id user id of users' username.
+     * @return user's username on success, "error" on failure.
+     */
     public String getMyName(int used_id) {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
@@ -1507,6 +1544,12 @@ public class Database {
         return "error";
     }
 
+    /**
+     * Gets a given user's e-mail.
+     *
+     * @param used_id user id of user's e-mail.
+     * @return user's e-mail on success, "error" on failure.
+     */
     public String getMyEmail(int used_id) {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
@@ -1531,15 +1574,11 @@ public class Database {
         return "error";
     }
 
-    /*
-     __ _        _
-    / _\ |_ __ _| |_ ___
-    \ \| __/ _` | __/ __|
-    _\ \ || (_| | |_\__ \
-    \__/\__\__,_|\__|___/
-    Stats
+    /**
+     * Increments the number of games a user has played.
+     *
+     * @return true if games incremented, false if error.
      */
-
     public boolean incrementGamesPlayed() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Statistics set games_played=games_played + 1 where user_id = ?;";
@@ -1566,7 +1605,11 @@ public class Database {
     }
 
 
-
+    /**
+     * Increments number of games a player has won.
+     *
+     * @return true if win registered, false if error.
+     */
     public boolean incrementGamesWon() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Statistics set games_won=games_won + 1 where user_id = ?;";
@@ -1592,7 +1635,12 @@ public class Database {
         return false;
     }
 
-    public String getGamesPlayed(int user_id) {
+    /**
+     * Gets # of games a user has played.
+     *
+     * @return # of games on success as a String, "error" on failure.
+     */
+    public String getGamesPlayed() {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -1618,8 +1666,12 @@ public class Database {
         return "error";
     }
 
-
-    public String getGamesWon(int user_id) {
+    /**
+     * Gets # of games a user has won.
+     *
+     * @return # of games won as a String on success, "error on failure.
+     */
+    public String getGamesWon() {
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -1645,6 +1697,12 @@ public class Database {
         return "error";
     }
 
+    /**
+     * Adds a given user to the statistics table.
+     *
+     * @param user_id user id of player to add in statistics
+     * @return 1 on success, -1 on failure.
+     */
     public int addUserToStatistics(int user_id) {
 
         String stmt;
@@ -1679,9 +1737,12 @@ public class Database {
     \__/_| |_|\__,_|\__\__,_|\___/ \_/\_/ |_| |_|
      */
 
+    /**
+     * Calls the shutdown method from ConnectionPool.java
+     *
+     * @throws SQLException
+     */
     public void close() throws SQLException {
         connectionPool.shutdown();
     }
-
-
 }
