@@ -72,7 +72,7 @@ public class GameMain extends Application {
     private final int surrenderWidth = 250;
     private final int surrenderHeight = 180;
 
-    ////GAME OVER WINDWO SIZE////
+    ////GAME OVER WINDWOW SIZE////
     private final int gameOverWidth = 450;
     private final int gameOverHeight = 200;
 
