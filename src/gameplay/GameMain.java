@@ -68,24 +68,47 @@ public class GameMain extends Application {
     private final double windowWidth = screenWidth;
     private final double windowHeight = screenHeight;
 
+    ////SURRENDER WINDOW SIZE////
+    private final int surrenderWidth = 250;
+    private final int surrenderHeight = 180;
+
+    ////GAME OVER WINDWOW SIZE////
+    private final int gameOverWidth = 450;
+    private final int gameOverHeight = 200;
+
     ////SIZE VARIABLES////
+
+    //BUTTONS SIZE//
     private final int buttonWidth = 175;
     private final int buttonHeight = 75;
+
+    //LABELS SIZES//
     private final int phaseLabelWidth = 300;
     private final int phaseLabelHeight = 50;
+    private final int resourceLabelWidth = 300;
+
+    //TILE STROKES//
+    private final int standardStrokeWidth = 1;
+    private final int selectedStrokeWidth = 3;
+
+    //RECRUIT PANE UNIT TILES WIDTH//
+    private final int unitPadding = 5;
+    private final int unitTilesWidth = tileSize * 5 + unitPadding * 4;
 
     ////PANE PADDINGS////
+    private final int buttonYPadding = 500;
 
     //GRID//
     private final int gridXPadding = (int)(windowWidth * 0.15);
     private final int gridYPadding = (int)(windowHeight * 0.10);
 
-
     //PLACEMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
     private final int recruitYPadding = 150;
     private final int placementButtonXPadding = 150;
-    private final int placementButtonYPadding = 500;
+    private final int placementDescriptionYPadding = 200;
+    private final int unitTilesYPadding = 60;
+    private final int resourceLabelXPadding = (int)((unitTilesWidth - resourceLabelWidth) / 2);
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
@@ -94,14 +117,18 @@ public class GameMain extends Application {
     private final int descriptionYPadding = 100;
     private final int turnCounterXPadding = 0;
     private final int turnCounterYPadding = 0;
-    private final int endTurnButtonXPadding = 150;
-    private final int endTurnButtonYPadding = 500;
-    private final int surrenderButtonXPadding = 150;
-    private final int surrenderButtonYPadding = 580;
+    private final int buttonSpacing = 10;
 
     //PHASELABEL PANE//
     private final int phaseLabelXPadding = gridXPadding + (int) ((tileSize * boardSize - phaseLabelWidth) / 2);
     private final int phaseLabelYPadding = (int) ((gridYPadding - phaseLabelHeight) / 2);
+
+    //SURRENDER WINDOW//
+    private final int surrenderButtonSpacing = 50;
+    private final int surrenderContentSpacing = 20;
+
+    //GAME OVER WINDOW//
+    private final int gameOverContentSpacing = 20;
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
@@ -114,14 +141,18 @@ public class GameMain extends Application {
     private boolean gameFinished = false;
     public static boolean hasPlacedAUnit = false;
 
+    ////THREAD TIMER////
+    private final int threadTimer = 1000;
+
+    ////UNIT GENERATOR////
     private UnitGenerator unitGenerator = new UnitGenerator();
 
     ////STYLING////
     private String gameTitle = "PAPER LEGION";
     private String descriptionFont = "-fx-font-family: 'Arial Black'";
     private String buttonBackgroundColor = "-fx-background-color: #000000";
-    private String turnCounterFontSize = "-fx-font-size: 32px";
-    private String phaseLabelFontSize = "-fx-font-size: 32px";
+    private String fontSize32 = "-fx-font-size:32px;";
+    private Paint standardTileColor = Color.WHITE;
     private Paint selectionOutlineColor = Color.RED;
     private Paint buttonTextColor = Color.WHITE;
     private Paint movementHighlightColor = Color.GREENYELLOW;
@@ -163,7 +194,7 @@ public class GameMain extends Application {
             //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while (!db.obstaclesHaveBeenAdded()) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(threadTimer);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -191,7 +222,7 @@ public class GameMain extends Application {
 
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
-        description.setLayoutY(descriptionYPadding+100);
+        description.setLayoutY(placementDescriptionYPadding);
         descriptionVisible(true);
 
 
@@ -200,7 +231,7 @@ public class GameMain extends Application {
         finishedPlacingButton.setTextFill(buttonTextColor);
         finishedPlacingButton.setStyle(buttonBackgroundColor);
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
-        finishedPlacingButton.setLayoutY(placementButtonYPadding);
+        finishedPlacingButton.setLayoutY(buttonYPadding);
 
         recruitPane.getChildren().addAll(description,finishedPlacingButton);
 
@@ -238,7 +269,7 @@ public class GameMain extends Application {
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                grid.tileList[i][j].setFill(Color.WHITE); //sets the grid all white again, and sets all tiles untargetable for dragboard as a safety measure
+                grid.tileList[i][j].setFill(standardTileColor); //sets the grid all white again, and sets all tiles untargetable for dragboard as a safety measure
                 grid.tileList[i][j].setUntargetable();
             }
         }
@@ -277,7 +308,7 @@ public class GameMain extends Application {
                 while (keepRunning()) {
                     try {
                         while (!opponentReady) {
-                            Thread.sleep(1000);
+                            Thread.sleep(threadTimer);
                             //When player in database matches your own user_id it is your turn again.
 
                             System.out.println(opponent_id + ": " + opponentReady);
@@ -342,21 +373,17 @@ public class GameMain extends Application {
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
-//        endTurnButton.setLayoutX(endTurnButtonXPadding);
-//        endTurnButton.setLayoutY(endTurnButtonYPadding);
 
         surrenderButton = new JFXButton("Surrender");
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
-//        surrenderButton.setLayoutX(surrenderButtonXPadding);
-//        surrenderButton.setLayoutY(surrenderButtonYPadding);
 
         HBox hboxSidePanelButtons = new HBox();
-        hboxSidePanelButtons.setSpacing(10);
+        hboxSidePanelButtons.setSpacing(buttonSpacing);
         hboxSidePanelButtons.getChildren().addAll(endTurnButton, surrenderButton);
         sidePanel.getChildren().addAll(hboxSidePanelButtons);
-        hboxSidePanelButtons.setLayoutY(endTurnButtonYPadding);
+        hboxSidePanelButtons.setLayoutY(buttonYPadding);
 
         movementPhase = true;
         phaseLabel.setText("MOVEMENT PHASE");
@@ -486,7 +513,7 @@ public class GameMain extends Application {
     private void clearHighLight() {
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
-                grid.tileList[i][j].setFill(Color.WHITE);
+                grid.tileList[i][j].setFill(standardTileColor);
             }
         }
     }
@@ -512,7 +539,7 @@ public class GameMain extends Application {
             //colors selected tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(selectionOutlineColor);
             grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(3);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(selectedStrokeWidth);
 
             //displays possible moves or attacks
             if (yourTurn) {
@@ -536,7 +563,7 @@ public class GameMain extends Application {
             //removes selection of unit tile
             grid.tileList[selectedPosY][selectedPosX].setStroke(Color.BLACK);
             grid.tileList[selectedPosY][selectedPosX].setStrokeType(StrokeType.INSIDE);
-            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(1);
+            grid.tileList[selectedPosY][selectedPosX].setStrokeWidth(standardStrokeWidth);
 
             //removes unit selection and position
             selectedUnit = null;
@@ -643,7 +670,7 @@ public class GameMain extends Application {
                                 waitTurnThread = null;
                             }
                             System.out.println("Sleeps thread " + Thread.currentThread());
-                            Thread.sleep(1000);
+                            Thread.sleep(threadTimer);
                             //When player in database matches your own user_id it is your turn again.
                             int getTurnPlayerResult = db.getTurnPlayer();
                             // If its your turn or you have left the game.
@@ -743,7 +770,7 @@ public class GameMain extends Application {
 
         Text surrender_text = new Text();
         surrender_text.setText("Are you sure?");
-        surrender_text.setStyle("-fx-font-size:32px;");
+        surrender_text.setStyle(fontSize32);
 
         JFXButton surrender_yes = new JFXButton("Yes");
         JFXButton surrender_no = new JFXButton("No");
@@ -767,14 +794,14 @@ public class GameMain extends Application {
         HBox buttons = new HBox();
         buttons.getChildren().addAll(surrender_yes, surrender_no);
         buttons.setAlignment(Pos.CENTER);
-        buttons.setSpacing(50);
+        buttons.setSpacing(surrenderButtonSpacing);
 
         VBox content = new VBox();
         content.setAlignment(Pos.CENTER);
-        content.setSpacing(20);
+        content.setSpacing(surrenderContentSpacing);
 
         content.getChildren().addAll(surrender_text, buttons);
-        Scene scene = new Scene(content, 250, 150);
+        Scene scene = new Scene(content, surrenderWidth, surrenderHeight);
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
         confirm_alert.showAndWait();
@@ -807,7 +834,7 @@ public class GameMain extends Application {
 
             Text winnerTextHeader = new Text();
             Text winnerText = new Text();
-            winnerTextHeader.setStyle("-fx-font-size:32px;");
+            winnerTextHeader.setStyle(fontSize32);
             winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
             db.incrementGamesPlayed();
 
@@ -842,9 +869,9 @@ public class GameMain extends Application {
 
             VBox content = new VBox();
             content.setAlignment(Pos.CENTER);
-            content.setSpacing(20);
+            content.setSpacing(gameOverContentSpacing);
             content.getChildren().addAll(winnerTextHeader, winnerText, endGameBtn);
-            Scene scene = new Scene(content, 450, 200);
+            Scene scene = new Scene(content, gameOverWidth, gameOverHeight);
             winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
             winner_alert.showAndWait();
@@ -895,22 +922,21 @@ public class GameMain extends Application {
 
 
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
-
         Pane unitPane = new Pane();
-        FlowPane units = new FlowPane(Orientation.HORIZONTAL, 5, 5);
+        FlowPane units = new FlowPane(Orientation.HORIZONTAL, unitPadding, unitPadding);
 
-        units.setMinWidth(520);
+        units.setPrefWidth(unitTilesWidth);
 
         for (int i = 0; i < SetUp.unitTypeList.size(); i++) {
             RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
             units.getChildren().add(tile);
         }
 
+        units.setLayoutY(unitTilesYPadding);
 
-        units.setLayoutY(60);
-
-        resourceLabel.setMinWidth(260);
-        resourceLabel.setLayoutX((int) (units.getWidth() / 2));
+        resourceLabel.setMinWidth(resourceLabelWidth);
+        resourceLabel.setLayoutX(resourceLabelXPadding);
+        resourceLabel.setStyle(fontSize32);
 
         unitPane.getChildren().addAll(resourceLabel, units);
 
@@ -924,7 +950,7 @@ public class GameMain extends Application {
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
-        turnCounter.setStyle(turnCounterFontSize);
+        turnCounter.setStyle(fontSize32);
         turnCounter.setLayoutX(turnCounterXPadding);
         turnCounter.setLayoutY(turnCounterYPadding);
 
@@ -947,7 +973,7 @@ public class GameMain extends Application {
     private Pane createPhaseLabelPane() {
         Pane phaseLabelPane = new Pane();
 
-        phaseLabel.setStyle(phaseLabelFontSize);
+        phaseLabel.setStyle(fontSize32);
         phaseLabel.setMinWidth(phaseLabelWidth);
         phaseLabel.setMinHeight(phaseLabelHeight);
 
@@ -985,4 +1011,3 @@ public class GameMain extends Application {
         launch(args);
     }
 }
-
