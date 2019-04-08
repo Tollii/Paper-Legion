@@ -438,7 +438,7 @@ public class Database {
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetningPieces = "INSERT INTO Pieces VALUES(?,?,?,?,?);";
-        String sqlSetningUnits = "INSERT INTO Units VALUES(?,?,?,?,?,?,?,?);";
+        String sqlSetningUnits = "INSERT INTO Units VALUES(?,?,?,?,?);";
 
         PreparedStatement preparedStatement = null;
 
@@ -463,10 +463,7 @@ public class Database {
                 preparedStatement.setInt(2, match_id);
                 preparedStatement.setInt(3, user_id);
                 preparedStatement.setDouble(4, exportUnitList.get(i).getHp());
-                preparedStatement.setInt(5, exportUnitList.get(i).getAttack());
-                preparedStatement.setInt(6, exportUnitList.get(i).getMinAttackRange());
-                preparedStatement.setInt(7, exportUnitList.get(i).getMaxAttackRange());
-                preparedStatement.setInt(8, exportUnitList.get(i).getUnitTypeId());
+                preparedStatement.setInt(5, exportUnitList.get(i).getUnitTypeId());
 
                 preparedStatement.executeUpdate();
             }
