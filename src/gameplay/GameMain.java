@@ -498,7 +498,12 @@ public class GameMain extends Application {
         }
     }
 
-    ////HIGHLIGHTING METHODS////
+    /**
+     * Highlights all possible tiles that a unit can move, by filling
+     * tile with with movement color. This method calls upon the method getMovementPossibleTiles()
+     * to find which tiles should be filled.
+     * @see GameLogic
+     */
     private void highlightPossibleMoves() {
         if (unitSelected) { //checks if there is a unit selected
             ArrayList<Tile> movementTargets = game.getMovementPossibleTiles();
@@ -513,7 +518,9 @@ public class GameMain extends Application {
 
     /**
      * Highlights all possible tiles that a unit can attack, by filling
-     * tile with attack color.
+     * tile with attack color. This method calls upon the method getAttackableTiles()
+     * to find which tiles should be filled.
+     * @see GameLogic
      */
     private void highlightPossibleAttacks() {
         if (unitSelected) { //checks if there is a unit selected
