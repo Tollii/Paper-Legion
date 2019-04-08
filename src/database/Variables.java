@@ -4,6 +4,7 @@ import Runnables.RunnableInterface;
 import gameplay.Grid;
 import gameplay.Obstacle;
 import gameplay.Unit;
+import gameplay.UnitGenerator;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.paint.Color;
@@ -63,5 +64,9 @@ public class Variables {
     public static int selectedStrokeWidth = 3;
 
     public static boolean testing = false;
+
+    //Utilities
+    public static ArrayList<Integer> unitTypeList;
+    public static UnitGenerator unitGenerator;
 
 }

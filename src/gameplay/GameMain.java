@@ -162,9 +162,6 @@ public class GameMain extends Application {
 
         db.getPlayers();
 
-        SetUp setUp = new SetUp();
-        setUp.importUnitTypes();
-
         root = new Pane();
         Scene scene = new Scene(root, windowWidth, windowHeight);
 
@@ -790,7 +787,6 @@ public class GameMain extends Application {
                         }
                     }
                 }
-
             }
         }
 
@@ -962,8 +958,8 @@ public class GameMain extends Application {
 
         recruitUnits.setMinWidth(unitTilesWidth);
 
-        for (int i = 0; i < SetUp.unitTypeList.size(); i++) {
-            RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(SetUp.unitTypeList.get(i)));
+        for (int i = 0; i < unitTypeList.size(); i++) {
+            RecruitTile tile = new RecruitTile(tileSize, tileSize, unitGenerator.newRecruit(unitTypeList.get(i)));
             recruitUnits.getChildren().add(tile);
         }
 

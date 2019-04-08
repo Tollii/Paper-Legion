@@ -1,5 +1,6 @@
 package gameplay;
 
+import database.Database;
 import database.Variables;
 import gameplay.units.Archer;
 import gameplay.units.Catapult;
@@ -9,8 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
 import java.net.URL;
+import java.util.ArrayList;
 
-import static database.Variables.testing;
+import static database.Variables.*;
 
 
 public class  UnitGenerator {
@@ -19,11 +21,9 @@ public class  UnitGenerator {
      * Holds the variables and  and methods for creating new units.
      * When generated, it will create a blueprint UnitType for each unit type in the game.
      * This is done so that unit can be created more efficiently later.
-     * @see SetUp
      * @see Unit
      * @see UnitType
      */
-
 
     ////Unit ID generator////
     private static int unitId = 0;
@@ -84,26 +84,36 @@ public class  UnitGenerator {
     private static UnitType catapultUnitType;
 
     /**
-     * Empty constructor for using the UnitGenerator,
-     * this has to be run after the the other generator with inputs
-     * otherwise the newUnit methods will not work properly.
-     */
-    public UnitGenerator(){}
-
-    /**
      * Constructor that takes in the initial values for the different unit types from SetUp.
      * This constructor has to be used first to have the UnitGenerator work properly
-     * @param swordsmanProto Holds the variables for the swordsman unitType
-     * @param archerProto Holds the variables for the archer unitType
-     * @param juggernautProto Holds the variables for the juggernaut unitType
-     * @param catapultProto Holds the variables for the catapult unitType
-     * @see SetUp
      * @see ProtoUnitType
      */
 
-    public UnitGenerator(ProtoUnitType swordsmanProto,
-                         ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
-        if (!testing){ //if not testing, images and sounds are initilized
+    public UnitGenerator(){
+
+        //Constructor variables
+        ProtoUnitType swordsmanProto;
+        ProtoUnitType archerProto;
+        ProtoUnitType juggernautProto;
+        ProtoUnitType catapultProto;
+
+        //Fills in the IDs of all the Units Types in the game
+        unitTypeList = db.fetchUnitTypeList();
+
+
+        swordsmanProto = db.importUnitType(unitTypeList.get(0));
+        archerProto = db.importUnitType(unitTypeList.get(1));
+        juggernautProto = db.importUnitType(unitTypeList.get(2));
+        catapultProto = db.importUnitType(unitTypeList.get(3));
+
+
+        //Safety measure, if the Database has yet to be initialized, initialize the database.
+        if(db == null){
+            db = new Database();
+        }
+
+
+        if (!testing){ //if not testing, images and sounds are initialized
             swordsmanImage= new Image(UnitGenerator.class.getResource("./assets/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
             swordsmanSound = new AudioClip(UnitGenerator.class.getResource("assets/hitSword.wav").toString());
             archerSound = new AudioClip(UnitGenerator.class.getResource("assets/arrow.wav").toString());
@@ -156,6 +166,8 @@ public class  UnitGenerator {
                 catapultProto.getMovementRange(),
                 catapultProto.getCost(),
                 catapultDescription, catapultDescriptionTag, catapultImage, catapultSound);
+
+        unitGenerator = this;
     }
 
     /**

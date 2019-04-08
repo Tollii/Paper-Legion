@@ -31,7 +31,6 @@ import database.Cleaner;
 public class GameLogicTest {
     GameLogic game;
     UnitGenerator units;
-    SetUp setUp;
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
@@ -76,8 +75,6 @@ public class GameLogicTest {
     @Before
     public void setUp() {
         game = new GameLogic();
-        setUp = new SetUp();
-        setUp.importUnitTypes();
         units = new UnitGenerator();
         obstacles = null;
         selectedUnit = null;

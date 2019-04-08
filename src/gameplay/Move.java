@@ -38,7 +38,6 @@ public class Move {
      * Returns the TurnId when the move took place
      * @return Int.
      */
-
     public int getTurnId() {
         return turnId;
     }
