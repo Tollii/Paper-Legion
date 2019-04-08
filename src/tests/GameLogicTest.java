@@ -1,3 +1,5 @@
+package tests;
+
 import java.sql.ResultSet;
 
 import database.ConnectionPool;

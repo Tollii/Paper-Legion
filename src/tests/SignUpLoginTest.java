@@ -1,3 +1,5 @@
+package tests;
+
 import database.ConnectionPool;
 import database.Database;
 import org.junit.*;
