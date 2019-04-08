@@ -1,8 +1,14 @@
 package gameplay;
 
-/* This class is used as a placeholder for information stored in database about
-/* Units/Pieces, and is intended to use with static positions especially for mvp */
-
+/**
+ * This class is used as a placeholder for information stored in database about
+ * the opponents units and is used in Database import methods to set up all pieces on
+ * the board (Grid)
+ * @see database.Database
+ * @see Unit
+ * @see UnitType
+ * @see Grid
+ */
 public class PieceSetup {
     private int pieceId;
     private int matchId;
@@ -11,6 +17,19 @@ public class PieceSetup {
     private int positionY;
     private int unit_type_id;
 
+
+    /**
+     * Sets the pieceId, matchId, playerId, position X, position Y, and unit_type_id for each piece.
+     * @param pieceId Sets the pieceId for the Piece.
+     * @param  matchId Sets the matchId for the piece.
+     * @param playerId Sets the playerId for the piece.
+     * @param positionX Sets the piece's x-position in accordance with Grid position.
+     * @param positionY Sets the piece's y-position in accordance with Grid position.
+     * @param unit_type_id Sets the unit type id for the piece.
+     * @see Unit
+     * @see UnitType
+     * @see Grid
+     */
     public PieceSetup(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id){
 
         this.pieceId = pieceId;
@@ -21,26 +40,53 @@ public class PieceSetup {
         this.unit_type_id = unit_type_id;
     }
 
+    /**
+     * Returns a integer with the pieceID.
+     * @return int Returns the pieceID.
+     */
     public int getPieceId() {
         return pieceId;
     }
 
+    /**
+     * Returns a integer with the matchID.
+     * @return int Returns the matchID.
+     */
     public int getMatchId() {
         return matchId;
     }
 
+    /**
+     * Returns a integer with the playerID associated with the piece.
+     * @return int Returns the playerID associated with the piece.
+     */
     public int getPlayerId() {
         return playerId;
     }
 
+    /**
+     * Returns the piece X-position in accordance with Grid coordinates.
+     * @return int Returns the piece's X-position relative to Grid Coordinates.
+     * @see Grid
+     */
     public int getPositionX() {
         return positionX;
     }
 
+    /**
+     * Returns the piece Y-position in accordance with Grid coordinates.
+     * @return int Returns the piece's Y-position relative to Grid Coordinates.
+     * @see Grid
+     */
     public int getPositionY() {
         return positionY;
     }
 
+    /**
+     * Returns a integer with the piece's unit_type_id .
+     * @return int Returns the piece's unit_type_id.
+     * @see Grid
+     */
     public int getUnit_type_id(){ return unit_type_id; }
 
 }
