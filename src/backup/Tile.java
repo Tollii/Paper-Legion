@@ -5,10 +5,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 
-public class Tile extends Rectangle {
+class Tile extends Rectangle {
   // Vet ikke om disse attributtene er nødvendige.
-  double oldPosX;
-  double oldPosY;
+  private double oldPosX;
+  private double oldPosY;
 
 
   public Tile(int sizeX, int sizeY){

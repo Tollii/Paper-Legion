@@ -1,22 +1,15 @@
-package tests;
-
 import java.sql.ResultSet;
-import database.Cleaner;
+
 import database.ConnectionPool;
 import database.Database;
 import database.Variables;
 import gameplay.*;
 
 import org.junit.*;
-import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static database.Variables.*;
-import static gameplay.GameMain.*;
 
 import static org.junit.Assert.*;
 import java.sql.Connection;
@@ -29,9 +22,9 @@ import database.Cleaner;
 //testUser password: testPassword id: 3
 
 public class GameLogicTest {
-    GameLogic game;
-    UnitGenerator units;
-    SetUp setUp;
+    private GameLogic game;
+    private UnitGenerator units;
+    private SetUp setUp;
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
@@ -48,7 +41,7 @@ public class GameLogicTest {
         ConnectionPool connectionPool;
         connectionPool = ConnectionPool.create();
         Connection myConn = connectionPool.getConnection();
-        ResultSet rs = null;
+        ResultSet rs;
         String stmt = "SELECT match_id FROM Matches WHERE game_started=0 AND player1 = 3; ";
         PreparedStatement preparedQuery = null;
         try {
@@ -121,8 +114,9 @@ public class GameLogicTest {
         obstacles = game.createObstacles();
         boolean noObstaclesOutOfBounds = true;
         //Goes through the arraylist and checks if all obstacles are out of the deployable zone
-        for(int i = 0; i<obstacles.size(); i++){
-            if (obstacles.get(i).getPosY()<1 && obstacles.get(i).getPosY()>boardSize-2){
+
+        for (Obstacle o : obstacles){
+            if (o.getPosY()<1 && o.getPosY()>boardSize-2){
                 noObstaclesOutOfBounds = false;
             }
         }

@@ -19,7 +19,6 @@ package gameplay;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
-import database.Variables;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +31,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
@@ -42,10 +40,8 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 import static database.Variables.*;
-import static database.Variables.waitTurnThread;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import javafx.geometry.Orientation;
 import menus.Main;
@@ -57,25 +53,16 @@ public class GameMain extends Application {
 
     ////SCENE ELEMENTS////
     private Pane root;
-    public static Label description = new Label();                //description label for the selected unit
-    private Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
-    private Label phaseLabel = new Label();
-    private static Label resourceLabel = new Label();    //Static so that Tile can update the label
+    private static final Label description = new Label();                //description label for the selected unit
+    private final static Label resourceLabel = new Label();    //Static so that Tile can update the label
+    private final Label  turnCounter = new Label("TURN: " + turn); //describe which turn it is
+    private final Label phaseLabel = new Label();
     private JFXButton endTurnButton;                                //button for ending turn
-    private JFXButton surrenderButton;                              //button for surrendering
     private static FlowPane recruitUnits;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
     private final double windowHeight = screenHeight;
-
-    ////SURRENDER WINDOW SIZE////
-    private final int surrenderWidth = 250;
-    private final int surrenderHeight = 180;
-
-    ////GAME OVER WINDWOW SIZE////
-    private final int gameOverWidth = 450;
-    private final int gameOverHeight = 200;
 
     ////SIZE VARIABLES////
 
@@ -101,38 +88,20 @@ public class GameMain extends Application {
 
     //PLACEMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
-    private final int recruitYPadding = 150;
-    private final int placementButtonXPadding = 150;
-    private final int placementDescriptionYPadding = 200;
-    private final int unitTilesYPadding = 60;
-    private final int resourceLabelXPadding = (int)((unitTilesWidth - resourceLabelWidth) / 2);
+    private final int resourceLabelXPadding = ((unitTilesWidth - resourceLabelWidth) / 2);
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
-    private final int sidePanelYPadding = 150;
     private final int descriptionXPadding = 0;
-    private final int descriptionYPadding = 100;
-    private final int turnCounterXPadding = 0;
-    private final int turnCounterYPadding = 0;
-    private final int buttonSpacing = 10;
 
     //PHASELABEL PANE//
-    private final int phaseLabelXPadding = gridXPadding + (int) ((tileSize * boardSize - phaseLabelWidth) / 2);
-    private final int phaseLabelYPadding = (int) ((gridYPadding - phaseLabelHeight) / 2);
-
-    //SURRENDER WINDOW//
-    private final int surrenderButtonSpacing = 50;
-    private final int surrenderContentSpacing = 20;
-
-    //GAME OVER WINDOW//
-    private final int gameOverContentSpacing = 20;
+    private final int phaseLabelXPadding = gridXPadding + ((tileSize * boardSize - phaseLabelWidth) / 2);
+    private final int phaseLabelYPadding = ((gridYPadding - phaseLabelHeight) / 2);
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
     private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
     private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
-    private ArrayList<Move> importedMovementList = new ArrayList<>();   //Keeps track of the moves made during the opponents turn
-    private ArrayList<Attack> importedAttackList = new ArrayList<>();   //Keeps track of the attacks made during the opponents turn
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
     private boolean surrendered = false;
     private boolean gameFinished = false;
@@ -144,19 +113,17 @@ public class GameMain extends Application {
     ////UNIT GENERATOR////
     private UnitGenerator unitGenerator = new UnitGenerator();
 
-    ////STYLING////
-    private String gameTitle = "PAPER LEGION";
-    private String descriptionFont = "-fx-font-family: 'Arial Black'";
-    private String buttonBackgroundColor = "-fx-background-color: #000000";
-    private String fontSize32 = "-fx-font-size:32px;";
-    private Paint buttonTextColor = Color.WHITE;
-    private Paint movementHighlightColor = Color.GREENYELLOW;
-    private Paint attackHighlightColor = Color.DARKRED;
-    private Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
+    private final String descriptionFont = "-fx-font-family: 'Arial Black'";
+    private final String buttonBackgroundColor = "-fx-background-color: #000000";
+    private final String fontSize32 = "-fx-font-size:32px;";
+    private final Paint buttonTextColor = Color.WHITE;
+    private final Paint movementHighlightColor = Color.GREENYELLOW;
+    private final Paint attackHighlightColor = Color.DARKRED;
+    private final Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
 
-    GameLogic game;
+    private GameLogic game;
 
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) {
         // Sets static variables for players and opponent id.
         game = new GameLogic();
 
@@ -174,6 +141,8 @@ public class GameMain extends Application {
 
         placementPhaseStart(); //starts the placement phase
 
+        ////STYLING////
+        String gameTitle = "PAPER LEGION";
         window.setTitle(gameTitle);
         window.setScene(scene);
         window.show();
@@ -222,6 +191,7 @@ public class GameMain extends Application {
 
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
+        int placementDescriptionYPadding = 200;
         description.setLayoutY(placementDescriptionYPadding);
         descriptionVisible(true);
 
@@ -230,6 +200,7 @@ public class GameMain extends Application {
         finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
         finishedPlacingButton.setTextFill(buttonTextColor);
         finishedPlacingButton.setStyle(buttonBackgroundColor);
+        int placementButtonXPadding = 150;
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
         finishedPlacingButton.setLayoutY(buttonYPadding);
 
@@ -302,10 +273,7 @@ public class GameMain extends Application {
             }
         }
 
-        if (exportUnitList != null) {
-            db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
-        }
-
+        db.exportPlacementUnits(exportUnitList, exportPositionXList, exportPositionYList);
         db.setReady(true);
         waitForOpponentReady();
     }
@@ -329,7 +297,7 @@ public class GameMain extends Application {
                             if (db.checkIfOpponentReady()) {
                                 opponentReady = true;
 
-                                System.out.println(opponent_id + ": " + opponentReady);
+                                System.out.println(opponent_id + ": ready!");
                                 this.doStop();
                             }
                         }
@@ -386,12 +354,14 @@ public class GameMain extends Application {
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
 
-        surrenderButton = new JFXButton("Surrender");
+        //button for surrendering
+        JFXButton surrenderButton = new JFXButton("Surrender");
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
 
         HBox hboxSidePanelButtons = new HBox();
+        int buttonSpacing = 10;
         hboxSidePanelButtons.setSpacing(buttonSpacing);
         hboxSidePanelButtons.getChildren().addAll(endTurnButton, surrenderButton);
         sidePanel.getChildren().addAll(hboxSidePanelButtons);
@@ -417,9 +387,7 @@ public class GameMain extends Application {
 
         });
 
-        surrenderButton.setOnAction(event -> {
-            surrender(endTurnButton);
-        });
+        surrenderButton.setOnAction(event -> surrender(endTurnButton));
 
         ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
         grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -442,7 +410,7 @@ public class GameMain extends Application {
 
             //attacks if left button is pressed twice and the unit selected hasn't attacked
             if (event.getClickCount() == 2) {
-                if (unitSelected && !movementPhase && !selectedUnit.getHasAttackedThisTurn() && event.getButton() == MouseButton.PRIMARY) {
+                if (unitSelected && !movementPhase && selectedUnit.getHasAttackedThisTurn() && event.getButton() == MouseButton.PRIMARY) {
                     attack(event);
                 }
             }
@@ -510,8 +478,8 @@ public class GameMain extends Application {
 
             //colors all tiles that are possible movement targets green
             //colors all tiles that are possible movement targets green
-            for (int i = 0; i < movementTargets.size(); i++) {
-                movementTargets.get(i).setFill(movementHighlightColor);
+            for(Tile t : movementTargets){
+                t.setFill(movementHighlightColor);
             }
         }
     }
@@ -527,8 +495,9 @@ public class GameMain extends Application {
             ArrayList<Tile> attackTargets = game.getAttackableTiles();
 
             //colors all attackable tiles red
-            for (int i = 0; i < attackTargets.size(); i++) {
-                attackTargets.get(i).setFill(attackHighlightColor);
+
+            for(Tile t : attackTargets){
+                t.setFill(attackHighlightColor);
             }
         }
     }
@@ -572,7 +541,7 @@ public class GameMain extends Application {
             if (yourTurn) {
                 if (movementPhase) {
                     highlightPossibleMoves();
-                } else if (!selectedUnit.getHasAttackedThisTurn()) {
+                } else if (selectedUnit.getHasAttackedThisTurn()) {
                     highlightPossibleAttacks();
                 }
             }
@@ -719,11 +688,7 @@ public class GameMain extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        Platform.runLater(() -> {
-
-                            setUpNewTurn(endTurnButton);
-
-                        });
+                        Platform.runLater(() -> setUpNewTurn(endTurnButton));
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -756,32 +721,32 @@ public class GameMain extends Application {
         endTurnButton.setText("End turn");
         phaseLabel.setText("MOVEMENT PHASE");
 
-        importedMovementList = db.importMoveList(turn - 1, match_id);
-        importedAttackList = db.importAttackList(turn - 1, match_id, opponent_id);
+        //Keeps track of the moves made during the opponents turn
+        ArrayList<Move> importedMovementList = db.importMoveList(turn - 1, match_id);
+        //Keeps track of the attacks made during the opponents turn
+        ArrayList<Attack> importedAttackList = db.importAttackList(turn - 1, match_id, opponent_id);
 
         System.out.println("importedAttackList size is: " + importedAttackList.size());
 
         ////EXECUTES MOVES FROM OPPONENTS TURN////
-        for (int i = 0; i < importedMovementList.size(); i++) {
+        for(Move m : importedMovementList){
             //gets the unit from the tile and removes it from the same tile
-            Unit movingUnit = grid.tileList[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()].getUnit();
-            grid.tileList[importedMovementList.get(i).getStartPosY()][importedMovementList.get(i).getStartPosX()].removeUnit();
+            Unit movingUnit = grid.tileList[m.getStartPosY()][m.getStartPosX()].getUnit();
+            grid.tileList[m.getStartPosY()][m.getStartPosX()].removeUnit();
             //adds the unit to new tile
-            grid.tileList[importedMovementList.get(i).getEndPosY()][importedMovementList.get(i).getEndPosX()].setUnit(movingUnit);
+            grid.tileList[m.getEndPosY()][m.getEndPosX()].setUnit(movingUnit);
         }
 
-        ////EXECUTES ATTACKS FROM OPPONENTS TURN////
-        for (int i = 0; i < importedAttackList.size(); i++) {
-
+        for(Attack a : importedAttackList){
             for (int j = 0; j < grid.tileList.length; j++) {
                 for (int k = 0; k < grid.tileList[j].length; k++) {
 
-                    if (grid.tileList[j][k].getUnit() != null && !grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == importedAttackList.get(i).getReceiverPieceID()) {
-                        System.out.println(importedAttackList.get(i).getDamage());
+                    if (grid.tileList[j][k].getUnit() != null && !grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == a.getReceiverPieceID()) {
+                        System.out.println(a.getDamage());
 
                         System.out.println("DOING AN ATTACK!" + grid.tileList[j][k].getUnit().getHp());
 
-                        grid.tileList[j][k].getUnit().takeDamage(importedAttackList.get(i).getDamage());
+                        grid.tileList[j][k].getUnit().takeDamage(a.getDamage());
 
                         //If units health is zero. Remove it from the board.
                         if (grid.tileList[j][k].getUnit().getHp() <= 0) {
@@ -793,7 +758,6 @@ public class GameMain extends Application {
 
             }
         }
-
         checkForGameOver();
     }
 
@@ -822,20 +786,23 @@ public class GameMain extends Application {
             confirm_alert.close();
         });
 
-        surrender_no.setOnAction(event -> {
-            confirm_alert.close();
-        });
+        surrender_no.setOnAction(event -> confirm_alert.close());
 
         HBox buttons = new HBox();
         buttons.getChildren().addAll(surrender_yes, surrender_no);
         buttons.setAlignment(Pos.CENTER);
+        //SURRENDER WINDOW//
+        int surrenderButtonSpacing = 50;
         buttons.setSpacing(surrenderButtonSpacing);
 
         VBox content = new VBox();
         content.setAlignment(Pos.CENTER);
+        int surrenderContentSpacing = 20;
         content.setSpacing(surrenderContentSpacing);
 
         content.getChildren().addAll(surrender_text, buttons);
+        int surrenderHeight = 180;////SURRENDER WINDOW SIZE////
+        int surrenderWidth = 250;
         Scene scene = new Scene(content, surrenderWidth, surrenderHeight);
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
@@ -904,8 +871,12 @@ public class GameMain extends Application {
 
             VBox content = new VBox();
             content.setAlignment(Pos.CENTER);
+            //GAME OVER WINDOW//
+            int gameOverContentSpacing = 20;
             content.setSpacing(gameOverContentSpacing);
             content.getChildren().addAll(winnerTextHeader, winnerText, endGameBtn);
+            int gameOverHeight = 200;////GAME OVER WINDWOW SIZE////
+            int gameOverWidth = 450;
             Scene scene = new Scene(content, gameOverWidth, gameOverHeight);
             winner_alert.initStyle(StageStyle.UNDECORATED);
             winner_alert.setScene(scene);
@@ -916,11 +887,11 @@ public class GameMain extends Application {
     private void gameCleanUp() {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
-            waitTurnThread.stop();
+            waitTurnRunnable.doStop();
             waitTurnThread = null;
         }
         if (waitPlacementThread != null) {
-            waitPlacementThread.stop();
+            waitPlacementRunnable.doStop();
             waitPlacementThread = null;
         }
         if (searchGameThread != null) {
@@ -967,6 +938,7 @@ public class GameMain extends Application {
             recruitUnits.getChildren().add(tile);
         }
 
+        int unitTilesYPadding = 60;
         recruitUnits.setLayoutY(unitTilesYPadding);
 
         resourceLabel.setMinWidth(resourceLabelWidth);
@@ -976,6 +948,7 @@ public class GameMain extends Application {
         unitPane.getChildren().addAll(resourceLabel, recruitUnits);
 
         unitPane.setLayoutX(recruitXPadding);
+        int recruitYPadding = 150;
         unitPane.setLayoutY(recruitYPadding);
         root.getChildren().add(unitPane);
 
@@ -986,17 +959,21 @@ public class GameMain extends Application {
         Pane sidePanel = new Pane();
 
         turnCounter.setStyle(fontSize32);
+        int turnCounterXPadding = 0;
         turnCounter.setLayoutX(turnCounterXPadding);
+        int turnCounterYPadding = 0;
         turnCounter.setLayoutY(turnCounterYPadding);
 
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
+        int descriptionYPadding = 100;
         description.setLayoutY(descriptionYPadding);
         description.setVisible(false);
 
         sidePanel.getChildren().addAll(turnCounter, phaseLabel, description);
 
         sidePanel.setLayoutX(sidePanelXPadding);
+        int sidePanelYPadding = 150;
         sidePanel.setLayoutY(sidePanelYPadding);
         root.getChildren().add(sidePanel);
 
@@ -1049,9 +1026,7 @@ public class GameMain extends Application {
     ////MAIN USED FOR SHUTDOWN HOOK////
     public void main(String[] args) {
         System.out.println("SHUTDOWN HOOK CALLED");
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Main.closeAndLogout();
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
         launch(args);
     }
 }

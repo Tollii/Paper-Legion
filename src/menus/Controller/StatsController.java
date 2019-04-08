@@ -1,11 +1,9 @@
 package menus.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import database.Variables.*;
 
 import static database.Variables.*;
 /**
@@ -42,9 +40,7 @@ public class StatsController extends Controller{
      */
     @FXML
     private void initialize(){
-        statsBackButton.setOnAction(event -> {
-            changeScene("mainMenu.fxml");
-        });
+        statsBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
         statsUsernameLabel.setText("Username: " + db.getMyName());
         statsEmailLabel.setText("E-mail: " + db.getMyEmail());
         statsGamesPlayedLabel.setText("Games played: " + db.getGamesPlayed());

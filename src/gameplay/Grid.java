@@ -7,9 +7,9 @@ import javafx.scene.layout.GridPane;
  * Creates a visible grid with the number of rows and columns with the specified arguments
  */
 public class Grid extends GridPane {
-    public Tile[][] tileList;
-    int columns;
-    int rows;
+    public final Tile[][] tileList;
+    private final int columns;
+    private final int rows;
 
     /**
      * When Object of Grid is created, constructor creates a visible grid (rows X columns)

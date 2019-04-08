@@ -114,7 +114,7 @@ public class Database {
      * @return a list of current matches that has been created, but not started.
      */
     public ArrayList<Match> findGamesAvailable(){
-        ArrayList<Match> matches = new ArrayList<Match>();
+        ArrayList<Match> matches = new ArrayList<>();
         String sqlString = "select match_id, username, password from Matches inner join Users on Matches.player1 = Users.user_id where game_started=0;";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -129,11 +129,8 @@ public class Database {
                 String playername = resultSet.getString("username");
                 boolean passwordProtected;
                 String password = resultSet.getString("password");
-                if(password != null){
-                 passwordProtected = true;
-                } else{
-                    passwordProtected = false;
-                }
+                passwordProtected = password != null;
+
 
                 matches.add(new Match(match_id,playername, passwordProtected, password));
 
@@ -196,10 +193,9 @@ public class Database {
      *
      * @param match_id match id of the match that is being joined.
      * @param player2 player id of the user joining the game.
-     * @return false on failure, true on success.
      */
 
-    public boolean joinGame(int match_id, int player2) {
+    public void joinGame(int match_id, int player2) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
         PreparedStatement preparedStatement = null;
@@ -212,17 +208,14 @@ public class Database {
             myConn.commit();
             if (result == 1) {
                 System.out.println("Joined game");
-                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
     }
 
     /**
@@ -329,9 +322,8 @@ public class Database {
      * Deletes game(s) that has been created by the player_id given as a parameter.
      *
      * @param player_id id of the player's match that'll be deleted
-     * @return true on success, false on failure.
      */
-    public boolean abortMatch(int player_id) {
+    public void abortMatch(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "delete from Matches where player1=?;";
         PreparedStatement preparedStatement = null;
@@ -341,10 +333,8 @@ public class Database {
             preparedStatement.setInt(1, player_id);
             int result = preparedStatement.executeUpdate();
             myConn.commit();
-            return result > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
@@ -491,10 +481,10 @@ public class Database {
      */
     public ArrayList<PieceSetup> importPlacementUnits() {
 
-        ArrayList<PieceSetup> outputList = null;
+        ArrayList<PieceSetup> outputList;
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "SELECT Pieces.piece_id, Pieces.match_id, Pieces.player_id, position_x, position_y, unit_type_id FROM Pieces JOIN Units U ON Pieces.piece_id = U.piece_id AND Pieces.match_id = U.match_id AND Pieces.player_id = U.player_id WHERE Pieces.match_id = ? AND Pieces.player_id = ?;";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         PreparedStatement preparedStatement = null;
 
 
@@ -533,11 +523,11 @@ public class Database {
      */
     public boolean checkIfOpponentReady(){
 
-        Boolean returnBoolean = false;
+        boolean returnBoolean = false;
 
         Connection myConn = connectionPool.getConnection();
 
-        String sqlSetning = "";
+        String sqlSetning;
         ResultSet resultSet = null;
 
         if(opponent_id == player1){
@@ -576,7 +566,7 @@ public class Database {
     /**
      * Sets the status of the player as ready
      *
-     * @param ready
+     * @param ready if true, sets player as ready.
      */
     public void setReady(boolean ready){
 
@@ -628,7 +618,7 @@ public class Database {
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();
         PreparedStatement player = null;
-        PreparedStatement matchUpdate = null;
+        PreparedStatement matchUpdate;
 
         //The statement
         String obstaclesInsertStmt = "insert into Obstacles(obstacle_id, match_id, position_x, position_y) values(?,?,?,?);";
@@ -713,7 +703,7 @@ public class Database {
      */
     public Boolean obstaclesHaveBeenAdded() {
 
-        Integer obstacle_amount;
+        int obstacle_amount;
         int obstacle_in_db;
 
         ResultSet result = null;
@@ -781,13 +771,11 @@ public class Database {
      * Updates the database with a new turn. Handles exception case with round 1.
      *
      * @param turn turn #
-     * @return 1 on success, -1 on failure.
      */
 
-    public int sendTurn(int turn) {
+    public void sendTurn(int turn) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
         String stmt = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
 
         try {
@@ -805,19 +793,14 @@ public class Database {
             }
             if (preparedStatement.executeUpdate() > 0) {
                 myConn.commit();
-                return 1;
-            } else {
-                return -1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Cleaner.setAutoCommit(myConn);
-            Cleaner.closeResSet(rs);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return -1;
     }
 
     /**
@@ -903,9 +886,8 @@ public class Database {
      * Sends data for movement done locally in the gameplay phase, to the database.
      *
      * @param movementList list of movements.
-     * @return true on success, false on failure.
      */
-    public boolean exportMoveList(ArrayList<Move> movementList) {
+    public void exportMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
         int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
@@ -917,17 +899,16 @@ public class Database {
         try {
 
             preparedStatement = myConn.prepareStatement(sqlString);
-
             myConn.setAutoCommit(false);
 
-            for (int i = 0; i < movementList.size(); i++) {
+            for(Move m : movementList){
                 preparedStatement.setInt(1, turnId); //"Arrays begin at 1"
-                preparedStatement.setInt(2, movementList.get(i).getPieceId());
+                preparedStatement.setInt(2, m.getPieceId());
                 preparedStatement.setInt(3, matchId);
-                preparedStatement.setInt(4, movementList.get(i).getStartPosX());
-                preparedStatement.setInt(5, movementList.get(i).getStartPosY());
-                preparedStatement.setInt(6, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(7, movementList.get(i).getEndPosY());
+                preparedStatement.setInt(4, m.getStartPosX());
+                preparedStatement.setInt(5, m.getStartPosY());
+                preparedStatement.setInt(6, m.getEndPosX());
+                preparedStatement.setInt(7, m.getEndPosY());
 
                 preparedStatement.executeUpdate();
             }
@@ -939,12 +920,10 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);
-            return false;
         } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return true;
     }
 
     /**
@@ -997,9 +976,8 @@ public class Database {
      * Sends attacks locally done to the database.
      *
      * @param attackList list of local attacks.
-     * @return true on success, false on failure.
      */
-    public boolean exportAttackList(ArrayList<Attack> attackList) {
+    public void exportAttackList(ArrayList<Attack> attackList) {
 
         int turnId = attackList.get(0).getTurnId();                         //TurnId is the same for all entries in the list
         int attackingPlayerId = attackList.get(0).getAttackingPlayerId();   //AttackingPlayerId is the same for all entries in the list
@@ -1015,31 +993,25 @@ public class Database {
 
             myConn.setAutoCommit(false);
 
-            for (int i = 0; i < attackList.size(); i++) {
+            for(Attack a : attackList){
                 preparedStatement.setInt(1, turnId); //"Arrays begin at 1"
                 preparedStatement.setInt(2, attackingPlayerId);
-                preparedStatement.setInt(3, attackList.get(i).getAttackerPieceID());
-                preparedStatement.setInt(4, attackList.get(i).getReceiverPieceID());
+                preparedStatement.setInt(3, a.getAttackerPieceID());
+                preparedStatement.setInt(4, a.getReceiverPieceID());
                 preparedStatement.setInt(5, matchId);
-                preparedStatement.setInt(6, attackList.get(i).getDamage());
-
+                preparedStatement.setInt(6, a.getDamage());
                 preparedStatement.executeUpdate();
             }
-
             myConn.commit();
             Cleaner.setAutoCommit(myConn);
-
 
         } catch (SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);
-            return false;
         } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-
-        return true;
     }
 
     /**
@@ -1091,9 +1063,8 @@ public class Database {
     /**
      * Sets a match to being surrendered.
      *
-     * @return true if game has been surrendered, false if an error occurred.
      */
-    public boolean surrenderGame() {
+    public void surrenderGame() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set surrendered=? where match_id=?";
         PreparedStatement preparedStatement = null;
@@ -1107,17 +1078,14 @@ public class Database {
             myConn.commit();
             if (result == 1) {
                 System.out.println("Game surrendered");
-                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
     }
 
     /**
@@ -1312,7 +1280,7 @@ public class Database {
      * @param password given password.
      * @param hash hash from database.
      * @param salt users' SALT.
-     * @return
+     * @return returns true if password matches, false if not
      */
 
     private boolean verifyPassword(String password, byte[] hash, byte[] salt) {
@@ -1335,9 +1303,8 @@ public class Database {
      * @param email new users' email.
      * @param hash new users' hashed password.
      * @param salt new users' SALT.
-     * @return 1 if successful, -1 on failure.
      */
-    private int addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
+    private void addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -1351,9 +1318,7 @@ public class Database {
             preparedStatement.setInt(5, 0);
             if (preparedStatement.executeUpdate() > 0) {
                 myConn.commit();
-                return 1;
-            } else return -1;
-
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1361,7 +1326,6 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return -1;
     }
 
     /*
@@ -1434,9 +1398,8 @@ public class Database {
     /**
      * Increments the number of games a user has played.
      *
-     * @return true if games incremented, false if error.
      */
-    public boolean incrementGamesPlayed() {
+    public void incrementGamesPlayed() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Statistics set games_played=games_played + 1 where user_id = ?;";
         PreparedStatement preparedStatement = null;
@@ -1448,17 +1411,14 @@ public class Database {
             myConn.commit();
             if (result == 1) {
                 System.out.println("Game registered");
-                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
     }
 
 
@@ -1467,7 +1427,7 @@ public class Database {
      *
      * @return true if win registered, false if error.
      */
-    public boolean incrementGamesWon() {
+    public void incrementGamesWon() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Statistics set games_won=games_won + 1 where user_id = ?;";
         PreparedStatement preparedStatement = null;
@@ -1479,17 +1439,14 @@ public class Database {
             myConn.commit();
             if (result == 1) {
                 System.out.println("Win registered");
-                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
     }
 
     /**
@@ -1560,7 +1517,7 @@ public class Database {
      * @param user_id user id of player to add in statistics
      * @return 1 on success, -1 on failure.
      */
-    public int addUserToStatistics(int user_id) {
+    private int addUserToStatistics(int user_id) {
 
         String stmt;
         PreparedStatement preparedStatement = null;
@@ -1574,8 +1531,7 @@ public class Database {
             preparedStatement.setInt(3, 0);
             if (preparedStatement.executeUpdate() > 0) {
                 myConn.commit();
-                return 1;
-            } else return -1;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1597,7 +1553,7 @@ public class Database {
     /**
      * Calls the shutdown method from ConnectionPool.java
      *
-     * @throws SQLException
+     * @throws SQLException if something went wrong :/
      */
     public void close() throws SQLException {
         connectionPool.shutdown();

@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import database.Variables;
 import gameplay.*;
-import gameplay.GameMain;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,13 +33,12 @@ import static database.Variables.*;
  * @see Match
  * @see ObservableList
  */
-    public class MatchSetupController extends Controller {
+public class MatchSetupController extends Controller {
 
         private boolean findGameClicked, gameEntered, threadStarted, createGameClicked = false;
         private Thread matchSetupThread;
-        private GameMain game;
 
-        @FXML
+    @FXML
         private ResourceBundle resources;
 
         @FXML
@@ -77,17 +75,17 @@ import static database.Variables.*;
         @FXML
         private ImageView paperLegionLogo;
 
-        @FXML
         /**
          * Initialize variables, and is a sort of constructor for the scene setup.
          * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
          */
+        @FXML
         void initialize() {
 
 
 
 
-            Runnable matchSetupRunnable = new RunnableInterface() {
+            RunnableInterface matchSetupRunnable = new RunnableInterface() {
 
                 private boolean doStop = false;
 
@@ -153,7 +151,7 @@ import static database.Variables.*;
               Match selectedMatch = table.getSelectionModel().getSelectedItem();
 
               // IF NOT PASSWORD PROTECTED, JOIN AND ENTER GAME
-              if(selectedMatch != null && selectedMatch.getPasswordProtected() == false){
+              if(!selectedMatch.getPasswordProtected()){
                   db.joinGame(selectedMatch.getMatch_id(),user_id);
                   match_id =  selectedMatch.getMatch_id();
                   yourTurn = false;
@@ -161,7 +159,7 @@ import static database.Variables.*;
                   System.out.println(match_id);
 
                   // IF THE GAME IS PASSWORD PROTECTED, POPUP WINDOW WITH USER INPUT
-              } else if(selectedMatch != null && selectedMatch.getPasswordProtected() == true){
+              } else {
                   // SETS UP WINDOW WITH PANES IF PASSWORD PROTECTED
                   StackPane stackpane = new StackPane();
                   VBox vBox = new VBox();
@@ -194,13 +192,11 @@ import static database.Variables.*;
                   window.show();
 
                   //CANCEL
-                  abort.setOnAction(event1 -> {
-                      window.close();
-                  });
+                  abort.setOnAction(event1 -> window.close());
 
                   // CHECKS INPUT PASSWORD AGAINST MATCH PASSWORD.
                   join.setOnAction(event1 -> {
-                      String passwordUserInput = inputPassword.getText().trim().toString();
+                      String passwordUserInput = inputPassword.getText();
                       if(passwordUserInput.equals(selectedMatch.getPassword())){
                           window.close();
                           db.joinGame(selectedMatch.getMatch_id(), user_id);
@@ -265,7 +261,7 @@ import static database.Variables.*;
 
                     // ADD MATCH IN GAME AND WAIT FOR PLAYER TO JOIN
                     submitPassword.setOnAction(event1 -> {
-                        String passwordInserted = inputPassword.getText().trim().toString();
+                        String passwordInserted = inputPassword.getText().trim();
                         match_id = db.createGame(user_id, passwordInserted);
                         table.setItems(getMatches()); //Refreshes tables.
                         window.close();
@@ -287,16 +283,14 @@ import static database.Variables.*;
                     });
 
                     //CANCEL
-                    abort.setOnAction(event1 -> {
-                        window.close();
-                    });
+                    abort.setOnAction(event1 -> window.close());
 
                 } else{
                     db.abortMatch(user_id);
                     createGameClicked = false;
                     createGameButton.setText("Create Game");
                     table.setItems(getMatches()); //Refreshes tables.
-                    matchSetupThread.stop();
+                    matchSetupRunnable.doStop();
                     matchSetupThread = null;
                 }
 
@@ -311,13 +305,11 @@ import static database.Variables.*;
      * @return ObservableList
      * @see ObservableList
      */
-    public ObservableList<Match> getMatches(){
+    private ObservableList<Match> getMatches(){
         ArrayList<Match> matches =  db.findGamesAvailable();
         ObservableList<Match> match_ids = FXCollections.observableArrayList();
 
-        for (Match i : matches) {
-            match_ids.add(i);
-        }
+        match_ids.addAll(matches);
         return match_ids;
     }
 
@@ -330,7 +322,7 @@ import static database.Variables.*;
         try {
             Variables.tileSize = (int)(screenWidth * 0.06);
             grid = new Grid(boardSize, boardSize);
-            game = new GameMain();
+            GameMain game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

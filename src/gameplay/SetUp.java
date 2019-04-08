@@ -4,13 +4,14 @@ import database.Database;
 
 import java.util.ArrayList;
 
+import static database.Database.importUnitType;
 import static database.Variables.db;
 
 public class SetUp {
 
-    protected static UnitGenerator unitGenerator;
+    static UnitGenerator unitGenerator;
 
-    protected static ArrayList<Integer> unitTypeList;
+    static ArrayList<Integer> unitTypeList;
 
     public SetUp(){
 
@@ -27,7 +28,7 @@ public class SetUp {
 
         for (int i = 0; i < unitTypeList.size(); i++) {
 
-           unitTypeArray[i] = db.importUnitType(unitTypeList.get(i));
+           unitTypeArray[i] = importUnitType(unitTypeList.get(i));
         }
 
         unitGenerator = new UnitGenerator(unitTypeArray[0], unitTypeArray[1], unitTypeArray[2], unitTypeArray[3]);

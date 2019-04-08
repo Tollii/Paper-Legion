@@ -1,14 +1,9 @@
 package gameplay;
 
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.layout.*;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.ClipboardContent;
@@ -16,10 +11,10 @@ import static database.Variables.*;
 import javafx.scene.paint.Paint;
 
 //own tile class for unit selector to avoid conflicts with gridtile class
-public class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsuled rectangle
+class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsuled rectangle
 
-  private Recruit recruit;
-  private Rectangle rect;
+  private final Recruit recruit;
+  private final Rectangle rect;
 
   public RecruitTile(int sizeX, int sizeY, Recruit recruit) {
     this.recruit = recruit;

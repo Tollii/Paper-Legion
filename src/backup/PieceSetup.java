@@ -3,14 +3,14 @@ package backup;
 /* This class is used as a placeholder for information stored in database about
 /* Units/Pieces, and is intended to use with static positions especially for mvp */
 
-public class PieceSetup {
-    private int pieceId;
-    private int matchId;
-    private int playerId;
-    private int positionX;
-    private int positionY;
-    private int unit_type_id;
-    private double current_health;
+class PieceSetup {
+    private final int pieceId;
+    private final int matchId;
+    private final int playerId;
+    private final int positionX;
+    private final int positionY;
+    private final int unit_type_id;
+    private final double current_health;
 
     public PieceSetup(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id, double current_health){
         this.pieceId = pieceId;

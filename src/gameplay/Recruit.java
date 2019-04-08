@@ -2,7 +2,6 @@ package gameplay;
 
 
 import database.Variables;
-import database.Variables;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -21,10 +20,8 @@ import javafx.scene.shape.Rectangle;
  * @see RecruitTile
  */
 public class Recruit extends StackPane {
-  private Rectangle rect;
-  private UnitType type;
-  private int costLabelHeight = 10;
-  private int costPosY = (int)((Variables.tileSize-costLabelHeight) / 2);
+  private final UnitType type;
+  private final int costLabelHeight = 10;
 
   /**
    * Sets up recruit with a UnitType, and also set images and styles of Recruit.
@@ -32,7 +29,7 @@ public class Recruit extends StackPane {
    * @param type Takes a UnitType class.
    */
   public Recruit(UnitType type) {
-    rect = new Rectangle();
+    Rectangle rect = new Rectangle();
     this.type = type;
 
     rect.setWidth(Variables.tileSize);
@@ -46,6 +43,7 @@ public class Recruit extends StackPane {
     costLabel.setPrefWidth(Variables.tileSize);
     costLabel.setMinHeight(costLabelHeight);
     costLabel.setAlignment(Pos.CENTER);
+    int costPosY = ((Variables.tileSize - costLabelHeight) / 2);
     costLabel.setTranslateY(costPosY);
     costLabel.setStyle("-fx-background-color: Blue;" + "-fx-text-fill: White;");
 
