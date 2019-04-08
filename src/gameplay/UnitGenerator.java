@@ -15,7 +15,15 @@ import static database.Variables.testing;
 
 public class  UnitGenerator {
 
-    //Variables
+    /**
+     * Holds the variables and  and methods for creating new units.
+     * When generated, it will create a blueprint UnitType for each unit type in the game.
+     * This is done so that unit can be created more efficiently later.
+     * @see SetUp
+     * @see Unit
+     * @see UnitType
+     */
+
 
     ////Unit ID generator////
     private static int unitId = 0;
@@ -28,10 +36,8 @@ public class  UnitGenerator {
             "Has a longsword, which can slay even the most dangerous of foes.";
     private static String swordsmanDescriptionTag =
             "Legendary swordsman";
-        private static Image swordsmanImage;
-        private static AudioClip swordsmanSound;
-
-
+    private static Image swordsmanImage;
+    private static AudioClip swordsmanSound;
 
     private static UnitType swordsmanUnitType;
 
@@ -57,9 +63,7 @@ public class  UnitGenerator {
             "Attacks all units in a line, but takes damage every attack";
     private static String juggernautDescriptionTag =
             "Juggernaut";
-    //TODO
     private static Image juggernautImage;
-    //TODO
     private static AudioClip juggernautSound;
 
     private static UnitType juggernautUnitType;
@@ -73,15 +77,28 @@ public class  UnitGenerator {
             "and has splash damage to nearby enemies.";
     private static String catapultDescriptionTag =
             "Throwy-McGig";
-    //TODO
     private static Image catapultImage;
-    //TODO
     private static AudioClip catapultSound;
 
     private static UnitType catapultUnitType;
 
-
+    /**
+     * Empty constructor for using the UnitGenerator,
+     * this has to be run after the the other generator with inputs
+     * otherwise the newUnit methods will not work properly.
+     */
     public UnitGenerator(){}
+
+    /**
+     * Constructor that takes in the initial values for the different unit types from SetUp.
+     * This constructor has to be used first to have the UnitGenerator work properly
+     * @param swordsmanProto Holds the variables for the swordsman unitType
+     * @param archerProto Holds the variables for the archer unitType
+     * @param juggernautProto Holds the variables for the juggernaut unitType
+     * @param catapultProto Holds the variables for the catapult unitType
+     * @see SetUp
+     * @see ProtoUnitType
+     */
 
     public UnitGenerator(ProtoUnitType swordsmanProto,
                          ProtoUnitType archerProto, ProtoUnitType juggernautProto, ProtoUnitType catapultProto){
@@ -144,6 +161,14 @@ public class  UnitGenerator {
                 catapultDescription, catapultDescriptionTag, catapultImage, catapultSound);
     }
 
+    /**
+     * Returns a friendly unit according to an int parameter.
+     * The unit is given an incremented unitID
+     * @param unitType int. Uses an int to identify which type of Unit to return
+     * @return Unit. Returns a unit of the specified type
+     * @see Unit
+     */
+
     public Unit newFriendlyUnit(int unitType) {
 
       switch (unitType) {
@@ -161,6 +186,14 @@ public class  UnitGenerator {
       }
       return null;
     }
+
+    /**
+     * Returns a friendly unit according to a String parameter.
+     * The unit is given an incremented unitID
+     * @param unitType String. Uses a String to identify which type of Unit to return
+     * @return Unit. Returns a unit of the specified type
+     * @see Unit
+     */
 
     public Unit newFriendlyUnit(String unitType) {
 
@@ -180,6 +213,16 @@ public class  UnitGenerator {
         return null;
     }
 
+    /**
+     * Returns an enemy unit according to an int parameter.
+     * The unit is given an imported unit ID
+     * This is used as a part of the import enemy units process
+     * @param unitType int. Uses an int to identify which type of Unit to return
+     * @param unitIdInput int. This is set as the units ID
+     * @return Unit. Returns a unit of the specified type with the specified ID
+     * @see Unit
+     */
+
     public Unit newEnemyUnit(int unitType, int unitIdInput) {
 
         switch (unitType) {
@@ -197,6 +240,16 @@ public class  UnitGenerator {
         }
         return null;
     }
+
+    /**
+     * Returns an enemy unit according to String parameter.
+     * The unit is given an imported unit ID
+     * This is used as a part of the import enemy units process
+     * @param unitType String. Uses a String to identify which type of Unit to return
+     * @param unitIdInput int. This is set as the units ID
+     * @return Unit. Returns a unit of the specified type with the specified ID
+     * @see Unit
+     */
 
     public Unit newEnemyUnit(String unitType, int unitIdInput) {
 
@@ -217,7 +270,12 @@ public class  UnitGenerator {
         return null;
     }
 
-
+    /**
+     * Returns a recruit according to an int parameter.
+     * @param unitType int. Uses an int to identify which type of Recruit to return
+     * @return Recruit. Returns a recruit of the specified type
+     * @see Recruit
+     */
 
     public Recruit newRecruit(int unitType) {
         switch (unitType) {

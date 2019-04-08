@@ -12,6 +12,15 @@ import java.util.ResourceBundle;
 
 import static database.Variables.*;
 
+
+/**
+ * Controller class for the login scene, it sets up layout and buttons for the scene.
+ * It also uses threads for running background database checks to see if user input of
+ * password and username is correct. If user information is correct then it will change scene to
+ * main menu, if not it will display a alert label.
+ * @see Controller Change Scenes
+ * @see Thread
+ */
 public class loginController extends Controller {
 
     private boolean loginPressed = false;
@@ -48,6 +57,10 @@ public class loginController extends Controller {
     private ImageView paperLegionLogo;
 
     @FXML
+    /**
+     * Initialize variables, and is a sort of constructor for the scene setup.
+     * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
+     */
     void initialize() {
 
         // Thread to log in so program doesn't freeze up when getting data from the database
@@ -107,7 +120,11 @@ public class loginController extends Controller {
         loginEnterButton.setDefaultButton(true);
 
     }
-
+    /**
+     * Sets a static variable user_id from the user that logged in.
+     * @param userIDFromLogin Sets the static variable (int) user_id for the user logged in.
+     * @see database.Variables
+     */
     private void setUser_id(int userIDFromLogin) {
         user_id = userIDFromLogin;
     }

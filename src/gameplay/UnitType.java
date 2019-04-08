@@ -3,6 +3,13 @@ package gameplay;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
+/**
+ * Interface for ensuring the functionally and variables of the different unit type classes.
+ * @see gameplay.units.Swordsman
+ * @see gameplay.units.Archer
+ * @see gameplay.units.Juggernaut
+ * @see gameplay.units.Catapult
+ */
 
 public interface UnitType {
 
