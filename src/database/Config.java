@@ -1,22 +1,40 @@
 package database;
 
+/**
+ * Configuration file that contains information needed to connect to the MYSQL database
+ * Configuration is set up on program launch
+ */
+
 public class Config {
 
-    public String DB_USER_NAME;
+    private String DB_USER_NAME;
 
-    public String DB_PASSWORD;
+    private String DB_PASSWORD;
 
-    public String DB_URL;
+    private String DB_URL;
 
-    public String DB_DRIVER;
+    private String DB_DRIVER;
 
-    public int DB_MAX_CONNECTIONS;
+    private int DB_MAX_CONNECTIONS;
 
     private static Config config = new Config();
 
-    public Config() {
+    private Config() {
         init();
     }
+
+    public static Config getConfig() {
+        return config;
+    }
+    //jdbc:MySQL://MySQL.stud.iie.ntnu.no:3306/thomabmo/confluence?autoReconnect=true
+
+    public static Config getInstance() {
+        return config;
+    }
+
+    /**
+     * Sets up the MYSQL adress to be readily used
+     */
 
     private void init() {
         DB_USER_NAME = "thomabmo";
@@ -25,10 +43,24 @@ public class Config {
         DB_DRIVER = "com.mysql.cj.jdbc.Driver";
         DB_MAX_CONNECTIONS = 10;
     }
-    //jdbc:MySQL://MySQL.stud.iie.ntnu.no:3306/thomabmo/confluence?autoReconnect=true
 
-    public static Config getInstance() {
-        return config;
+    public  String getDB_USER_NAME() {
+        return DB_USER_NAME;
     }
 
+    public String getDB_PASSWORD() {
+        return DB_PASSWORD;
+    }
+
+    public String getDB_URL() {
+        return DB_URL;
+    }
+
+    public String getDB_DRIVER() {
+        return DB_DRIVER;
+    }
+
+    public int getDB_MAX_CONNECTIONS() {
+        return DB_MAX_CONNECTIONS;
+    }
 }

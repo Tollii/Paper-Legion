@@ -827,7 +827,6 @@ public class GameMain extends Application {
 
         if (loser != -1) {
             //Game is won or lost.
-            gameCleanUp();
             //Open alert window.
             Stage winner_alert = new Stage();
             winner_alert.initModality(Modality.APPLICATION_MODAL);
@@ -839,9 +838,9 @@ public class GameMain extends Application {
             winnerTextHeader.setBoundsType(TextBoundsType.VISUAL);
             db.incrementGamesPlayed();
 
-            if (loser == user_id || eliminationResult == 0) {
+            if (loser == user_id || eliminationResult == 1) {
                 win_loseText = "You Lose!\n";
-            } else if (loser == opponent_id || eliminationResult == 1) {
+            } else if (loser == opponent_id || eliminationResult == 0) {
                 win_loseText = "You Win!\n";
                 db.incrementGamesWon();
             } else {
@@ -863,13 +862,7 @@ public class GameMain extends Application {
                     System.out.println("load failed");
                 }
                 winner_alert.close();
-                obstacles = null;
-                grid = null;
-                player1 = -1;
-                player2 = -1;
-                match_id = -1;
-                opponent_id = -1;
-                opponentReady = false;
+                gameCleanUp();
                 Main.rootScene.setRoot(root);
                 Main.window.setScene(Main.rootScene);
             });
@@ -895,8 +888,22 @@ public class GameMain extends Application {
             waitPlacementThread.stop();
             waitPlacementThread = null;
         }
-        //Resets turns to 1 for next game.
+        //Resets variables to default.
         turn = 1;
+        obstacles = null;
+        grid = null;
+        player1 = -1;
+        player2 = -1;
+        match_id = -1;
+        opponent_id = -1;
+        opponentReady = false;
+        movementList = new ArrayList<>();
+        attackList = new ArrayList<>();
+        unitGenerator = null;
+        selectedUnit = null;
+        selectedPosX = -1;
+        selectedPosY = -1;
+        yourTurn = false;
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////

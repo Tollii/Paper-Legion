@@ -2,6 +2,12 @@ package database;
 
 import java.sql.*;
 
+/**
+ * A simple class that cleans up after SQL statements.
+ *
+ */
+
+
 public class Cleaner {
 
     public static void closeResSet(ResultSet res){
