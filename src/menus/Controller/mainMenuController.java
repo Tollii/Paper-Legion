@@ -65,6 +65,7 @@ public class mainMenuController extends Controller {
                 findGameClicked = false;
                 gameEntered = false;
                 threadStarted = false;
+                turn = 1;
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {
