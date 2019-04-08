@@ -1,7 +1,7 @@
 package database;
 
 import gameplay.*;
-import menus.Controller1.Match;
+import menus.controller.Match;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;

@@ -1,4 +1,4 @@
-package menus.Controller1;
+package menus.controller;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 import static database.Variables.*;
 
 /**
- * Controller1 class for Custom Match scene. It is used to gather information from database, show
+ * controller class for Custom Match scene. It is used to gather information from database, show
  * in TableView and and one is able to create custom game with or without password, join a selected game, and abort game.
  * This class uses Match to store game information in a ObservableList.
  * @see Match

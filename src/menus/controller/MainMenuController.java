@@ -1,4 +1,4 @@
-package menus.Controller1;
+package menus.controller;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
@@ -17,9 +17,9 @@ import java.util.ResourceBundle;
 import static database.Variables.*;
 
 /**
- * Controller1 class for the main menu scene.
+ * controller class for the main menu scene.
  * Sets up the scene layout, buttons, paddings etc.
- * this class Extends to Controller1, in able to gain access to ChangeScene method.
+ * this class Extends to controller, in able to gain access to ChangeScene method.
  * @see Controller
  */
 public class MainMenuController extends Controller {

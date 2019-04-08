@@ -1,4 +1,4 @@
-package menus.Controller1;
+package menus.controller;
 
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.*;
@@ -14,7 +14,7 @@ import static database.Variables.*;
 
 
 /**
- * Controller1 class for the login scene, it sets up layout and buttons for the scene.
+ * controller class for the login scene, it sets up layout and buttons for the scene.
  * It also uses threads for running background database checks to see if user input of
  * password and username is correct. If user information is correct then it will change scene to
  * main menu, if not it will display a alert label.
