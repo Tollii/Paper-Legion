@@ -180,8 +180,12 @@ public class GameMain extends Application {
 
     }
 
+    /**
+     * Player 2 adds obstacles when he joins the game, this method calls upon the
+     * method game.createObstacles() which creates obstacles and give them a random placement
+     * by using a Random number generator.
+     */
     private void addObstacles() {
-        // Player 2 adds obstacles when he joins.
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
            obstacles = game.createObstacles();

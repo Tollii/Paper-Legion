@@ -13,7 +13,6 @@ public class Cleaner {
      * in a finally block
      * @param res Takes in a ResultSet.
      * @see ResultSet
-     * @throws SQLException Throws SQLEXCEPTION if it fails.
      */
     public static void closeResSet(ResultSet res){
         try{
@@ -30,7 +29,6 @@ public class Cleaner {
      * in a finally block
      * @param st Takes in a Statement
      * @see Statement
-     * @throws SQLException Throws SQLEXCEPTION if it fails.
      */
     public static void closeStatement(Statement st){
         try{
@@ -47,7 +45,6 @@ public class Cleaner {
      * in a finally block
      * @param con Takes in a Connection
      * @see Connection
-     * @throws SQLException Throws SQLEXCEPTION if it fails.
      */
     public static void closeConnection(Connection con){
         try{
@@ -64,7 +61,6 @@ public class Cleaner {
      * in a finally block.
      * @param con Takes in a Connection
      * @see Connection
-     * @throws SQLException Throws SQLEXCEPTION if it fails.
      */
     public static void rollBack(Connection con){
         try{
@@ -81,7 +77,6 @@ public class Cleaner {
      * in a finally block.
      * @param con Takes in a Connection
      * @see Connection
-     * @throws SQLException Throws SQLEXCEPTION if it fails.
      */
     public static void setAutoCommit(Connection con){
         try{
