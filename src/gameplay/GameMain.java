@@ -123,6 +123,14 @@ public class GameMain extends Application {
 
     private GameLogic game;
 
+    /**
+     * Start is called upon whenever the application changes scenes.
+     * Sets up variables, layouts, panes, buttons, etc. This method calls upon
+     * the addObstacles() method and the placementPhaseStart() method.
+     * the game in placementPhase
+     * @see GameLogic
+     * @see Application
+     */
     public void start(Stage window) {
         // Sets static variables for players and opponent id.
         game = new GameLogic();
@@ -152,8 +160,10 @@ public class GameMain extends Application {
     /**
      * Player 2 adds obstacles when he joins the game, this method calls upon the
      * method  (GameLogic) game.createObstacles() which creates obstacles and give them a random placement
-     * by using a Random number generator.
+     * by using a Random number generator.Player 1 continuously wait and polls to check if obstacles have been added
+     * before resuming the game flow of the program.
      * @see GameLogic
+     * @see database.Database
      */
     private void addObstacles() {
         // Also this code can put obstacles in the same spot at the moment.
@@ -181,6 +191,18 @@ public class GameMain extends Application {
     }
 
     ////PLACEMENT PHASE STARTER AND FINISHER METHODS////
+    /**
+     * Starts the placement phase by setting variables currentResources = startingResources, calling upon
+     * the method createRecruitPane() which enables Dragboard to work with recruit, recruit tiles,
+     * and sets up a sidebar for display information like finishedPlacingButton, description, and sets up
+     * the grid to be divided against the players, so that player 1 can place their units/recruits on the top
+     * and player can place their units on the bottom. Clicking the finishedPlacingButton calls upon the method
+     * placementPhaseFinished().
+     * @see GameLogic
+     * @see Recruit
+     * @see Unit
+     * @see database.Variables
+     */
     private void placementPhaseStart() {
 
         currentResources = startingResources; //Starts current resources to starting resources;
