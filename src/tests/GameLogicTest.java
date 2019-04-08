@@ -41,7 +41,6 @@ public class GameLogicTest {
         Database db = new Database();
         grid = new Grid(boardSize, boardSize);
 
-
         user_id = 3;
         Variables.opponent_id = 51;
         db.createGame(user_id, "null");
@@ -66,14 +65,7 @@ public class GameLogicTest {
             connectionPool.releaseConnection(myConn);
         }
 
-
         db.joinGame(match_id, opponent_id);
-
-
-
-
-
-
     }
 
     @AfterClass
@@ -122,7 +114,7 @@ public class GameLogicTest {
     }
 
     @Test
-    public void CreateObstacle(){
+    public void testCreateObstacle(){
         int lowerBound = 3;
         int upperBound = 7;
         ArrayList<Obstacle> obstacles;
@@ -238,6 +230,4 @@ public class GameLogicTest {
         grid.tileList[boardSize-1][boardSize-1].setUnit(testUnit);
         assertEquals(0, game.checkForEliminationVictory());
     }
-
-
 }
