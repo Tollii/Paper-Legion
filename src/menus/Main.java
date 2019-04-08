@@ -60,15 +60,15 @@ public class Main extends Application {
         }
         //Stops threads.
         if (waitTurnThread != null) {
-            waitTurnThread.stop();
+            waitTurnRunnable.doStop();
             waitTurnThread = null;
         }
         if (waitPlacementThread != null) {
-            waitPlacementThread.stop();
+            waitPlacementRunnable.doStop();
             waitPlacementThread = null;
         }
         if (searchGameThread != null) {
-            searchGameThread.stop();
+            searchGameRunnable.doStop();
             searchGameThread = null;
         }
         try {

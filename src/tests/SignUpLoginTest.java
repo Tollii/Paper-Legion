@@ -1,5 +1,3 @@
-package tests;
-
 import database.ConnectionPool;
 import database.Database;
 import org.junit.*;
@@ -15,7 +13,7 @@ import database.Cleaner;
 public class SignUpLoginTest {
     private Database instance;
     ConnectionPool connectionPool = null;
-    int userId = 0;
+    private final int userId = 0;
     @BeforeClass
     public static void setUpClass() throws SQLException {
         ConnectionPool connectionPool;
@@ -97,9 +95,8 @@ public class SignUpLoginTest {
     public void testLogout(){
         System.out.println("testLogout()");
         instance.login("testUser","testPassword");
-        boolean expResult = true;
         boolean result = instance.logout(3);
-        assertEquals(expResult, result);
+        assertEquals(true, result);
     }
 
     /*

@@ -11,10 +11,10 @@ package menus.Controller;
  * @see javafx.collections.ObservableList
  */
 public class Match{
-    private int match_id;
-    private String player;
-    private boolean passwordProtected;
-    private String password;
+    private final int match_id;
+    private final String player;
+    private final boolean passwordProtected;
+    private final String password;
 
     /**
      * This class is a holder object for Matches with 1/2 players, and

@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import menus.Controller.MatchSetupController;
 
 import static database.Variables.testing;
 
@@ -17,11 +16,8 @@ import static database.Variables.testing;
  * @see Image
  */
 public class Obstacle extends StackPane {
-    private int posX;
-    private int posY;
-    private int obstacleID;
-    private Rectangle rect;
-    private Image obstacleImg;
+    private final int posX;
+    private final int posY;
 
     /**
      * Sets the variables posX, posY, and obstacleID for the object.
@@ -35,14 +31,13 @@ public class Obstacle extends StackPane {
      */
     public Obstacle(int posX, int posY, int obstacleID){
 
-        rect = new Rectangle();
+        Rectangle rect = new Rectangle();
         rect.setWidth(Variables.tileSize);
         rect.setHeight(Variables.tileSize);
         this.posX = posX;
         this.posY = posY;
-        this.obstacleID = obstacleID;
         if(!testing){
-            obstacleImg = new Image("/gameplay/assets/obstacle.png");
+            Image obstacleImg = new Image("/gameplay/assets/obstacle.png");
             rect.setFill(new ImagePattern(obstacleImg));
             this.getChildren().add(rect);
         }

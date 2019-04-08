@@ -5,13 +5,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 
-public class Tile extends Rectangle {
-  // Vet ikke om disse attributtene er nødvendige.
-  double oldPosX;
-  double oldPosY;
+class Tile extends Rectangle {
 
 
-  public Tile(int sizeX, int sizeY){
+    public Tile(int sizeX, int sizeY){
     super(sizeX,sizeY,Color.WHITE);
     super.setStrokeType(StrokeType.INSIDE);
     super.setStroke(Color.BLACK);
@@ -20,8 +17,9 @@ public class Tile extends Rectangle {
   }
 
   public void setPos(double posX, double posY){
-    this.oldPosX = posX;
-    this.oldPosY = posY;
+      // Vet ikke om disse attributtene er nødvendige.
+      double oldPosX = posX;
+      double oldPosY = posY;
   }
 }
 //

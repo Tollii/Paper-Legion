@@ -51,16 +51,14 @@ public class signUpController extends Controller {
     private ImageView paperLegionLogo;
 
 
-    @FXML
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
+    @FXML
     void initialize() {
 
-        goBackButton.setOnAction(event -> {
-            changeScene("login.fxml");
-        });
+        goBackButton.setOnAction(event -> changeScene("login.fxml"));
 
         signUpButton.setOnAction(event -> {
             //Checks if both password fields are the same.

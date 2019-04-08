@@ -1,6 +1,6 @@
 package backup;
 
-public class Move {
+class Move {
 
     private int turnId;
     private int pieceId;

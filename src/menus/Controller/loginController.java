@@ -56,11 +56,11 @@ public class loginController extends Controller {
     @FXML
     private ImageView paperLegionLogo;
 
-    @FXML
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
+    @FXML
     void initialize() {
 
         // Thread to log in so program doesn't freeze up when getting data from the database
@@ -86,9 +86,7 @@ public class loginController extends Controller {
                         int userId = db.login(usernameInput.getText(), passwordInput.getText());
                         if (userId > 0) {
                             setUser_id(userId);
-                            Platform.runLater(() -> {
-                                changeScene("mainMenu.fxml");
-                            });
+                            Platform.runLater(() -> changeScene("mainMenu.fxml"));
                             loginPressed = false;
                             this.doStop();
                         } else {
@@ -105,9 +103,8 @@ public class loginController extends Controller {
 
         loginThread = new Thread(loginRunnable);
 
-        newUserButton.setOnAction(event -> {
-            changeScene("signUp.fxml");
-        });
+        newUserButton.setOnAction(event ->
+            changeScene("signUp.fxml"));
 
         loginEnterButton.setOnAction(event -> {
             loginPressed = true;
