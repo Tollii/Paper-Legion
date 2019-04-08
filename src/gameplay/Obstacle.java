@@ -36,7 +36,6 @@ public class Obstacle extends StackPane {
         rect.setHeight(Variables.tileSize);
         this.posX = posX;
         this.posY = posY;
-        int obstacleID1 = obstacleID;
         if(!testing){
             Image obstacleImg = new Image("/gameplay/assets/obstacle.png");
             rect.setFill(new ImagePattern(obstacleImg));

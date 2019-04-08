@@ -1256,11 +1256,13 @@ public class Database {
     }
 
     /**
-     * Generates a hash,
+     * Generates a hash. Uses PBDKF2 method from SecretKeyFactory
      *
-     * @param password
-     * @param salt
-     * @return
+     * @param password given password to hash
+     * @param salt the user's salt
+     * @return hash in byte[]
+     * @see SecretKeyFactory
+     * @see KeySpec
      */
     private byte[] generateHash(String password, byte[] salt) {
         try {
@@ -1425,7 +1427,6 @@ public class Database {
     /**
      * Increments number of games a player has won.
      *
-     * @return true if win registered, false if error.
      */
     public void incrementGamesWon() {
         Connection myConn = connectionPool.getConnection();
@@ -1517,7 +1518,7 @@ public class Database {
      * @param user_id user id of player to add in statistics
      * @return 1 on success, -1 on failure.
      */
-    private int addUserToStatistics(int user_id) {
+    private void addUserToStatistics(int user_id) {
 
         String stmt;
         PreparedStatement preparedStatement = null;
@@ -1539,7 +1540,6 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-        return -1;
     }
 
     /*

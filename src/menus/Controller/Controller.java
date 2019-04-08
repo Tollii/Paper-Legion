@@ -11,7 +11,7 @@ import java.io.IOException;
  * It's function is to avoid duplicate code, and have a method
  * that can be called from other classes.
  */
-public class Controller {
+class Controller {
 
     /**
      * Changes the scene for the main Stage of the application.

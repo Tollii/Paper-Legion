@@ -21,7 +21,6 @@ import javafx.scene.shape.Rectangle;
  */
 public class Recruit extends StackPane {
   private final UnitType type;
-  private final int costLabelHeight = 10;
 
   /**
    * Sets up recruit with a UnitType, and also set images and styles of Recruit.
@@ -41,6 +40,7 @@ public class Recruit extends StackPane {
 
     // Styling of costLabel.
     costLabel.setPrefWidth(Variables.tileSize);
+    int costLabelHeight = 10;
     costLabel.setMinHeight(costLabelHeight);
     costLabel.setAlignment(Pos.CENTER);
     int costPosY = ((Variables.tileSize - costLabelHeight) / 2);
