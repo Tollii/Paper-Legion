@@ -53,7 +53,7 @@ public class Database {
      */
 
     /**
-     *
+     *???
      *
      * @param unitIdInput
      * @return
@@ -233,7 +233,7 @@ public class Database {
      *
      * @param player_id player id of the player creating the game
      * @param password if game is password protected, use a string. If not, it will default to null.
-     * @return
+     * @return match_id on success, -1 on failure
      */
     public int createGame(int player_id, String password) {
         int match_id = -1;
@@ -282,7 +282,7 @@ public class Database {
      * Polls once whether the game has started or not. Used when a game has been created to check
      * if another player has joined your game.
      *
-     * @param match_id id of the match being polled
+     * @param match_id id of the match being polled.
      * @return true when an opponent has been found, false if not.
      */
     public boolean pollGameStarted(int match_id) {
@@ -326,6 +326,12 @@ public class Database {
                       |_|
      */
 
+    /**
+     * Deletes game(s) that has been created by the player_id given as a parameter.
+     *
+     * @param player_id id of the player's match that'll be deleted
+     * @return true on success, false on failure.
+     */
     public boolean abortMatch(int player_id) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "delete from Matches where player1=?;";
@@ -347,6 +353,10 @@ public class Database {
         }
     }
 
+    /**
+     * ???
+     * @return
+     */
     public ArrayList<Integer> fetchUnitTypeList() {
 
         ArrayList<Integer> outputList = new ArrayList<>();
@@ -377,6 +387,9 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Updates the variable class with your opponents player_id
+     */
     public void getPlayers() {
 
         Connection myConn = connectionPool.getConnection();
@@ -412,6 +425,14 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+
+    /**
+     * ???
+     *
+     * @param exportUnitList
+     * @param exportPositionXList
+     * @param exportPositionYList
+     */
 
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
         Connection myConn = connectionPool.getConnection();
@@ -464,6 +485,11 @@ public class Database {
         }
     }
 
+    /**
+     * ???
+     *
+     * @return
+     */
     public ArrayList<PieceSetup> importPlacementUnits() {
 
         ArrayList<PieceSetup> outputList = null;
@@ -500,6 +526,12 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Checks if your opponent is ready during the placement phase of the game.
+     *
+     *
+     * @return true if opponent is ready, false if not.
+     */
     public boolean checkIfOpponentReady(){
 
         Boolean returnBoolean = false;
@@ -542,6 +574,11 @@ public class Database {
 
     }
 
+    /**
+     * Sets the status of the player as ready
+     *
+     * @param ready
+     */
     public void setReady(boolean ready){
 
         Connection myConn = connectionPool.getConnection();
@@ -724,6 +761,11 @@ public class Database {
     }
     */
 
+    /**
+     * Sends a list of obstacles to the Obstacles table on the MYSQL database
+     *
+     * @param obstacles list of obstacles
+     */
     public void exportObstacles(ArrayList<Obstacle> obstacles) {
         Connection myConn = connectionPool.getConnection();
         Connection myConn2 = connectionPool.getConnection();
@@ -765,6 +807,11 @@ public class Database {
         }
     }
 
+    /**
+     * Gets obstacles and their position from the MYSQL database.
+     *
+     * @return imported list of obstacles
+     */
     public ArrayList<Obstacle> importObstacles() {
         ArrayList<Obstacle> ObstacleImport = new ArrayList<>();
         ResultSet result = null;
@@ -801,6 +848,11 @@ public class Database {
         return null;
     }
 
+    /**
+     *  Checks if the correct amount of obstacles have been added in accordance with the # of obstacles in the database in a given match
+     *
+     * @return true if local obstacles and server obstacles are equal. False if not.
+     */
     public Boolean obstaclesHaveBeenAdded() {
 
         Integer obstacle_amount;
@@ -867,22 +919,23 @@ public class Database {
                               |_|            |___/
      */
 
+    /**
+     * Updates the database with a new turn. Handles exception case with round 1.
+     *
+     * @param turn turn #
+     * @return 1 on success, -1 on failure.
+     */
+
     public int sendTurn(int turn) {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
-        String stmt = "SELECT player1,player2 FROM Matches WHERE match_id = ?";
-        String stmt2 = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
+        String stmt = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
 
         try {
             myConn.setAutoCommit(false);
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1, match_id);
-            rs = preparedStatement.executeQuery();
-            myConn.commit();
-            rs.next();
 
-            preparedStatement = myConn.prepareStatement(stmt2);
+            preparedStatement = myConn.prepareStatement(stmt);
             preparedStatement.setInt(1, turn);
             preparedStatement.setInt(2, match_id);
 
@@ -909,6 +962,11 @@ public class Database {
         return -1;
     }
 
+    /**
+     * Imports the latest turn stored on the database.
+     *
+     * @return player id on success, -1 on failure.
+     */
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -983,43 +1041,12 @@ public class Database {
     }
 */
 
-    public boolean exportPieceMoveList(ArrayList<Move> movementList) {
-
-        int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
-        int matchId = movementList.get(0).getMatchId();      //MatchID is the same for all entries in the list
-
-        Connection myConn = connectionPool.getConnection();
-        String sqlString = "UPDATE Pieces SET position_x = ?, position_y = ?  WHERE match_id=? AND piece_id = ? AND player_id = ? ;";
-
-        PreparedStatement preparedStatement = null;
-        try {
-            myConn.setAutoCommit(false);
-            preparedStatement = myConn.prepareStatement(sqlString);
-
-            for (int i = 0; i < movementList.size(); i++) {
-                preparedStatement.setInt(1, movementList.get(i).getEndPosX());
-                preparedStatement.setInt(2, movementList.get(i).getEndPosY());
-                preparedStatement.setInt(3, matchId);
-                preparedStatement.setInt(4, movementList.get(i).getPieceId());
-                preparedStatement.setInt(5, user_id);
-
-
-                preparedStatement.executeUpdate();
-            }
-            myConn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Cleaner.rollBack(myConn);
-            return false;
-        } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-            Cleaner.setAutoCommit(myConn);
-        }
-        return true;
-    }
-
+    /**
+     * Sends data for movement done locally in the gameplay phase, to the database.
+     *
+     * @param movementList list of movements.
+     * @return true on success, false on failure.
+     */
     public boolean exportMoveList(ArrayList<Move> movementList) {
 
         int turnId = movementList.get(0).getTurnId();       //TurnID is the same for all entries in the list
@@ -1062,6 +1089,13 @@ public class Database {
         return true;
     }
 
+    /**
+     * Imports your opponents movements.
+     *
+     * @param enemyTurnIDInput your opponents latest turn id.
+     * @param matchIdInput match id.
+     * @return List of movements on success, null on failure.
+     */
     public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
 
         ArrayList<Move> outputList = new ArrayList<>();
@@ -1100,6 +1134,12 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Sends attacks locally done to the database.
+     *
+     * @param attackList list of local attacks.
+     * @return true on success, false on failure.
+     */
     public boolean exportAttackList(ArrayList<Attack> attackList) {
 
         int turnId = attackList.get(0).getTurnId();                         //TurnId is the same for all entries in the list
@@ -1143,6 +1183,14 @@ public class Database {
         return true;
     }
 
+    /**
+     * Imports the latest attacks from your opponent.
+     *
+     * @param enemyTurnIDInput your opponents latest turn id.
+     * @param matchIdInput match id.
+     * @param otherPlayerIdInput your opponents player id.
+     * @return list of attacks on success, null on failure.
+     */
     public ArrayList<Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
 
         ArrayList<Attack> outputList = new ArrayList<>();
@@ -1181,6 +1229,11 @@ public class Database {
         return outputList;
     }
 
+    /**
+     * Sets a match to being surrendered.
+     *
+     * @return true if game has been surrendered, false if an error occurred.
+     */
     public boolean surrenderGame() {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set surrendered=? where match_id=?";
@@ -1208,6 +1261,11 @@ public class Database {
         return false;
     }
 
+    /**
+     * Checks if a game has been surrendered.
+     *
+     * @return returns 1 if game has been surrendered, -1 if not.
+     */
     public int checkForSurrender() {
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
@@ -1241,7 +1299,13 @@ public class Database {
           |___/
      */
 
-    //Should probably return more than a boolean so we can identify who is logged in.
+    /**
+     * Takes given username and password to log in.
+     *
+     * @param username username to account
+     * @param password password to account
+     * @return user id if login is successful, -1 if not.
+     */
     public int login(String username, String password) {
 
         Connection myConn = connectionPool.getConnection();
@@ -1285,6 +1349,12 @@ public class Database {
         return -1;
     }
 
+    /**
+     * Logs out a user.
+     *
+     * @param userId user id of user to log out of.
+     * @return true if logged out, false if not.
+     */
     public boolean logout(int userId) {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
@@ -1307,6 +1377,15 @@ public class Database {
         return false;
     }
 
+    /**
+     * Creates a new user using user name, password and e-mail.
+     * Password gets a hash using SALT and then stored on the database.
+     *
+     * @param user new account user name.
+     * @param password new account password.
+     * @param email new account email.
+     * @return 1 for registration success, 0 if account exists, -1 if error.
+     */
     public int signUp(String user, String password, String email) {
 
         Connection con = connectionPool.getConnection();
@@ -1338,8 +1417,6 @@ public class Database {
                 rs.next();
                 addUserToStatistics(rs.getInt("user_id"));
                 return 1;
-                //-1 feil
-                //1 registrering godkjent
             }
         } catch (SQLException e) {
             e.printStackTrace();

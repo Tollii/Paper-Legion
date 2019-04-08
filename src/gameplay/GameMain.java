@@ -300,7 +300,7 @@ public class GameMain extends Application {
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
-        waitPlacementRunnable = new RunnableInterface() {
+        RunnableInterface waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -610,7 +610,7 @@ public class GameMain extends Application {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
-
+            System.out.println("Turn increased in endTurn");
             turnCounter.setText("TURN: " + turn);
             endTurnButton.setText("Waiting for other player");
             yourTurn = false;
@@ -657,7 +657,7 @@ public class GameMain extends Application {
 
     private void waitForTurn(JFXButton endTurnButton) {
         // Runnable lambda implementation for turn waiting with it's own thread
-        waitTurnRunnable = new RunnableInterface() {
+        RunnableInterface waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -666,7 +666,8 @@ public class GameMain extends Application {
                     try {
                         while (!yourTurn) {
                             if (gameFinished) {
-                                this.doStop();
+                                //this.doStop();
+                                checkForGameOver();
                                 waitTurnThread = null;
                             }
                             System.out.println("Sleeps thread " + Thread.currentThread());
@@ -676,7 +677,6 @@ public class GameMain extends Application {
                             // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
                             if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
-                                System.out.println("yourTurn changes");
                                 yourTurn = true;
                                 this.doStop();
                             }
@@ -716,6 +716,7 @@ public class GameMain extends Application {
         deselect();
         selectedUnit = null;
         turn++;
+        System.out.println("Turn increased in setUpNewTurn");
         movementPhase = true;
         turnCounter.setText("TURN: " + turn);
         endTurnButton.setText("End turn");
@@ -897,13 +898,11 @@ public class GameMain extends Application {
         match_id = -1;
         opponent_id = -1;
         opponentReady = false;
-        movementList = new ArrayList<>();
-        attackList = new ArrayList<>();
         unitGenerator = null;
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
-        yourTurn = false;
+
     }
 
     ////METHODS FOR SETTING UP THE DIFFERENT PANES CONTAINING THE UI ELEMENTS////
