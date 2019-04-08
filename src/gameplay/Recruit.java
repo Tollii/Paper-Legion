@@ -2,6 +2,7 @@ package gameplay;
 
 
 import database.Variables;
+import database.Variables;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,7 +15,8 @@ import javafx.scene.shape.Rectangle;
 public class Recruit extends StackPane {
   private Rectangle rect;
   private UnitType type;
-  private int healthbarPosY = 40;
+  private int costLabelHeight = 10;
+  private int costPosY = (int)((Variables.tileSize-costLabelHeight) / 2);
 
 
   public Recruit(UnitType type) {
@@ -30,8 +32,9 @@ public class Recruit extends StackPane {
 
     // Styling of costLabel.
     costLabel.setPrefWidth(Variables.tileSize);
+    costLabel.setMinHeight(costLabelHeight);
     costLabel.setAlignment(Pos.CENTER);
-    costLabel.setTranslateY(healthbarPosY);
+    costLabel.setTranslateY(costPosY);
     costLabel.setStyle("-fx-background-color: Blue;" + "-fx-text-fill: White;");
 
   }
