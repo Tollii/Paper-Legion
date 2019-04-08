@@ -1291,7 +1291,7 @@ public class Database {
     }
 
     /**
-     * ???
+     * Generates a hash,
      *
      * @param password
      * @param salt
