@@ -20,9 +20,9 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
 
     public Tile(int sizeX, int sizeY) {
         rect = new Rectangle(sizeX, sizeY, Color.WHITE);
-        rect.setStrokeType(StrokeType.INSIDE);
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(1);
+        rect.setStrokeType(standardStrokePlacement);
+        rect.setStroke(standardStrokeColor);
+        rect.setStrokeWidth(standardStrokeWidth);
 
         this.getChildren().add(rect);
 
