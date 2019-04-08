@@ -501,6 +501,10 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Highlights all possible tiles that a unit can attack, by filling
+     * tile with attack color.
+     */
     private void highlightPossibleAttacks() {
         if (unitSelected) { //checks if there is a unit selected
             ArrayList<Tile> attackTargets = game.getAttackableTiles();
@@ -512,6 +516,10 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Clear all fill from tiles in Grid.list. and set it so the default
+     * tile color.
+     */
     private void clearHighLight() {
         for (int i = 0; i < grid.tileList.length; i++) {
             for (int j = 0; j < grid.tileList[i].length; j++) {
