@@ -998,10 +998,21 @@ public class GameMain extends Application {
         Main.closeAndLogout();
     }
 
+    /**
+     * Is a static method which sets the description used in the sidebar.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param newDescription Takes a String with the description that should show in the sidebar.
+     * @see Recruit
+     */
     public static void changeDescriptionLabel(String newDescription){
         description.setText(newDescription);
     }
 
+    /**
+     * Is a static method which controls if the description used in the sidebar is visible.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param visible Takes a boolean to control whether the description is visible or not.
+     */
     public static void descriptionVisible(boolean visible){
         description.setVisible(visible);
     }
