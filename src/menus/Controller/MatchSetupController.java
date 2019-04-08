@@ -3,6 +3,7 @@ package menus.Controller;
 import Runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import database.Variables;
 import gameplay.*;
 import gameplay.GameMain;
 import javafx.application.Platform;
@@ -327,7 +328,9 @@ import static database.Variables.*;
          */
     private void enterGame() {
         try {
-            GameMain game = new GameMain();
+            Variables.tileSize = (int)(screenWidth * 0.06);
+            grid = new Grid(boardSize, boardSize);
+            game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {

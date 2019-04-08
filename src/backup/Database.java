@@ -23,14 +23,14 @@
 //
 //import static database.Variables.*;
 //
-//public class Database {
+//public class database {
 //    //Test
 //
 //    //Class variables
 //
 //    private static ConnectionPool connectionPool = null;
 //
-//    public Database() {
+//    public database() {
 //
 //        try {
 //            System.out.println("Creating pool");
