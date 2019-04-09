@@ -17,7 +17,7 @@
 
 package gameplay;
 
-import Runnables.RunnableInterface;
+import Runnables1.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.application.Platform;
