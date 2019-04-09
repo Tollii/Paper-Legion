@@ -94,6 +94,11 @@ public class  UnitGenerator {
         ProtoUnitType juggernautProto;
         ProtoUnitType catapultProto;
 
+        //Safety measure, if the Database has yet to be initialized, initialize the database.
+        if(db == null){
+            db = new Database();
+        }
+
         //Fills in the IDs of all the Units Types in the game
         unitTypeList = db.fetchUnitTypeList();
 
