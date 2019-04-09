@@ -44,7 +44,7 @@
                 </JFXButton>
                 <JFXButton fx:id="mainMenuCustomMatchButton" maxHeight="50.0" maxWidth="256.0" minHeight="30.0"
                            minWidth="90.0" prefHeight="50.0" prefWidth="257.0"
-                           style="-fx-background-color: #e3e4e5#e3e4e5;" text="Custom Match">
+                           style="-fx-background-color: #e3e4e5#e3e4e5;" text="Find Match">
                     <VBox.margin>
                         <Insets bottom="-10.0"/>
                     </VBox.margin>
@@ -65,7 +65,7 @@
                 </JFXButton>
                 <JFXButton fx:id="mainMenuExitButton" alignment="CENTER" maxHeight="50.0" maxWidth="257.0"
                            minHeight="30.0" minWidth="90.0" prefHeight="50.0" prefWidth="257.0"
-                           style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Exit">
+                           style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Logout">
                     <VBox.margin>
                         <Insets bottom="-10.0"/>
                     </VBox.margin>
