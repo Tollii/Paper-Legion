@@ -296,7 +296,6 @@ public class Unit extends StackPane {
     * Takes a jawa awt BufferedImage and changes the color
     * of pixels with a given RGB Value with that of an other RGB Value.
     * Used to change the color of unit image to match either friendly or enemy color. (Blue/Gold)
-    * @return BufferedImage
     * @param imgBuf BufferedImage. The BufferedImage that gets edited
     * @param oldRed Int. The old red value
     * @param oldGreen Int. The old green value
