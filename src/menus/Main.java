@@ -9,9 +9,15 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 import java.sql.SQLException;
 
 import static database.Variables.*;
+
+
+
 
 public class Main extends Application {
 
@@ -20,8 +26,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        window = primaryStage;
 
+
+        window = primaryStage;
+        
         //database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
         Parent root = FXMLLoader.load(getClass().getResource("/menus/View/login.fxml"));
@@ -42,6 +50,15 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        //Sets the Dock icon for mac
+        try {
+            URL iconURL = Main.class.getResource("/images/dockIcon.png");
+            Image image = new ImageIcon(iconURL).getImage();
+            com.apple.eawt.Application.getApplication().setDockIconImage(image);
+        } catch (Exception e) {
+            // Won't work on Windows or Linux.
+        }
+
         //Shutdown hook. Closes stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
         launch(args);
