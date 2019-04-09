@@ -1,4 +1,4 @@
-package Runnables1;
+package runnables;
 
 public interface RunnableInterface extends Runnable {
     void doStop();

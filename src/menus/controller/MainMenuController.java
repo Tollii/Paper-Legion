@@ -1,6 +1,6 @@
 package menus.controller;
 
-import Runnables1.RunnableInterface;
+import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import database.Variables;
 import gameplay.GameMain;

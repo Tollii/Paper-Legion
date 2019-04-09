@@ -1,6 +1,6 @@
 package database;
 
-import Runnables1.RunnableInterface;
+import runnables.RunnableInterface;
 import gameplay.Grid;
 import gameplay.Obstacle;
 import gameplay.Unit;

@@ -1,6 +1,6 @@
 package menus.controller;
 
-import Runnables1.RunnableInterface;
+import runnables.RunnableInterface;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
