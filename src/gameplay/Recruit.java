@@ -45,7 +45,7 @@ public class Recruit extends StackPane {
     costLabel.setAlignment(Pos.CENTER);
     int costPosY = ((Variables.tileSize - costLabelHeight) / 2) - 2 * Variables.standardStrokeWidth;
     costLabel.setTranslateY(costPosY);
-    costLabel.setStyle("-fx-background-color: rgba(255, 255, 255, 0.6); -fx-font-size: 10;");
+    costLabel.setStyle("-fx-background-color: rgba(255, 255, 255, 0.6); -fx-font-size: 10; -fx-font-family: 'Arial Black';");
 
   }
 

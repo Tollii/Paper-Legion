@@ -135,7 +135,7 @@ public class GameMain extends Application {
     ////UNIT GENERATOR////
     private UnitGenerator unitGenerator = new UnitGenerator();
 
-    private final String descriptionFont = "-fx-font-family: 'Arial Black';";
+    private final String arialFont = "-fx-font-family: 'Arial Black';";
     private final String buttonBackgroundColor = "-fx-background-color: #000000;";
     private final String fontSize32 = "-fx-font-size:32px;";
     private final String descriptionHeadFontSize = "-fx-font-size: 20px;";
@@ -999,7 +999,7 @@ public class GameMain extends Application {
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
 
-        resourceLabel.setStyle(fontSize32);
+        resourceLabel.setStyle(fontSize32 + arialFont);
         resourceLabel.setText("Resources: $" + currentResources);
 
         HBox resourceLabelBox = new HBox();
@@ -1020,12 +1020,12 @@ public class GameMain extends Application {
         }
         recruitUnits.setLayoutY(unitTilesYPadding);
 
-        descriptionHead.setStyle(descriptionFont + descriptionHeadFontSize);
+        descriptionHead.setStyle(arialFont + descriptionHeadFontSize);
         descriptionHead.setLayoutX(descriptionXPadding);
         descriptionHead.setLayoutY(placementDescriptionYPadding);
         descriptionHead.setVisible(false);
 
-        description.setStyle(descriptionFont);
+        description.setStyle(arialFont);
         description.setLayoutX(descriptionXPadding);
         description.setLayoutY(placementDescriptionYPadding + 2 * descriptionHeadHeigth);
         description.setVisible(false);
@@ -1046,12 +1046,12 @@ public class GameMain extends Application {
         turnCounter.setLayoutX(turnCounterXPadding);
         turnCounter.setLayoutY(turnCounterYPadding);
 
-        descriptionHead.setStyle(descriptionFont + descriptionHeadFontSize);
+        descriptionHead.setStyle(arialFont + descriptionHeadFontSize);
         descriptionHead.setLayoutX(descriptionXPadding);
         descriptionHead.setLayoutY(descriptionYPadding);
         descriptionHead.setVisible(false);
 
-        description.setStyle(descriptionFont);
+        description.setStyle(arialFont);
         description.setLayoutX(descriptionXPadding);
         description.setLayoutY(descriptionYPadding + descriptionHeadHeigth);
         description.setVisible(false);
@@ -1068,7 +1068,7 @@ public class GameMain extends Application {
     private Pane createPhaseLabelPane() {
         Pane phaseLabelPane = new Pane();
 
-        phaseLabel.setStyle(fontSize32);
+        phaseLabel.setStyle(fontSize32 + arialFont);
         phaseLabel.setMinHeight(phaseLabelHeight);
 
         HBox phaseLabelBox = new HBox();
