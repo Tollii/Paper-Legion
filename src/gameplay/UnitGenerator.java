@@ -81,9 +81,11 @@ public class  UnitGenerator {
     private static UnitType catapultUnitType;
 
     /**
-     * Constructor that takes in the initial values for the different unit types from SetUp.
-     * This constructor has to be used first to have the UnitGenerator work properly
+     * Constructor that contacts the database and fills inn all the initial
+     * values for the different unit types.
+     * this needs to be updated if more unit types are added.
      * @see ProtoUnitType
+     * @see Database fetchUnitTypeList(), importUnitType()
      */
 
     public UnitGenerator(){
