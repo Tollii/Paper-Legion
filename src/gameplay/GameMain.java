@@ -384,6 +384,14 @@ public class GameMain extends Application {
         waitPlacementThread.start();
     }
 
+    /**
+     * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
+     * Uses UnitGenerator to add the new enemy units.
+     * @see PieceSetup
+     * @see Grid
+     * @see UnitGenerator
+     * @see database.Database
+     */
     private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
@@ -493,6 +501,18 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Checks to see if in movementphase and if it's players turn, if it is then this method uses
+     * getPosXFromEvent and getPosYFromEvent to get the MouseEvent.MouseClick transformed into
+     * grid coordinates and uses the method getAttackableTiles() to get all pieces on tiles within attack
+     * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
+     * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
+     * with executeAttack() method. Finally it deselects the unit with deselect() method.
+     * @see GameMain
+     * @see Grid
+     * @see Unit
+     * @see GameLogic
+     */
     private void attack(MouseEvent event) {
         if (!movementPhase && yourTurn) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
@@ -855,14 +875,7 @@ public class GameMain extends Application {
         JFXButton surrender_no = new JFXButton("No");
 
         surrender_yes.setOnAction(event -> {
-            db.surrenderGame();
-            surrendered = true;
-
-            if (yourTurn) {
-                endTurn(endTurnButton, phaseLabelPane);
-            } else {
-                checkForGameOver();
-            }
+            actualSurrender(endTurnButton, phaseLabelPane);
             confirm_alert.close();
         });
 
@@ -882,6 +895,17 @@ public class GameMain extends Application {
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
         confirm_alert.showAndWait();
+    }
+
+    private void actualSurrender(JFXButton endTurnButton, Pane phaseLabelPane){
+        db.surrenderGame();
+        surrendered = true;
+
+        if (yourTurn) {
+            endTurn(endTurnButton, phaseLabelPane);
+        } else {
+            checkForGameOver();
+        }
     }
 
     ////METHODS FOR ENDING THE GAME////
@@ -955,6 +979,10 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Resets all of the game variables so that if player wants to play another game, all the
+     * data will be loaded on a new game.
+     */
     private void gameCleanUp() {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
@@ -1039,6 +1067,12 @@ public class GameMain extends Application {
         return unitPane;
     }
 
+    /**
+     * Creates the sidepanel for the placement/movement/attack phase, and serves useful
+     * for showing descriptions and buttons like Surrender and End Turn.
+     * Returns the sidepanelPane.
+     * @return Pane
+     */
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
@@ -1064,7 +1098,13 @@ public class GameMain extends Application {
 
         return sidePanel;
     }
-
+    /**
+     * Sets up a pane on the top of the game with a label to show status for turns,
+     * phase info, etc. For example: Placement phase to indicate that player is in that phase,
+     * or waiting for opponent to show that it is not players turn.
+     * Returns the phaseLabelPane.
+     * @return Pane
+     */
     private Pane createPhaseLabelPane() {
         Pane phaseLabelPane = new Pane();
 
@@ -1085,16 +1125,23 @@ public class GameMain extends Application {
         return phaseLabelPane;
     }
 
-    ////SHUTDOWN METHODS////
+    /**
+     * Executes when application shuts down. User is logged out and database connection is closed.
+     * Calls on surrender method to show a message dialog to user that game ended before user is logged out.
+     */
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
         Pane phaseLabelPane = createPhaseLabelPane();
-        surrender(endTurnButton, phaseLabelPane);
+        actualSurrender(endTurnButton, phaseLabelPane);
         Main.closeAndLogout();
     }
 
     ////MAIN USED FOR SHUTDOWN HOOK////
+    /**
+     * Calls for shutdown methods if program is closed. It is used to log out user
+     * and close connections.
+     */
     public void main(String[] args) {
         System.out.println("SHUTDOWN HOOK CALLED");
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));

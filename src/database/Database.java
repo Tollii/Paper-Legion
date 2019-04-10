@@ -1180,9 +1180,8 @@ public class Database {
      * Logs out a user.
      *
      * @param userId user id of user to log out of.
-     * @return true if logged out, false if not.
      */
-    public boolean logout(int userId) {
+    public void logout(int userId) {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
         String stmt = "UPDATE Users SET online_status = 0 WHERE user_id = ?";
@@ -1193,7 +1192,6 @@ public class Database {
             preparedQuery.setInt(1, userId);
             preparedQuery.executeUpdate();
             myConn.commit();
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1201,7 +1199,6 @@ public class Database {
             Cleaner.closeStatement(preparedQuery);
             connectionPool.releaseConnection(myConn);
         }
-        return false;
     }
 
     /**
@@ -1516,7 +1513,6 @@ public class Database {
      * Adds a given user to the statistics table.
      *
      * @param user_id user id of player to add in statistics
-     * @return 1 on success, -1 on failure.
      */
     private void addUserToStatistics(int user_id) {
 
