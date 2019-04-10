@@ -75,8 +75,6 @@ public class MainMenuController extends Controller {
         RunnableInterface searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
-            //TODO bug. Starting a game and going to any other button will cancel it, but the scene switches quickly back mainmenu without prompt.
-
             @Override
             public void run() {
                 opponentReady = false;

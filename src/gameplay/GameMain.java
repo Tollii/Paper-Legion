@@ -68,7 +68,7 @@ public class GameMain extends Application {
     private final static Label resourceLabel = new Label();    //Static so that Tile can update the label
     private final Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private final Label phaseLabel = new Label();
-    private JFXButton endTurnButton;                                //button for ending turn
+    private JFXButton endTurnButton = new JFXButton();                                //button for ending turn
     private static FlowPane recruitUnits;
     public Pane phaseLabelPane;
 
@@ -440,7 +440,7 @@ public class GameMain extends Application {
         Pane sidePanel = createSidePanel();
         phaseLabelPane = createPhaseLabelPane();
 
-        endTurnButton = new JFXButton("End turn");
+        endTurnButton.setText("End Turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
