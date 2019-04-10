@@ -60,6 +60,7 @@ public class GameMain extends Application {
     private final Label phaseLabel = new Label();
     private JFXButton endTurnButton;                                //button for ending turn
     private static FlowPane recruitUnits;
+    public Pane phaseLabelPane;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -119,7 +120,6 @@ public class GameMain extends Application {
 
     //PHASELABEL PANE//
     private final int phaseLabelYPadding = ((gridYPadding - phaseLabelHeight) / 2);
-    public Pane phaseLabelPane;
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
