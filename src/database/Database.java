@@ -753,6 +753,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             Cleaner.closeStatement(preparedStatement2);
             connectionPool.releaseConnection(myConn);
+            connectionPool.releaseConnection(myConn2);
         }
         return null;
     }
