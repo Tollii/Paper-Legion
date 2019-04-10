@@ -368,7 +368,7 @@ public class GameMain extends Application {
                             System.out.println("RUN LATER!!!");
 
                             importOpponentPlacementUnits();
-                            movementActionPhaseStart();
+                            movementPhaseStart();
 
 
                         });
@@ -405,7 +405,7 @@ public class GameMain extends Application {
     }
 
     ////MOVEMENT AND ACTION PHASE STARTER////
-    private void movementActionPhaseStart() {
+    private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
         Pane phaseLabelPane = createPhaseLabelPane();
 
