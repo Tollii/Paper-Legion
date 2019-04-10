@@ -1,5 +1,6 @@
 package menus.controller;
 
+import javafx.scene.layout.Pane;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import database.Variables;
@@ -53,12 +54,24 @@ public class MainMenuController extends Controller {
     private ImageView paperLegionLogo;
 
 
+    @FXML
+    private Pane imageMainMenu;
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
     @FXML
     void initialize() {
+
+        imageMainMenu.setStyle("-fx-background-image: url(/menus/menuAssets/legion_finished.png);" +
+                "-fx-background-size: contain;" +
+                "-fx-background-repeat: no-repeat;"+
+
+                "-fx-background-position: center;");
+
+
         game = null;
         RunnableInterface searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
