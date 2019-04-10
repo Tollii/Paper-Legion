@@ -236,7 +236,6 @@ public class Unit extends StackPane {
     public String getDescription() {
 
         return descriptionTag + "\n" +
-                "\nCost: " + cost + 
                 "\nHp: " + hp +
                 "\nMovement Range: " + movementRange +
                 "\nAttack: " + attack +

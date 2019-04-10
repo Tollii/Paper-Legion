@@ -74,8 +74,8 @@ public class Recruit extends StackPane {
    */
   public String getDescription(){
 
-    return type.getDescriptionTag() + "\n" +
-            "\nCost: " + type.getCost() +
+    return type.getDescriptionTag() +
+            "\nCost: " + type.getCost() + "\n" +
             "\nHp: " + type.getHp() +
             "\nMovement Range: " + type.getMovementRange() +
             "\nAttack: " + type.getAttack() +
