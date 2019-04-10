@@ -1181,7 +1181,7 @@ public class Database {
      *
      * @param userId user id of user to log out of.
      */
-    public void logout(int userId) {
+    public boolean logout(int userId) {
         //Logs out the user. Sets online_status to 0.
         Connection myConn = connectionPool.getConnection();
         String stmt = "UPDATE Users SET online_status = 0 WHERE user_id = ?";
@@ -1192,6 +1192,7 @@ public class Database {
             preparedQuery.setInt(1, userId);
             preparedQuery.executeUpdate();
             myConn.commit();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -1199,6 +1200,7 @@ public class Database {
             Cleaner.closeStatement(preparedQuery);
             connectionPool.releaseConnection(myConn);
         }
+        return false;
     }
 
     /**
