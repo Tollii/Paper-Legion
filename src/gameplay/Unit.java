@@ -51,6 +51,7 @@ public class Unit extends StackPane {
     private final String healthColor = "-fx-background-color: rgba(0, 255, 0, 0.4);";
     private final String lowHealthColor = "-fx-background-color: rgba(255, 0, 0, 0.4);";
     private final String healthFontSize = "-fx-font-size: 10;";
+    private final String healthFont = "-fx-font-family: 'Arial Black';";
 
     /**
      * Sets the unit variables tile size, whether unit is enemy or not, attack multiplier, max-, min attack range,
@@ -94,7 +95,7 @@ public class Unit extends StackPane {
             int healthbarPosY = (int)(-((Variables.tileSize - healthbarHeight) / 2) + 2 * Variables.standardStrokeWidth);
             healthbar.setTranslateY(healthbarPosY);
 
-            healthbar.setStyle(healthColor + healthFontSize);
+            healthbar.setStyle(healthColor + healthFontSize + healthFont);
 
 
             ///SETS UNIT IMAGE////
