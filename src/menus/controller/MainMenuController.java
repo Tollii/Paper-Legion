@@ -194,7 +194,7 @@ public class MainMenuController extends Controller {
     private void enterGame() {
         try {
             findGameClicked = false;
-            Variables.tileSize = (int)(screenWidth * 0.06);
+            Variables.tileSize = (int)(screenWidth * 0.07);
             grid = new Grid(boardSize, boardSize);
             game = new GameMain();
             game.start(Main.window);

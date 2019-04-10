@@ -320,7 +320,7 @@ public class MatchSetupController extends Controller {
          */
     private void enterGame() {
         try {
-            Variables.tileSize = (int)(screenWidth * 0.06);
+            Variables.tileSize = (int)(screenWidth * 0.07);
             grid = new Grid(boardSize, boardSize);
             GameMain game = new GameMain();
             game.start(Main.window);
