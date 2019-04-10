@@ -39,13 +39,13 @@ public class Recruit extends StackPane {
     this.getChildren().add(costLabel);
 
     // Styling of costLabel.
-    costLabel.setPrefWidth(Variables.tileSize);
+    costLabel.setPrefWidth(Variables.tileSize - 2 * Variables.standardStrokeWidth);
     int costLabelHeight = 10;
     costLabel.setMinHeight(costLabelHeight);
     costLabel.setAlignment(Pos.CENTER);
-    int costPosY = ((Variables.tileSize - costLabelHeight) / 2);
+    int costPosY = ((Variables.tileSize - costLabelHeight) / 2) - 2 * Variables.standardStrokeWidth;
     costLabel.setTranslateY(costPosY);
-    costLabel.setStyle("-fx-background-color: Blue;" + "-fx-text-fill: White;");
+    costLabel.setStyle("-fx-font-size: 10;");
 
   }
 
@@ -67,26 +67,16 @@ public class Recruit extends StackPane {
   }
 
   /**
-   * Returns the attributes like health, movement range, attack, defence, and description in a single String.
-   * Very similar to a toString method. It is used in the sidepanel to show recruit information on mouse click.
+   * Returns the attributes like health, movement range, attack, description tag, and description in a single String.
+   * Very similar to a toString method(). It is used in the sidepanel to show recruit information on mouse click.
    * @return String
    * @see Unit
    */
   public String getDescription(){
-    return "\n" +
+
+    return type.getDescriptionTag() + "\n" +
             "\nHp: " + type.getHp() +
             "\nMovement Range: " + type.getMovementRange() +
-            "\nAttack: " + type.getAttack() +
-            "\nDefence: " + type.getDefenceMultiplier() + "\n" +
-            "\n" + type.getDescription();
-  }
-
-  /**
-  * Returns the head for the description, with the cost added. Very similar to a toString() method.
-  * @return String
-  * @see Unit
-  */
-  public String getDescriptionHead() {
-    return type.getDescriptionTag() + "\nCost: " + type.getCost();
+            "\nAttack: " + type.getAttack() + "x\n" + "\n" + type.getDescription();
   }
 }
