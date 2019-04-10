@@ -38,10 +38,6 @@ public class Variables {
     public static Thread searchGameThread;
     public static Thread waitTurnThread;
     public static Thread waitPlacementThread;
-    public static RunnableInterface searchGameRunnable;
-    public static RunnableInterface waitTurnRunnable;
-    public static RunnableInterface waitPlacementRunnable;
-
 
     //GameMain Variables;
     public static final int boardSize = 7;      //sets the number of tiles en each direction of the grid
