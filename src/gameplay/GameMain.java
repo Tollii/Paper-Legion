@@ -98,18 +98,18 @@ public class GameMain extends Application {
     private final int buttonSpacing = 10;
 
     //GRID//
-    private final int gridXPadding = (int)(windowWidth * 0.15);
-    private final int gridYPadding = (int)(windowHeight * 0.10);
+    private final int gridXPadding = (int)(windowWidth * 0.08);
+    private final int gridYPadding = (int)(windowHeight * 0.07);
 
     //PLACEMENT PHASE SIDE PANEL//
-    private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
+    private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
     private final int recruitYPadding = 150;
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
     private final int placementButtonXPadding = 150;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
-    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.08);
+    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
     private final int sidePanelYPadding = 150;
     private final int turnCounterXPadding = 0;
     private final int turnCounterYPadding = 0;
