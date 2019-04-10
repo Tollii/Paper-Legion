@@ -56,7 +56,7 @@ public class GameMain extends Application {
     private static final Label description = new Label();                //description label for the selected unit
     private static final Label descriptionHead = new Label();            //description head label for selected unit
     private final static Label resourceLabel = new Label();    //Static so that Tile can update the label
-    private final Label  turnCounter = new Label("TURN: " + turn); //describe which turn it is
+    private final Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private final Label phaseLabel = new Label();
     private JFXButton endTurnButton;                                //button for ending turn
     private static FlowPane recruitUnits;
@@ -1087,7 +1087,7 @@ public class GameMain extends Application {
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
-        turnCounter.setStyle(fontSize32);
+        turnCounter.setStyle(fontSize32 + arialFont);
         turnCounter.setLayoutX(turnCounterXPadding);
         turnCounter.setLayoutY(turnCounterYPadding);
 
