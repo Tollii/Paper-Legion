@@ -1,6 +1,8 @@
 package menus;
 
 import database.Database;
+import gameplay.GameLogic;
+import gameplay.GameMain;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -65,7 +67,11 @@ public class Main extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
+        if(user_id>0 && match_id>0){
+            game.actualSurrender();
+        }
         closeAndLogout();
+
     }
 
     public static void closeAndLogout() {

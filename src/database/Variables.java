@@ -1,10 +1,7 @@
 package database;
 
+import gameplay.*;
 import runnables.RunnableInterface;
-import gameplay.Grid;
-import gameplay.Obstacle;
-import gameplay.Unit;
-import gameplay.UnitGenerator;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.paint.Color;
@@ -68,5 +65,6 @@ public class Variables {
     //Utilities
     public static ArrayList<Integer> unitTypeList;
     public static UnitGenerator unitGenerator;
+    public static GameMain game;
 
 }
