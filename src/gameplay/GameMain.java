@@ -387,6 +387,14 @@ public class GameMain extends Application {
         waitPlacementThread.start();
     }
 
+    /**
+     * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
+     * Uses UnitGenerator to add the new enemy units.
+     * @see PieceSetup
+     * @see Grid
+     * @see UnitGenerator
+     * @see database.Database
+     */
     private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
@@ -496,6 +504,18 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Checks to see if in movementphase and if it's players turn, if it is then this method uses
+     * getPosXFromEvent and getPosYFromEvent to get the MouseEvent.MouseClick transformed into
+     * grid coordinates and uses the method getAttackableTiles() to get all pieces on tiles within attack
+     * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
+     * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
+     * with executeAttack() method. Finally it deselects the unit with deselect() method.
+     * @see GameMain
+     * @see Grid
+     * @see Unit
+     * @see GameLogic
+     */
     private void attack(MouseEvent event) {
         if (!movementPhase && yourTurn) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
