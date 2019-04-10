@@ -24,7 +24,7 @@ import static database.Variables.*;
  */
 public class MainMenuController extends Controller {
     private boolean findGameClicked, gameEntered, threadStarted = false;
-    private GameMain game;
+
     @FXML
     private ResourceBundle resources;
 

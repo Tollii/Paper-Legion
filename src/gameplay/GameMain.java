@@ -117,6 +117,7 @@ public class GameMain extends Application {
 
     //PHASELABEL PANE//
     private final int phaseLabelYPadding = ((gridYPadding - phaseLabelHeight) / 2);
+    public Pane phaseLabelPane;
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
@@ -301,7 +302,7 @@ public class GameMain extends Application {
      */
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
-        Pane phaseLabelPane = createPhaseLabelPane();
+        phaseLabelPane = createPhaseLabelPane();
         phaseLabel.setText("WAITING FOR OTHER PLAYER");
 
         for (int i = 0; i < boardSize; i++) {
@@ -387,14 +388,6 @@ public class GameMain extends Application {
         waitPlacementThread.start();
     }
 
-    /**
-     * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
-     * Uses UnitGenerator to add the new enemy units.
-     * @see PieceSetup
-     * @see Grid
-     * @see UnitGenerator
-     * @see database.Database
-     */
     private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
@@ -408,7 +401,7 @@ public class GameMain extends Application {
     ////MOVEMENT AND ACTION PHASE STARTER////
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
-        Pane phaseLabelPane = createPhaseLabelPane();
+        phaseLabelPane = createPhaseLabelPane();
 
         endTurnButton = new JFXButton("End turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
@@ -434,7 +427,7 @@ public class GameMain extends Application {
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
-            waitForTurn(endTurnButton, phaseLabelPane);
+            waitForTurn();
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -442,11 +435,11 @@ public class GameMain extends Application {
 
         ////BUTTON EvenT HANDLERS////
         endTurnButton.setOnAction(event -> {
-            endTurn(endTurnButton, phaseLabelPane);
+            endTurn();
             phaseLabel.setText("OPPONENT'S TURN");
         });
 
-        surrenderButton.setOnAction(event -> surrender(endTurnButton, phaseLabelPane));
+        surrenderButton.setOnAction(event -> surrender());
 
         ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
         grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -463,7 +456,7 @@ public class GameMain extends Application {
             //moves unit if left button is pressed once and it is the movement phase
             if (event.getClickCount() == 1) {
                 if (unitSelected && movementPhase && event.getButton() == MouseButton.PRIMARY) {
-                    move(event, phaseLabelPane);
+                    move(event);
                 }
             }
 
@@ -476,7 +469,7 @@ public class GameMain extends Application {
         });
     }
 
-    private void move(MouseEvent event, Pane phaseLabelPane) {
+    private void move(MouseEvent event) {
         if(yourTurn) {
             int newPosX = getPosXFromEvent(event);
             int newPosY = getPosYFromEvent(event); //position of click
@@ -504,18 +497,6 @@ public class GameMain extends Application {
         }
     }
 
-    /**
-     * Checks to see if in movementphase and if it's players turn, if it is then this method uses
-     * getPosXFromEvent and getPosYFromEvent to get the MouseEvent.MouseClick transformed into
-     * grid coordinates and uses the method getAttackableTiles() to get all pieces on tiles within attack
-     * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
-     * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
-     * with executeAttack() method. Finally it deselects the unit with deselect() method.
-     * @see GameMain
-     * @see Grid
-     * @see Unit
-     * @see GameLogic
-     */
     private void attack(MouseEvent event) {
         if (!movementPhase && yourTurn) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
@@ -689,7 +670,7 @@ public class GameMain extends Application {
     }
 
     ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
-    private void endTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
+    private void endTurn() {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
@@ -733,12 +714,12 @@ public class GameMain extends Application {
 
             //Wait for you next turn. Does not trigger if you have surrendered.
             if (!surrendered) {
-                waitForTurn(endTurnButton, phaseLabelPane);
+                waitForTurn();
             }
         }
     }
 
-    private void waitForTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
+    private void waitForTurn() {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
@@ -767,7 +748,7 @@ public class GameMain extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        Platform.runLater(() -> setUpNewTurn(endTurnButton, phaseLabelPane));
+                        Platform.runLater(() -> setUpNewTurn());
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -791,7 +772,7 @@ public class GameMain extends Application {
     }
 
     ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
-    private void setUpNewTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
+    private void setUpNewTurn() {
         deselect();
         selectedUnit = null;
         turn++;
@@ -839,7 +820,7 @@ public class GameMain extends Application {
     }
 
     ////METHOD FOR HANDLING SURRENDER////
-    private void surrender(JFXButton endTurnButton, Pane phaseLabelPane) {
+    private void surrender() {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
         confirm_alert.setTitle("Game over!");
@@ -852,7 +833,7 @@ public class GameMain extends Application {
         JFXButton surrender_no = new JFXButton("No");
 
         surrender_yes.setOnAction(event -> {
-            actualSurrender(endTurnButton, phaseLabelPane);
+            actualSurrender();
             confirm_alert.close();
         });
 
@@ -874,12 +855,12 @@ public class GameMain extends Application {
         confirm_alert.showAndWait();
     }
 
-    private void actualSurrender(JFXButton endTurnButton, Pane phaseLabelPane){
+    public void actualSurrender(){
         db.surrenderGame();
         surrendered = true;
 
         if (yourTurn) {
-            endTurn(endTurnButton, phaseLabelPane);
+            endTurn();
         } else {
             checkForGameOver();
         }
@@ -1075,8 +1056,7 @@ public class GameMain extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
-        Pane phaseLabelPane = createPhaseLabelPane();
-        actualSurrender(endTurnButton, phaseLabelPane);
+        actualSurrender();
         Main.closeAndLogout();
     }
 
