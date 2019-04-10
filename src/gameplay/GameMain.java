@@ -266,7 +266,7 @@ public class GameMain extends Application {
      * @see database.Variables
      */
     static void updateResourceLabel() {
-        resourceLabel.setText("Resources: " + currentResources);
+        resourceLabel.setText("Resources: $" + currentResources);
     }
 
     /**
@@ -1000,7 +1000,7 @@ public class GameMain extends Application {
         Pane unitPane = new Pane();
 
         resourceLabel.setStyle(fontSize32);
-        resourceLabel.setText("Resources: " + currentResources);
+        resourceLabel.setText("Resources: $" + currentResources);
 
         HBox resourceLabelBox = new HBox();
         if (unitTypeList.size() < 5) {

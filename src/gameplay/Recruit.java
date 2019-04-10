@@ -35,7 +35,7 @@ public class Recruit extends StackPane {
     rect.setHeight(Variables.tileSize);
     rect.setFill(new ImagePattern(getImage()));
     this.getChildren().add(rect);
-    Label costLabel = new Label(String.valueOf(type.getCost()));
+    Label costLabel = new Label("$" + String.valueOf(type.getCost()));
     this.getChildren().add(costLabel);
 
     // Styling of costLabel.
@@ -45,7 +45,7 @@ public class Recruit extends StackPane {
     costLabel.setAlignment(Pos.CENTER);
     int costPosY = ((Variables.tileSize - costLabelHeight) / 2) - 2 * Variables.standardStrokeWidth;
     costLabel.setTranslateY(costPosY);
-    costLabel.setStyle("-fx-font-size: 10;");
+    costLabel.setStyle("-fx-background-color: rgba(255, 255, 255, 0.6); -fx-font-size: 10;");
 
   }
 
@@ -87,6 +87,6 @@ public class Recruit extends StackPane {
   * @see Unit
   */
   public String getDescriptionHead() {
-    return type.getDescriptionTag() + "\nCost: " + type.getCost();
+    return type.getDescriptionTag() + "\nCost: $" + type.getCost();
   }
 }
