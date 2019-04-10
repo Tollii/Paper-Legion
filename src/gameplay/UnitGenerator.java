@@ -118,14 +118,14 @@ public class  UnitGenerator {
 
 
         if (!testing){ //if not testing, images and sounds are initialized
-            swordsmanImage= new Image(UnitGenerator.class.getResource("/gameplay/assets/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-            swordsmanSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/hitSword.wav").toString());
-            archerSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/arrow.wav").toString());
-            archerImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/archer.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-            juggernautImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/juggernaut.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-            juggernautSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/juggernaut.wav").toString());
-            catapultImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/catapult.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-            catapultSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/catapult.wav").toString());
+            swordsmanImage= new Image(UnitGenerator.class.getResource("/gameplay/assets/images/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            swordsmanSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/soundclips/hitSword.wav").toString());
+            archerImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/images/archer.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            archerSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/soundclips/arrow.wav").toString());
+            juggernautImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/images/juggernaut.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            juggernautSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/soundclips/juggernaut.wav").toString());
+            catapultImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/images/catapult.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
+            catapultSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/soundclips/catapult.wav").toString());
         }
         swordsmanUnitType = new Swordsman("Swordsman",
                 swordsmanProto.getUnitTypeId(),
