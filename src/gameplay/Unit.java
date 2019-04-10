@@ -85,14 +85,14 @@ public class Unit extends StackPane {
             healthbar = new Label(hpText);
 
             this.getChildren().addAll(rect, healthbar);
-            healthbar.setPrefWidth(Variables.tileSize);
+            healthbar.setPrefWidth(Variables.tileSize - 2 * Variables.standardStrokeWidth);
             healthbar.setAlignment(Pos.CENTER);
             int healthbarHeight = 10;
             healthbar.setMinHeight(healthbarHeight);
-            int healthbarPosY = ((Variables.tileSize - healthbarHeight) / 2);
+            int healthbarPosY = ((Variables.tileSize - healthbarHeight) / 2) - 2 * Variables.standardStrokeWidth;
             healthbar.setTranslateY(healthbarPosY);
 
-            healthbar.setStyle("-fx-background-color: Green;" + "-fx-text-fill: White;");
+            healthbar.setStyle("-fx-background-color: rgba(0, 255, 0, 0.4);");
 
 
             ///SETS UNIT IMAGE////
@@ -251,7 +251,7 @@ public class Unit extends StackPane {
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
         if (hp <= LOW_HP_THRESHOLD) {
-            healthbar.setStyle("-fx-background-color: Red");
+            healthbar.setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
         }
     }
 
@@ -269,7 +269,7 @@ public class Unit extends StackPane {
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
         if (hp <= LOW_HP_THRESHOLD) {
-            healthbar.setStyle("-fx-background-color: Red");
+            healthbar.setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
         }
     }
 
