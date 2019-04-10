@@ -329,6 +329,11 @@ public class GameMain extends Application {
     }
 
     ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
+
+
+    /**
+     * Method for polling if oppo
+     */
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitPlacementRunnable = new RunnableInterface() {
@@ -402,7 +407,21 @@ public class GameMain extends Application {
         }
     }
 
-    ////MOVEMENT AND ACTION PHASE STARTER////
+
+    /**
+     * Starts the movement phase, starts up creating panes for game with the methods
+     * createSidePanel() and createPhaseLabelPane() to set up layouts for the game in
+     * the movement phase. This method also set's the headline label to Movement phase.
+     * And if waiting on the other player it sets the text to Opponent's turn. And calls the
+     * waitForTurn() method to poll database to see if the turn has changed.
+     * It contains several optional methods depending on user input. User can hit
+     * the end turn button and be transported into attackphase, or it can shift the turn to the
+     * opponent depending on which phase player is in. This method has all of the MouseEvent's
+     * for the game, and depending on which mouse button clicked, or if double click will launch
+     * different methods. The methods used in the MouseEvent is select(), deselect(), attack(), move()
+     * @see GameLogic
+     *
+     */
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
         Pane phaseLabelPane = createPhaseLabelPane();
@@ -908,7 +927,18 @@ public class GameMain extends Application {
         }
     }
 
-    ////METHODS FOR ENDING THE GAME////
+    /**
+     * Uses checkForEliminationVictory() method to see if opponent or player has pieces left on board, also checks the database
+     * with the method db.checkForSurrencder() to check if opponent has surrendered.
+     * If game ended either by defeat or by surrendering  It creates a popup window to show the
+     * end game status to the players. If a player surrenders it will say you lost for that player, and you win for the other.
+     * When the game ends, the methods db.incrementGames() is called to increment number of games player for both players. It will
+     * also call upon the method db.incrementGamesWon() for the winning player. The message dialog has a button which will return the player
+     * to the main menu. When user hits that button, this method uses the method gameCleanup() to reset variables if player wants to play again,
+     * and send players to the mainmenu.
+     * @see database.Database
+     * @see GameLogic
+     */
     private void checkForGameOver() {
         String win_loseText;
         String gameSummary = "";
