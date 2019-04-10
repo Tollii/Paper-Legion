@@ -350,7 +350,7 @@ public class GameMain extends Application {
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
 
-        RunnableInterface waitPlacementRunnable = new RunnableInterface() {
+        waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -823,7 +823,7 @@ public class GameMain extends Application {
      */
     private void waitForTurn() {
         // Runnable lambda implementation for turn waiting with it's own thread
-        RunnableInterface waitTurnRunnable = new RunnableInterface() {
+        waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -1075,13 +1075,14 @@ public class GameMain extends Application {
      * data will be loaded on a new game.
      */
     private void gameCleanUp() {
+        System.out.println("CLEAN UP HAPPENS");
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
-            //waitTurnRunnable.doStop();
+            waitTurnRunnable.doStop();
             waitTurnThread = null;
         }
         if (waitPlacementThread != null) {
-            //waitPlacementRunnable.doStop();
+            waitPlacementRunnable.doStop();
             waitPlacementThread = null;
         }
 
