@@ -79,6 +79,7 @@ public class MainMenuController extends Controller {
 
             @Override
             public void run() {
+                opponentReady = false;
                 turn = 1;
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.

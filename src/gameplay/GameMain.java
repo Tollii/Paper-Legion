@@ -339,6 +339,7 @@ public class GameMain extends Application {
      */
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
+
         RunnableInterface waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
@@ -346,6 +347,7 @@ public class GameMain extends Application {
             public void run() {
                 while (keepRunning()) {
                     try {
+                        Thread.sleep(threadTimer);
                         while (!opponentReady) {
                             Thread.sleep(threadTimer);
                             //When player in database matches your own user_id it is your turn again.
@@ -356,7 +358,7 @@ public class GameMain extends Application {
                                 opponentReady = true;
 
                                 System.out.println(opponent_id + ": ready!");
-                                this.doStop();
+                                doStop();
                                 waitPlacementThread = null;
                             }
                         }
