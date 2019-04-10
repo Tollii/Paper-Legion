@@ -37,7 +37,7 @@ public class Obstacle extends StackPane {
         this.posX = posX;
         this.posY = posY;
         if(!testing){
-            Image obstacleImg = new Image("/gameplay/assets/obstacle.png");
+            Image obstacleImg = new Image("/gameplay/assets/images/obstacle.png");
             rect.setFill(new ImagePattern(obstacleImg));
             this.getChildren().add(rect);
         }
