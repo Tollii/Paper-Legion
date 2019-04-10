@@ -188,7 +188,7 @@ public class GameMain extends Application {
     private void addObstacles() {
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
-           obstacles = game.createObstacles();
+            obstacles = game.createObstacles();
         } else {
             //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while (!db.obstaclesHaveBeenAdded()) {
@@ -277,11 +277,11 @@ public class GameMain extends Application {
      * @see RecruitTile
      */
     static void deselectRecruitTiles() {
-      RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
-      for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
-        tile.setStrokeWidth(standardStrokeWidth);
-        tile.setStroke(standardStrokeColor);
-      }
+        RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
+        for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
+            tile.setStrokeWidth(standardStrokeWidth);
+            tile.setStroke(standardStrokeColor);
+        }
     }
 
     /**

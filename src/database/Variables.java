@@ -59,7 +59,7 @@ public class Variables {
     public static final Paint standardTileColor = Color.WHITE;
     public static final Paint standardStrokeColor = Color.BLACK;
     public static final StrokeType standardStrokePlacement = StrokeType.INSIDE;
-    public static final Paint selectionOutlineColor = Color.RED;
+    public static final Paint selectionOutlineColor = Color.rgb(56, 31, 217);
     public static final int standardStrokeWidth = 1;
     public static final int selectedStrokeWidth = 3;
 
