@@ -52,9 +52,10 @@ public class GameMain extends Application {
     private static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
-    private Pane root;
+    private static Pane root;
     private static final Label description = new Label();                //description label for the selected unit
-    private final static Label resourceLabel = new Label();    //Static so that Tile can update the label
+    private static final Label placeUnitLabel = new Label("Drag units onto the grid"); //User hint to place units on the board
+    private static final Label resourceLabel = new Label();    //Static so that Tile can update the label
     private final Label  turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private final Label phaseLabel = new Label();
     private JFXButton endTurnButton;                                //button for ending turn
@@ -140,6 +141,7 @@ public class GameMain extends Application {
     private final Paint movementHighlightColor = Color.GREENYELLOW;
     private final Paint attackHighlightColor = Color.DARKRED;
     private final Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
+    private final String placeUnitLabelBackgroundColor = "-fx-background-color: rgba(255, 255, 255, 0.4);";
 
     private GameLogic game;
 
@@ -224,6 +226,7 @@ public class GameMain extends Application {
         currentResources = startingResources; //Starts current resources to starting resources;
 
         Pane recruitPane = createRecruitPane();
+        showPlaceUnitLabel();
 
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
@@ -285,6 +288,10 @@ public class GameMain extends Application {
         tile.setStrokeWidth(standardStrokeWidth);
         tile.setStroke(standardStrokeColor);
       }
+    }
+
+    static void removePlaceUnitLabel() {
+      root.getChildren().remove(placeUnitLabel);
     }
 
     /**
@@ -1001,6 +1008,24 @@ public class GameMain extends Application {
         root.getChildren().add(unitPane);
 
         return unitPane;
+    }
+
+    private void showPlaceUnitLabel() {
+      placeUnitLabel.setStyle(placeUnitLabelBackgroundColor + fontSize32);
+
+      HBox hPlaceUnitLabelBox = new HBox();
+      hPlaceUnitLabelBox.setAlignment(Pos.CENTER);
+      hPlaceUnitLabelBox.setMinWidth(tileSize*boardSize);
+      hPlaceUnitLabelBox.getChildren().add(placeUnitLabel);
+
+      VBox vPlaceUnitLabelBox = new VBox();
+      vPlaceUnitLabelBox.setLayoutX(gridXPadding);
+      vPlaceUnitLabelBox.setLayoutY(gridYPadding);
+      vPlaceUnitLabelBox.setMinHeight(tileSize*boardSize);
+      vPlaceUnitLabelBox.setAlignment(Pos.CENTER);
+      vPlaceUnitLabelBox.getChildren().add(hPlaceUnitLabelBox);
+
+      root.getChildren().add(vPlaceUnitLabelBox);
     }
 
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
