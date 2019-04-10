@@ -248,7 +248,7 @@ public class Unit extends StackPane {
     * @return String
     */
     public String getDescriptionHead() {
-      return type.getDescriptionTag();
+      return descriptionTag;
     }
 
     /**
