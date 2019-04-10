@@ -22,5 +22,14 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="mysql-connector-java-8.0.13" level="application" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../jfoenix-8.0.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
