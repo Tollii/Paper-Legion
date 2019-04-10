@@ -59,7 +59,7 @@ public class Database {
      * @return ProtoUnitType
      * @see ProtoUnitType
      */
-    public static ProtoUnitType importUnitType(int unitIdInput) {
+    public ProtoUnitType importUnitType(int unitIdInput) {
         String sqlString = "SELECT * FROM Unit_types WHERE unit_type_id = ?";
         Connection myConn = connectionPool.getConnection();
 

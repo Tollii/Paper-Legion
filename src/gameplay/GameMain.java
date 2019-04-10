@@ -94,7 +94,7 @@ public class GameMain extends Application {
     private static final int unitTilesWidth = tileSize * 5 + unitPadding * 4;
 
     ////PANE PADDINGS////
-    private final int buttonYPadding = 500;
+    private final int buttonYPadding = (int)(windowHeight * 0.65);
     private final int buttonSpacing = 10;
 
     //GRID//
@@ -103,14 +103,14 @@ public class GameMain extends Application {
 
     //PLACEMENT PHASE SIDE PANEL//
     private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
-    private final int recruitYPadding = 150;
+    private final int recruitYPadding = (int)(windowHeight * 0.12);
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
     private final int placementButtonXPadding = 150;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
-    private final int sidePanelYPadding = 150;
+    private final int sidePanelYPadding = (int)(windowHeight * 0.12);
     private final int turnCounterXPadding = 0;
     private final int turnCounterYPadding = 0;
     private final int descriptionXPadding = 0;
@@ -987,7 +987,11 @@ public class GameMain extends Application {
         resourceLabel.setText("Resources: " + currentResources);
 
         HBox resourceLabelBox = new HBox();
-        resourceLabelBox.setMinWidth(unitTilesWidth);
+        if (unitTypeList.size() < 5) {
+            resourceLabelBox.setMinWidth((unitTypeList.size() * tileSize) + ((unitTypeList.size() - 1) * unitPadding));
+        } else {
+            resourceLabelBox.setMinWidth(unitTilesWidth);
+        }
         resourceLabelBox.setAlignment(Pos.CENTER);
         resourceLabelBox.getChildren().add(resourceLabel);
 
