@@ -774,6 +774,7 @@ public class Database {
      */
 
     public void sendTurn(int turn) {
+        System.out.println("send turn Called");
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";

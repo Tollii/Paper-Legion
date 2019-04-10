@@ -440,6 +440,7 @@ public class GameMain extends Application {
         phaseLabel.setText("MOVEMENT PHASE");
 
         //If you are player 2. Start polling the database for next turn.
+        System.out.println("yourTurn: " + yourTurn);
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
@@ -1017,6 +1018,7 @@ public class GameMain extends Application {
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
+        endTurnButton = null;
     }
     /**
      * Method for setting up different panes containing the UI elements.
