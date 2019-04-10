@@ -22,7 +22,7 @@
           <children>
               <VBox alignment="CENTER" fillWidth="false" layoutX="-8.0" layoutY="-23.0" prefHeight="420.0" prefWidth="590.0" spacing="15.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-8.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="-23.0">
                  <children>
-                     <ImageView fx:id="paperLegionLogo" fitHeight="108.0" fitWidth="309.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="paperLegionLogo" fitHeight="258.0" fitWidth="459.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="/menus/menuAssets/paperLegionLogo.png" />
                         </image>

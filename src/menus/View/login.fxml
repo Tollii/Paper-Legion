@@ -18,7 +18,7 @@
                 AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
         <VBox alignment="CENTER" prefHeight="366.0" prefWidth="590.0" spacing="25.0" AnchorPane.bottomAnchor="-2.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <ImageView fx:id="paperLegionLogo" fitHeight="108.0" fitWidth="309.0" pickOnBounds="true"
+            <ImageView fx:id="paperLegionLogo" fitHeight="258.0" fitWidth="459.0" pickOnBounds="true"
                        preserveRatio="true">
                 <Image url="/menus/menuAssets/paperLegionLogo.png"/>
             </ImageView>

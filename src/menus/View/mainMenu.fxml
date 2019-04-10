@@ -26,7 +26,7 @@
                              <Insets left="150.0" />
                          </HBox.margin>
                         <children>
-                            <ImageView fx:id="paperLegionLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <ImageView fx:id="paperLegionLogo" fitHeight="411.0" fitWidth="372.0" pickOnBounds="true" preserveRatio="true">
                                <image>
                                    <Image url="/menus/menuAssets/paperLegionLogo.png" />
                                </image>
