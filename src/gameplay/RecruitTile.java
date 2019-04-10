@@ -10,7 +10,14 @@ import javafx.scene.input.ClipboardContent;
 import static database.Variables.*;
 import javafx.scene.paint.Paint;
 
-//own tile class for unit selector to avoid conflicts with gridtile class
+/**
+* Own lightweight version of Tile for use in placementphase for holding recruits. Has some different methods,
+* and lacks a lot of unnecessary attributes and methods from Tile. Extends StackPane to stack multiple
+* nodes in one place: holding a rectangle as a background with a recruit on top, and a cost label over that again.
+* @see Tile
+* @see Recruit
+* @see StackPane
+*/
 class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsuled rectangle
 
   private final Recruit recruit;
