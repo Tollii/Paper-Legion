@@ -48,6 +48,9 @@ public class Unit extends StackPane {
     private final boolean enemy;
     private boolean hasAttackedThisTurn;
     private final int pieceId;
+    private final String healthColor = "-fx-background-color: rgba(0, 255, 0, 0.4);";
+    private final String lowHealthColor = "-fx-background-color: rgba(255, 0, 0, 0.4);";
+    private final String healthFontSize = "-fx-font-size: 10;";
 
     /**
      * Sets the unit variables tile size, whether unit is enemy or not, attack multiplier, max-, min attack range,
@@ -87,12 +90,11 @@ public class Unit extends StackPane {
             this.getChildren().addAll(rect, healthbar);
             healthbar.setPrefWidth(Variables.tileSize - 2 * Variables.standardStrokeWidth);
             healthbar.setAlignment(Pos.CENTER);
-            int healthbarHeight = 10;
-            healthbar.setMinHeight(healthbarHeight);
-            int healthbarPosY = ((Variables.tileSize - healthbarHeight) / 2) - 2 * Variables.standardStrokeWidth;
+            double healthbarHeight = 10;
+            int healthbarPosY = (int)(-((Variables.tileSize - healthbarHeight) / 2) + 2 * Variables.standardStrokeWidth);
             healthbar.setTranslateY(healthbarPosY);
 
-            healthbar.setStyle("-fx-background-color: rgba(0, 255, 0, 0.4);");
+            healthbar.setStyle(healthColor + healthFontSize);
 
 
             ///SETS UNIT IMAGE////
@@ -251,7 +253,7 @@ public class Unit extends StackPane {
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
         if (hp <= LOW_HP_THRESHOLD) {
-            healthbar.setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
+            healthbar.setStyle(lowHealthColor + healthFontSize);
         }
     }
 
@@ -269,7 +271,7 @@ public class Unit extends StackPane {
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
         if (hp <= LOW_HP_THRESHOLD) {
-            healthbar.setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
+            healthbar.setStyle(lowHealthColor + healthFontSize);
         }
     }
 
