@@ -46,6 +46,16 @@ import java.util.ArrayList;
 import javafx.geometry.Orientation;
 import menus.Main;
 
+/**
+ * This class handles the game part of the application, it sets up the the game
+ * with variables, panes, buttons, layout and communication methods/threads for
+ * communicating with other players. All of the visual stuff is done here, and also
+ * some methods for handling the the visuals.
+ * When generated a object of this class, the object should call: "instancename".start(Stage).
+ * When calling this method, this Main method takes control of the Stage.
+ * @see database.Database
+ * @see GameLogic
+ */
 public class GameMain extends Application {
 
     ////BOARD SIZE CONTROLS////
@@ -687,6 +697,7 @@ public class GameMain extends Application {
             selectedPosY = -1;
         }
     }
+
     /**
      * Deselects the unit by resetting variables and change styling of tiles to go back to
      * default settings. Styles the tiles (Rectangle) in the Grid.list. It also removes description and clears onClick
@@ -805,6 +816,11 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * This method creates a new Thread which checks whose turn it is with the method
+     * getTurnPlayer from Database Class and changes the static variable yourTurn=true
+     * if method returns true.
+     */
     private void waitForTurn() {
         // Runnable lambda implementation for turn waiting with it's own thread
         RunnableInterface waitTurnRunnable = new RunnableInterface() {
@@ -857,7 +873,13 @@ public class GameMain extends Application {
         waitTurnThread.start();
     }
 
-    ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
+    /**
+     * Sets up the next turn by deselecting Units, incrementing turn counter, and changes the the text of
+     * the button to "End Turn" instead of "Waiting for other player" and phase label to "Movement phase" instead of
+     * "Waiting for other player". Then it imports the movement and attack of the oppponent and executes the attacks and moves.
+     * Finally the method calls for checkForGameOver() to see if player has been defeated.
+     * @see database.Database
+     */
     private void setUpNewTurn() {
         deselect();
         selectedUnit = null;
@@ -905,7 +927,12 @@ public class GameMain extends Application {
         checkForGameOver();
     }
 
-    ////METHOD FOR HANDLING SURRENDER////
+    /**
+     * This method is called when a player hits the Surrender button.
+     * This method sets up and opens a confirm dialog window to check if player is sure, if no go back
+     * to game, if the player selects yes, the method closes the dialog box and calls upon the method
+     * actualsurrender which saves the data to a database server and takes the rest of the dialog.
+     */
     private void surrender() {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
@@ -941,6 +968,15 @@ public class GameMain extends Application {
         confirm_alert.showAndWait();
     }
 
+    /**
+     * This method is called upon by surrender() method, and this method
+     * uses the method surrenderGame() from the Database Class to send information about
+     * which player won, and increment games won for that player. It sets a variable
+     * surrendered=true, which is checked by another method after the end of each turn.
+     * This method ends the turn after setting the variable, and if it is not players turn
+     * then the method checks for game over using the  checkForGameOver() method.
+     * @see database.Database
+     */
     public void actualSurrender(){
         db.surrenderGame();
         surrendered = true;
@@ -1063,6 +1099,7 @@ public class GameMain extends Application {
         selectedPosY = -1;
         endTurnButton = null;
     }
+
     /**
      * Method for setting up different panes containing the UI elements.
      * Sets up Grid and styles it.
@@ -1162,6 +1199,7 @@ public class GameMain extends Application {
 
         return sidePanel;
     }
+
     /**
      * Sets up a pane on the top of the game with a label to show status for turns,
      * phase info, etc. For example: Placement phase to indicate that player is in that phase,
