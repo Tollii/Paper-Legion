@@ -17,8 +17,6 @@ import java.sql.SQLException;
 import static database.Variables.*;
 
 
-
-
 public class Main extends Application {
 
     public static Stage window;
