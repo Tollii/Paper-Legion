@@ -832,14 +832,7 @@ public class GameMain extends Application {
         JFXButton surrender_no = new JFXButton("No");
 
         surrender_yes.setOnAction(event -> {
-            db.surrenderGame();
-            surrendered = true;
-
-            if (yourTurn) {
-                endTurn(endTurnButton, phaseLabelPane);
-            } else {
-                checkForGameOver();
-            }
+            actualSurrender(endTurnButton, phaseLabelPane);
             confirm_alert.close();
         });
 
@@ -859,6 +852,17 @@ public class GameMain extends Application {
         confirm_alert.initStyle(StageStyle.UNDECORATED);
         confirm_alert.setScene(scene);
         confirm_alert.showAndWait();
+    }
+
+    private void actualSurrender(JFXButton endTurnButton, Pane phaseLabelPane){
+        db.surrenderGame();
+        surrendered = true;
+
+        if (yourTurn) {
+            endTurn(endTurnButton, phaseLabelPane);
+        } else {
+            checkForGameOver();
+        }
     }
 
     ////METHODS FOR ENDING THE GAME////
@@ -1052,7 +1056,7 @@ public class GameMain extends Application {
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
         Pane phaseLabelPane = createPhaseLabelPane();
-        surrender(endTurnButton, phaseLabelPane);
+        actualSurrender(endTurnButton, phaseLabelPane);
         Main.closeAndLogout();
     }
 
