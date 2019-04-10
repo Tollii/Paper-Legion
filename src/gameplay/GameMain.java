@@ -53,7 +53,6 @@ import menus.Main;
  * some methods for handling the the visuals.
  * When generated a object of this class, the object should call: "instancename".start(Stage).
  * When calling this method, this Main method takes control of the Stage.
- *
  * @see database.Database
  * @see GameLogic
  */
@@ -107,23 +106,23 @@ public class GameMain extends Application {
     private static final int unitTilesWidth = tileSize * 5 + unitPadding * 4;
 
     ////PANE PADDINGS////
-    private final int buttonYPadding = (int) (windowHeight * 0.65);
+    private final int buttonYPadding = (int)(windowHeight * 0.65);
     private final int buttonSpacing = 10;
 
     //GRID//
-    private final int gridXPadding = (int) (windowWidth * 0.08);
-    private final int gridYPadding = (int) (windowHeight * 0.07);
+    private final int gridXPadding = (int)(windowWidth * 0.08);
+    private final int gridYPadding = (int)(windowHeight * 0.07);
 
     //PLACEMENT PHASE SIDE PANEL//
-    private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int) (screenWidth * 0.05);
-    private final int recruitYPadding = (int) (windowHeight * 0.12);
+    private final int recruitXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
+    private final int recruitYPadding = (int)(windowHeight * 0.12);
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
     private final int placementButtonXPadding = 150;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
-    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int) (screenWidth * 0.05);
-    private final int sidePanelYPadding = (int) (windowHeight * 0.12);
+    private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
+    private final int sidePanelYPadding = (int)(windowHeight * 0.12);
     private final int turnCounterXPadding = 0;
     private final int turnCounterYPadding = 0;
     private final int descriptionXPadding = 0;
@@ -163,7 +162,6 @@ public class GameMain extends Application {
      * Sets up variables, layouts, panes, buttons, etc. This method calls upon
      * the addObstacles() method and the placementPhaseStart() method.
      * the game in placementPhase
-     *
      * @see GameLogic
      * @see Application
      */
@@ -195,7 +193,6 @@ public class GameMain extends Application {
      * method  (GameLogic) game.createObstacles() which creates obstacles and give them a random placement
      * by using a Random number generator.Player 1 continuously wait and polls to check if obstacles have been added
      * before resuming the game flow of the program.
-     *
      * @see GameLogic
      * @see database.Database
      */
@@ -231,7 +228,6 @@ public class GameMain extends Application {
      * the grid to be divided against the players, so that player 1 can place their units/recruits on the top
      * and player can place their units on the bottom. Clicking the finishedPlacingButton calls upon the method
      * placementPhaseFinished().
-     *
      * @see GameLogic
      * @see Recruit
      * @see Unit
@@ -278,7 +274,6 @@ public class GameMain extends Application {
     /**
      * It is a static method that updates the resource label, when called upon.
      * It sets the text of the resourceLabel to a static variable :"currentResources".
-     *
      * @see database.Variables
      */
     static void updateResourceLabel() {
@@ -289,13 +284,12 @@ public class GameMain extends Application {
      * Deselects the other recruit tiles in the sidebar when selecting
      * another recruit tile. This method unstrokes the recruitTiles which is
      * not selected.
-     *
      * @see Recruit
      * @see RecruitTile
      */
     static void deselectRecruitTiles() {
         RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
-        for (RecruitTile tile : recruitUnits.getChildren().toArray(a)) {
+        for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
             tile.setStrokeWidth(standardStrokeWidth);
             tile.setStroke(standardStrokeColor);
         }
@@ -308,7 +302,6 @@ public class GameMain extends Application {
      * phase and is ready to start the game in Movement phase.
      * Finally this method calls upon the method waitForOpponentReady() which polls
      * to check if opponent is read.
-     *
      * @param recruitPane Takes in a Pane
      * @see database.Database
      * @see Recruit
@@ -351,7 +344,6 @@ public class GameMain extends Application {
      * checkIfOpponentReady() from Database method to do this.
      * This methods calls upon the methods importPlacementUnits() and movementPhaseStart()
      * when opponent is finished with the placement phase.
-     *
      * @see GameLogic
      * @see database.Database
      */
@@ -415,7 +407,6 @@ public class GameMain extends Application {
     /**
      * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
      * Uses UnitGenerator to add the new enemy units.
-     *
      * @see PieceSetup
      * @see Grid
      * @see UnitGenerator
@@ -442,8 +433,8 @@ public class GameMain extends Application {
      * opponent depending on which phase player is in. This method has all of the MouseEvent's
      * for the game, and depending on which mouse button clicked, or if double click will launch
      * different methods. The methods used in the MouseEvent is select(), deselect(), attack(), move()
-     *
      * @see GameLogic
+     *
      */
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
@@ -524,11 +515,10 @@ public class GameMain extends Application {
      * checkForLegalMove(). If the move is legal then the unit changes position and adds itself to a movement list
      * to later be exported to Database. Finally, this method sets the phase label to Attack Phase, and remove all
      * of the movement highlighting of the tiles with the method clearHighlight().
-     *
      * @see GameLogic
      */
     private void move(MouseEvent event) {
-        if (yourTurn) {
+        if(yourTurn) {
             int newPosX = getPosXFromEvent(event);
             int newPosY = getPosYFromEvent(event); //position of click
 
@@ -562,7 +552,6 @@ public class GameMain extends Application {
      * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
      * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
      * with executeAttack() method. Finally it deselects the unit with deselect() method.
-     *
      * @see GameMain
      * @see Grid
      * @see Unit
@@ -574,12 +563,12 @@ public class GameMain extends Application {
             int attackPosY = getPosYFromEvent(event); //sets position attacked
             ArrayList<Tile> attackTargets = game.getAttackableTiles();
 
-            if (game.checkForLegalAttack(attackPosY, attackPosX, attackTargets)) {
+            if (game.checkForLegalAttack(attackPosY,attackPosX,attackTargets)) {
 
                 //adds the attack to attacklist
                 attackList.add(new Attack(turn, match_id, user_id, selectedUnit.getPieceId(), grid.tileList[attackPosY][attackPosX].getUnit().getPieceId(), selectedUnit.getAttack()));
 
-                game.executeAttack(attackPosY, attackPosX);
+                game.executeAttack(attackPosY,attackPosX);
 
                 //play audio clip.
                 selectedUnit.getAudio().play(); //plays the audio clip associated with the unit type
@@ -593,7 +582,6 @@ public class GameMain extends Application {
      * Highlights all possible tiles that a unit can move, by filling
      * tile with with movement color. This method calls upon the method getMovementPossibleTiles()
      * to find which tiles should be filled.
-     *
      * @see GameLogic
      */
     private void highlightPossibleMoves() {
@@ -602,7 +590,7 @@ public class GameMain extends Application {
 
             //colors all tiles that are possible movement targets green
             //colors all tiles that are possible movement targets green
-            for (Tile t : movementTargets) {
+            for(Tile t : movementTargets){
                 t.setFill(movementHighlightColor);
             }
         }
@@ -612,7 +600,6 @@ public class GameMain extends Application {
      * Highlights all possible tiles that a unit can attack, by filling
      * tile with attack color. This method calls upon the method getAttackableTiles()
      * to find which tiles should be filled.
-     *
      * @see GameLogic
      */
     private void highlightPossibleAttacks() {
@@ -621,7 +608,7 @@ public class GameMain extends Application {
 
             //colors all attackable tiles red
 
-            for (Tile t : attackTargets) {
+            for(Tile t : attackTargets){
                 t.setFill(attackHighlightColor);
             }
         }
@@ -642,12 +629,11 @@ public class GameMain extends Application {
     /**
      * Is a static method which sets the description used in the sidebar.
      * It is used in Recruit, but can also be called from other Classes.
-     *
-     * @param newDescription     Takes a String with the description that should show in the sidebar.
+     * @param newDescription Takes a String with the description that should show in the sidebar.
      * @param newDescriptionHead Takes a String for the description head.
      * @see Recruit
      */
-    public static void changeDescriptionLabel(String newDescription, String newDescriptionHead) {
+    public static void changeDescriptionLabel(String newDescription, String newDescriptionHead){
         descriptionHead.setText(newDescriptionHead);
         description.setText(newDescription);
     }
@@ -655,10 +641,9 @@ public class GameMain extends Application {
     /**
      * Is a static method which controls if the description used in the sidebar is visible.
      * It is used in Recruit, but can also be called from other Classes.
-     *
      * @param visible Takes a boolean to control whether the description and description head is visible or not.
      */
-    public static void descriptionVisible(boolean visible) {
+    public static void descriptionVisible(boolean visible){
         descriptionHead.setVisible(visible);
         description.setVisible(visible);
     }
@@ -670,8 +655,7 @@ public class GameMain extends Application {
      * If unit is friendly, it sets a stroke around the tile, sets description for the tile in the sidebar,
      * if player is in attack phase, it will call upon highlightPossibleAttacks, or if player is in movement phase
      * it will call upon the method highlightPossibleMoves().
-     *
-     * @param event Takes in a MouseEvent to use with getPosXFromEvent and getPosYFromEvent.
+     * @param  event Takes in a MouseEvent to use with getPosXFromEvent and getPosYFromEvent.
      */
     private void select(MouseEvent event) {
 
@@ -719,7 +703,6 @@ public class GameMain extends Application {
      * default settings. Styles the tiles (Rectangle) in the Grid.list. It also removes description and clears onClick
      * items from sidebar. Uses static variables: selectedUnit, selectedPosX, selectedPosY, description, grid.
      * This method also calls on clearHighlight() method which sets the fill on every tile back to default settings.
-     *
      * @see Grid
      * @see Tile
      * @see javafx.scene.shape.Rectangle
@@ -752,9 +735,9 @@ public class GameMain extends Application {
      * MouseEvent.MouseClicked as argument and turns the pixel coordinates
      * to grid coordinates by rounding up to nearest tile size.
      *
-     * @param event Gets the coordinates from MouseEvent.MouseClicked.
+     * @param  event  Gets the coordinates from MouseEvent.MouseClicked.
      * @return returns an X position integer which corresponds with the grid.
-     * @see Grid
+     * @see         Grid
      */
     private int getPosXFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getX()) / tileSize) - 1;
@@ -765,9 +748,9 @@ public class GameMain extends Application {
      * MouseEvent.MouseClicked as argument and turns the pixel coordinates
      * to grid coordinates by rounding up to nearest tile size.
      *
-     * @param event Gets the coordinates from MouseEvent.MouseClicked.
+     * @param  event  Gets the coordinates from MouseEvent.MouseClicked.
      * @return returns an Y position integer which corresponds with the grid.
-     * @see Grid
+     * @see         Grid
      */
     private int getPosYFromEvent(MouseEvent event) {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
@@ -781,7 +764,6 @@ public class GameMain extends Application {
      * it calls upon the sendTurn() method to change turns. It then deselects the unit using the deselect() method.
      * Finally this methods calls upon the metods checkForGameOver to see if player won, and waitForTurn() which only
      * triggers if player has not surrendered.
-     *
      * @see database.Database
      * @see GameLogic
      */
@@ -896,7 +878,6 @@ public class GameMain extends Application {
      * the button to "End Turn" instead of "Waiting for other player" and phase label to "Movement phase" instead of
      * "Waiting for other player". Then it imports the movement and attack of the oppponent and executes the attacks and moves.
      * Finally the method calls for checkForGameOver() to see if player has been defeated.
-     *
      * @see database.Database
      */
     private void setUpNewTurn() {
@@ -916,7 +897,7 @@ public class GameMain extends Application {
         System.out.println("importedAttackList size is: " + importedAttackList.size());
 
         ////EXECUTES MOVES FROM OPPONENTS TURN////
-        for (Move m : importedMovementList) {
+        for(Move m : importedMovementList){
             //gets the unit from the tile and removes it from the same tile
             Unit movingUnit = grid.tileList[m.getStartPosY()][m.getStartPosX()].getUnit();
             grid.tileList[m.getStartPosY()][m.getStartPosX()].removeUnit();
@@ -924,7 +905,7 @@ public class GameMain extends Application {
             grid.tileList[m.getEndPosY()][m.getEndPosX()].setUnit(movingUnit);
         }
 
-        for (Attack a : importedAttackList) {
+        for(Attack a : importedAttackList){
             for (int j = 0; j < grid.tileList.length; j++) {
                 for (int k = 0; k < grid.tileList[j].length; k++) {
 
@@ -994,10 +975,9 @@ public class GameMain extends Application {
      * surrendered=true, which is checked by another method after the end of each turn.
      * This method ends the turn after setting the variable, and if it is not players turn
      * then the method checks for game over using the  checkForGameOver() method.
-     *
      * @see database.Database
      */
-    public void actualSurrender() {
+    public void actualSurrender(){
         db.surrenderGame();
         surrendered = true;
 
@@ -1017,7 +997,6 @@ public class GameMain extends Application {
      * also call upon the method db.incrementGamesWon() for the winning player. The message dialog has a button which will return the player
      * to the main menu. When user hits that button, this method uses the method gameCleanup() to reset variables if player wants to play again,
      * and send players to the mainmenu.
-     *
      * @see database.Database
      * @see GameLogic
      */
@@ -1098,10 +1077,14 @@ public class GameMain extends Application {
     private void gameCleanUp() {
         System.out.println("CLEAN UP HAPPENS");
         //Stuff that need to be closed or reset. Might not warrant its own method.
-        waitTurnRunnable.doStop();
-        waitTurnThread.stop();
-        waitPlacementRunnable.doStop();
-        waitPlacementThread.stop();
+        if (waitTurnThread != null) {
+            waitTurnRunnable.doStop();
+            waitTurnThread.stop();
+        }
+        if (waitPlacementThread != null) {
+            waitPlacementRunnable.doStop();
+            waitPlacementThread.stop();
+        }
 
         //Resets variables to default.
         turn = 1;
@@ -1121,7 +1104,6 @@ public class GameMain extends Application {
     /**
      * Method for setting up different panes containing the UI elements.
      * Sets up Grid and styles it.
-     *
      * @see Grid
      */
     private Pane createGrid() {
@@ -1140,7 +1122,6 @@ public class GameMain extends Application {
      * Creates a sidebar panel for placement phase, and adds the buttons, and Recruits to it.
      * This method also stylizes and sets up resourcelabel, descriptionHead, and adds description
      * to the pane. This method returns the pane with all the labels and buttons in it.
-     *
      * @return Pane
      * @see Recruit
      * @see RecruitTile
@@ -1192,7 +1173,6 @@ public class GameMain extends Application {
      * Creates the sidepanel for the placement/movement/attack phase, and serves useful
      * for showing descriptions and buttons like Surrender and End Turn.
      * Returns the sidepanelPane.
-     *
      * @return Pane
      */
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
@@ -1226,7 +1206,6 @@ public class GameMain extends Application {
      * phase info, etc. For example: Placement phase to indicate that player is in that phase,
      * or waiting for opponent to show that it is not players turn.
      * Returns the phaseLabelPane.
-     *
      * @return Pane
      */
     private Pane createPhaseLabelPane() {
@@ -1236,7 +1215,7 @@ public class GameMain extends Application {
         phaseLabel.setMinHeight(phaseLabelHeight);
 
         HBox phaseLabelBox = new HBox();
-        phaseLabelBox.setMinWidth(tileSize * boardSize);
+        phaseLabelBox.setMinWidth(tileSize*boardSize);
         phaseLabelBox.setAlignment(Pos.CENTER);
         phaseLabelBox.getChildren().add(phaseLabel);
 
