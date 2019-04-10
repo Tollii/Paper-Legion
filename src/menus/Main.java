@@ -37,8 +37,8 @@ public class Main extends Application {
 
         window.setTitle("Paper Legion");
         window.setScene(rootScene);
-        window.setMinWidth(850);
-        window.setMinHeight(650);
+        window.setMinWidth(1024);
+        window.setMinHeight(768);
 
         //Finds screen size and sizes window to it.
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
