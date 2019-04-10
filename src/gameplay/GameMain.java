@@ -357,6 +357,7 @@ public class GameMain extends Application {
 
                                 System.out.println(opponent_id + ": ready!");
                                 this.doStop();
+                                waitPlacementThread = null;
                             }
                         }
 
@@ -367,7 +368,6 @@ public class GameMain extends Application {
 
                             importOpponentPlacementUnits();
                             movementPhaseStart();
-                            waitTurnThread.stop();
 
                         });
 
