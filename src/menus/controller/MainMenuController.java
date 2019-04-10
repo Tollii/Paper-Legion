@@ -68,7 +68,6 @@ public class MainMenuController extends Controller {
         imageMainMenu.setStyle("-fx-background-image: url(/menus/menuAssets/legion_finished.png);" +
                 "-fx-background-size: contain;" +
                 "-fx-background-repeat: no-repeat;"+
-
                 "-fx-background-position: center;");
 
 
