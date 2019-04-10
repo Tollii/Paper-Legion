@@ -33,13 +33,10 @@ public class Config {
     public static Config getConfig() {
         return config;
     }
-    //jdbc:MySQL://MySQL.stud.iie.ntnu.no:3306/thomabmo/confluence?autoReconnect=true
 
     public static Config getInstance() {
         return config;
     }
-
-
 
     /**
      *
