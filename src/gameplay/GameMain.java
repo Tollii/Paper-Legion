@@ -225,12 +225,6 @@ public class GameMain extends Application {
 
         Pane recruitPane = createRecruitPane();
 
-        description.setStyle(descriptionFont);
-        description.setLayoutX(descriptionXPadding);
-        description.setLayoutY(placementDescriptionYPadding);
-        descriptionVisible(true);
-
-
         JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
         finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
         finishedPlacingButton.setTextFill(buttonTextColor);
@@ -238,7 +232,7 @@ public class GameMain extends Application {
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
         finishedPlacingButton.setLayoutY(buttonYPadding);
 
-        recruitPane.getChildren().addAll(description,finishedPlacingButton);
+        recruitPane.getChildren().add(finishedPlacingButton);
 
         int playerSideTop, playerSideBottom; //sets paddings depending on player side (to the coloring of the boardtiles as well as untargetability)
         if (user_id == player1) {
@@ -563,6 +557,25 @@ public class GameMain extends Application {
                 grid.tileList[i][j].setFill(standardTileColor);
             }
         }
+    }
+
+    /**
+     * Is a static method which sets the description used in the sidebar.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param newDescription Takes a String with the description that should show in the sidebar.
+     * @see Recruit
+     */
+    public static void changeDescriptionLabel(String newDescription){
+        description.setText(newDescription);
+    }
+
+    /**
+     * Is a static method which controls if the description used in the sidebar is visible.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param visible Takes a boolean to control whether the description is visible or not.
+     */
+    public static void descriptionVisible(boolean visible){
+        description.setVisible(visible);
     }
 
     /**
@@ -997,7 +1010,12 @@ public class GameMain extends Application {
         }
         recruitUnits.setLayoutY(unitTilesYPadding);
 
-        unitPane.getChildren().addAll(resourceLabelBox, recruitUnits);
+        description.setStyle(descriptionFont);
+        description.setLayoutX(descriptionXPadding);
+        description.setLayoutY(placementDescriptionYPadding);
+        descriptionVisible(false);
+
+        unitPane.getChildren().addAll(resourceLabelBox, recruitUnits, description);
 
         unitPane.setLayoutX(recruitXPadding);
         unitPane.setLayoutY(recruitYPadding);
@@ -1054,25 +1072,6 @@ public class GameMain extends Application {
         Pane phaseLabelPane = createPhaseLabelPane();
         surrender(endTurnButton, phaseLabelPane);
         Main.closeAndLogout();
-    }
-
-    /**
-     * Is a static method which sets the description used in the sidebar.
-     * It is used in Recruit, but can also be called from other Classes.
-     * @param newDescription Takes a String with the description that should show in the sidebar.
-     * @see Recruit
-     */
-    public static void changeDescriptionLabel(String newDescription){
-        description.setText(newDescription);
-    }
-
-    /**
-     * Is a static method which controls if the description used in the sidebar is visible.
-     * It is used in Recruit, but can also be called from other Classes.
-     * @param visible Takes a boolean to control whether the description is visible or not.
-     */
-    public static void descriptionVisible(boolean visible){
-        description.setVisible(visible);
     }
 
     ////MAIN USED FOR SHUTDOWN HOOK////
