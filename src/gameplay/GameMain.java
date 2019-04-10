@@ -367,7 +367,7 @@ public class GameMain extends Application {
 
                             importOpponentPlacementUnits();
                             movementPhaseStart();
-
+                            waitTurnThread.stop();
 
                         });
 
