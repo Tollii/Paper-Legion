@@ -75,15 +75,18 @@ public class GameInfoController extends Controller {
         gameInfoBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
 
         backgroundImagePane.setStyle("-fx-background-image: url(/menus/menuAssets/movementInfo.png);" +
-                "-fx-background-size: cover;" +
+                "-fx-background-size: contain;" +
+                "-fx-background-repeat: no-repeat;"+
                 "-fx-background-position: top left;");
 
         attackbackgroundImagePane.setStyle("-fx-background-image: url(/menus/menuAssets/attackInfo.png);" +
-                "-fx-background-size: cover;" +
+                "-fx-background-size: contain;" +
+                "-fx-background-repeat: no-repeat;"+
                 "-fx-background-position: top left;");
 
         placementbackgroundImagePane.setStyle("-fx-background-image: url(/menus/menuAssets/placement.png);" +
-                "-fx-background-size: cover;" +
+                "-fx-background-size: contain;" +
+                "-fx-background-repeat: no-repeat;"+
                 "-fx-background-position: top left;");
 
 
