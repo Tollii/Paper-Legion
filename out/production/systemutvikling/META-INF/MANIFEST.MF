@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: /Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Content
- s/Home
-Main-Class: menus.Main
-
