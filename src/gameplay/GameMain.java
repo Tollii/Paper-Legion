@@ -60,6 +60,7 @@ public class GameMain extends Application {
     private final Label phaseLabel = new Label();
     private JFXButton endTurnButton;                                //button for ending turn
     private static FlowPane recruitUnits;
+    public Pane phaseLabelPane;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -119,7 +120,6 @@ public class GameMain extends Application {
 
     //PHASELABEL PANE//
     private final int phaseLabelYPadding = ((gridYPadding - phaseLabelHeight) / 2);
-    public Pane phaseLabelPane;
 
     ////GAME CONTROL VARIABLES////
     private boolean unitSelected = false;
@@ -329,11 +329,13 @@ public class GameMain extends Application {
         waitForOpponentReady();
     }
 
-    ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
-
-
     /**
-     * Method for polling if oppo
+     * Method for polling if opponent is finished with placement phase. It uses the
+     * checkIfOpponentReady() from Database method to do this.
+     * This methods calls upon the methods importPlacementUnits() and movementPhaseStart()
+     * when opponent is finished with the placement phase.
+     * @see GameLogic
+     * @see database.Database
      */
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
@@ -390,6 +392,14 @@ public class GameMain extends Application {
         waitPlacementThread.start();
     }
 
+    /**
+     * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
+     * Uses UnitGenerator to add the new enemy units.
+     * @see PieceSetup
+     * @see Grid
+     * @see UnitGenerator
+     * @see database.Database
+     */
     private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
@@ -399,7 +409,6 @@ public class GameMain extends Application {
             grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
         }
     }
-
 
     /**
      * Starts the movement phase, starts up creating panes for game with the methods
@@ -486,6 +495,16 @@ public class GameMain extends Application {
         });
     }
 
+    /**
+     * If it is player's turn it gets mouseclick position from MouseEvent and uses
+     * methods getPosYFromEvent() and getPosYFromEvent() to translate into x and y
+     * coordinates corresponding with the grid/board. It then uses the method getMovementPossibleTiles()
+     * to get all the tiles the unit is able to move to, and checks if the move is legal with the method
+     * checkForLegalMove(). If the move is legal then the unit changes position and adds itself to a movement list
+     * to later be exported to Database. Finally, this method sets the phase label to Attack Phase, and remove all
+     * of the movement highlighting of the tiles with the method clearHighlight().
+     * @see GameLogic
+     */
     private void move(MouseEvent event) {
         if(yourTurn) {
             int newPosX = getPosXFromEvent(event);
@@ -514,6 +533,18 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Checks to see if in movementphase and if it's players turn, if it is then this method uses
+     * getPosXFromEvent and getPosYFromEvent to get the MouseEvent.MouseClick transformed into
+     * grid coordinates and uses the method getAttackableTiles() to get all pieces on tiles within attack
+     * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
+     * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
+     * with executeAttack() method. Finally it deselects the unit with deselect() method.
+     * @see GameMain
+     * @see Grid
+     * @see Unit
+     * @see GameLogic
+     */
     private void attack(MouseEvent event) {
         if (!movementPhase && yourTurn) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
@@ -712,7 +743,17 @@ public class GameMain extends Application {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }
 
-    ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
+    /**
+     * If this method is called when it is players turn, then the turn integer increments,
+     * and it changes the text labels to Waiting for other players. It then exports the movement
+     * and attacks done within players round to database using methods exportMoveList() and
+     * exportAttackList() from Database class. After player is done with round, and the export is complete
+     * it calls upon the sendTurn() method to change turns. It then deselects the unit using the deselect() method.
+     * Finally this methods calls upon the metods checkForGameOver to see if player won, and waitForTurn() which only
+     * triggers if player has not surrendered.
+     * @see database.Database
+     * @see GameLogic
+     */
     private void endTurn() {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
@@ -1037,6 +1078,14 @@ public class GameMain extends Application {
         return gridPane;
     }
 
+    /**
+     * Creates a sidebar panel for placement phase, and adds the buttons, and Recruits to it.
+     * This method also stylizes and sets up resourcelabel, descriptionHead, and adds description
+     * to the pane. This method returns the pane with all the labels and buttons in it.
+     * @return Pane
+     * @see Recruit
+     * @see RecruitTile
+     */
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
 
@@ -1149,7 +1198,6 @@ public class GameMain extends Application {
         Main.closeAndLogout();
     }
 
-    ////MAIN USED FOR SHUTDOWN HOOK////
     /**
      * Calls for shutdown methods if program is closed. It is used to log out user
      * and close connections.
