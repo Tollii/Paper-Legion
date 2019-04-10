@@ -54,6 +54,7 @@ public class GameMain extends Application {
     ////SCENE ELEMENTS////
     private Pane root;
     private static final Label description = new Label();                //description label for the selected unit
+    private static final Label descriptionHead = new Label();            //description head label for selected unit
     private final static Label resourceLabel = new Label();    //Static so that Tile can update the label
     private final Label  turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private final Label phaseLabel = new Label();
@@ -87,6 +88,7 @@ public class GameMain extends Application {
 
     //LABELS SIZES//
     private final int phaseLabelHeight = 50;
+    private final int descriptionHeadHeigth = 20;
 
     //RECRUIT PANE UNIT TILES WIDTH//
     private static final int unitPadding = 5;
@@ -133,9 +135,10 @@ public class GameMain extends Application {
     ////UNIT GENERATOR////
     private UnitGenerator unitGenerator = new UnitGenerator();
 
-    private final String descriptionFont = "-fx-font-family: 'Arial Black'";
-    private final String buttonBackgroundColor = "-fx-background-color: #000000";
+    private final String descriptionFont = "-fx-font-family: 'Arial Black';";
+    private final String buttonBackgroundColor = "-fx-background-color: #000000;";
     private final String fontSize32 = "-fx-font-size:32px;";
+    private final String descriptionHeadFontSize = "-fx-font-size: 20px;";
     private final Paint buttonTextColor = Color.WHITE;
     private final Paint movementHighlightColor = Color.GREENYELLOW;
     private final Paint attackHighlightColor = Color.DARKRED;
@@ -563,18 +566,21 @@ public class GameMain extends Application {
      * Is a static method which sets the description used in the sidebar.
      * It is used in Recruit, but can also be called from other Classes.
      * @param newDescription Takes a String with the description that should show in the sidebar.
+     * @param newDescriptionHead Takes a String for the description head.
      * @see Recruit
      */
-    public static void changeDescriptionLabel(String newDescription){
+    public static void changeDescriptionLabel(String newDescription, String newDescriptionHead){
+        descriptionHead.setText(newDescriptionHead);
         description.setText(newDescription);
     }
 
     /**
      * Is a static method which controls if the description used in the sidebar is visible.
      * It is used in Recruit, but can also be called from other Classes.
-     * @param visible Takes a boolean to control whether the description is visible or not.
+     * @param visible Takes a boolean to control whether the description and description head is visible or not.
      */
     public static void descriptionVisible(boolean visible){
+        descriptionHead.setVisible(visible);
         description.setVisible(visible);
     }
 
@@ -619,7 +625,9 @@ public class GameMain extends Application {
             }
             //displays the description of the unit
             description.setText(selectedUnit.getDescription());
+            descriptionHead.setText(selectedUnit.getDescriptionHead());
             description.setVisible(true);
+            descriptionHead.setVisible(true);
         } else {
             selectedPosX = -1;
             selectedPosY = -1;
@@ -649,7 +657,9 @@ public class GameMain extends Application {
 
             //removes unit description
             description.setText("");
+            descriptionHead.setText("");
             description.setVisible(false);
+            descriptionHead.setVisible(false);
 
             clearHighLight();
         }
@@ -1010,12 +1020,17 @@ public class GameMain extends Application {
         }
         recruitUnits.setLayoutY(unitTilesYPadding);
 
+        descriptionHead.setStyle(descriptionFont + descriptionHeadFontSize);
+        descriptionHead.setLayoutX(descriptionXPadding);
+        descriptionHead.setLayoutY(placementDescriptionYPadding);
+        descriptionHead.setVisible(false);
+
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
-        description.setLayoutY(placementDescriptionYPadding);
-        descriptionVisible(false);
+        description.setLayoutY(placementDescriptionYPadding + 2 * descriptionHeadHeigth);
+        description.setVisible(false);
 
-        unitPane.getChildren().addAll(resourceLabelBox, recruitUnits, description);
+        unitPane.getChildren().addAll(resourceLabelBox, recruitUnits, descriptionHead, description);
 
         unitPane.setLayoutX(recruitXPadding);
         unitPane.setLayoutY(recruitYPadding);
@@ -1031,12 +1046,17 @@ public class GameMain extends Application {
         turnCounter.setLayoutX(turnCounterXPadding);
         turnCounter.setLayoutY(turnCounterYPadding);
 
+        descriptionHead.setStyle(descriptionFont + descriptionHeadFontSize);
+        descriptionHead.setLayoutX(descriptionXPadding);
+        descriptionHead.setLayoutY(descriptionYPadding);
+        descriptionHead.setVisible(false);
+
         description.setStyle(descriptionFont);
         description.setLayoutX(descriptionXPadding);
-        description.setLayoutY(descriptionYPadding);
+        description.setLayoutY(descriptionYPadding + descriptionHeadHeigth);
         description.setVisible(false);
 
-        sidePanel.getChildren().addAll(turnCounter, phaseLabel, description);
+        sidePanel.getChildren().addAll(turnCounter, phaseLabel, descriptionHead, description);
 
         sidePanel.setLayoutX(sidePanelXPadding);
         sidePanel.setLayoutY(sidePanelYPadding);

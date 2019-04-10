@@ -230,17 +230,25 @@ public class Unit extends StackPane {
     }
 
     /**
-     * Returns a string with the units attributes and description text and tags.
+     * Returns the attributes like health, movement range, attack, defence, and description in a single String.
      * @return String
      */
     public String getDescription() {
 
-        return descriptionTag + "\n" +
+        return "\n" +
                 "\nHp: " + hp +
                 "\nMovement Range: " + movementRange +
                 "\nAttack: " + attack +
                 "\nDefence: " + defenceMultiplier + "\n" +
                 "\n" + description;
+    }
+
+    /**
+    * Returns the head for the description, which is the name of the units type
+    * @return String
+    */
+    public String getDescriptionHead() {
+      return type.getDescriptionTag();
     }
 
     /**

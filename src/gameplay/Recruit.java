@@ -67,19 +67,26 @@ public class Recruit extends StackPane {
   }
 
   /**
-   * Returns the attributes like health, movement range, attack, description tag, and description in a single String.
-   * Very similar to a toString method(). It is used in the sidepanel to show recruit information on mouse click.
+   * Returns the attributes like health, movement range, attack, defence, and description in a single String.
+   * Very similar to a toString method. It is used in the sidepanel to show recruit information on mouse click.
    * @return String
    * @see Unit
    */
   public String getDescription(){
-
-    return type.getDescriptionTag() +
-            "\nCost: " + type.getCost() + "\n" +
+    return "\n" +
             "\nHp: " + type.getHp() +
             "\nMovement Range: " + type.getMovementRange() +
             "\nAttack: " + type.getAttack() +
             "\nDefence: " + type.getDefenceMultiplier() + "\n" +
             "\n" + type.getDescription();
+  }
+
+  /**
+  * Returns the head for the description, with the cost added. Very similar to a toString() method.
+  * @return String
+  * @see Unit
+  */
+  public String getDescriptionHead() {
+    return type.getDescriptionTag() + "\nCost: " + type.getCost();
   }
 }

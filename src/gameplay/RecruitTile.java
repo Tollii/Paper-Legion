@@ -27,7 +27,7 @@ class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsul
     this.getChildren().add(this.recruit);
 
     this.setOnMouseClicked(event -> {
-      GameMain.changeDescriptionLabel(recruit.getDescription());
+      GameMain.changeDescriptionLabel(recruit.getDescription(), recruit.getDescriptionHead());
       GameMain.descriptionVisible(true);
 
       GameMain.deselectRecruitTiles();
