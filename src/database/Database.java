@@ -651,6 +651,7 @@ public class Database {
 //            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(player);
             connectionPool.releaseConnection(myConn);
+            connectionPool.releaseConnection(myConn2);
         }
     }
 
