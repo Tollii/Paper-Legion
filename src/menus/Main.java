@@ -48,14 +48,14 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        //Sets the Dock icon for mac
-        try {
-            URL iconURL = Main.class.getResource("/images/dockIcon.png");
-            Image image = new ImageIcon(iconURL).getImage();
-            com.apple.eawt.Application.getApplication().setDockIconImage(image);
-        } catch (Exception e) {
-            // Won't work on Windows or Linux.
-        }
+//        //Sets the Dock icon for mac
+//        try {
+//            URL iconURL = Main.class.getResource("/images/dockIcon.png");
+//            Image image = new ImageIcon(iconURL).getImage();
+//            com.apple.eawt.Application.getApplication().setDockIconImage(image);
+//        } catch (Exception e) {
+//            // Won't work on Windows or Linux.
+//        }
 
         //Shutdown hook. Closes stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
