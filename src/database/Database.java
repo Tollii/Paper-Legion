@@ -1336,6 +1336,23 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+    public void keepTheConnectionAlive() {
+        String stmt = "SELECT user_id FROM Users WHERE user_id = 1;";
+        Connection myConn = connectionPool.getConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(stmt);
+            preparedStatement.executeQuery();
+            myConn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
 
     /*
      __ _        _
