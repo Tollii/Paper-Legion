@@ -120,7 +120,7 @@ public class  UnitGenerator {
 
         if (!testing){ //if not testing, images and sounds are initialized
             swordsmanImage= new Image(UnitGenerator.class.getResource("/gameplay/assets/images/swordsman.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
-            swordsmanSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/soundclips/hitSword.wav").toString());
+            swordsmanSound = new AudioClip(UnitGenerator.class.getResource("/soundclips/swordsman.wav").toString());
             archerImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/images/archer.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
             archerSound = new AudioClip(UnitGenerator.class.getResource("/gameplay/assets/soundclips/arrow.wav").toString());
             juggernautImage = new Image(UnitGenerator.class.getResource("/gameplay/assets/images/juggernaut.png").toExternalForm(), Variables.tileSize, Variables.tileSize, false, false);
