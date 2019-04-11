@@ -192,6 +192,8 @@ public class GameMain extends Application {
         db.getPlayers();
 
         root = new Pane();
+        root.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
+
         Scene scene = new Scene(root, windowWidth, windowHeight);
 
         Pane gridPane = createGrid(); //creates the grid
@@ -258,6 +260,7 @@ public class GameMain extends Application {
         currentResources = startingResources; //Starts current resources to starting resources;
 
         Pane recruitPane = createRecruitPane();
+        recruitPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
         showPlaceUnitLabel();
 
         JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
@@ -460,6 +463,9 @@ public class GameMain extends Application {
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
         phaseLabelPane = createPhaseLabelPane();
+
+        sidePanel.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
+        phaseLabelPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
 
         endTurnButton.setText("End Turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);

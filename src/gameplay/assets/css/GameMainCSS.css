@@ -1,0 +1,22 @@
+/* The root of the scene */
+#root {
+  -fx-background-image: url(/menus/menuAssets/tile.png);
+  -fx-background-size: 300, 300;
+  -fx-background-repeat: repeat;
+  -fx-background-position: left top;
+}
+
+/* Side panel for placementPhase */
+#recruitPane {
+  -fx-background-color: #FFFFFF;
+}
+
+/* Side panel for attack/movement phases */
+#sidePanel {
+  -fx-background-color: #FFFFFF;
+}
+
+/* The pane containing the label for stating the game phase */
+#phaseLabelPane {
+  -fx-background-color: #FFFFFF;
+}
