@@ -1081,11 +1081,11 @@ public class GameMain extends Application {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
-            waitTurnThread.stop();
+            waitTurnThread.interrupt();
         }
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
-            waitPlacementThread.stop();
+            waitPlacementThread.interrupt();
         }
 
         //Resets variables to default.
