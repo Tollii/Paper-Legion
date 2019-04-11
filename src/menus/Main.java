@@ -2,12 +2,14 @@ package menus;
 
 import database.Database;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import runnables.RunnableInterface;
 
 import java.sql.SQLException;
 
@@ -50,7 +52,10 @@ public class Main extends Application {
         screenHeight = screenSize.getHeight();
         window.setWidth(screenWidth);
         window.setHeight(screenHeight);
+        databaseNoTimeout();
         window.show();
+        databaseNoTimeoutThread = new Thread(databaseNoTimeoutRunnable);
+        databaseNoTimeoutThread.start();
     }
 
     /**
@@ -71,6 +76,42 @@ public class Main extends Application {
         //Shutdown hook. Closes stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
         launch(args);
+    }
+
+    private void databaseNoTimeout() {
+        // Runnable lambda implementation for turn waiting with it's own thread
+
+        databaseNoTimeoutRunnable = new RunnableInterface() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while (keepRunning()) {
+                    try {
+                        System.out.println("HALLOOOO from the thread");
+                        Thread.sleep(150000);
+                        db.keepTheConnectionAlive();
+
+                        Platform.runLater(() -> {
+
+                        });
+}
+                     catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public synchronized void doStop() {
+                this.doStop = true;
+            }
+
+            @Override
+            public synchronized boolean keepRunning() {
+                return !this.doStop;
+            }
+        };
     }
 
     /**
@@ -105,6 +146,10 @@ public class Main extends Application {
         }
         if (searchGameThread != null) {
             searchGameRunnable.doStop();
+            searchGameThread.stop();
+        }
+        if(databaseNoTimeoutThread != null){
+            databaseNoTimeoutRunnable.doStop();
             searchGameThread.stop();
         }
         try {
