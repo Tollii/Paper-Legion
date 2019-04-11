@@ -72,8 +72,12 @@ public class MatchSetupController extends Controller {
         @FXML
         private JFXButton backToMenuButton;
 
-    @FXML
-    private AnchorPane paneforPattern;
+
+        @FXML
+        private AnchorPane contentPane;
+
+        @FXML
+        private AnchorPane paneforPattern;
 
         @FXML
         private ImageView paperLegionLogo;
@@ -85,6 +89,7 @@ public class MatchSetupController extends Controller {
         @FXML
         void initialize() {
             paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+            contentPane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
 
 
 

@@ -39,3 +39,10 @@
     -fx-background-position: top left;
 }
 
+#contentPane {
+    -fx-background-color: white;
+    -fx-stroke: Red;
+    -fx-stroke-width: 50;
+}
+
+
