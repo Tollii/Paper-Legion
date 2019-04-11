@@ -79,13 +79,13 @@ public class GameInfoController extends Controller {
      */
     @FXML
     private void initialize(){
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
 
 
-        backgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-        attackbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-        placementbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        backgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        attackbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        placementbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
 
 
         gameInfoBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));

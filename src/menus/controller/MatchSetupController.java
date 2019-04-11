@@ -90,8 +90,8 @@ public class MatchSetupController extends Controller {
          */
         @FXML
         void initialize() {
-            paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-            contentPane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+            paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+            contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
 
 
 
