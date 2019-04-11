@@ -1265,8 +1265,8 @@ public class Database {
     /**
      * Generates a hash. Uses PBDKF2 method from SecretKeyFactory
      *
-     * @param password given password to hash
-     * @param salt the user's salt
+     * @param password entered password that will be hashed.
+     * @param salt the salt used as input in the hashing.
      * @return hash in byte[]
      * @see SecretKeyFactory
      * @see KeySpec
@@ -1291,7 +1291,6 @@ public class Database {
      * @param salt users' SALT.
      * @return returns true if password matches, false if not
      */
-
     private boolean verifyPassword(String password, byte[] hash, byte[] salt) {
 
         byte[] enteredPassword;
