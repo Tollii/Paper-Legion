@@ -41,8 +41,10 @@
 
 #contentPane {
     -fx-background-color: white;
-    -fx-stroke: Red;
-    -fx-stroke-width: 50;
+
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , -7 , 7 );
+
+
 }
 
 
