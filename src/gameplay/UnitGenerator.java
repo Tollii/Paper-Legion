@@ -3,10 +3,7 @@ package gameplay;
 import database.Database;
 
 import database.Variables;
-import gameplay.units.Archer;
-import gameplay.units.Catapult;
-import gameplay.units.Juggernaut;
-import gameplay.units.Swordsman;
+import gameplay.units.*;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import static database.Variables.*;

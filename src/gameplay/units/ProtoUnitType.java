@@ -1,5 +1,6 @@
-package gameplay;
+package gameplay.units;
 
+import gameplay.UnitGenerator;
 import gameplay.UnitType;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;

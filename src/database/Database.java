@@ -1,6 +1,7 @@
 package database;
 
 import gameplay.*;
+import gameplay.units.ProtoUnitType;
 import menus.controller.Match;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
