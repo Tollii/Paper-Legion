@@ -140,19 +140,19 @@ public class Main extends Application {
         //Stops threads.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
-            waitTurnThread.stop();
+            waitTurnThread.interrupt();
         }
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
-            waitPlacementThread.stop();
+            waitPlacementThread.interrupt();
         }
         if (searchGameThread != null) {
             searchGameRunnable.doStop();
-            searchGameThread.stop();
+            searchGameThread.interrupt();
         }
         if(databaseNoTimeoutThread != null){
             databaseNoTimeoutRunnable.doStop();
-            databaseNoTimeoutThread.stop();
+            databaseNoTimeoutThread.interrupt();
         }
         try {
             db.close();
