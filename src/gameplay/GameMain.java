@@ -407,16 +407,16 @@ public class GameMain extends Application {
     /**
      * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
      * Uses UnitGenerator to add the new enemy units.
-     * @see PieceSetup
+     * @see PiecePlacer
      * @see Grid
      * @see UnitGenerator
      * @see database.Database
      */
     private void importOpponentPlacementUnits() {
-        ArrayList<PieceSetup> importList = db.importPlacementUnits();
+        ArrayList<PiecePlacer> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
-        for (PieceSetup piece : importList) {
+        for (PiecePlacer piece : importList) {
             System.out.println("ADDING OPPONENT UNIT");
             grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
         }

@@ -9,7 +9,7 @@ package gameplay;
  * @see UnitType
  * @see Grid
  */
-public class PieceSetup {
+public class PiecePlacer {
     private final int pieceId;
     private final int matchId;
     private final int playerId;
@@ -30,7 +30,7 @@ public class PieceSetup {
      * @see UnitType
      * @see Grid
      */
-    public PieceSetup(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id){
+    public PiecePlacer(int pieceId, int matchId, int playerId, int positionX, int positionY, int unit_type_id){
 
         this.pieceId = pieceId;
         this.matchId = matchId;

@@ -475,14 +475,14 @@ public class Database {
 
     /**
      * Imports the result of the opponents players placement phase.
-     * The values are imported as a List of PieceSetup.
+     * The values are imported as a List of PiecePlacer.
      *
-     * @return ArrayList. List of PieceSetup, contains Unit values and position X, Y.
-     * @see PieceSetup
+     * @return ArrayList. List of PiecePlacer, contains Unit values and position X, Y.
+     * @see PiecePlacer
      */
-    public ArrayList<PieceSetup> importPlacementUnits() {
+    public ArrayList<PiecePlacer> importPlacementUnits() {
 
-        ArrayList<PieceSetup> outputList;
+        ArrayList<PiecePlacer> outputList;
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "SELECT Pieces.piece_id, Pieces.match_id, Pieces.player_id, position_x, position_y, unit_type_id FROM Pieces JOIN Units U ON Pieces.piece_id = U.piece_id AND Pieces.match_id = U.match_id AND Pieces.player_id = U.player_id WHERE Pieces.match_id = ? AND Pieces.player_id = ?;";
         ResultSet resultSet;
@@ -501,7 +501,7 @@ public class Database {
 
                 while(resultSet.next()){
 
-                    outputList.add(new PieceSetup(resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("player_id"), resultSet.getInt("position_x"), resultSet.getInt("position_y"), resultSet.getInt("unit_type_id")));
+                    outputList.add(new PiecePlacer(resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("player_id"), resultSet.getInt("position_x"), resultSet.getInt("position_y"), resultSet.getInt("unit_type_id")));
                 }
 
 
