@@ -1,10 +1,7 @@
 package database;
 
+import gameplay.*;
 import runnables.RunnableInterface;
-import gameplay.Grid;
-import gameplay.Obstacle;
-import gameplay.Unit;
-import gameplay.UnitGenerator;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.paint.Color;
@@ -41,9 +38,9 @@ public class Variables {
     public static Thread searchGameThread;
     public static Thread waitTurnThread;
     public static Thread waitPlacementThread;
-    public static RunnableInterface searchGameRunnable;
-    public static RunnableInterface waitTurnRunnable;
     public static RunnableInterface waitPlacementRunnable;
+    public static RunnableInterface waitTurnRunnable;
+    public static RunnableInterface searchGameRunnable;
 
 
     //GameMain Variables;
@@ -54,12 +51,13 @@ public class Variables {
     public static Unit selectedUnit;
     public static int selectedPosX;
     public static int selectedPosY;
+    public static boolean doStopPlacement;
 
     //Tile selection variables
     public static final Paint standardTileColor = Color.WHITE;
     public static final Paint standardStrokeColor = Color.BLACK;
     public static final StrokeType standardStrokePlacement = StrokeType.INSIDE;
-    public static final Paint selectionOutlineColor = Color.RED;
+    public static final Paint selectionOutlineColor = Color.rgb(56, 31, 217);
     public static final int standardStrokeWidth = 1;
     public static final int selectedStrokeWidth = 3;
 
@@ -68,5 +66,6 @@ public class Variables {
     //Utilities
     public static ArrayList<Integer> unitTypeList;
     public static UnitGenerator unitGenerator;
+    public static GameMain game;
 
 }

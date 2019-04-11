@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import static database.Variables.*;
 /**
@@ -33,6 +34,9 @@ public class StatsController extends Controller{
     @FXML
     private ImageView paperLegionLogo;
 
+    @FXML
+    private AnchorPane paneforPattern;
+
 
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
@@ -40,6 +44,9 @@ public class StatsController extends Controller{
      */
     @FXML
     private void initialize(){
+
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+
         statsBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
         statsUsernameLabel.setText("Username: " + db.getMyName());
         statsEmailLabel.setText("E-mail: " + db.getMyEmail());

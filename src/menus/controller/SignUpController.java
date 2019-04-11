@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,6 +51,9 @@ public class SignUpController extends Controller {
     @FXML
     private ImageView paperLegionLogo;
 
+    @FXML
+    private AnchorPane paneforPattern;
+
 
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
@@ -57,6 +61,8 @@ public class SignUpController extends Controller {
      */
     @FXML
     void initialize() {
+
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
 
         goBackButton.setOnAction(event -> changeScene("login.fxml"));
 

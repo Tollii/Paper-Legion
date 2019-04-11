@@ -46,6 +46,16 @@ import java.util.ArrayList;
 import javafx.geometry.Orientation;
 import menus.Main;
 
+/**
+ * This class handles the game part of the application, it sets up the the game
+ * with variables, panes, buttons, layout and communication methods/threads for
+ * communicating with other players. All of the visual stuff is done here, and also
+ * some methods for handling the the visuals.
+ * When generated a object of this class, the object should call: "instancename".start(Stage).
+ * When calling this method, this Main method takes control of the Stage.
+ * @see database.Database
+ * @see GameLogic
+ */
 public class GameMain extends Application {
 
     ////BOARD SIZE CONTROLS////
@@ -54,12 +64,14 @@ public class GameMain extends Application {
     ////SCENE ELEMENTS////
     private static Pane root;
     private static final Label description = new Label();                //description label for the selected unit
+    private static final Label descriptionHead = new Label();            //description head label for selected unit
     private static final Label placeUnitLabel = new Label("Drag units onto the grid"); //User hint to place units on the board
     private static final Label resourceLabel = new Label();    //Static so that Tile can update the label
     private final Label  turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private final Label phaseLabel = new Label();
-    private JFXButton endTurnButton;                                //button for ending turn
+    private JFXButton endTurnButton = new JFXButton();                                //button for ending turn
     private static FlowPane recruitUnits;
+    public Pane phaseLabelPane;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -88,6 +100,7 @@ public class GameMain extends Application {
 
     //LABELS SIZES//
     private final int phaseLabelHeight = 50;
+    private final int descriptionHeadHeigth = 20;
 
     //RECRUIT PANE UNIT TILES WIDTH//
     private static final int unitPadding = 5;
@@ -134,9 +147,10 @@ public class GameMain extends Application {
     ////UNIT GENERATOR////
     private UnitGenerator unitGenerator = new UnitGenerator();
 
-    private final String descriptionFont = "-fx-font-family: 'Arial Black'";
-    private final String buttonBackgroundColor = "-fx-background-color: #000000";
+    private final String arialFont = "-fx-font-family: 'Arial Black';";
+    private final String buttonBackgroundColor = "-fx-background-color: #000000;";
     private final String fontSize32 = "-fx-font-size:32px;";
+    private final String descriptionHeadFontSize = "-fx-font-size: 20px;";
     private final Paint buttonTextColor = Color.WHITE;
     private final Paint movementHighlightColor = Color.GREENYELLOW;
     private final Paint attackHighlightColor = Color.DARKRED;
@@ -187,7 +201,7 @@ public class GameMain extends Application {
     private void addObstacles() {
         // Also this code can put obstacles in the same spot at the moment.
         if (!yourTurn) {
-           obstacles = game.createObstacles();
+            obstacles = game.createObstacles();
         } else {
             //Player 1 continually checks if all the obstacles have been added to the match. Then he imports from the database.
             while (!db.obstaclesHaveBeenAdded()) {
@@ -228,12 +242,6 @@ public class GameMain extends Application {
         Pane recruitPane = createRecruitPane();
         showPlaceUnitLabel();
 
-        description.setStyle(descriptionFont);
-        description.setLayoutX(descriptionXPadding);
-        description.setLayoutY(placementDescriptionYPadding);
-        descriptionVisible(true);
-
-
         JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
         finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
         finishedPlacingButton.setTextFill(buttonTextColor);
@@ -241,7 +249,7 @@ public class GameMain extends Application {
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
         finishedPlacingButton.setLayoutY(buttonYPadding);
 
-        recruitPane.getChildren().addAll(description,finishedPlacingButton);
+        recruitPane.getChildren().add(finishedPlacingButton);
 
         int playerSideTop, playerSideBottom; //sets paddings depending on player side (to the coloring of the boardtiles as well as untargetability)
         if (user_id == player1) {
@@ -272,7 +280,7 @@ public class GameMain extends Application {
      * @see database.Variables
      */
     static void updateResourceLabel() {
-        resourceLabel.setText("Resources: " + currentResources);
+        resourceLabel.setText("Resources: $" + currentResources);
     }
 
     /**
@@ -283,11 +291,11 @@ public class GameMain extends Application {
      * @see RecruitTile
      */
     static void deselectRecruitTiles() {
-      RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
-      for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
-        tile.setStrokeWidth(standardStrokeWidth);
-        tile.setStroke(standardStrokeColor);
-      }
+        RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
+        for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
+            tile.setStrokeWidth(standardStrokeWidth);
+            tile.setStroke(standardStrokeColor);
+        }
     }
 
     static void removePlaceUnitLabel() {
@@ -308,7 +316,7 @@ public class GameMain extends Application {
      */
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
-        Pane phaseLabelPane = createPhaseLabelPane();
+        phaseLabelPane = createPhaseLabelPane();
         phaseLabel.setText("WAITING FOR OTHER PLAYER");
 
         for (int i = 0; i < boardSize; i++) {
@@ -338,9 +346,17 @@ public class GameMain extends Application {
         waitForOpponentReady();
     }
 
-    ////METHOD FOR POLLING IF OPPONENT IS FINISHED WITH PLACEMENT PHASE////
+    /**
+     * Method for polling if opponent is finished with placement phase. It uses the
+     * checkIfOpponentReady() from Database method to do this.
+     * This methods calls upon the methods importPlacementUnits() and movementPhaseStart()
+     * when opponent is finished with the placement phase.
+     * @see GameLogic
+     * @see database.Database
+     */
     private void waitForOpponentReady() {
         // Runnable lambda implementation for turn waiting with it's own thread
+
         waitPlacementRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
@@ -348,6 +364,7 @@ public class GameMain extends Application {
             public void run() {
                 while (keepRunning()) {
                     try {
+                        Thread.sleep(threadTimer);
                         while (!opponentReady) {
                             Thread.sleep(threadTimer);
                             //When player in database matches your own user_id it is your turn again.
@@ -358,7 +375,8 @@ public class GameMain extends Application {
                                 opponentReady = true;
 
                                 System.out.println(opponent_id + ": ready!");
-                                this.doStop();
+                                doStop();
+                                waitPlacementThread = null;
                             }
                         }
 
@@ -369,7 +387,6 @@ public class GameMain extends Application {
 
                             importOpponentPlacementUnits();
                             movementPhaseStart();
-
 
                         });
 
@@ -394,6 +411,14 @@ public class GameMain extends Application {
         waitPlacementThread.start();
     }
 
+    /**
+     * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
+     * Uses UnitGenerator to add the new enemy units.
+     * @see PieceSetup
+     * @see Grid
+     * @see UnitGenerator
+     * @see database.Database
+     */
     private void importOpponentPlacementUnits() {
         ArrayList<PieceSetup> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
@@ -404,12 +429,25 @@ public class GameMain extends Application {
         }
     }
 
-    ////MOVEMENT AND ACTION PHASE STARTER////
+    /**
+     * Starts the movement phase, starts up creating panes for game with the methods
+     * createSidePanel() and createPhaseLabelPane() to set up layouts for the game in
+     * the movement phase. This method also set's the headline label to Movement phase.
+     * And if waiting on the other player it sets the text to Opponent's turn. And calls the
+     * waitForTurn() method to poll database to see if the turn has changed.
+     * It contains several optional methods depending on user input. User can hit
+     * the end turn button and be transported into attackphase, or it can shift the turn to the
+     * opponent depending on which phase player is in. This method has all of the MouseEvent's
+     * for the game, and depending on which mouse button clicked, or if double click will launch
+     * different methods. The methods used in the MouseEvent is select(), deselect(), attack(), move()
+     * @see GameLogic
+     *
+     */
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
-        Pane phaseLabelPane = createPhaseLabelPane();
+        phaseLabelPane = createPhaseLabelPane();
 
-        endTurnButton = new JFXButton("End turn");
+        endTurnButton.setText("End Turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
@@ -430,10 +468,11 @@ public class GameMain extends Application {
         phaseLabel.setText("MOVEMENT PHASE");
 
         //If you are player 2. Start polling the database for next turn.
+        System.out.println("yourTurn: " + yourTurn);
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
-            waitForTurn(endTurnButton, phaseLabelPane);
+            waitForTurn();
         } else {
             //Enters turn 1 into database.
             db.sendTurn(turn);
@@ -441,11 +480,11 @@ public class GameMain extends Application {
 
         ////BUTTON EvenT HANDLERS////
         endTurnButton.setOnAction(event -> {
-            endTurn(endTurnButton, phaseLabelPane);
+            endTurn();
             phaseLabel.setText("OPPONENT'S TURN");
         });
 
-        surrenderButton.setOnAction(event -> surrender(endTurnButton, phaseLabelPane));
+        surrenderButton.setOnAction(event -> surrender());
 
         ////EVENT HANDLER FOR SELECTING TILES, MOVEMENT AND ATTACK///
         grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -462,7 +501,7 @@ public class GameMain extends Application {
             //moves unit if left button is pressed once and it is the movement phase
             if (event.getClickCount() == 1) {
                 if (unitSelected && movementPhase && event.getButton() == MouseButton.PRIMARY) {
-                    move(event, phaseLabelPane);
+                    move(event);
                 }
             }
 
@@ -475,7 +514,17 @@ public class GameMain extends Application {
         });
     }
 
-    private void move(MouseEvent event, Pane phaseLabelPane) {
+    /**
+     * If it is player's turn it gets mouseclick position from MouseEvent and uses
+     * methods getPosYFromEvent() and getPosYFromEvent() to translate into x and y
+     * coordinates corresponding with the grid/board. It then uses the method getMovementPossibleTiles()
+     * to get all the tiles the unit is able to move to, and checks if the move is legal with the method
+     * checkForLegalMove(). If the move is legal then the unit changes position and adds itself to a movement list
+     * to later be exported to Database. Finally, this method sets the phase label to Attack Phase, and remove all
+     * of the movement highlighting of the tiles with the method clearHighlight().
+     * @see GameLogic
+     */
+    private void move(MouseEvent event) {
         if(yourTurn) {
             int newPosX = getPosXFromEvent(event);
             int newPosY = getPosYFromEvent(event); //position of click
@@ -503,6 +552,18 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Checks to see if in movementphase and if it's players turn, if it is then this method uses
+     * getPosXFromEvent and getPosYFromEvent to get the MouseEvent.MouseClick transformed into
+     * grid coordinates and uses the method getAttackableTiles() to get all pieces on tiles within attack
+     * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
+     * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
+     * with executeAttack() method. Finally it deselects the unit with deselect() method.
+     * @see GameMain
+     * @see Grid
+     * @see Unit
+     * @see GameLogic
+     */
     private void attack(MouseEvent event) {
         if (!movementPhase && yourTurn) { //checks if attack phase
             int attackPosX = getPosXFromEvent(event);
@@ -573,6 +634,28 @@ public class GameMain extends Application {
     }
 
     /**
+     * Is a static method which sets the description used in the sidebar.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param newDescription Takes a String with the description that should show in the sidebar.
+     * @param newDescriptionHead Takes a String for the description head.
+     * @see Recruit
+     */
+    public static void changeDescriptionLabel(String newDescription, String newDescriptionHead){
+        descriptionHead.setText(newDescriptionHead);
+        description.setText(newDescription);
+    }
+
+    /**
+     * Is a static method which controls if the description used in the sidebar is visible.
+     * It is used in Recruit, but can also be called from other Classes.
+     * @param visible Takes a boolean to control whether the description and description head is visible or not.
+     */
+    public static void descriptionVisible(boolean visible){
+        descriptionHead.setVisible(visible);
+        description.setVisible(visible);
+    }
+
+    /**
      * Selects a unit, and depending on whether it is player's turn, or player unit, it does different actions.
      * This method uses getPosXFromEvent and getPosYFromEvent to get coordinates relative to Grid/Board, and uses those
      * coordinates to target the tile.
@@ -613,12 +696,15 @@ public class GameMain extends Application {
             }
             //displays the description of the unit
             description.setText(selectedUnit.getDescription());
+            descriptionHead.setText(selectedUnit.getDescriptionHead());
             description.setVisible(true);
+            descriptionHead.setVisible(true);
         } else {
             selectedPosX = -1;
             selectedPosY = -1;
         }
     }
+
     /**
      * Deselects the unit by resetting variables and change styling of tiles to go back to
      * default settings. Styles the tiles (Rectangle) in the Grid.list. It also removes description and clears onClick
@@ -643,7 +729,9 @@ public class GameMain extends Application {
 
             //removes unit description
             description.setText("");
+            descriptionHead.setText("");
             description.setVisible(false);
+            descriptionHead.setVisible(false);
 
             clearHighLight();
         }
@@ -675,8 +763,18 @@ public class GameMain extends Application {
         return (int) Math.ceil((event.getY()) / tileSize) - 1;
     }
 
-    ////TURN ENDING METHOD AND WAIT FOR TURN POLLER////
-    private void endTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
+    /**
+     * If this method is called when it is players turn, then the turn integer increments,
+     * and it changes the text labels to Waiting for other players. It then exports the movement
+     * and attacks done within players round to database using methods exportMoveList() and
+     * exportAttackList() from Database class. After player is done with round, and the export is complete
+     * it calls upon the sendTurn() method to change turns. It then deselects the unit using the deselect() method.
+     * Finally this methods calls upon the metods checkForGameOver to see if player won, and waitForTurn() which only
+     * triggers if player has not surrendered.
+     * @see database.Database
+     * @see GameLogic
+     */
+    private void endTurn() {
         if (yourTurn) {
             //Increments turn. Opponents Turn.
             turn++;
@@ -720,12 +818,17 @@ public class GameMain extends Application {
 
             //Wait for you next turn. Does not trigger if you have surrendered.
             if (!surrendered) {
-                waitForTurn(endTurnButton, phaseLabelPane);
+                waitForTurn();
             }
         }
     }
 
-    private void waitForTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
+    /**
+     * This method creates a new Thread which checks whose turn it is with the method
+     * getTurnPlayer from Database Class and changes the static variable yourTurn=true
+     * if method returns true.
+     */
+    private void waitForTurn() {
         // Runnable lambda implementation for turn waiting with it's own thread
         waitTurnRunnable = new RunnableInterface() {
             private boolean doStop = false;
@@ -745,7 +848,7 @@ public class GameMain extends Application {
                             int getTurnPlayerResult = db.getTurnPlayer();
                             // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
-                            if (getTurnPlayerResult == user_id || getTurnPlayerResult == -1) {
+                            if (getTurnPlayerResult == user_id) {
                                 System.out.println("yourTurn changes");
                                 yourTurn = true;
                                 this.doStop();
@@ -754,7 +857,7 @@ public class GameMain extends Application {
                         //What will happen when it is your turn again.
 
                         //Increments turn. Back to your turn.
-                        Platform.runLater(() -> setUpNewTurn(endTurnButton, phaseLabelPane));
+                        Platform.runLater(() -> setUpNewTurn());
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -777,8 +880,14 @@ public class GameMain extends Application {
         waitTurnThread.start();
     }
 
-    ////SETS UP THE NEXT TURN BY COMMITTING OPPONENTS ATTACKS AND MOVEMENTS////
-    private void setUpNewTurn(JFXButton endTurnButton, Pane phaseLabelPane) {
+    /**
+     * Sets up the next turn by deselecting Units, incrementing turn counter, and changes the the text of
+     * the button to "End Turn" instead of "Waiting for other player" and phase label to "Movement phase" instead of
+     * "Waiting for other player". Then it imports the movement and attack of the oppponent and executes the attacks and moves.
+     * Finally the method calls for checkForGameOver() to see if player has been defeated.
+     * @see database.Database
+     */
+    private void setUpNewTurn() {
         deselect();
         selectedUnit = null;
         turn++;
@@ -825,8 +934,13 @@ public class GameMain extends Application {
         checkForGameOver();
     }
 
-    ////METHOD FOR HANDLING SURRENDER////
-    private void surrender(JFXButton endTurnButton, Pane phaseLabelPane) {
+    /**
+     * This method is called when a player hits the Surrender button.
+     * This method sets up and opens a confirm dialog window to check if player is sure, if no go back
+     * to game, if the player selects yes, the method closes the dialog box and calls upon the method
+     * actualsurrender which saves the data to a database server and takes the rest of the dialog.
+     */
+    private void surrender() {
         Stage confirm_alert = new Stage();
         confirm_alert.initModality(Modality.APPLICATION_MODAL);
         confirm_alert.setTitle("Game over!");
@@ -839,14 +953,7 @@ public class GameMain extends Application {
         JFXButton surrender_no = new JFXButton("No");
 
         surrender_yes.setOnAction(event -> {
-            db.surrenderGame();
-            surrendered = true;
-
-            if (yourTurn) {
-                endTurn(endTurnButton, phaseLabelPane);
-            } else {
-                checkForGameOver();
-            }
+            actualSurrender();
             confirm_alert.close();
         });
 
@@ -868,7 +975,38 @@ public class GameMain extends Application {
         confirm_alert.showAndWait();
     }
 
-    ////METHODS FOR ENDING THE GAME////
+    /**
+     * This method is called upon by surrender() method, and this method
+     * uses the method surrenderGame() from the Database Class to send information about
+     * which player won, and increment games won for that player. It sets a variable
+     * surrendered=true, which is checked by another method after the end of each turn.
+     * This method ends the turn after setting the variable, and if it is not players turn
+     * then the method checks for game over using the  checkForGameOver() method.
+     * @see database.Database
+     */
+    public void actualSurrender(){
+        db.surrenderGame();
+        surrendered = true;
+
+        if (yourTurn) {
+            endTurn();
+        } else {
+            checkForGameOver();
+        }
+    }
+
+    /**
+     * Uses checkForEliminationVictory() method to see if opponent or player has pieces left on board, also checks the database
+     * with the method db.checkForSurrencder() to check if opponent has surrendered.
+     * If game ended either by defeat or by surrendering  It creates a popup window to show the
+     * end game status to the players. If a player surrenders it will say you lost for that player, and you win for the other.
+     * When the game ends, the methods db.incrementGames() is called to increment number of games player for both players. It will
+     * also call upon the method db.incrementGamesWon() for the winning player. The message dialog has a button which will return the player
+     * to the main menu. When user hits that button, this method uses the method gameCleanup() to reset variables if player wants to play again,
+     * and send players to the mainmenu.
+     * @see database.Database
+     * @see GameLogic
+     */
     private void checkForGameOver() {
         String win_loseText;
         String gameSummary = "";
@@ -939,15 +1077,20 @@ public class GameMain extends Application {
         }
     }
 
+    /**
+     * Resets all of the game variables so that if player wants to play another game, all the
+     * data will be loaded on a new game.
+     */
     private void gameCleanUp() {
+        System.out.println("CLEAN UP HAPPENS");
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
-            waitTurnThread = null;
+            waitTurnThread.stop();
         }
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
-            waitPlacementThread = null;
+            waitPlacementThread.stop();
         }
 
         //Resets variables to default.
@@ -962,7 +1105,9 @@ public class GameMain extends Application {
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
+        endTurnButton = null;
     }
+
     /**
      * Method for setting up different panes containing the UI elements.
      * Sets up Grid and styles it.
@@ -980,11 +1125,19 @@ public class GameMain extends Application {
         return gridPane;
     }
 
+    /**
+     * Creates a sidebar panel for placement phase, and adds the buttons, and Recruits to it.
+     * This method also stylizes and sets up resourcelabel, descriptionHead, and adds description
+     * to the pane. This method returns the pane with all the labels and buttons in it.
+     * @return Pane
+     * @see Recruit
+     * @see RecruitTile
+     */
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
 
-        resourceLabel.setStyle(fontSize32);
-        resourceLabel.setText("Resources: " + currentResources);
+        resourceLabel.setStyle(fontSize32 + arialFont);
+        resourceLabel.setText("Resources: $" + currentResources);
 
         HBox resourceLabelBox = new HBox();
         if (unitTypeList.size() < 5) {
@@ -1004,7 +1157,17 @@ public class GameMain extends Application {
         }
         recruitUnits.setLayoutY(unitTilesYPadding);
 
-        unitPane.getChildren().addAll(resourceLabelBox, recruitUnits);
+        descriptionHead.setStyle(arialFont + descriptionHeadFontSize);
+        descriptionHead.setLayoutX(descriptionXPadding);
+        descriptionHead.setLayoutY(placementDescriptionYPadding);
+        descriptionHead.setVisible(false);
+
+        description.setStyle(arialFont);
+        description.setLayoutX(descriptionXPadding);
+        description.setLayoutY(placementDescriptionYPadding + 2 * descriptionHeadHeigth);
+        description.setVisible(false);
+
+        unitPane.getChildren().addAll(resourceLabelBox, recruitUnits, descriptionHead, description);
 
         unitPane.setLayoutX(recruitXPadding);
         unitPane.setLayoutY(recruitYPadding);
@@ -1031,19 +1194,30 @@ public class GameMain extends Application {
       root.getChildren().add(vPlaceUnitLabelBox);
     }
 
+    /**
+     * Creates the sidepanel for the placement/movement/attack phase, and serves useful
+     * for showing descriptions and buttons like Surrender and End Turn.
+     * Returns the sidepanelPane.
+     * @return Pane
+     */
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
 
-        turnCounter.setStyle(fontSize32);
+        turnCounter.setStyle(fontSize32 + arialFont);
         turnCounter.setLayoutX(turnCounterXPadding);
         turnCounter.setLayoutY(turnCounterYPadding);
 
-        description.setStyle(descriptionFont);
+        descriptionHead.setStyle(arialFont + descriptionHeadFontSize);
+        descriptionHead.setLayoutX(descriptionXPadding);
+        descriptionHead.setLayoutY(descriptionYPadding);
+        descriptionHead.setVisible(false);
+
+        description.setStyle(arialFont);
         description.setLayoutX(descriptionXPadding);
-        description.setLayoutY(descriptionYPadding);
+        description.setLayoutY(descriptionYPadding + descriptionHeadHeigth);
         description.setVisible(false);
 
-        sidePanel.getChildren().addAll(turnCounter, phaseLabel, description);
+        sidePanel.getChildren().addAll(turnCounter, phaseLabel, descriptionHead, description);
 
         sidePanel.setLayoutX(sidePanelXPadding);
         sidePanel.setLayoutY(sidePanelYPadding);
@@ -1052,10 +1226,17 @@ public class GameMain extends Application {
         return sidePanel;
     }
 
+    /**
+     * Sets up a pane on the top of the game with a label to show status for turns,
+     * phase info, etc. For example: Placement phase to indicate that player is in that phase,
+     * or waiting for opponent to show that it is not players turn.
+     * Returns the phaseLabelPane.
+     * @return Pane
+     */
     private Pane createPhaseLabelPane() {
         Pane phaseLabelPane = new Pane();
 
-        phaseLabel.setStyle(fontSize32);
+        phaseLabel.setStyle(fontSize32 + arialFont);
         phaseLabel.setMinHeight(phaseLabelHeight);
 
         HBox phaseLabelBox = new HBox();
@@ -1072,35 +1253,21 @@ public class GameMain extends Application {
         return phaseLabelPane;
     }
 
-    ////SHUTDOWN METHODS////
+    /**
+     * Executes when application shuts down. User is logged out and database connection is closed.
+     * Calls on surrender method to show a message dialog to user that game ended before user is logged out.
+     */
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
-        Pane phaseLabelPane = createPhaseLabelPane();
-        surrender(endTurnButton, phaseLabelPane);
+        actualSurrender();
         Main.closeAndLogout();
     }
 
     /**
-     * Is a static method which sets the description used in the sidebar.
-     * It is used in Recruit, but can also be called from other Classes.
-     * @param newDescription Takes a String with the description that should show in the sidebar.
-     * @see Recruit
+     * Calls for shutdown methods if program is closed. It is used to log out user
+     * and close connections.
      */
-    public static void changeDescriptionLabel(String newDescription){
-        description.setText(newDescription);
-    }
-
-    /**
-     * Is a static method which controls if the description used in the sidebar is visible.
-     * It is used in Recruit, but can also be called from other Classes.
-     * @param visible Takes a boolean to control whether the description is visible or not.
-     */
-    public static void descriptionVisible(boolean visible){
-        description.setVisible(visible);
-    }
-
-    ////MAIN USED FOR SHUTDOWN HOOK////
     public void main(String[] args) {
         System.out.println("SHUTDOWN HOOK CALLED");
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));

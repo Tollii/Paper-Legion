@@ -24,13 +24,19 @@ import java.util.Random;
 import static database.Variables.*;
 
 /**
- * <h1>GameLogic</h1>
- * denne klassen er shit
- * @author teamXX
- * @since i dag
+ * Class contains all calculation methods used during gameplay such as finding attackable tiles or checking if a move is legal.
+ * These methods are testable and return back to GameMain.
+ * @see GameMain
  */
 public class GameLogic {
 
+
+    /**
+     * Checks to see if move is legal by checking if the move position player wants to move is one
+     * of the tiles returns in getMovementPossibleTiles() method.
+     * @return boolean
+     * @see GameMain
+     */
     public boolean checkForLegalMove(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
 
         for(Tile t : movementTargets){
@@ -41,6 +47,12 @@ public class GameLogic {
         return false;
     }
 
+    /**
+     * Checks to see if attack is legal by checking if the attack position player wants to attack is one
+     * of the tiles returns in getAttackableTiles() method.
+     * @return boolean
+     * @see GameMain
+     */
     public boolean checkForLegalAttack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
         for(Tile t : attackTargets){
             if(t.equals(grid.tileList[attackPosY][attackPosX])) {
@@ -50,6 +62,12 @@ public class GameLogic {
         return false;
     }
 
+
+    /**
+     * Gets all possible tiles a unit is within range to move to. Checks to see if move is legal and
+     * that there is no enemy unit or obstacle on the tile that are returned in a ArrayList.
+     * @return ArrayList<tile>
+     */
     public ArrayList<Tile> getMovementPossibleTiles() {
         ArrayList<Tile> movementTargets = new ArrayList<>();
 
@@ -66,6 +84,12 @@ public class GameLogic {
         return movementTargets;
     }
 
+    /**
+     * Checks for opponents within attack range and returns them in a ArrayList with tiles that have opponents units in them.
+     * @see GameMain
+     * @see Unit
+     * @return ArrayList<Tile>
+     */
     public ArrayList<Tile> getAttackableTiles() {
         ArrayList<Tile> attackTargets = new ArrayList<>();
 
@@ -91,7 +115,12 @@ public class GameLogic {
         return attackTargets;
     }
 
-    ////CHECKS IF EITHER YOU OR YOUR OPPONENT HAS BEEN ELIMINATED////
+    /**
+     * Checks if either player or opponent has been eliminated
+     * Returns 1 if user loses, 0 if opponent loses, else it returns -1
+     * @return int
+     * @see GameMain
+     */
     public int checkForEliminationVictory() {
         int yourPieces = 0;
         int opponentsPieces = 0;
@@ -116,6 +145,16 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Executes an attack on the enemy unit and removes the unit from the game if hp<=0
+     * And sets the unit who has attack with a boolean with the method setHasAttackThisTurn=true
+     * so that other methods that check through units for exporting attacks.
+     * This method is usually called from another method, and never called alone.
+     * @param attackPosY Takes in the Y grid coordinates as an int
+     * @param attackPosX Takes in the X grid coordinates as an int
+     * @see GameMain
+     * @see Grid
+     */
     public void executeAttack(int attackPosY, int attackPosX) {
         //damages enemy unit
         grid.tileList[attackPosY][attackPosX].getUnit().takeDamage(selectedUnit.getAttack());

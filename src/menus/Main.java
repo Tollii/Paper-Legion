@@ -1,6 +1,8 @@
 package menus;
 
 import database.Database;
+import gameplay.GameLogic;
+import gameplay.GameMain;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -35,8 +37,8 @@ public class Main extends Application {
 
         window.setTitle("Paper Legion");
         window.setScene(rootScene);
-        window.setMinWidth(850);
-        window.setMinHeight(650);
+        window.setMinWidth(1024);
+        window.setMinHeight(768);
 
         //Finds screen size and sizes window to it.
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
@@ -48,14 +50,14 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        //Sets the Dock icon for mac
-        try {
-            URL iconURL = Main.class.getResource("/images/dockIcon.png");
-            Image image = new ImageIcon(iconURL).getImage();
-            com.apple.eawt.Application.getApplication().setDockIconImage(image);
-        } catch (Exception e) {
-            // Won't work on Windows or Linux.
-        }
+//        //Sets the Dock icon for mac
+//        try {
+//            URL iconURL = Main.class.getResource("/images/dockIcon.png");
+//            Image image = new ImageIcon(iconURL).getImage();
+//            com.apple.eawt.Application.getApplication().setDockIconImage(image);
+//        } catch (Exception e) {
+//            // Won't work on Windows or Linux.
+//        }
 
         //Shutdown hook. Closes stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));
@@ -65,7 +67,11 @@ public class Main extends Application {
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
+        if(user_id>0 && match_id>0){
+            game.actualSurrender();
+        }
         closeAndLogout();
+
     }
 
     public static void closeAndLogout() {
@@ -76,15 +82,15 @@ public class Main extends Application {
         //Stops threads.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
-            waitTurnThread = null;
+            waitTurnThread.stop();
         }
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
-            waitPlacementThread = null;
+            waitPlacementThread.stop();
         }
         if (searchGameThread != null) {
             searchGameRunnable.doStop();
-            searchGameThread = null;
+            searchGameThread.stop();
         }
         try {
             db.close();

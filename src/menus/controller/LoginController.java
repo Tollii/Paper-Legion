@@ -1,5 +1,6 @@
 package menus.controller;
 
+import javafx.scene.layout.AnchorPane;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
@@ -56,12 +57,19 @@ public class LoginController extends Controller {
     @FXML
     private ImageView paperLegionLogo;
 
+    @FXML
+    private AnchorPane paneforPattern;
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
     @FXML
     void initialize() {
+
+
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+
 
         // Thread to log in so program doesn't freeze up when getting data from the database
 

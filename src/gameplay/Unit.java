@@ -28,6 +28,7 @@ import static database.Variables.testing;
 
 public class Unit extends StackPane {
     private Label healthbar;
+    private Label healthbarText;
 
     ////UNIT INFO////
     private final UnitType type;
@@ -51,6 +52,8 @@ public class Unit extends StackPane {
     private final String healthColor = "-fx-background-color: rgba(0, 255, 0, 0.4);";
     private final String lowHealthColor = "-fx-background-color: rgba(255, 0, 0, 0.4);";
     private final String healthFontSize = "-fx-font-size: 10;";
+    private final String healthFont = "-fx-font-family: 'Arial Black';";
+    private final int healthbarWidth = Variables.tileSize - 2 * Variables.standardStrokeWidth;
 
     /**
      * Sets the unit variables tile size, whether unit is enemy or not, attack multiplier, max-, min attack range,
@@ -85,16 +88,21 @@ public class Unit extends StackPane {
 
         String hpText = String.valueOf(hp);
         if(!testing) {
-            healthbar = new Label(hpText);
+            healthbar = new Label();
+            healthbarText = new Label(hpText);
 
-            this.getChildren().addAll(rect, healthbar);
-            healthbar.setPrefWidth(Variables.tileSize - 2 * Variables.standardStrokeWidth);
+            this.getChildren().addAll(rect, healthbar, healthbarText);
+            healthbar.setPrefWidth(healthbarWidth);
             healthbar.setAlignment(Pos.CENTER);
+            healthbarText.setPrefWidth(healthbarWidth);
+            healthbarText.setAlignment(Pos.CENTER);
             double healthbarHeight = 10;
             int healthbarPosY = (int)(-((Variables.tileSize - healthbarHeight) / 2) + 2 * Variables.standardStrokeWidth);
             healthbar.setTranslateY(healthbarPosY);
+            healthbarText.setTranslateY(healthbarPosY);
 
-            healthbar.setStyle(healthColor + healthFontSize);
+            healthbar.setStyle(healthColor);
+            healthbarText.setStyle(healthFontSize + healthFont);
 
 
             ///SETS UNIT IMAGE////
@@ -230,15 +238,25 @@ public class Unit extends StackPane {
     }
 
     /**
-     * Returns a string with the units attributes and description text and tags.
+     * Returns the attributes like health, movement range, attack, defence, and description in a single String.
      * @return String
      */
     public String getDescription() {
 
-        return descriptionTag + "\n" +
+        return "\n" +
                 "\nHp: " + hp +
                 "\nMovement Range: " + movementRange +
-                "\nAttack: " + attack + "x\n" + "\n" + description;
+                "\nAttack: " + attack +
+                "\nDefence: " + defenceMultiplier + "\n" +
+                "\n" + description;
+    }
+
+    /**
+     * Returns the head for the description, which is the name of the units type
+     * @return String
+     */
+    public String getDescriptionHead() {
+        return type.getDescriptionTag();
     }
 
     /**
@@ -253,7 +271,7 @@ public class Unit extends StackPane {
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
         if (hp <= LOW_HP_THRESHOLD) {
-            healthbar.setStyle(lowHealthColor + healthFontSize);
+            healthbar.setStyle(lowHealthColor);
         }
     }
 
@@ -267,11 +285,12 @@ public class Unit extends StackPane {
 
         this.hp -= damageDealt / defenceMultiplier;
 
-        healthbar.setText(String.valueOf(hp));
+        healthbarText.setText(String.valueOf(hp));
+        healthbar.setMaxWidth(healthbarWidth * (hp / type.getHp()));
 
         ////CHANGES THE COLOUR OF THE HP-BAR////
         if (hp <= LOW_HP_THRESHOLD) {
-            healthbar.setStyle(lowHealthColor + healthFontSize);
+            healthbar.setStyle(lowHealthColor);
         }
     }
 
@@ -295,17 +314,17 @@ public class Unit extends StackPane {
     }
 
     /**
-    * Takes a jawa awt BufferedImage and changes the color
-    * of pixels with a given RGB Value with that of an other RGB Value.
-    * Used to change the color of unit image to match either friendly or enemy color. (Blue/Gold)
-    * @param imgBuf BufferedImage. The BufferedImage that gets edited
-    * @param oldRed Int. The old red value
-    * @param oldGreen Int. The old green value
-    * @param oldBlue Int. The old blue value
-    * @param newRed Int. The new red value
-    * @param newGreen Int. The new green value
-    * @param newBlue Int. The new blue value
-    */
+     * Takes a jawa awt BufferedImage and changes the color
+     * of pixels with a given RGB Value with that of an other RGB Value.
+     * Used to change the color of unit image to match either friendly or enemy color. (Blue/Gold)
+     * @param imgBuf BufferedImage. The BufferedImage that gets edited
+     * @param oldRed Int. The old red value
+     * @param oldGreen Int. The old green value
+     * @param oldBlue Int. The old blue value
+     * @param newRed Int. The new red value
+     * @param newGreen Int. The new green value
+     * @param newBlue Int. The new blue value
+     */
     private static void changeColor(BufferedImage imgBuf, int oldRed, int oldGreen, int oldBlue, int newRed, int newGreen, int newBlue) {
         int RGB_MASK = 0x00ffffff;
         int ALPHA_MASK = 0xff000000;

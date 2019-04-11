@@ -518,8 +518,7 @@ public class Database {
     /**
      * Checks if your opponent is ready during the placement phase of the game.
      *
-     *
-     * @return true if opponent is ready, false if not.
+     * @return Boolean. True if opponent is ready, false if not.
      */
     public boolean checkIfOpponentReady(){
 
@@ -652,13 +651,14 @@ public class Database {
 //            Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(player);
             connectionPool.releaseConnection(myConn);
+            connectionPool.releaseConnection(myConn2);
         }
     }
 
     /**
      * Gets obstacles and their position from the MYSQL database.
      *
-     * @return imported list of obstacles
+     * @return ArrayList. Imported list of obstacles
      */
     public ArrayList<Obstacle> importObstacles() {
         ArrayList<Obstacle> ObstacleImport = new ArrayList<>();
@@ -697,9 +697,9 @@ public class Database {
     }
 
     /**
-     *  Checks if the correct amount of obstacles have been added in accordance with the # of obstacles in the database in a given match
+     * Checks if the correct amount of obstacles have been added in accordance with the # of obstacles in the database in a given match
      *
-     * @return true if local obstacles and server obstacles are equal. False if not.
+     * @return Boolean. True if local obstacles and server obstacles are equal. False if not.
      */
     public Boolean obstaclesHaveBeenAdded() {
 
@@ -754,6 +754,7 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             Cleaner.closeStatement(preparedStatement2);
             connectionPool.releaseConnection(myConn);
+            connectionPool.releaseConnection(myConn2);
         }
         return null;
     }
@@ -770,10 +771,11 @@ public class Database {
     /**
      * Updates the database with a new turn. Handles exception case with round 1.
      *
-     * @param turn turn #
+     * @param turn turn number.
      */
 
     public void sendTurn(int turn) {
+        System.out.println("send turn Called");
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
@@ -804,9 +806,9 @@ public class Database {
     }
 
     /**
-     * Imports the latest turn stored on the database.
+     * Checks which player has a given turn.
      *
-     * @return player id on success, -1 on failure.
+     * @return Int. Player id on success, -1 on failure.
      */
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
@@ -931,7 +933,7 @@ public class Database {
      *
      * @param enemyTurnIDInput your opponents latest turn id.
      * @param matchIdInput match id.
-     * @return List of movements on success, null on failure.
+     * @return ArrayList. List of movements on success, null on failure.
      */
     public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
 
@@ -1180,7 +1182,6 @@ public class Database {
      * Logs out a user.
      *
      * @param userId user id of user to log out of.
-     * @return true if logged out, false if not.
      */
     public boolean logout(int userId) {
         //Logs out the user. Sets online_status to 0.
@@ -1516,7 +1517,6 @@ public class Database {
      * Adds a given user to the statistics table.
      *
      * @param user_id user id of player to add in statistics
-     * @return 1 on success, -1 on failure.
      */
     private void addUserToStatistics(int user_id) {
 

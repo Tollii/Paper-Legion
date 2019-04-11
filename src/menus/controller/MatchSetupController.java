@@ -1,5 +1,6 @@
 package menus.controller;
 
+import javafx.scene.layout.AnchorPane;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -71,6 +72,8 @@ public class MatchSetupController extends Controller {
         @FXML
         private JFXButton backToMenuButton;
 
+    @FXML
+    private AnchorPane paneforPattern;
 
         @FXML
         private ImageView paperLegionLogo;
@@ -81,6 +84,7 @@ public class MatchSetupController extends Controller {
          */
         @FXML
         void initialize() {
+            paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
 
 
 

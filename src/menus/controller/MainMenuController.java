@@ -1,5 +1,7 @@
 package menus.controller;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import database.Variables;
@@ -24,7 +26,7 @@ import static database.Variables.*;
  */
 public class MainMenuController extends Controller {
     private boolean findGameClicked, gameEntered, threadStarted = false;
-    private GameMain game;
+
     @FXML
     private ResourceBundle resources;
 
@@ -52,6 +54,12 @@ public class MainMenuController extends Controller {
     @FXML
     private ImageView paperLegionLogo;
 
+    @FXML
+    private AnchorPane paneforPattern;
+
+    @FXML
+    private Pane imageMainMenu;
+
 
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
@@ -59,14 +67,21 @@ public class MainMenuController extends Controller {
      */
     @FXML
     void initialize() {
+
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+
+
         game = null;
         RunnableInterface searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
-            //TODO bug. Starting a game and going to any other button will cancel it, but the scene switches quickly back mainmenu without prompt.
-
             @Override
             public void run() {
+                opponentReady = false;
+                findGameClicked = false;
+                gameEntered = false;
+                threadStarted = false;
                 turn = 1;
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
