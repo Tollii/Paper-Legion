@@ -1099,7 +1099,7 @@ public class GameMain extends Application {
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
-        endTurnButton = null;
+        //endTurnButton = null;
     }
 
     /**
