@@ -844,6 +844,7 @@ public class GameMain extends Application {
                             if (getTurnPlayerResult == user_id) {
                                 System.out.println("yourTurn changes");
                                 yourTurn = true;
+                                waitTurnThread.interrupt();
                                 this.doStop();
                             }
                         }
