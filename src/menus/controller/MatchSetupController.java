@@ -331,6 +331,7 @@ public class MatchSetupController extends Controller {
          */
     private void enterGame() {
         try {
+            findGameClicked = false;
             Variables.tileSize = (int)(screenWidth * 0.07);
             grid = new Grid(boardSize, boardSize);
             game = new GameMain();

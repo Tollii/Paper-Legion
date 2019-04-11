@@ -1314,6 +1314,26 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+    public void keepTheConnectionAlive() {
+        String stmt = "SELECT version();";
+        Connection myConn = connectionPool.getConnection();
+        ResultSet rs = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            myConn.setAutoCommit(false);
+            preparedStatement = myConn.prepareStatement(stmt);
+            rs = preparedStatement.executeQuery();
+            myConn.commit();
+            rs.next();
+            System.out.println("yoyo from keepTheConnectionAlive" + rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Cleaner.setAutoCommit(myConn);
+            Cleaner.closeStatement(preparedStatement);
+            connectionPool.releaseConnection(myConn);
+        }
+    }
 
     /*
      __ _        _

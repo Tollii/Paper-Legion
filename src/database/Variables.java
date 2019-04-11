@@ -42,6 +42,8 @@ public class Variables {
     public static Thread searchGameThread;
     public static Thread waitTurnThread;
     public static Thread waitPlacementThread;
+    public static Thread databaseNoTimeoutThread;
+    public static RunnableInterface databaseNoTimeoutRunnable;
     public static RunnableInterface waitPlacementRunnable;
     public static RunnableInterface waitTurnRunnable;
     public static RunnableInterface searchGameRunnable;
