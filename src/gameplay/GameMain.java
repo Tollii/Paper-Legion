@@ -1212,7 +1212,7 @@ public class GameMain extends Application {
       root.getChildren().addAll(placeUnitPane, arrow);
     }
 
-    static void removePlaceUnitLabel() {
+    public static void removePlaceUnitLabel() {
       root.getChildren().remove(placeUnitPane);
       root.getChildren().remove(arrow);
     }
