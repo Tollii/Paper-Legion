@@ -27,7 +27,7 @@ public class Main extends Application {
         
         //database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
-        Parent root = FXMLLoader.load(getClass().getResource("/menus/View1/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/menus/view/login.fxml"));
         rootScene = new Scene(root, 850, 650);
 
         window.setTitle("Paper Legion");
