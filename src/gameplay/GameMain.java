@@ -135,8 +135,8 @@ public class GameMain extends Application {
     private final int placementButtonXPadding = 150;
 
     //ARROW//
-    private final int arrowWidth = 7;
-    private final int arrowHeadSize = 20;
+    private final int arrowWidth = 5;
+    private final int arrowHeadSize = 30;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
@@ -171,8 +171,9 @@ public class GameMain extends Application {
     private final Paint buttonTextColor = Color.WHITE;
     private final Paint movementHighlightColor = Color.GREENYELLOW;
     private final Paint attackHighlightColor = Color.DARKRED;
-    private final Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
+    private final Paint untargetableTileColor = Color.rgb(155, 135, 65);
     private final String placeUnitLabelBackgroundColor = "-fx-background-color: rgba(255, 255, 255, 0.4);";
+    private final Paint arrowColor = Color.rgb(170, 170, 192);
 
     private GameLogic game;
 
@@ -1219,9 +1220,8 @@ public class GameMain extends Application {
     private Path drawArrow(double startX, double startY, double endX, double endY) {
       Path arrow = new Path();
 
-      arrow.setFill(standardStrokeColor);
-      arrow.setFillRule(FillRule.EVEN_ODD);
       arrow.setStrokeWidth(arrowWidth);
+      arrow.setStroke(arrowColor);
 
       //Line
       arrow.getElements().add(new MoveTo(startX, startY));
