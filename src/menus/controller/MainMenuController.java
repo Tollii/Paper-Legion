@@ -73,7 +73,7 @@ public class MainMenuController extends Controller {
 
 
         game = null;
-        RunnableInterface searchGameRunnable = new RunnableInterface() {
+        searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
