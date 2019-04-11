@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.controller.StatsController">
+    <children>
+        <AnchorPane fx:id="paneforPattern" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <AnchorPane fx:id="contentPane" layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" stylesheets="/menus/controller/MenuCSS.css" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
+                    <children>
+                        <VBox alignment="CENTER" prefHeight="366.0" prefWidth="590.0" spacing="30.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <ImageView fx:id="paperLegionLogo" fitHeight="411.0" fitWidth="372.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="/menus/menuAssets/paperLegionLogo.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="statsUsernameLabel" text="Username: ">
+                                    <font>
+                                        <Font name="Avenir Light" size="22.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="statsEmailLabel" text="E-mail: ">
+                                    <font>
+                                        <Font size="22.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="statsGamesPlayedLabel" text="Games played:">
+                                    <font>
+                                        <Font name="Avenir Light" size="22.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="statsGamesWonLabel" text="Games won: ">
+                                    <font>
+                                        <Font size="22.0" />
+                                    </font>
+                                </Label>
+                                <JFXButton fx:id="statsBackButton" style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Back" />
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
