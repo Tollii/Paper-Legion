@@ -61,6 +61,10 @@ public class MainMenuController extends Controller {
     private Pane imageMainMenu;
 
 
+    @FXML
+    private AnchorPane contentPane;
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
@@ -70,6 +74,7 @@ public class MainMenuController extends Controller {
 
         paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
         imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
 
 
         game = null;

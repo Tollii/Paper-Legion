@@ -1,7 +1,7 @@
 /* Surrounding container */
 #paneforPattern {
-    -fx-background-image: url(/paperPattern.jpg);
-    -fx-background-size: 200, 200;
+    -fx-background-image: url(/menus/menuAssets/tile.png);
+    -fx-background-size: 300, 300;
     -fx-background-repeat: repeat;
     -fx-background-position: left top;
 }
@@ -38,4 +38,11 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: top left;
 }
+
+#contentPane {
+    -fx-background-color: white;
+    -fx-stroke: Red;
+    -fx-stroke-width: 50;
+}
+
 
