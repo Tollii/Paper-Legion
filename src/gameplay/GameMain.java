@@ -112,7 +112,7 @@ public class GameMain extends Application {
     //LABELS SIZES//
     private final int phaseLabelHeight = 50;
     private final int descriptionHeadHeigth = 20;
-    private final int placeUnitLabelWidth = 400;
+    private final int placeUnitLabelWidth = 500;
     private final int placeUnitLabelHeight = 40;
 
     //RECRUIT PANE UNIT TILES WIDTH//
@@ -1194,7 +1194,7 @@ public class GameMain extends Application {
     /**
     * Adds a label to the board to communicate to the player to add units to the board.
     * It also adds an arrow from the recruitTiles to the middle of the playable area of
-    * the board depending on the players side of the board. 
+    * the board depending on the players side of the board.
     */
     private void showPlaceUnitLabel() {
       placeUnitPane = new Pane();
