@@ -846,7 +846,6 @@ public class GameMain extends Application {
                                 yourTurn = true;
                                 doStop = true;
                                 waitTurnThread.interrupt();
-
                             }
                         }
                         //What will happen when it is your turn again.
