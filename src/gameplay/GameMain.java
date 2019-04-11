@@ -133,6 +133,7 @@ public class GameMain extends Application {
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
     private final int placementButtonXPadding = 150;
+    private final int recruitContentXPadding = 0;
 
     //ARROW//
     private final int arrowWidth = 5;
@@ -143,7 +144,7 @@ public class GameMain extends Application {
     private final int sidePanelYPadding = (int)(windowHeight * 0.12);
     private final int turnCounterXPadding = 0;
     private final int turnCounterYPadding = 0;
-    private final int descriptionXPadding = 0;
+    private final int sidePanelContentXPadding = 0;
     private final int descriptionYPadding = 100;
 
     //PHASELABEL PANE//
@@ -192,11 +193,14 @@ public class GameMain extends Application {
         db.getPlayers();
 
         root = new Pane();
+        root.setId("root");
         root.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
 
         Scene scene = new Scene(root, windowWidth, windowHeight);
 
         Pane gridPane = createGrid(); //creates the grid
+        gridPane.setId("grid");
+        gridPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
 
         addObstacles();
 
@@ -260,6 +264,7 @@ public class GameMain extends Application {
         currentResources = startingResources; //Starts current resources to starting resources;
 
         Pane recruitPane = createRecruitPane();
+        recruitPane.setId("recruitPane");
         recruitPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
         showPlaceUnitLabel();
 
@@ -334,6 +339,8 @@ public class GameMain extends Application {
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
         phaseLabelPane = createPhaseLabelPane();
+        phaseLabelPane.setId("phaseLabelPane");
+        phaseLabelPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
         phaseLabel.setText("WAITING FOR OTHER PLAYER");
 
         for (int i = 0; i < boardSize; i++) {
@@ -462,10 +469,9 @@ public class GameMain extends Application {
      */
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
-        phaseLabelPane = createPhaseLabelPane();
 
+        sidePanel.setId("sidePanel");
         sidePanel.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
-        phaseLabelPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
 
         endTurnButton.setText("End Turn");
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
@@ -1179,12 +1185,12 @@ public class GameMain extends Application {
         recruitUnits.setLayoutY(unitTilesYPadding);
 
         descriptionHead.setStyle(arialFont + descriptionHeadFontSize);
-        descriptionHead.setLayoutX(descriptionXPadding);
+        descriptionHead.setLayoutX(recruitContentXPadding);
         descriptionHead.setLayoutY(placementDescriptionYPadding);
         descriptionHead.setVisible(false);
 
         description.setStyle(arialFont);
-        description.setLayoutX(descriptionXPadding);
+        description.setLayoutX(recruitContentXPadding);
         description.setLayoutY(placementDescriptionYPadding + 2 * descriptionHeadHeigth);
         description.setVisible(false);
 
@@ -1283,16 +1289,16 @@ public class GameMain extends Application {
         turnCounter.setLayoutY(turnCounterYPadding);
 
         descriptionHead.setStyle(arialFont + descriptionHeadFontSize);
-        descriptionHead.setLayoutX(descriptionXPadding);
+        descriptionHead.setLayoutX(sidePanelContentXPadding);
         descriptionHead.setLayoutY(descriptionYPadding);
         descriptionHead.setVisible(false);
 
         description.setStyle(arialFont);
-        description.setLayoutX(descriptionXPadding);
+        description.setLayoutX(sidePanelContentXPadding);
         description.setLayoutY(descriptionYPadding + descriptionHeadHeigth);
         description.setVisible(false);
 
-        sidePanel.getChildren().addAll(turnCounter, phaseLabel, descriptionHead, description);
+        sidePanel.getChildren().addAll(turnCounter, descriptionHead, description);
 
         sidePanel.setLayoutX(sidePanelXPadding);
         sidePanel.setLayoutY(sidePanelYPadding);
@@ -1315,7 +1321,7 @@ public class GameMain extends Application {
         phaseLabel.setMinHeight(phaseLabelHeight);
 
         HBox phaseLabelBox = new HBox();
-        phaseLabelBox.setMinWidth(tileSize*boardSize);
+        phaseLabelBox.setMinWidth(tileSize*boardSize - 2 * standardStrokeWidth);
         phaseLabelBox.setAlignment(Pos.CENTER);
         phaseLabelBox.getChildren().add(phaseLabel);
 
@@ -1324,6 +1330,8 @@ public class GameMain extends Application {
         phaseLabelPane.setLayoutX(gridXPadding);
         phaseLabelPane.setLayoutY(phaseLabelYPadding);
         root.getChildren().add(phaseLabelPane);
+
+        phaseLabelPane.toBack();
 
         return phaseLabelPane;
     }

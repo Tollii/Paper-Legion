@@ -9,14 +9,30 @@
 /* Side panel for placementPhase */
 #recruitPane {
   -fx-background-color: #FFFFFF;
+  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , -7 , 7 );
+  -fx-padding: 5;
+  -fx-border-color: #000000;
+  -fx-border-width: 1;
 }
 
 /* Side panel for attack/movement phases */
 #sidePanel {
   -fx-background-color: #FFFFFF;
+  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , -7 , 7 );
+  -fx-padding: 5;
+  -fx-border-color: #000000;
+  -fx-border-width: 1;
 }
 
 /* The pane containing the label for stating the game phase */
 #phaseLabelPane {
   -fx-background-color: #FFFFFF;
+  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , -7 , 7 );
+  -fx-border-color: #000000;
+  -fx-border-width: 1;
+}
+
+/* The playing board */
+#grid {
+  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , -7 , 7 );
 }
