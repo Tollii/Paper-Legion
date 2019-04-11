@@ -132,8 +132,8 @@ public class GameMain extends Application {
     private final int recruitYPadding = (int)(windowHeight * 0.12);
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
-    private final int placementButtonXPadding = 150;
-    private final int recruitContentXPadding = 0;
+    private final int placementButtonXPadding = 225;
+    private final int recruitContentXPadding = 75;
 
     //ARROW//
     private final int arrowWidth = 5;
@@ -142,10 +142,12 @@ public class GameMain extends Application {
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
     private final int sidePanelYPadding = (int)(windowHeight * 0.12);
-    private final int turnCounterXPadding = 0;
+    private final int turnCounterXPadding = 5;
     private final int turnCounterYPadding = 0;
     private final int sidePanelContentXPadding = 0;
     private final int descriptionYPadding = 100;
+    private final int descriptionXPadding = 0;
+
 
     //PHASELABEL PANE//
     private final int phaseLabelYPadding = ((gridYPadding - phaseLabelHeight) / 2);
@@ -207,6 +209,7 @@ public class GameMain extends Application {
         placementPhaseStart(); //starts the placement phase
 
         ////STYLING////
+
         String gameTitle = "PAPER LEGION";
         window.setTitle(gameTitle);
         window.setScene(scene);
@@ -274,6 +277,10 @@ public class GameMain extends Application {
         finishedPlacingButton.setStyle(buttonBackgroundColor);
         finishedPlacingButton.setLayoutX(placementButtonXPadding);
         finishedPlacingButton.setLayoutY(buttonYPadding);
+        description.setTranslateX(descriptionXPadding);
+        descriptionHead.setTranslateX(descriptionXPadding);
+        resourceLabel.setTranslateX(recruitContentXPadding);
+        recruitUnits.setTranslateX(recruitContentXPadding);
 
         recruitPane.getChildren().add(finishedPlacingButton);
 
@@ -470,6 +477,11 @@ public class GameMain extends Application {
     private void movementPhaseStart() {
         Pane sidePanel = createSidePanel();
 
+
+        descriptionHead.setTranslateX(10);
+        description.setTranslateX(10);
+
+
         sidePanel.setId("sidePanel");
         sidePanel.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
 
@@ -477,9 +489,11 @@ public class GameMain extends Application {
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
+        endTurnButton.setTranslateX(25);
 
         //button for surrendering
         JFXButton surrenderButton = new JFXButton("Surrender");
+        surrenderButton.setTranslateX(25);
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
@@ -495,6 +509,7 @@ public class GameMain extends Application {
 
         //If you are player 2. Start polling the database for next turn.
         System.out.println("yourTurn: " + yourTurn);
+            turnCounter.setTranslateX(turnCounterXPadding);
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
@@ -1168,6 +1183,7 @@ public class GameMain extends Application {
      */
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
+        unitPane.setPrefWidth(625);
 
         resourceLabel.setStyle(fontSize32 + arialFont);
         resourceLabel.setText("Resources: $" + currentResources);
@@ -1289,6 +1305,7 @@ public class GameMain extends Application {
      */
     private Pane createSidePanel() { //creates the side panel for movement/attack phase
         Pane sidePanel = new Pane();
+        sidePanel.setPrefWidth(625);
 
         turnCounter.setStyle(fontSize32 + arialFont);
         turnCounter.setLayoutX(turnCounterXPadding);
