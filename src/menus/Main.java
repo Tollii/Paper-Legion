@@ -12,8 +12,11 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 
 import static database.Variables.*;
-
-
+/**
+ * The main class of the program, which calls the main method which then again calls the
+ * start method. This class sets up the stage and scene. This class extends to Application
+ * which inherits automatically a lot of variables and methods to make the GUI.
+ */
 public class Main extends Application {
 
     public static Stage window;

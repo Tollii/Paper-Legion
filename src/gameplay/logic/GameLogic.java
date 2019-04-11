@@ -40,7 +40,11 @@ public class GameLogic {
     /**
      * Checks to see if move is legal by checking if the move position player wants to move is one
      * of the tiles returns in getMovementPossibleTiles() method.
+     * @param newPosY Takes in the y-position player wants to move piece relative to grid.
+     * @param newPosX Takes in the x-position player wants to move piece relative to grid.
+     * @param movementTargets Takes in a ArrayList with Tile objects
      * @return boolean
+     * @see Grid
      * @see GameMain
      */
     public boolean checkForLegalMove(int newPosY, int newPosX, ArrayList<Tile> movementTargets) {
@@ -56,7 +60,11 @@ public class GameLogic {
     /**
      * Checks to see if attack is legal by checking if the attack position player wants to attack is one
      * of the tiles returns in getAttackableTiles() method.
+     * @param attackPosY Takes in a integer with the y-position relative to the Grid
+     * @param attackPosX Takes in a integer with the x-position relative to the Grid.
+     * @param attackTargets Takes in a ArrayList with tile objects.
      * @return boolean
+     * @see Grid
      * @see GameMain
      */
     public boolean checkForLegalAttack(int attackPosY, int attackPosX, ArrayList<Tile> attackTargets) {
@@ -72,7 +80,7 @@ public class GameLogic {
     /**
      * Gets all possible tiles a unit is within range to move to. Checks to see if move is legal and
      * that there is no enemy unit or obstacle on the tile that are returned in a ArrayList.
-     * @return ArrayList<tile>
+     * @return ArrayList with Tile objects
      */
     public ArrayList<Tile> getMovementPossibleTiles() {
         ArrayList<Tile> movementTargets = new ArrayList<>();
@@ -94,7 +102,7 @@ public class GameLogic {
      * Checks for opponents within attack range and returns them in a ArrayList with tiles that have opponents units in them.
      * @see GameMain
      * @see Unit
-     * @return ArrayList<Tile>
+     * @return ArrayList with Tile objects
      */
     public ArrayList<Tile> getAttackableTiles() {
         ArrayList<Tile> attackTargets = new ArrayList<>();
@@ -152,7 +160,7 @@ public class GameLogic {
     }
 
     /**
-     * Executes an attack on the enemy unit and removes the unit from the game if hp<=0
+     * Executes an attack on the enemy unit and removes the unit from the game if hp is less than 0
      * And sets the unit who has attack with a boolean with the method setHasAttackThisTurn=true
      * so that other methods that check through units for exporting attacks.
      * This method is usually called from another method, and never called alone.
@@ -180,6 +188,7 @@ public class GameLogic {
      * This method uses a random generated number to place the obstacles.
      * Finally this method calls upon db.exportObstacles() to export the obstacle postion
      * to the database, so it will be synchronized for both players.
+     * @return ArrayList, returns an ArrayList with Obstacle objects.
      * @see database.Database
      * @see GameMain
      * @see Obstacle

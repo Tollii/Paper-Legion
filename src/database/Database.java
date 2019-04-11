@@ -27,9 +27,10 @@ import static database.Variables.*;
  * This class contains all of the MYSQL statements that is used for the whole program, from login to gameplay.
  * All methods conatining any SQL lines use the Cleaner class for cleanup at the end of it's execution.
  * Most if, not all statements uses preparedStatement.
+ * @see Config
+ * @see ConnectionPool
+ * @see Cleaner
  */
-
-
 public class Database {
 
 
@@ -117,7 +118,8 @@ public class Database {
      * A select statement that puts all created matches that has not been started yet in a list.
      * Checks if the match is password protected or not, and updates the value in that specified match accordingly.
      *
-     * @return a list of current matches that has been created, but not started.
+     * @return ArrayList a list of current matches that has been created, but not started. Arraylist contains Match objects.
+     * @see Match
      */
     public ArrayList<Match> findGamesAvailable(){
         ArrayList<Match> matches = new ArrayList<>();
@@ -158,7 +160,8 @@ public class Database {
      * Joins the first one available.
      *
      * @param player_id id of the player that is searching for games.
-     * @return -1 on error, returns match_id on success.
+     * @return int, -1 on error, returns match_id on success.
+     * @see menus.controller.MainMenuController
      */
     public int quickMatch_search(int player_id) {
         Connection myConn = connectionPool.getConnection();
@@ -199,8 +202,9 @@ public class Database {
      *
      * @param match_id match id of the match that is being joined.
      * @param player2 player id of the user joining the game.
+     * @see menus.controller.MainMenuController
+     * @see menus.controller.MatchSetupController
      */
-
     public void joinGame(int match_id, int player2) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetning = "update Matches set player2=?, game_started=1 where match_id=?;";
@@ -231,7 +235,9 @@ public class Database {
      *
      * @param player_id player id of the player creating the game
      * @param password if game is password protected, use a string. If not, it will default to null.
-     * @return match_id on success, -1 on failure
+     * @return int, returns match_id on success, -1 on failure
+     * @see menus.controller.MainMenuController
+     * @see menus.controller.MatchSetupController
      */
     public int createGame(int player_id, String password) {
         int match_id = -1;
@@ -281,7 +287,9 @@ public class Database {
      * if another player has joined your game.
      *
      * @param match_id id of the match being polled.
-     * @return true when an opponent has been found, false if not.
+     * @return boolean, returns true when an opponent has been found, false if not.
+     * @see menus.controller.MainMenuController
+     * @see menus.controller.MatchSetupController
      */
     public boolean pollGameStarted(int match_id) {
         int gameStarted = 0;
@@ -351,6 +359,8 @@ public class Database {
     /**
      * Imports a list of UnitTypeIds. This is used to identify which Units to import.
      * @return ArrayList. Returns an integer ArrayList of the different UnitTypeIds
+     * @see GameMain
+     * @see gameplay.logic.GameLogic
      */
     public ArrayList<Integer> fetchUnitTypeList() {
 
@@ -384,6 +394,7 @@ public class Database {
 
     /**
      * Updates the variable class with your opponents player_id
+     * @see GameMain
      */
     public void getPlayers() {
 
@@ -430,7 +441,6 @@ public class Database {
      * @see Unit
      * @see GameMain placementPhaseFinished
      */
-
     public void exportPlacementUnits(ArrayList<Unit> exportUnitList, ArrayList<Integer> exportPositionXList, ArrayList<Integer> exportPositionYList) {
         Connection myConn = connectionPool.getConnection();
         String sqlSetningPieces = "INSERT INTO Pieces VALUES(?,?,?,?,?);";
@@ -572,6 +582,7 @@ public class Database {
      * Sets the status of the player as ready
      *
      * @param ready if true, sets player as ready.
+     * @see GameMain
      */
     public void setReady(boolean ready){
 
@@ -618,6 +629,8 @@ public class Database {
      * Sends a list of obstacles to the Obstacles table on the MYSQL database
      *
      * @param obstacles list of obstacles
+     * @see GameMain
+     * @see gameplay.logic.GameLogic
      */
     public void exportObstacles(ArrayList<Obstacle> obstacles) {
         Connection myConn = connectionPool.getConnection();
@@ -665,6 +678,8 @@ public class Database {
      * Gets obstacles and their position from the MYSQL database.
      *
      * @return ArrayList. Imported list of obstacles
+     * @see GameMain
+     * @see gameplay.logic.GameLogic
      */
     public ArrayList<Obstacle> importObstacles() {
         ArrayList<Obstacle> ObstacleImport = new ArrayList<>();
@@ -706,6 +721,8 @@ public class Database {
      * Checks if the correct amount of obstacles have been added in accordance with the # of obstacles in the database in a given match
      *
      * @return Boolean. True if local obstacles and server obstacles are equal. False if not.
+     * @see GameMain
+     * @see gameplay.logic.GameLogic
      */
     public Boolean obstaclesHaveBeenAdded() {
 
@@ -778,8 +795,8 @@ public class Database {
      * Updates the database with a new turn. Handles exception case with round 1.
      *
      * @param turn turn number.
+     * @see GameMain
      */
-
     public void sendTurn(int turn) {
         System.out.println("send turn Called");
         Connection myConn = connectionPool.getConnection();
@@ -815,6 +832,7 @@ public class Database {
      * Checks which player has a given turn.
      *
      * @return Int. Player id on success, -1 on failure.
+     * @see GameMain
      */
     public int getTurnPlayer() {
         Connection myConn = connectionPool.getConnection();
@@ -841,59 +859,12 @@ public class Database {
         }
         return -1;
     }
-/*
-    public int pollForUnits() { //Midlertidig metode for auto generert units
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        String stmt = "SELECT COUNT(*) AS counter FROM Units WHERE match_id = ?;";
-        ResultSet rs = null;
-        try {
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setInt(1, match_id);
-            rs = preparedStatement.executeQuery();
-            rs.next();
-            return rs.getInt("counter");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.closeResSet(rs);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-        return -1;
-    }
-
-
-    public void sendHealthInfo(int pieceID, double currentHealth) {
-        Connection myConn = connectionPool.getConnection();
-        PreparedStatement preparedStatement = null;
-        String stmt = "UPDATE Units SET current_health = ? WHERE piece_id = ? AND match_id = ? AND player_id = ?";
-        try {
-            myConn.setAutoCommit(false);
-            preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.setDouble(1, currentHealth); //"Arrays begin at 1"
-            preparedStatement.setInt(2, pieceID);
-            preparedStatement.setInt(3, match_id);
-            preparedStatement.setInt(4, opponent_id);
-
-            preparedStatement.executeUpdate();
-            myConn.commit();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-*/
 
     /**
      * Sends data for movement done locally in the gameplay phase, to the database.
      *
      * @param movementList list of movements.
+     * @see GameMain
      */
     public void exportMoveList(ArrayList<Move> movementList) {
 
@@ -940,6 +911,7 @@ public class Database {
      * @param enemyTurnIDInput your opponents latest turn id.
      * @param matchIdInput match id.
      * @return ArrayList. List of movements on success, null on failure.
+     * @see GameMain
      */
     public ArrayList<Move> importMoveList(int enemyTurnIDInput, int matchIdInput) {
 
@@ -984,6 +956,7 @@ public class Database {
      * Sends attacks locally done to the database.
      *
      * @param attackList list of local attacks.
+     * @see GameMain
      */
     public void exportAttackList(ArrayList<Attack> attackList) {
 
@@ -1029,6 +1002,7 @@ public class Database {
      * @param matchIdInput match id.
      * @param otherPlayerIdInput your opponents player id.
      * @return list of attacks on success, null on failure.
+     * @see GameMain
      */
     public ArrayList<Attack> importAttackList(int enemyTurnIDInput, int matchIdInput, int otherPlayerIdInput) {
 
@@ -1070,7 +1044,7 @@ public class Database {
 
     /**
      * Sets a match to being surrendered.
-     *
+     * @see GameMain
      */
     public void surrenderGame() {
         Connection myConn = connectionPool.getConnection();
@@ -1099,7 +1073,8 @@ public class Database {
     /**
      * Checks if a game has been surrendered.
      *
-     * @return returns 1 if game has been surrendered, -1 if not.
+     * @return int,  returns 1 if game has been surrendered, -1 if not.
+     * @see GameMain
      */
     public int checkForSurrender() {
         Connection myConn = connectionPool.getConnection();
@@ -1125,6 +1100,7 @@ public class Database {
         return -1;
     }
 
+
     /*
      __ _             _
     / _(_) __ _ _ __ (_)_ __
@@ -1134,12 +1110,14 @@ public class Database {
           |___/
      */
 
+
     /**
      * Takes given username and password to log in.
      *
      * @param username username to account
      * @param password password to account
-     * @return user id if login is successful, -1 if not.
+     * @return int, user id if login is successful, -1 if not.
+     * @see menus.controller.LoginController
      */
     public int login(String username, String password) {
 
@@ -1186,7 +1164,7 @@ public class Database {
 
     /**
      * Logs out a user.
-     *
+     * @return boolean
      * @param userId user id of user to log out of.
      */
     public boolean logout(int userId) {
@@ -1218,7 +1196,7 @@ public class Database {
      * @param user new account user name.
      * @param password new account password.
      * @param email new account email.
-     * @return 1 for registration success, 0 if account exists, -1 if error.
+     * @return int, 1 for registration success, 0 if account exists, -1 if error.
      */
     public int signUp(String user, String password, String email) {
 
@@ -1289,7 +1267,7 @@ public class Database {
      * @param password given password.
      * @param hash hash from database.
      * @param salt users' SALT.
-     * @return returns true if password matches, false if not
+     * @return boolean, returns true if password matches, false if not
      */
     private boolean verifyPassword(String password, byte[] hash, byte[] salt) {
 
@@ -1311,6 +1289,7 @@ public class Database {
      * @param email new users' email.
      * @param hash new users' hashed password.
      * @param salt new users' SALT.
+     * @see Database
      */
     private void addUserToDatabase(String username, String email, byte[] hash, byte[] salt) {
         String stmt = "INSERT INTO Users (username,hashedpassword,passwordsalt,email,online_status) VALUES (?,?,?,?,?)";
@@ -1348,7 +1327,8 @@ public class Database {
     /**
      * Gets a given user's username.
      *
-     * @return user's username on success, "error" on failure.
+     * @return String, user's username on success, "error" on failure.
+     * @see Database
      */
     public String getMyName() {
         Connection myConn = connectionPool.getConnection();
@@ -1377,7 +1357,8 @@ public class Database {
     /**
      * Gets a given user's e-mail.
      *
-     * @return user's e-mail on success, "error" on failure.
+     * @return String, user's e-mail on success, "error" on failure.
+     * @see Database
      */
     public String getMyEmail() {
         Connection myConn = connectionPool.getConnection();
@@ -1405,7 +1386,7 @@ public class Database {
 
     /**
      * Increments the number of games a user has played.
-     *
+     * @see Database
      */
     public void incrementGamesPlayed() {
         Connection myConn = connectionPool.getConnection();
@@ -1432,7 +1413,7 @@ public class Database {
 
     /**
      * Increments number of games a player has won.
-     *
+     * @see Database
      */
     public void incrementGamesWon() {
         Connection myConn = connectionPool.getConnection();
@@ -1459,7 +1440,8 @@ public class Database {
     /**
      * Gets # of games a user has played.
      *
-     * @return # of games on success as a String, "error" on failure.
+     * @return String, # of games on success as a String, "error" on failure.
+     * @see Database
      */
     public String getGamesPlayed() {
         Connection myConn = connectionPool.getConnection();
@@ -1490,7 +1472,8 @@ public class Database {
     /**
      * Gets # of games a user has won.
      *
-     * @return # of games won as a String on success, "error on failure.
+     * @return String,  # of games won as a String on success, "error on failure.
+     * @see Database
      */
     public String getGamesWon() {
         Connection myConn = connectionPool.getConnection();
@@ -1522,6 +1505,8 @@ public class Database {
      * Adds a given user to the statistics table.
      *
      * @param user_id user id of player to add in statistics
+     * @see menus.controller.StatsController
+     * @see Database
      */
     private void addUserToStatistics(int user_id) {
 
@@ -1559,6 +1544,8 @@ public class Database {
      * Calls the shutdown method from ConnectionPool.java
      *
      * @throws SQLException if something went wrong :/
+     * @see Database
+     * @see ConnectionPool
      */
     public void close() throws SQLException {
         connectionPool.shutdown();
