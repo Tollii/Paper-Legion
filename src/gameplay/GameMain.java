@@ -828,9 +828,9 @@ public class GameMain extends Application {
 
             @Override
             public void run() {
-                while (!waitTurnThread.isInterrupted() && keepRunning()) {
+                while (!doStop) {
                     try {
-                        while (!yourTurn) {
+                        while (!waitTurnThread.isInterrupted() && !yourTurn) {
                             if (gameFinished) {
                                 this.doStop();
                                 waitTurnThread = null;
@@ -844,8 +844,9 @@ public class GameMain extends Application {
                             if (getTurnPlayerResult == user_id) {
                                 System.out.println("yourTurn changes");
                                 yourTurn = true;
+                                doStop = true;
                                 waitTurnThread.interrupt();
-                                this.doStop();
+
                             }
                         }
                         //What will happen when it is your turn again.
