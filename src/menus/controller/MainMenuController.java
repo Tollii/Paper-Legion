@@ -76,18 +76,19 @@ public class MainMenuController extends Controller {
         imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
         contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
-
+        //Reset from a previous game.
         game = null;
+        opponentReady = false;
+        findGameClicked = false;
+        gameEntered = false;
+        threadStarted = false;
+        turn = 1;
+
         searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
             public void run() {
-                opponentReady = false;
-                findGameClicked = false;
-                gameEntered = false;
-                threadStarted = false;
-                turn = 1;
                 while (keepRunning()) {
                     // If user clicks the button while searching for game the matchmaking thread is shut down.
                     if (findGameClicked) {

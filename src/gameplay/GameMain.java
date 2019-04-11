@@ -548,6 +548,7 @@ public class GameMain extends Application {
      * checkForLegalMove(). If the move is legal then the unit changes position and adds itself to a movement list
      * to later be exported to Database. Finally, this method sets the phase label to Attack Phase, and remove all
      * of the movement highlighting of the tiles with the method clearHighlight().
+     * @param event Takes in a MouseEvent.MouseClicked event.
      * @see GameLogic
      */
     private void move(MouseEvent event) {
@@ -585,6 +586,7 @@ public class GameMain extends Application {
      * movement and uses checkForLegalAttack to see whether the piece player wants to attack is in the array of
      * attackable Tiles. It then adds the attack to attackList which can be sent to database and then executes attack
      * with executeAttack() method. Finally it deselects the unit with deselect() method.
+     * @param event Takes in a MouseEvent.MouseClick
      * @see GameMain
      * @see Grid
      * @see Unit
@@ -801,13 +803,15 @@ public class GameMain extends Application {
      * @see GameLogic
      */
     private void endTurn() {
+        System.out.println("EndTurn called" + yourTurn);
         if (yourTurn) {
+
             //Increments turn. Opponents Turn.
             turn++;
-
+            yourTurn = false;
             turnCounter.setText("TURN: " + turn);
             endTurnButton.setText("Waiting for other player");
-            yourTurn = false;
+
 
             ////SEND MOVEMENT////
             if (movementList.size() != 0) {
@@ -915,6 +919,7 @@ public class GameMain extends Application {
      * @see database.Database
      */
     private void setUpNewTurn() {
+        System.out.println("setUpNewTurn" + " called" + yourTurn);
         deselect();
         selectedUnit = null;
         turn++;
@@ -1139,6 +1144,7 @@ public class GameMain extends Application {
      * Method for setting up different panes containing the UI elements.
      * Sets up Grid and styles it.
      * @see Grid
+     * @return Pane, returns the pane that contains the grid.
      */
     private Pane createGrid() {
         Pane gridPane = new Pane();
@@ -1350,6 +1356,7 @@ public class GameMain extends Application {
     /**
      * Calls for shutdown methods if program is closed. It is used to log out user
      * and close connections.
+     * @param args Takes in arguemnts for the main method.
      */
     public void main(String[] args) {
         System.out.println("SHUTDOWN HOOK CALLED");

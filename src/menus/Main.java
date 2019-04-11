@@ -2,23 +2,34 @@ package menus;
 
 import database.Database;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import runnables.RunnableInterface;
 
 import java.sql.SQLException;
 
 import static database.Variables.*;
-
-
+/**
+ * The main class of the program, which calls the main method which then again calls the
+ * start method. This class sets up the stage and scene. This class extends to Application
+ * which inherits automatically a lot of variables and methods to make the GUI.
+ */
 public class Main extends Application {
 
     public static Stage window;
     public static Scene rootScene;
 
+    /**
+     * Start method is called by main method on program launch, and sets up the database connection,
+     * the stage, and the scene.
+     * @param primaryStage Takes in a stage from Application.
+     * @throws Exception throws out execeptions.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -41,9 +52,17 @@ public class Main extends Application {
         screenHeight = screenSize.getHeight();
         window.setWidth(screenWidth);
         window.setHeight(screenHeight);
+        databaseNoTimeout();
         window.show();
+        databaseNoTimeoutThread = new Thread(databaseNoTimeoutRunnable);
+        databaseNoTimeoutThread.start();
     }
 
+    /**
+     * The main method of the program, launches method start() and a thread to check if user quits the program, which
+     * will close and log out users from the database
+     * @param args Takes in arguments for the main method.
+     */
     public static void main(String[] args) {
 //        //Sets the Dock icon for mac
 //        try {
@@ -59,6 +78,47 @@ public class Main extends Application {
         launch(args);
     }
 
+    private void databaseNoTimeout() {
+        // Runnable lambda implementation for turn waiting with it's own thread
+
+        databaseNoTimeoutRunnable = new RunnableInterface() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while (keepRunning()) {
+                    try {
+                        System.out.println("HALLOOOO from the thread");
+                        Thread.sleep(150000);
+                        db.keepTheConnectionAlive();
+
+                        Platform.runLater(() -> {
+
+                        });
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void doStop() {
+                this.doStop = true;
+            }
+
+            @Override
+            public boolean keepRunning() {
+                return !this.doStop;
+            }
+        };
+    }
+
+    /**
+     * Stops the thread  that logs out users from database, which was created from main method.
+     */
+
+
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
@@ -69,6 +129,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Closes all connections and logs out the users from the database on program exit.
+     */
     public static void closeAndLogout() {
         if (user_id > 0) {
             db.logout(user_id);
@@ -77,15 +140,19 @@ public class Main extends Application {
         //Stops threads.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
-            waitTurnThread.stop();
+            waitTurnThread.interrupt();
         }
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
-            waitPlacementThread.stop();
+            waitPlacementThread.interrupt();
         }
         if (searchGameThread != null) {
             searchGameRunnable.doStop();
-            searchGameThread.stop();
+            searchGameThread.interrupt();
+        }
+        if(databaseNoTimeoutThread != null){
+            databaseNoTimeoutRunnable.doStop();
+            databaseNoTimeoutThread.interrupt();
         }
         try {
             db.close();
