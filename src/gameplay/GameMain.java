@@ -36,6 +36,9 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.LineTo;
 
 import java.io.IOException;
 
@@ -72,6 +75,8 @@ public class GameMain extends Application {
     private JFXButton endTurnButton = new JFXButton();                                //button for ending turn
     private static FlowPane recruitUnits;
     public Pane phaseLabelPane;
+    private static Pane placeUnitPane;
+    private static Path arrow;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -101,6 +106,8 @@ public class GameMain extends Application {
     //LABELS SIZES//
     private final int phaseLabelHeight = 50;
     private final int descriptionHeadHeigth = 20;
+    private final int placeUnitLabelWidth = 400;
+    private final int placeUnitLabelHeight = 40;
 
     //RECRUIT PANE UNIT TILES WIDTH//
     private static final int unitPadding = 5;
@@ -120,6 +127,10 @@ public class GameMain extends Application {
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
     private final int placementButtonXPadding = 150;
+
+    //ARROW//
+    private final int arrowWidth = 7;
+    private final int arrowHeadSize = 20;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
@@ -296,10 +307,6 @@ public class GameMain extends Application {
             tile.setStrokeWidth(standardStrokeWidth);
             tile.setStroke(standardStrokeColor);
         }
-    }
-
-    static void removePlaceUnitLabel() {
-      root.getChildren().remove(placeUnitLabel);
     }
 
     /**
@@ -1177,21 +1184,58 @@ public class GameMain extends Application {
     }
 
     private void showPlaceUnitLabel() {
-      placeUnitLabel.setStyle(placeUnitLabelBackgroundColor + fontSize32);
+      placeUnitPane = new Pane();
 
-      HBox hPlaceUnitLabelBox = new HBox();
-      hPlaceUnitLabelBox.setAlignment(Pos.CENTER);
-      hPlaceUnitLabelBox.setMinWidth(tileSize*boardSize);
-      hPlaceUnitLabelBox.getChildren().add(placeUnitLabel);
+      placeUnitLabel.setStyle(placeUnitLabelBackgroundColor + fontSize32 + arialFont);
+      placeUnitLabel.setAlignment(Pos.CENTER);
+      placeUnitLabel.setMinWidth(placeUnitLabelWidth);
+      placeUnitLabel.setMinHeight(placeUnitLabelHeight);
 
-      VBox vPlaceUnitLabelBox = new VBox();
-      vPlaceUnitLabelBox.setLayoutX(gridXPadding);
-      vPlaceUnitLabelBox.setLayoutY(gridYPadding);
-      vPlaceUnitLabelBox.setMinHeight(tileSize*boardSize);
-      vPlaceUnitLabelBox.setAlignment(Pos.CENTER);
-      vPlaceUnitLabelBox.getChildren().add(hPlaceUnitLabelBox);
+      if (user_id == player1) {
+        arrow = drawArrow(recruitXPadding, recruitYPadding + unitTilesYPadding + (tileSize / 2), gridXPadding + ((tileSize*boardSize) / 2), gridYPadding + tileSize);
+      } else {
+        arrow = drawArrow(recruitXPadding, recruitYPadding + unitTilesYPadding + (tileSize / 2), gridXPadding + ((tileSize*boardSize) / 2), gridYPadding + tileSize*(boardSize - 1));
+      }
 
-      root.getChildren().add(vPlaceUnitLabelBox);
+      placeUnitPane.getChildren().add(placeUnitLabel);
+      placeUnitPane.setLayoutX(gridXPadding + ((tileSize*boardSize - placeUnitLabelWidth) / 2));
+      placeUnitPane.setLayoutY(gridYPadding + ((tileSize*boardSize - placeUnitLabelHeight) / 2));
+
+      root.getChildren().addAll(placeUnitPane, arrow);
+    }
+
+    static void removePlaceUnitLabel() {
+      root.getChildren().remove(placeUnitPane);
+      root.getChildren().remove(arrow);
+    }
+
+    private Path drawArrow(double startX, double startY, double endX, double endY) {
+      Path arrow = new Path();
+
+      arrow.setFill(standardStrokeColor);
+      arrow.setFillRule(FillRule.EVEN_ODD);
+      arrow.setStrokeWidth(arrowWidth);
+
+      //Line
+      arrow.getElements().add(new MoveTo(startX, startY));
+      arrow.getElements().add(new LineTo(endX, endY));
+
+      //ArrowHead
+      double angle = Math.atan2((endY - startY), (endX - startX)) - Math.PI / 2.0;
+      double sin = Math.sin(angle);
+      double cos = Math.cos(angle);
+      //point1
+      double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + endX;
+      double y1 = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + endY;
+      //point2
+      double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + endX;
+      double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + endY;
+
+      arrow.getElements().add(new LineTo(x1, y1));
+      arrow.getElements().add(new MoveTo(endX, endY));
+      arrow.getElements().add(new LineTo(x2, y2));
+
+      return arrow;
     }
 
     /**
