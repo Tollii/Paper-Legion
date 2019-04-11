@@ -22,6 +22,12 @@ public class Main extends Application {
     public static Stage window;
     public static Scene rootScene;
 
+    /**
+     * Start method is called by main method on program launch, and sets up the database connection,
+     * the stage, and the scene.
+     * @param primaryStage Takes in a stage from Application.
+     * @throws Exception throws out execeptions.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -47,6 +53,11 @@ public class Main extends Application {
         window.show();
     }
 
+    /**
+     * The main method of the program, launches method start() and a thread to check if user quits the program, which
+     * will close and log out users from the database
+     * @param args Takes in arguments for the main method.
+     */
     public static void main(String[] args) {
 //        //Sets the Dock icon for mac
 //        try {
@@ -62,6 +73,9 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Stops the thread  that logs out users from database, which was created from main method.
+     */
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
@@ -72,6 +86,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Closes all connections and logs out the users from the database on program exit.
+     */
     public static void closeAndLogout() {
         if (user_id > 0) {
             db.logout(user_id);
