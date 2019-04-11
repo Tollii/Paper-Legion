@@ -74,7 +74,7 @@ public class Main extends Application {
             public void run() {
                 while (keepRunning()) {
                     try {
-
+                        System.out.println("HALLOOOO from the thread");
                         Thread.sleep(150000);
                         db.keepTheConnectionAlive();
 
