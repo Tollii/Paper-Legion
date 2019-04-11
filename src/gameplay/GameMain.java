@@ -828,9 +828,9 @@ public class GameMain extends Application {
 
             @Override
             public void run() {
-                while (keepRunning()) {
+                while (!waitTurnThread.isInterrupted() && keepRunning()) {
                     try {
-                        while (!yourTurn && !waitTurnThread.isInterrupted()) {
+                        while (!yourTurn) {
                             if (gameFinished) {
                                 this.doStop();
                                 waitTurnThread = null;
