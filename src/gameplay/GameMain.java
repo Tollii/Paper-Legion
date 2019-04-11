@@ -42,6 +42,9 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.LineTo;
 
 import java.io.IOException;
 
@@ -68,15 +71,18 @@ public class GameMain extends Application {
     private static final int playerSideSize = 2; //Used to set width of the placement area
 
     ////SCENE ELEMENTS////
-    private Pane root;
+    private static Pane root;
     private static final Label description = new Label();                //description label for the selected unit
     private static final Label descriptionHead = new Label();            //description head label for selected unit
-    private final static Label resourceLabel = new Label();    //Static so that Tile can update the label
-    private final Label turnCounter = new Label("TURN: " + turn); //describe which turn it is
+    private static final Label placeUnitLabel = new Label("Drag units onto the grid"); //User hint to place units on the board
+    private static final Label resourceLabel = new Label();    //Static so that Tile can update the label
+    private final Label  turnCounter = new Label("TURN: " + turn); //describe which turn it is
     private final Label phaseLabel = new Label();
     private JFXButton endTurnButton = new JFXButton();                                //button for ending turn
     private static FlowPane recruitUnits;
     public Pane phaseLabelPane;
+    private static Pane placeUnitPane;
+    private static Path arrow;
 
     ////WINDOW SIZE////
     private final double windowWidth = screenWidth;
@@ -106,6 +112,8 @@ public class GameMain extends Application {
     //LABELS SIZES//
     private final int phaseLabelHeight = 50;
     private final int descriptionHeadHeigth = 20;
+    private final int placeUnitLabelWidth = 400;
+    private final int placeUnitLabelHeight = 40;
 
     //RECRUIT PANE UNIT TILES WIDTH//
     private static final int unitPadding = 5;
@@ -125,6 +133,10 @@ public class GameMain extends Application {
     private final int unitTilesYPadding = 60;
     private final int placementDescriptionYPadding = 200;
     private final int placementButtonXPadding = 150;
+
+    //ARROW//
+    private final int arrowWidth = 5;
+    private final int arrowHeadSize = 30;
 
     //MOVEMENT AND ATTACK PHASE SIDE PANEL//
     private final int sidePanelXPadding = gridXPadding + tileSize * boardSize + (int)(screenWidth * 0.05);
@@ -159,7 +171,9 @@ public class GameMain extends Application {
     private final Paint buttonTextColor = Color.WHITE;
     private final Paint movementHighlightColor = Color.GREENYELLOW;
     private final Paint attackHighlightColor = Color.DARKRED;
-    private final Paint untargetableTileColor = Color.color(155.0 / 255.0, 135.0 / 255.0, 65.0 / 255.0);
+    private final Paint untargetableTileColor = Color.rgb(155, 135, 65);
+    private final String placeUnitLabelBackgroundColor = "-fx-background-color: rgba(255, 255, 255, 0.4);";
+    private final Paint arrowColor = Color.rgb(170, 170, 192);
 
     private GameLogic game;
 
@@ -244,6 +258,7 @@ public class GameMain extends Application {
         currentResources = startingResources; //Starts current resources to starting resources;
 
         Pane recruitPane = createRecruitPane();
+        showPlaceUnitLabel();
 
         JFXButton finishedPlacingButton = new JFXButton("Finished placing units"); //creates a button for ending the placementphase
         finishedPlacingButton.setMinSize(buttonWidth, buttonHeight);
@@ -1174,6 +1189,78 @@ public class GameMain extends Application {
         root.getChildren().add(unitPane);
 
         return unitPane;
+    }
+
+    /**
+    * Adds a label to the board to communicate to the player to add units to the board.
+    * It also adds an arrow from the recruitTiles to the middle of the playable area of
+    * the board depending on the players side of the board. 
+    */
+    private void showPlaceUnitLabel() {
+      placeUnitPane = new Pane();
+
+      placeUnitLabel.setStyle(placeUnitLabelBackgroundColor + fontSize32 + arialFont);
+      placeUnitLabel.setAlignment(Pos.CENTER);
+      placeUnitLabel.setMinWidth(placeUnitLabelWidth);
+      placeUnitLabel.setMinHeight(placeUnitLabelHeight);
+
+      if (user_id == player1) {
+        arrow = drawArrow(recruitXPadding, recruitYPadding + unitTilesYPadding + (tileSize / 2), gridXPadding + ((tileSize*boardSize) / 2), gridYPadding + tileSize);
+      } else {
+        arrow = drawArrow(recruitXPadding, recruitYPadding + unitTilesYPadding + (tileSize / 2), gridXPadding + ((tileSize*boardSize) / 2), gridYPadding + tileSize*(boardSize - 1));
+      }
+
+      placeUnitPane.getChildren().add(placeUnitLabel);
+      placeUnitPane.setLayoutX(gridXPadding + ((tileSize*boardSize - placeUnitLabelWidth) / 2));
+      placeUnitPane.setLayoutY(gridYPadding + ((tileSize*boardSize - placeUnitLabelHeight) / 2));
+
+      root.getChildren().addAll(placeUnitPane, arrow);
+    }
+
+    /**
+    * Method for removing placeUnitLabel and arrow after first unit is added to the board
+    * @see Tile
+    */
+    public static void removePlaceUnitLabel() {
+      root.getChildren().remove(placeUnitPane);
+      root.getChildren().remove(arrow);
+    }
+
+    /**
+    * Creates an arrow path to be added by showPlaceUnitLabel() to illustrate how to add
+    * units to the board. The mathod takes the start and end x and y positions
+    * @param startX double value for start x position of arrow
+    * @param startY double value for start y position of arrow
+    * @param endX double value for end x position of arrow
+    * @param endY double value for end y position of arrow
+    * @return Path
+    */
+    private Path drawArrow(double startX, double startY, double endX, double endY) {
+      Path arrow = new Path();
+
+      arrow.setStrokeWidth(arrowWidth);
+      arrow.setStroke(arrowColor);
+
+      //Line
+      arrow.getElements().add(new MoveTo(startX, startY));
+      arrow.getElements().add(new LineTo(endX, endY));
+
+      //ArrowHead
+      double angle = Math.atan2((endY - startY), (endX - startX)) - Math.PI / 2.0;
+      double sin = Math.sin(angle);
+      double cos = Math.cos(angle);
+      //point1
+      double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + endX;
+      double y1 = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + endY;
+      //point2
+      double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + endX;
+      double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + endY;
+
+      arrow.getElements().add(new LineTo(x1, y1));
+      arrow.getElements().add(new MoveTo(endX, endY));
+      arrow.getElements().add(new LineTo(x2, y2));
+
+      return arrow;
     }
 
     /**

@@ -68,6 +68,7 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
                 if(currentResources - newUnit.getCost() >= 0){
                     setUnit(newUnit);
                     setUntargetable();
+                    GameMain.removePlaceUnitLabel();
                     success = true;
                 }
             }
