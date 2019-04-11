@@ -7,6 +7,12 @@ import database.Database;
 import database.Variables;
 import gameplay.*;
 
+import gameplay.gameboard.Grid;
+import gameplay.gameboard.Obstacle;
+import gameplay.gameboard.Tile;
+import gameplay.logic.GameLogic;
+import gameplay.units.Unit;
+import gameplay.units.UnitGenerator;
 import org.junit.*;
 
 import java.util.ArrayList;
