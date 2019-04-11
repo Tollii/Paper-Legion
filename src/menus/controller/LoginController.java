@@ -74,8 +74,8 @@ public class LoginController extends Controller {
     void initialize() {
 
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
-        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
         // Thread to log in so program doesn't freeze up when getting data from the database

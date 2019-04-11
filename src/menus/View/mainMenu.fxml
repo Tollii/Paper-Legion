@@ -14,7 +14,7 @@
 
 <AnchorPane fx:id="paneforPattern" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.controller.MainMenuController">
    <children>
-       <AnchorPane fx:id="contentPane" layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" stylesheets="/menus/controller/MenuCSS1.css" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
+       <AnchorPane fx:id="contentPane" layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" stylesheets="/menus/controller/MenuCSS.css" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
           <children>
               <HBox alignment="CENTER_LEFT" prefHeight="470.0" prefWidth="624.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                  <children>

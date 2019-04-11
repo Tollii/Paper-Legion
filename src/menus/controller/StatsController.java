@@ -49,9 +49,9 @@ public class StatsController extends Controller{
     @FXML
     private void initialize(){
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
-        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
         statsBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
         statsUsernameLabel.setText("Username: " + db.getMyName());

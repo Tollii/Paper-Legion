@@ -72,9 +72,9 @@ public class MainMenuController extends Controller {
     @FXML
     void initialize() {
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
-        imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
-        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS1.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
         game = null;
