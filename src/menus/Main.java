@@ -78,8 +78,6 @@ public class Main extends Application {
                         Thread.sleep(150000);
                         db.keepTheConnectionAlive();
 
-                        //What will happen when your opponent is ready.
-
                         Platform.runLater(() -> {
 
                         });

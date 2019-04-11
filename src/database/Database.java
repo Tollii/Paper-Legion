@@ -1336,7 +1336,7 @@ public class Database {
         }
     }
     public void keepTheConnectionAlive() {
-        String stmt = "SELECT user_id FROM Users WHERE user_id = 1;";
+        String stmt = "SELECT version();";
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -1346,7 +1346,7 @@ public class Database {
             rs = preparedStatement.executeQuery();
             myConn.commit();
             rs.next();
-            System.out.println("yoyo from keepTheConnectionAlive");
+            System.out.println("yoyo from keepTheConnectionAlive" + rs);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
