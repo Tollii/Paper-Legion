@@ -43,10 +43,10 @@ public class Main extends Application {
         screenHeight = screenSize.getHeight();
         window.setWidth(screenWidth);
         window.setHeight(screenHeight);
-        databaseNoTimeoutThread = new Thread(databaseNoTimeoutRunnable);
-        databaseNoTimeoutThread.start();
         databaseNoTimeout();
         window.show();
+        databaseNoTimeoutThread = new Thread(databaseNoTimeoutRunnable);
+        databaseNoTimeoutThread.start();
     }
 
     public static void main(String[] args) {

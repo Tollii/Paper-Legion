@@ -1338,12 +1338,15 @@ public class Database {
     public void keepTheConnectionAlive() {
         String stmt = "SELECT user_id FROM Users WHERE user_id = 1;";
         Connection myConn = connectionPool.getConnection();
+        ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         try {
             myConn.setAutoCommit(false);
             preparedStatement = myConn.prepareStatement(stmt);
-            preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             myConn.commit();
+            rs.next();
+            System.out.println("yoyo from keepTheConnectionAlive");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
