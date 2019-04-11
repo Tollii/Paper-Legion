@@ -830,7 +830,7 @@ public class GameMain extends Application {
             public void run() {
                 while (keepRunning()) {
                     try {
-                        while (!yourTurn) {
+                        while (!yourTurn && !waitTurnThread.isInterrupted()) {
                             if (gameFinished) {
                                 this.doStop();
                                 waitTurnThread = null;
