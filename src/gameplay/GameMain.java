@@ -810,7 +810,7 @@ public class GameMain extends Application {
             checkForGameOver();
 
             //Wait for you next turn. Does not trigger if you have surrendered.
-            if (!surrendered) {
+            if (!surrendered && !gameFinished) {
                 waitForTurn();
             }
         }
