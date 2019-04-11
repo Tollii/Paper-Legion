@@ -103,12 +103,12 @@ public class Main extends Application {
             }
 
             @Override
-            public synchronized void doStop() {
+            public void doStop() {
                 this.doStop = true;
             }
 
             @Override
-            public synchronized boolean keepRunning() {
+            public boolean keepRunning() {
                 return !this.doStop;
             }
         };
