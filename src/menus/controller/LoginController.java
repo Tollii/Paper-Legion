@@ -66,11 +66,9 @@ public class LoginController extends Controller {
      */
     @FXML
     void initialize() {
-        paneforPattern.setStyle("-fx-background-image: url(/menus/menuAssets/paperPattern.jpg);" +
-                "-fx-background-size: 200, 200;" +
-                "-fx-background-repeat: repeat;"+
 
-                "-fx-background-position: left top;");
+
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
 
 
         // Thread to log in so program doesn't freeze up when getting data from the database

@@ -1,5 +1,6 @@
 package menus.controller;
 
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
@@ -53,6 +54,8 @@ public class MainMenuController extends Controller {
     @FXML
     private ImageView paperLegionLogo;
 
+    @FXML
+    private AnchorPane paneforPattern;
 
     @FXML
     private Pane imageMainMenu;
@@ -65,10 +68,8 @@ public class MainMenuController extends Controller {
     @FXML
     void initialize() {
 
-        imageMainMenu.setStyle("-fx-background-image: url(/menus/menuAssets/legion_finished.png);" +
-                "-fx-background-size: contain;" +
-                "-fx-background-repeat: no-repeat;"+
-                "-fx-background-position: center;");
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
 
 
         game = null;
