@@ -1052,7 +1052,7 @@ public class GameMain extends Application {
             JFXButton endGameBtn = new JFXButton("Return to menu");
 
             endGameBtn.setOnAction(event -> {
-                String fxmlDir = "/menus/view/mainMenu.fxml";
+                String fxmlDir = "/menus/fxml/MainMenu.fxml";
                 Parent root = null;
                 try {
                     root = FXMLLoader.load(this.getClass().getResource(fxmlDir));

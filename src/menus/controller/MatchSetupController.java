@@ -154,7 +154,7 @@ public class MatchSetupController extends Controller {
             // ABORTS CREATED MATCHES AND EXITS TO MAIN MENU
             backToMenuButton.setOnAction(event -> {
                 db.abortMatch(user_id);
-                changeScene("mainMenu.fxml");
+                changeScene("MainMenu.fxml");
             });
 
             //JOINS SELECTED GAME ROW IN TABLE

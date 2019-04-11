@@ -88,7 +88,7 @@ public class GameInfoController extends Controller {
         placementbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
-        gameInfoBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
+        gameInfoBackButton.setOnAction(event -> changeScene("MainMenu.fxml"));
 
 
 

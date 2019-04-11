@@ -53,7 +53,7 @@ public class StatsController extends Controller{
 
         contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
-        statsBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
+        statsBackButton.setOnAction(event -> changeScene("MainMenu.fxml"));
         statsUsernameLabel.setText("Username: " + db.getMyName());
         statsEmailLabel.setText("E-mail: " + db.getMyEmail());
         statsGamesPlayedLabel.setText("Games played: " + db.getGamesPlayed());

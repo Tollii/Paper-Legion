@@ -95,7 +95,7 @@ public class MainMenuController extends Controller {
                             cancelGame();
                             threadStarted = false;
                             searchGameThread = null;
-                            changeScene("mainMenu.fxml");
+                            changeScene("MainMenu.fxml");
                             this.doStop();
                         });
                     } else {
@@ -191,18 +191,18 @@ public class MainMenuController extends Controller {
             cancelGame();
             db.logout(user_id);
             user_id = -1;
-            changeScene("login.fxml");
+            changeScene("Login.fxml");
         });
 
         //Displays Stats and tutorial information.
         mainMenuGameInfoButton.setOnAction(event -> {
             cancelGame();
-            changeScene("gameInfo.fxml");
+            changeScene("GameInfo.fxml");
         });
 
         mainMenuStatsButton.setOnAction(event -> {
             cancelGame();
-            changeScene("stats.fxml");
+            changeScene("Stats.fxml");
         });
     }
 

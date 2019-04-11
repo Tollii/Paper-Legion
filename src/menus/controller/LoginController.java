@@ -101,7 +101,7 @@ public class LoginController extends Controller {
                         int userId = db.login(usernameInput.getText(), passwordInput.getText());
                         if (userId > 0) {
                             setUser_id(userId);
-                            Platform.runLater(() -> changeScene("mainMenu.fxml"));
+                            Platform.runLater(() -> changeScene("MainMenu.fxml"));
                             loginPressed = false;
                             this.doStop();
                         } else {
@@ -119,7 +119,7 @@ public class LoginController extends Controller {
         loginThread = new Thread(loginRunnable);
 
         newUserButton.setOnAction(event ->
-            changeScene("signUp.fxml"));
+            changeScene("SignUp.fxml"));
 
         loginEnterButton.setOnAction(event -> {
             loginPressed = true;

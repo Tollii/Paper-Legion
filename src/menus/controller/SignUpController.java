@@ -70,7 +70,7 @@ public class SignUpController extends Controller {
         contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
-        goBackButton.setOnAction(event -> changeScene("login.fxml"));
+        goBackButton.setOnAction(event -> changeScene("Login.fxml"));
 
         signUpButton.setOnAction(event -> {
             //Checks if both password fields are the same.
@@ -83,7 +83,7 @@ public class SignUpController extends Controller {
                 // Tries to register user in database.
                 int signup = db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText());
                 if (signup > 0) {
-                    changeScene("login.fxml");
+                    changeScene("Login.fxml");
                 }
                 else if(signup == 0){
                     alertField.setText("User already exists");
