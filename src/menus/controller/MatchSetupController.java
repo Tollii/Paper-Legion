@@ -1,6 +1,8 @@
 package menus.controller;
 
+import gameplay.gameboard.Grid;
 import javafx.scene.layout.AnchorPane;
+import menus.Match;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -72,8 +74,12 @@ public class MatchSetupController extends Controller {
         @FXML
         private JFXButton backToMenuButton;
 
-    @FXML
-    private AnchorPane paneforPattern;
+
+        @FXML
+        private AnchorPane contentPane;
+
+        @FXML
+        private AnchorPane paneforPattern;
 
         @FXML
         private ImageView paperLegionLogo;
@@ -84,7 +90,8 @@ public class MatchSetupController extends Controller {
          */
         @FXML
         void initialize() {
-            paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+            paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+            contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
 
@@ -147,7 +154,7 @@ public class MatchSetupController extends Controller {
             // ABORTS CREATED MATCHES AND EXITS TO MAIN MENU
             backToMenuButton.setOnAction(event -> {
                 db.abortMatch(user_id);
-                changeScene("mainMenu.fxml");
+                changeScene("MainMenu.fxml");
             });
 
             //JOINS SELECTED GAME ROW IN TABLE

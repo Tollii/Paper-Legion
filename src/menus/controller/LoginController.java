@@ -60,6 +60,12 @@ public class LoginController extends Controller {
     @FXML
     private AnchorPane paneforPattern;
 
+
+    @FXML
+    private AnchorPane contentPane;
+
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
@@ -68,7 +74,8 @@ public class LoginController extends Controller {
     void initialize() {
 
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
         // Thread to log in so program doesn't freeze up when getting data from the database
@@ -94,7 +101,7 @@ public class LoginController extends Controller {
                         int userId = db.login(usernameInput.getText(), passwordInput.getText());
                         if (userId > 0) {
                             setUser_id(userId);
-                            Platform.runLater(() -> changeScene("mainMenu.fxml"));
+                            Platform.runLater(() -> changeScene("MainMenu.fxml"));
                             loginPressed = false;
                             this.doStop();
                         } else {
@@ -112,7 +119,7 @@ public class LoginController extends Controller {
         loginThread = new Thread(loginRunnable);
 
         newUserButton.setOnAction(event ->
-            changeScene("signUp.fxml"));
+            changeScene("SignUp.fxml"));
 
         loginEnterButton.setOnAction(event -> {
             loginPressed = true;

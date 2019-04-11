@@ -55,6 +55,10 @@ public class SignUpController extends Controller {
     private AnchorPane paneforPattern;
 
 
+    @FXML
+    private AnchorPane contentPane;
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
@@ -62,9 +66,11 @@ public class SignUpController extends Controller {
     @FXML
     void initialize() {
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
-        goBackButton.setOnAction(event -> changeScene("login.fxml"));
+
+        goBackButton.setOnAction(event -> changeScene("Login.fxml"));
 
         signUpButton.setOnAction(event -> {
             //Checks if both password fields are the same.
@@ -77,7 +83,7 @@ public class SignUpController extends Controller {
                 // Tries to register user in database.
                 int signup = db.signUp(usernameInput.getText(), passwordInput.getText(), emailInput.getText());
                 if (signup > 0) {
-                    changeScene("login.fxml");
+                    changeScene("Login.fxml");
                 }
                 else if(signup == 0){
                     alertField.setText("User already exists");

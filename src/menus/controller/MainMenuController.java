@@ -6,7 +6,7 @@ import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import database.Variables;
 import gameplay.GameMain;
-import gameplay.Grid;
+import gameplay.gameboard.Grid;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -61,6 +61,10 @@ public class MainMenuController extends Controller {
     private Pane imageMainMenu;
 
 
+    @FXML
+    private AnchorPane contentPane;
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
@@ -68,12 +72,13 @@ public class MainMenuController extends Controller {
     @FXML
     void initialize() {
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-        imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        imageMainMenu.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
         game = null;
-        RunnableInterface searchGameRunnable = new RunnableInterface() {
+        searchGameRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
             @Override
@@ -90,7 +95,7 @@ public class MainMenuController extends Controller {
                             cancelGame();
                             threadStarted = false;
                             searchGameThread = null;
-                            changeScene("mainMenu.fxml");
+                            changeScene("MainMenu.fxml");
                             this.doStop();
                         });
                     } else {
@@ -186,18 +191,18 @@ public class MainMenuController extends Controller {
             cancelGame();
             db.logout(user_id);
             user_id = -1;
-            changeScene("login.fxml");
+            changeScene("Login.fxml");
         });
 
         //Displays Stats and tutorial information.
         mainMenuGameInfoButton.setOnAction(event -> {
             cancelGame();
-            changeScene("gameInfo.fxml");
+            changeScene("GameInfo.fxml");
         });
 
         mainMenuStatsButton.setOnAction(event -> {
             cancelGame();
-            changeScene("stats.fxml");
+            changeScene("Stats.fxml");
         });
     }
 

@@ -17,6 +17,12 @@
 
 package gameplay;
 
+import gameplay.gameboard.*;
+import gameplay.logic.Attack;
+import gameplay.logic.GameLogic;
+import gameplay.logic.Move;
+import gameplay.units.Unit;
+import gameplay.units.UnitGenerator;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
@@ -290,7 +296,7 @@ public class GameMain extends Application {
      * It sets the text of the resourceLabel to a static variable :"currentResources".
      * @see database.Variables
      */
-    static void updateResourceLabel() {
+    public static void updateResourceLabel() {
         resourceLabel.setText("Resources: $" + currentResources);
     }
 
@@ -301,7 +307,7 @@ public class GameMain extends Application {
      * @see Recruit
      * @see RecruitTile
      */
-    static void deselectRecruitTiles() {
+    public static void deselectRecruitTiles() {
         RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
         for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
             tile.setStrokeWidth(standardStrokeWidth);
@@ -421,16 +427,16 @@ public class GameMain extends Application {
     /**
      * Uses db.importPlacementUnits() method to import opponent's pieces onto board.
      * Uses UnitGenerator to add the new enemy units.
-     * @see PieceSetup
+     * @see PiecePlacer
      * @see Grid
      * @see UnitGenerator
      * @see database.Database
      */
     private void importOpponentPlacementUnits() {
-        ArrayList<PieceSetup> importList = db.importPlacementUnits();
+        ArrayList<PiecePlacer> importList = db.importPlacementUnits();
         System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
-        for (PieceSetup piece : importList) {
+        for (PiecePlacer piece : importList) {
             System.out.println("ADDING OPPONENT UNIT");
             grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
         }
@@ -824,7 +830,7 @@ public class GameMain extends Application {
             checkForGameOver();
 
             //Wait for you next turn. Does not trigger if you have surrendered.
-            if (!surrendered) {
+            if (!surrendered && !gameFinished) {
                 waitForTurn();
             }
         }
@@ -842,9 +848,9 @@ public class GameMain extends Application {
 
             @Override
             public void run() {
-                while (keepRunning()) {
+                while (!doStop) {
                     try {
-                        while (!yourTurn) {
+                        while (!waitTurnThread.isInterrupted() && !yourTurn) {
                             if (gameFinished) {
                                 this.doStop();
                                 waitTurnThread = null;
@@ -858,7 +864,8 @@ public class GameMain extends Application {
                             if (getTurnPlayerResult == user_id) {
                                 System.out.println("yourTurn changes");
                                 yourTurn = true;
-                                this.doStop();
+                                doStop = true;
+                                waitTurnThread.interrupt();
                             }
                         }
                         //What will happen when it is your turn again.
@@ -1059,7 +1066,7 @@ public class GameMain extends Application {
             JFXButton endGameBtn = new JFXButton("Return to menu");
 
             endGameBtn.setOnAction(event -> {
-                String fxmlDir = "/menus/View/mainMenu.fxml";
+                String fxmlDir = "/menus/fxml/MainMenu.fxml";
                 Parent root = null;
                 try {
                     root = FXMLLoader.load(this.getClass().getResource(fxmlDir));
@@ -1093,11 +1100,11 @@ public class GameMain extends Application {
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
-            waitTurnThread.stop();
+            waitTurnThread.interrupt();
         }
         if (waitPlacementThread != null) {
             waitPlacementRunnable.doStop();
-            waitPlacementThread.stop();
+            waitPlacementThread.interrupt();
         }
 
         //Resets variables to default.
@@ -1112,7 +1119,7 @@ public class GameMain extends Application {
         selectedUnit = null;
         selectedPosX = -1;
         selectedPosY = -1;
-        endTurnButton = null;
+        //endTurnButton = null;
     }
 
     /**

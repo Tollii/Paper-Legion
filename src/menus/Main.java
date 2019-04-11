@@ -1,8 +1,6 @@
 package menus;
 
 import database.Database;
-import gameplay.GameLogic;
-import gameplay.GameMain;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -11,9 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.net.URL;
 import java.sql.SQLException;
 
 import static database.Variables.*;
@@ -32,7 +27,7 @@ public class Main extends Application {
         
         //database is a static class that starts when the application starts. All queries from the the database goes through it.
         db = new Database();
-        Parent root = FXMLLoader.load(getClass().getResource("/menus/View/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/menus/fxml/Login.fxml"));
         rootScene = new Scene(root, 850, 650);
 
         window.setTitle("Paper Legion");

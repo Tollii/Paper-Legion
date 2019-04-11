@@ -23,7 +23,7 @@ class Controller {
     void changeScene(String fxml) {
         Class currentClass = this.getClass();
 
-        String fxmlDir = "/menus/View/"+fxml;
+        String fxmlDir = "/menus/fxml/" +fxml;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(currentClass.getResource(fxmlDir));
 

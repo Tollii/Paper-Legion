@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="paneforPattern" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.controller.GameInfoController">
+   <children>
+       <AnchorPane fx:id="contentPane" layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" stylesheets="/menus/controller/MenuCSS.css" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
+          <children>
+              <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="574.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                 <children>
+                     <ImageView fx:id="paperLegionLogo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                         <VBox.margin>
+                             <Insets top="5.0" />
+                         </VBox.margin>
+                        <image>
+                            <Image url="/menus/menuAssets/paperLegionLogo.png" />
+                        </image>
+                     </ImageView>
+                     <TabPane prefHeight="289.0" prefWidth="574.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                        <tabs>
+                            <Tab text="Game info">
+                               <content>
+                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="264.0" prefWidth="574.0">
+                                      <children>
+                                          <JFXTextArea editable="false" prefHeight="266.0" prefWidth="574.0" text="Paper Legion is a game made by team 17 for a programming project at NTNU spring 2019.&#10;&#10;&#10;The game is loosely based on the board game &quot;Stratego&quot;&#10;&#10;&#10;Info about the gameplay:&#10;You are always the blue pieces. Game host starts the first round. You have to move before attacking.&#10;Movement can be done to one piece each round, but every piece can attack every round after a piece has been moved. " wrapText="true" AnchorPane.bottomAnchor="-99.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                              <padding>
+                                                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                              </padding>
+                                              <font>
+                                                  <Font name="Avenir Light" size="13.0" />
+                                              </font>
+                                          </JFXTextArea>
+                                      </children>
+                                   </AnchorPane>
+                               </content>
+                            </Tab>
+                            <Tab text="Plasement phase">
+                               <content>
+                                   <HBox prefHeight="100.0" prefWidth="200.0">
+                                      <children>
+                                          <Pane fx:id="placementbackgroundImagePane" prefWidth="486.0" HBox.hgrow="ALWAYS" />
+                                          <JFXTextArea fx:id="placementText" editable="false" prefHeight="210.0" prefWidth="88.0" text="The game starts with the placement phase, it is only in the beginning of the game, so make your placement choice wisely!&#10;&#10;You start off with a finite amount of resources that you can buy units with. &#10;&#10;Just drag and drop the units where you want.&#10;&#10;Pro tip: A good starting placement and unit type choice combination can be deadly!" wrapText="true" HBox.hgrow="ALWAYS">
+                                              <HBox.margin>
+                                                  <Insets left="15.0" right="15.0" top="15.0" />
+                                              </HBox.margin>
+                                          </JFXTextArea>
+                                      </children>
+                                   </HBox>
+                               </content>
+                            </Tab>
+                            <Tab text="Movement phase">
+                               <content>
+                                   <HBox>
+                                      <children>
+                                          <Pane fx:id="backgroundImagePane" prefWidth="486.0" HBox.hgrow="ALWAYS" />
+                                          <JFXTextArea fx:id="movementText" editable="false" prefWidth="88.0" text="While you are in the movement phase, you can move one of your units within that unit's movement range. &#10;&#10;You can also skip the movement phase and go directly to attack. &#10;&#10;You are automatically taken to the attack phase after the movement phase." wrapText="true" HBox.hgrow="ALWAYS">
+                                              <HBox.margin>
+                                                  <Insets left="15.0" right="15.0" top="15.0" />
+                                              </HBox.margin>
+                                          </JFXTextArea>
+                                      </children>
+                                   </HBox>
+                               </content>
+                            </Tab>
+                            <Tab text="Attack phase">
+                               <content>
+                                   <HBox prefHeight="100.0" prefWidth="200.0">
+                                      <children>
+                                          <Pane fx:id="attackbackgroundImagePane" prefWidth="486.0" HBox.hgrow="ALWAYS" />
+                                          <JFXTextArea fx:id="attackText" editable="false" prefWidth="88.0" text="When in attack phase, you can attack as many of the opponents unit as long as you have units within attack range.&#10;&#10;After you have completed all your devious attacks, you hit end turn. And wait in suspense for your opponents move." wrapText="true" HBox.hgrow="ALWAYS">
+                                              <HBox.margin>
+                                                  <Insets left="15.0" right="15.0" top="15.0" />
+                                              </HBox.margin>
+                                          </JFXTextArea>
+                                      </children>
+                                   </HBox>
+                               </content>
+                            </Tab>
+                        </tabs>
+                     </TabPane>
+                     <JFXButton fx:id="gameInfoBackButton" contentDisplay="CENTER" style="-fx-background-color: #e3e4e5#e3e4e5 #e3e4e5#e3e4e5;" text="Back" />
+                 </children>
+              </VBox>
+          </children>
+       </AnchorPane>
+   </children>
+</AnchorPane>

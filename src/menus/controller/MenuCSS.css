@@ -1,0 +1,48 @@
+/* Surrounding container */
+#paneforPattern {
+    -fx-background-image: url(/menus/menuAssets/tile.png);
+    -fx-background-size: 300, 300;
+    -fx-background-repeat: repeat;
+    -fx-background-position: left top;
+}
+
+
+/* Hero image in main menu*/
+#imageMainMenu {
+    -fx-background-image: url(/menus/menuAssets/legion_finished.png);
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+/* Movement game info pane */
+#backgroundImagePane {
+-fx-background-image: url(/menus/menuAssets/movementInfo.png);
+-fx-background-size: contain;
+-fx-background-repeat: no-repeat;
+-fx-background-position: top left;
+}
+
+/* attack game info pane */
+#attackbackgroundImagePane {
+    -fx-background-image: url(/menus/menuAssets/attackInfo.png);
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: top left;
+}
+
+/* placement game info pane */
+#placementbackgroundImagePane {
+    -fx-background-image: url(/menus/menuAssets/placement.png);
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: top left;
+}
+
+#contentPane {
+    -fx-background-color: white;
+    -fx-stroke: Red;
+    -fx-stroke-width: 50;
+}
+
+

@@ -38,6 +38,10 @@ public class StatsController extends Controller{
     private AnchorPane paneforPattern;
 
 
+    @FXML
+    private AnchorPane contentPane;
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
@@ -45,9 +49,11 @@ public class StatsController extends Controller{
     @FXML
     private void initialize(){
 
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
-        statsBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+
+        statsBackButton.setOnAction(event -> changeScene("MainMenu.fxml"));
         statsUsernameLabel.setText("Username: " + db.getMyName());
         statsEmailLabel.setText("E-mail: " + db.getMyEmail());
         statsGamesPlayedLabel.setText("Games played: " + db.getGamesPlayed());

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="paneforPattern" minHeight="650.0" minWidth="850.0" prefHeight="650.0" prefWidth="850.0" style="-fx-background-color: #3e3e3e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="menus.controller.MatchSetupController">
+   <children>
+      <AnchorPane fx:id="contentPane" layoutX="113.0" layoutY="90.0" prefHeight="375.0" prefWidth="590.0" stylesheets="/menus/controller/MenuCSS.css" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="90.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="470.0" prefWidth="624.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="470.0" prefWidth="504.0" spacing="10.0">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                     <children>
+                        <JFXButton fx:id="joinGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Join Game" textFill="WHITE" />
+                        <JFXButton fx:id="createGameButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Create Game" textFill="WHITE" />
+                        <JFXButton fx:id="matchSetup_refreshButton" prefHeight="46.0" prefWidth="142.0" style="-fx-background-color: #000000;" text="Refresh" textFill="WHITE" />
+                        <JFXButton fx:id="backToMenuButton" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: e3e4e5;" text="Back">
+                           <VBox.margin>
+                              <Insets top="150.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="470.0" prefWidth="699.0" spacing="15.0" HBox.hgrow="ALWAYS">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets left="50.0" right="10.0" />
+                     </HBox.margin>
+                     <children>
+                        <ImageView fx:id="paperLegionLogo" fitHeight="178.0" fitWidth="362.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="/menus/menuAssets/paperLegionLogo.png" />
+                           </image>
+                        </ImageView>
+                        <TableView fx:id="table" prefHeight="320.0" prefWidth="357.0">
+                           <columns>
+                              <TableColumn fx:id="matchID_Table" prefWidth="84.0" text="Match ID" />
+                              <TableColumn fx:id="player_table" prefWidth="131.0" text="Player" />
+                              <TableColumn fx:id="passwordTable" prefWidth="138.0" text="Password Protected" />
+                           </columns>
+                           <VBox.margin>
+                              <Insets right="75.0" />
+                           </VBox.margin>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -69,20 +69,26 @@ public class GameInfoController extends Controller {
     private AnchorPane paneforPattern;
 
 
+    @FXML
+    private AnchorPane contentPane;
+
+
     /**
      * Initialize variables, and is a sort of constructor for the scene setup.
      * @see com.sun.javafx.fxml.builder.JavaFXSceneBuilder
      */
     @FXML
     private void initialize(){
-        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-
-        backgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-        attackbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
-        placementbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/menuCSS.css").toExternalForm());
+        paneforPattern.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        contentPane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
 
 
-        gameInfoBackButton.setOnAction(event -> changeScene("mainMenu.fxml"));
+        backgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        attackbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+        placementbackgroundImagePane.getStylesheets().add(getClass().getResource("/menus/controller/MenuCSS.css").toExternalForm());
+
+
+        gameInfoBackButton.setOnAction(event -> changeScene("MainMenu.fxml"));
 
 
 
