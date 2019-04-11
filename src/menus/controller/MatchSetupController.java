@@ -2,6 +2,7 @@ package menus.controller;
 
 import gameplay.gameboard.Grid;
 import javafx.scene.layout.AnchorPane;
+import menus.Match;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;

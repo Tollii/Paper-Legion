@@ -7,7 +7,7 @@ import gameplay.logic.Attack;
 import gameplay.logic.Move;
 import gameplay.units.ProtoUnitType;
 import gameplay.units.Unit;
-import menus.controller.Match;
+import menus.Match;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;

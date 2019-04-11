@@ -1,4 +1,6 @@
-package menus.controller;
+package menus;
+
+import menus.controller.MatchSetupController;
 
 /**
  * This class is a holder object for Matches with 1/2 players, and
