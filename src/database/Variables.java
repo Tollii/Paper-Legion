@@ -1,6 +1,10 @@
 package database;
 
 import gameplay.*;
+import gameplay.gameboard.Grid;
+import gameplay.gameboard.Obstacle;
+import gameplay.units.Unit;
+import gameplay.units.UnitGenerator;
 import runnables.RunnableInterface;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;

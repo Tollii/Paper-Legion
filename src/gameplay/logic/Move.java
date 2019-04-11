@@ -1,4 +1,4 @@
-package gameplay;
+package gameplay.logic;
 
 /**
  * Holds information about a move that has been made during the players or the opponents turn.

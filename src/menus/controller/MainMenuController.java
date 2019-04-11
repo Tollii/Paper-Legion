@@ -6,7 +6,7 @@ import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import database.Variables;
 import gameplay.GameMain;
-import gameplay.Grid;
+import gameplay.gameboard.Grid;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

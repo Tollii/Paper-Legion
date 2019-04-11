@@ -1,6 +1,7 @@
-package gameplay;
+package gameplay.gameboard;
 
 import database.Variables;
+import gameplay.gameboard.Grid;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;

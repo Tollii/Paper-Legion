@@ -1,8 +1,6 @@
 package menus;
 
 import database.Database;
-import gameplay.GameLogic;
-import gameplay.GameMain;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -11,9 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.net.URL;
 import java.sql.SQLException;
 
 import static database.Variables.*;

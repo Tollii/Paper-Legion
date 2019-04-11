@@ -15,8 +15,14 @@
 //      ##    ######## ##     ## ##     ##     ######   ##         //
 
 
-package gameplay;
+package gameplay.logic;
 
+
+import gameplay.GameMain;
+import gameplay.gameboard.Obstacle;
+import gameplay.gameboard.Grid;
+import gameplay.gameboard.Tile;
+import gameplay.units.Unit;
 
 import java.util.ArrayList;
 import java.util.Random;

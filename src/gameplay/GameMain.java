@@ -17,6 +17,12 @@
 
 package gameplay;
 
+import gameplay.gameboard.*;
+import gameplay.logic.Attack;
+import gameplay.logic.GameLogic;
+import gameplay.logic.Move;
+import gameplay.units.Unit;
+import gameplay.units.UnitGenerator;
 import runnables.RunnableInterface;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
@@ -276,7 +282,7 @@ public class GameMain extends Application {
      * It sets the text of the resourceLabel to a static variable :"currentResources".
      * @see database.Variables
      */
-    static void updateResourceLabel() {
+    public static void updateResourceLabel() {
         resourceLabel.setText("Resources: $" + currentResources);
     }
 
@@ -287,7 +293,7 @@ public class GameMain extends Application {
      * @see Recruit
      * @see RecruitTile
      */
-    static void deselectRecruitTiles() {
+    public static void deselectRecruitTiles() {
         RecruitTile[] a = new RecruitTile[recruitUnits.getChildren().size()];
         for (RecruitTile tile:recruitUnits.getChildren().toArray(a)) {
             tile.setStrokeWidth(standardStrokeWidth);

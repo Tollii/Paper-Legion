@@ -1,4 +1,4 @@
-package gameplay;
+package gameplay.gameboard;
 
 import database.Variables;
 import javafx.scene.layout.GridPane;

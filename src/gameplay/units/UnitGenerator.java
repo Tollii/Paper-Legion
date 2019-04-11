@@ -1,9 +1,13 @@
-package gameplay;
+package gameplay.units;
 
 import database.Database;
 
 import database.Variables;
-import gameplay.units.*;
+import gameplay.gameboard.Recruit;
+import gameplay.units.unitTypes.Archer;
+import gameplay.units.unitTypes.Catapult;
+import gameplay.units.unitTypes.Juggernaut;
+import gameplay.units.unitTypes.Swordsman;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import static database.Variables.*;

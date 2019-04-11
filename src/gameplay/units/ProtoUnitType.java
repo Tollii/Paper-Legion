@@ -1,7 +1,5 @@
 package gameplay.units;
 
-import gameplay.UnitGenerator;
-import gameplay.UnitType;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
@@ -153,7 +151,7 @@ public class ProtoUnitType implements UnitType {
     /**
      * Returns the Description as a String
      * @return String
-     * @see gameplay.UnitGenerator
+     * @see UnitGenerator
      */
 
     @Override
@@ -165,7 +163,7 @@ public class ProtoUnitType implements UnitType {
      * Returns the DescriptionTag as a String
      * The DescriptionTag is used at the start of the Description
      * @return String
-     * @see gameplay.UnitGenerator
+     * @see UnitGenerator
      */
 
     @Override

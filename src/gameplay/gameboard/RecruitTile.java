@@ -1,5 +1,6 @@
-package gameplay;
+package gameplay.gameboard;
 
+import gameplay.GameMain;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -18,7 +19,7 @@ import javafx.scene.paint.Paint;
 * @see Recruit
 * @see StackPane
 */
-class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsuled rectangle
+public class RecruitTile extends StackPane{ //each tile is a stackpane with an encapsuled rectangle
 
   private final Recruit recruit;
   private final Rectangle rect;

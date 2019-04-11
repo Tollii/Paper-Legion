@@ -1,4 +1,6 @@
-package gameplay;
+package gameplay.logic;
+
+import gameplay.units.Unit;
 
 public class Attack {
 

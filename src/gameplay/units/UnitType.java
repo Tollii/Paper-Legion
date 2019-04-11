@@ -1,14 +1,18 @@
-package gameplay;
+package gameplay.units;
 
+import gameplay.units.unitTypes.Archer;
+import gameplay.units.unitTypes.Catapult;
+import gameplay.units.unitTypes.Juggernaut;
+import gameplay.units.unitTypes.Swordsman;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 
 /**
  * Interface for ensuring the functionally and variables of the different unit type classes.
- * @see gameplay.units.Swordsman
- * @see gameplay.units.Archer
- * @see gameplay.units.Juggernaut
- * @see gameplay.units.Catapult
+ * @see Swordsman
+ * @see Archer
+ * @see Juggernaut
+ * @see Catapult
  */
 
 public interface UnitType {

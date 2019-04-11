@@ -1,4 +1,7 @@
-package gameplay;
+package gameplay.gameboard;
+
+import gameplay.units.Unit;
+import gameplay.units.UnitType;
 
 /**
  * This class is used as a placeholder for information stored in database about

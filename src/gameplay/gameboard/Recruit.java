@@ -1,7 +1,10 @@
-package gameplay;
+package gameplay.gameboard;
 
 
 import database.Variables;
+import gameplay.GameMain;
+import gameplay.units.Unit;
+import gameplay.units.UnitType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;

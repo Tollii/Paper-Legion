@@ -1,6 +1,8 @@
-package gameplay;
+package gameplay.gameboard;
 
 
+import gameplay.GameMain;
+import gameplay.units.Unit;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
