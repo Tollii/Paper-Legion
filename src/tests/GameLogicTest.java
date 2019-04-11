@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import database.ConnectionPool;
 import database.Database;
 import database.Variables;
-import gameplay.*;
 
 import gameplay.gameboard.Grid;
 import gameplay.gameboard.Obstacle;
@@ -29,9 +28,11 @@ import database.Cleaner;
 //testUser2 Password: testPassword2 id: 51
 //testUser password: testPassword id: 3
 
+
 public class GameLogicTest {
     GameLogic game;
     UnitGenerator units;
+
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
@@ -73,6 +74,7 @@ public class GameLogicTest {
 
     }
 
+
     @Before
     public void setUp() {
         game = new GameLogic();
@@ -88,8 +90,6 @@ public class GameLogicTest {
     public void tearDown() {
 
     }
-//TODO call Tile.SetUnit(unit) for å lage units til testing
-
     @Test
     //tests if a unit gets the right available movements
     public void testAvailableMovements() {
@@ -128,6 +128,7 @@ public class GameLogicTest {
         assertTrue(lowerBound<=obstacles.size() && upperBound>=obstacles.size() && noObstaclesOutOfBounds);
     }
 
+
     @Test
     public void testAvailableAttacksShortRange(){
         //checks the knight, if he can attack diagonally
@@ -150,7 +151,6 @@ public class GameLogicTest {
         }
         assertArrayEquals(compare, resultArray);
     }
-
     @Test
     public void testAvailableAttacksLongRange(){
         //checks the knight, if he can attack diagonally
@@ -183,6 +183,7 @@ public class GameLogicTest {
         int posY = 2;
         assertTrue(game.checkForLegalMove(posY, posX, movements));
     }
+
     @Test
     public void testSpecificInvalidMovement(){
         ArrayList<Tile> movements = new ArrayList<>();
@@ -191,13 +192,14 @@ public class GameLogicTest {
         int posY = 2;
         assertTrue(!game.checkForLegalMove(posY, posX, movements));
     }
+
     @Test
     public void testSpecificValidAttack(){
         ArrayList<Tile> attacks = new ArrayList<>();
         attacks.add(grid.tileList[2][2]);
         int posX = 2;
         int posY = 2;
-        assertTrue(game.checkForLegalMove(posY, posX, attacks));
+        assertTrue(game.checkForLegalAttack(posY, posX, attacks));
     }
 
     @Test
@@ -206,7 +208,7 @@ public class GameLogicTest {
         attacks.add(grid.tileList[2][2]);
         int posX = 3;
         int posY = 2;
-        assertTrue(!game.checkForLegalMove(posY, posX, attacks));
+        assertTrue(!game.checkForLegalAttack(posY, posX, attacks));
     }
 
     @Test

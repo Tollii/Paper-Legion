@@ -333,7 +333,7 @@ public class MatchSetupController extends Controller {
         try {
             Variables.tileSize = (int)(screenWidth * 0.07);
             grid = new Grid(boardSize, boardSize);
-            GameMain game = new GameMain();
+            game = new GameMain();
             game.start(Main.window);
             System.out.println("Success!!!!");
         } catch (Exception e) {
