@@ -1191,6 +1191,11 @@ public class GameMain extends Application {
         return unitPane;
     }
 
+    /**
+    * Adds a label to the board to communicate to the player to add units to the board.
+    * It also adds an arrow from the recruitTiles to the middle of the playable area of
+    * the board depending on the players side of the board. 
+    */
     private void showPlaceUnitLabel() {
       placeUnitPane = new Pane();
 
@@ -1212,11 +1217,24 @@ public class GameMain extends Application {
       root.getChildren().addAll(placeUnitPane, arrow);
     }
 
+    /**
+    * Method for removing placeUnitLabel and arrow after first unit is added to the board
+    * @see Tile
+    */
     public static void removePlaceUnitLabel() {
       root.getChildren().remove(placeUnitPane);
       root.getChildren().remove(arrow);
     }
 
+    /**
+    * Creates an arrow path to be added by showPlaceUnitLabel() to illustrate how to add
+    * units to the board. The mathod takes the start and end x and y positions
+    * @param startX double value for start x position of arrow
+    * @param startY double value for start y position of arrow
+    * @param endX double value for end x position of arrow
+    * @param endY double value for end y position of arrow
+    * @return Path
+    */
     private Path drawArrow(double startX, double startY, double endX, double endY) {
       Path arrow = new Path();
 
