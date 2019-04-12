@@ -33,7 +33,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-
         window = primaryStage;
         
         //database is a static class that starts when the application starts. All queries from the the database goes through it.
@@ -78,9 +77,11 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Runs in the background while the program is open, and executes an select statement after a set amount of time to keep the database from timing out.
+     *
+     */
     private void databaseNoTimeout() {
-        // Runnable lambda implementation for turn waiting with it's own thread
-
         databaseNoTimeoutRunnable = new RunnableInterface() {
             private boolean doStop = false;
 
@@ -117,8 +118,6 @@ public class Main extends Application {
     /**
      * Stops the thread  that logs out users from database, which was created from main method.
      */
-
-
     @Override
     public void stop() {
         // Executed when the application shuts down. User is logged out and database connection is closed.
