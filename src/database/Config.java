@@ -38,7 +38,7 @@ public class Config {
      * @see Database
      */
     private void init() {
-        getDB_Login();
+        DB_Login();
         DB_URL = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo?autoReconnect=true&useUnicode=yes";
         DB_DRIVER = "com.mysql.cj.jdbc.Driver";
         DB_MAX_CONNECTIONS = 10;
@@ -111,7 +111,7 @@ public class Config {
      *
      * @see Database
      */
-    private void getDB_Login() {
+    private void DB_Login() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("src/database/DatabaseLogin.properties"));
             DB_USER_NAME = reader.readLine();
