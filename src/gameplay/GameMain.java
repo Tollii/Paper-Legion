@@ -485,9 +485,8 @@ public class GameMain extends Application {
         Pane sidePanel = createSidePanel();
 
 
-        descriptionHead.setTranslateX(10);
-        description.setTranslateX(10);
-
+        descriptionHead.setTranslateX(75);
+        description.setTranslateX(75);
 
         sidePanel.setId("sidePanel");
         sidePanel.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());
@@ -496,11 +495,13 @@ public class GameMain extends Application {
         endTurnButton.setMinSize(buttonWidth, buttonHeight);
         endTurnButton.setTextFill(buttonTextColor);
         endTurnButton.setStyle(buttonBackgroundColor);
-        endTurnButton.setTranslateX(25);
+        endTurnButton.setTranslateX(135);
+        endTurnButton.setTranslateY(-25);
 
         //button for surrendering
         JFXButton surrenderButton = new JFXButton("Surrender");
-        surrenderButton.setTranslateX(25);
+        surrenderButton.setTranslateX(135);
+        surrenderButton.setTranslateY(-25);
         surrenderButton.setMinSize(buttonWidth, buttonHeight);
         surrenderButton.setTextFill(buttonTextColor);
         surrenderButton.setStyle(buttonBackgroundColor);
@@ -515,7 +516,8 @@ public class GameMain extends Application {
         phaseLabel.setText("MOVEMENT PHASE");
 
         //If you are player 2. Start polling the database for next turn.
-            turnCounter.setTranslateX(turnCounterXPadding);
+            turnCounter.setTranslateX(225);
+            turnCounter.setTranslateY(25);
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
             endTurnButton.setText("Waiting for other player");
@@ -1173,7 +1175,7 @@ public class GameMain extends Application {
      */
     private Pane createRecruitPane() { //adds unit selector/recruiter and styles it
         Pane unitPane = new Pane();
-        unitPane.setPrefWidth(625);
+        unitPane.setPrefWidth(725);
 
         resourceLabel.setStyle(fontSize32 + arialFont);
         resourceLabel.setText("Resources: $" + currentResources);

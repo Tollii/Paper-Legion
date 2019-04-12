@@ -22,6 +22,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="jfoenix-8.0.8" level="project" />
-    <orderEntry type="library" exported="" name="mysql-connector-java-8.0.13" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-8.0.13" level="application" />
   </component>
 </module>
