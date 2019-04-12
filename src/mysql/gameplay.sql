@@ -25,3 +25,5 @@ Order by piece_id,player_id;
 
 
 delete from Matches where player2=2;
+
+Select version();

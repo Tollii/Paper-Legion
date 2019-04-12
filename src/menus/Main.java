@@ -63,14 +63,6 @@ public class Main extends Application {
      * @param args Takes in arguments for the main method.
      */
     public static void main(String[] args) {
-//        //Sets the Dock icon for mac
-//        try {
-//            URL iconURL = Main.class.getResource("/images/dockIcon.png");
-//            Image image = new ImageIcon(iconURL).getImage();
-//            com.apple.eawt.Application.getApplication().setDockIconImage(image);
-//        } catch (Exception e) {
-//            // Won't work on Windows or Linux.
-//        }
 
         //Shutdown hook. Closes stuff when program exits.
         Runtime.getRuntime().addShutdownHook(new Thread(Main::closeAndLogout));

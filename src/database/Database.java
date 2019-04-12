@@ -1314,6 +1314,12 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
+
+    /**
+     * A call to the database designed only to keep the connection alive
+     *
+     * @see Database
+     */
     public void keepTheConnectionAlive() {
         String stmt = "SELECT version();";
         Connection myConn = connectionPool.getConnection();
@@ -1330,6 +1336,7 @@ public class Database {
             e.printStackTrace();
         } finally {
             Cleaner.setAutoCommit(myConn);
+            Cleaner.closeResSet(rs);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
