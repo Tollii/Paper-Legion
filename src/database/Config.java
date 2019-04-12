@@ -1,8 +1,9 @@
 package database;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Configuration file that contains information needed to connect to the MYSQL database
@@ -43,7 +44,6 @@ public class Config {
         DB_DRIVER = "com.mysql.cj.jdbc.Driver";
         DB_MAX_CONNECTIONS = 10;
     }
-
 
     /**
      * Returns a Config object
@@ -113,7 +113,10 @@ public class Config {
      */
     private void DB_Login() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("src/database/DatabaseLogin.properties"));
+            InputStream stream = getClass().getResourceAsStream("DatabaseLogin.properties");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+
             DB_USER_NAME = reader.readLine();
             DB_PASSWORD = reader.readLine();
             reader.close();
