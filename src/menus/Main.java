@@ -81,7 +81,6 @@ public class Main extends Application {
             public void run() {
                 while (keepRunning()) {
                     try {
-                        System.out.println("HALLOOOO from the thread");
                         Thread.sleep(150000);
                         db.keepTheConnectionAlive();
 
@@ -126,7 +125,7 @@ public class Main extends Application {
     public static void closeAndLogout() {
         if (user_id > 0) {
             db.logout(user_id);
-            System.out.println("You were logged out");
+            System.out.println("Logged out");
         }
         //Stops threads.
         if (waitTurnThread != null) {

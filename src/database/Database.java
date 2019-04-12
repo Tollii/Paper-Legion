@@ -306,12 +306,7 @@ public class Database {
             while (result.next()) {
                 gameStarted = result.getInt("game_started");
             }
-            if (gameStarted == 1) {
-                return true;
-            } else {
-                System.out.println(match_id);
-                return false;
-            }
+            return gameStarted == 1;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -798,7 +793,6 @@ public class Database {
      * @see GameMain
      */
     public void sendTurn(int turn) {
-        System.out.println("send turn Called");
         Connection myConn = connectionPool.getConnection();
         PreparedStatement preparedStatement = null;
         String stmt = "INSERT INTO Turns(turn_id,match_id,player) VALUES (?,?,?);";
@@ -932,7 +926,6 @@ public class Database {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                System.out.println("Adding to output!!!");
                 outputList.add(new Move(resultSet.getInt("turn_id"), resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("start_pos_x"), resultSet.getInt("start_pos_y"), resultSet.getInt("end_pos_x"), resultSet.getInt("end_pos_y")));
             }
 
@@ -945,10 +938,6 @@ public class Database {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-
-
-        System.out.println("Imported move list size: " + outputList.size());
-
         return outputList;
     }
 
@@ -1025,7 +1014,6 @@ public class Database {
 
 
             while (resultSet.next()) {
-                System.out.println("ADDING TO ATTACK LIST!");
                 outputList.add(new Attack(resultSet.getInt("turn_id"), resultSet.getInt("match_id"), resultSet.getInt("attacking_player_id"), resultSet.getInt("attacker_piece_id"), resultSet.getInt("receiver_piece_id"), resultSet.getInt("damage_dealt")));
             }
 
@@ -1331,7 +1319,6 @@ public class Database {
             rs = preparedStatement.executeQuery();
             myConn.commit();
             rs.next();
-            System.out.println("yoyo from keepTheConnectionAlive" + rs);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

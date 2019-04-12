@@ -242,11 +242,8 @@ public class GameMain extends Application {
             obstacles = db.importObstacles();
         }
 
-        System.out.println("There are " + obstacles.size() + " obstacles");
-
         //Adds obstacles to the board.
         for (int i = 0; i < obstacles.size(); i++) {
-            System.out.println(i + " - X: " + obstacles.get(i).getPosX() + " - Y:" + obstacles.get(i).getPosY());
             grid.tileList[obstacles.get(i).getPosY()][obstacles.get(i).getPosX()].setObstacle(obstacles.get(i));
         }
     }
@@ -416,12 +413,9 @@ public class GameMain extends Application {
                             Thread.sleep(threadTimer);
                             //When player in database matches your own user_id it is your turn again.
 
-                            System.out.println(opponent_id + ": " + opponentReady);
-
                             if (db.checkIfOpponentReady()) {
                                 opponentReady = true;
 
-                                System.out.println(opponent_id + ": ready!");
                                 doStop();
                                 waitPlacementThread = null;
                             }
@@ -430,7 +424,6 @@ public class GameMain extends Application {
                         //What will happen when your opponent is ready.
 
                         Platform.runLater(() -> {
-                            System.out.println("RUN LATER!!!");
 
                             importOpponentPlacementUnits();
                             movementPhaseStart();
@@ -468,10 +461,8 @@ public class GameMain extends Application {
      */
     private void importOpponentPlacementUnits() {
         ArrayList<PiecePlacer> importList = db.importPlacementUnits();
-        System.out.println("SIZE OF IMPORT LIST: " + importList.size());
 
         for (PiecePlacer piece : importList) {
-            System.out.println("ADDING OPPONENT UNIT");
             grid.tileList[piece.getPositionY()][piece.getPositionX()].setUnit(unitGenerator.newEnemyUnit(piece.getUnit_type_id(), piece.getPieceId()));
         }
     }
@@ -524,7 +515,6 @@ public class GameMain extends Application {
         phaseLabel.setText("MOVEMENT PHASE");
 
         //If you are player 2. Start polling the database for next turn.
-        System.out.println("yourTurn: " + yourTurn);
             turnCounter.setTranslateX(turnCounterXPadding);
         if (!yourTurn) {
             phaseLabel.setText("OPPONENT'S TURN");
@@ -729,10 +719,6 @@ public class GameMain extends Application {
         selectedPosY = getPosYFromEvent(event);
 
         //checks if clicked tile has unit
-        System.out.println("X " + selectedPosX);
-        System.out.println("Y " + selectedPosY);
-        System.out.println(grid.tileList[selectedPosY][selectedPosX].getUnit());
-        System.out.println(!grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy());
         if (grid.tileList[selectedPosY][selectedPosX].getUnit() != null && !grid.tileList[selectedPosY][selectedPosX].getUnit().getEnemy()) {
             //selects unit and unitposition
             unitSelected = true;
@@ -834,7 +820,6 @@ public class GameMain extends Application {
      * @see GameLogic
      */
     private void endTurn() {
-        System.out.println("EndTurn called" + yourTurn);
         if (yourTurn) {
 
             //Increments turn. Opponents Turn.
@@ -846,7 +831,6 @@ public class GameMain extends Application {
 
             ////SEND MOVEMENT////
             if (movementList.size() != 0) {
-                System.out.println("SENDING MOVE LIST!");
                 db.exportMoveList(movementList); //when we use movement table use this
 
                 movementList = new ArrayList<>(); //Resets the movementList for the next turn.
@@ -903,14 +887,12 @@ public class GameMain extends Application {
                                 this.doStop();
                                 waitTurnThread = null;
                             }
-                            System.out.println("Sleeps thread " + Thread.currentThread());
                             Thread.sleep(threadTimer);
                             //When player in database matches your own user_id it is your turn again.
                             int getTurnPlayerResult = db.getTurnPlayer();
                             // If its your turn or you have left the game.
                             System.out.println("Whose turn is it? " + db.getTurnPlayer());
                             if (getTurnPlayerResult == user_id) {
-                                System.out.println("yourTurn changes");
                                 yourTurn = true;
                                 doStop = true;
                                 waitTurnThread.interrupt();
@@ -950,7 +932,6 @@ public class GameMain extends Application {
      * @see database.Database
      */
     private void setUpNewTurn() {
-        System.out.println("setUpNewTurn" + " called" + yourTurn);
         deselect();
         selectedUnit = null;
         turn++;
@@ -964,7 +945,6 @@ public class GameMain extends Application {
         //Keeps track of the attacks made during the opponents turn
         ArrayList<Attack> importedAttackList = db.importAttackList(turn - 1, match_id, opponent_id);
 
-        System.out.println("importedAttackList size is: " + importedAttackList.size());
 
         ////EXECUTES MOVES FROM OPPONENTS TURN////
         for(Move m : importedMovementList){
@@ -980,10 +960,6 @@ public class GameMain extends Application {
                 for (int k = 0; k < grid.tileList[j].length; k++) {
 
                     if (grid.tileList[j][k].getUnit() != null && !grid.tileList[j][k].getUnit().getEnemy() && grid.tileList[j][k].getUnit().getPieceId() == a.getReceiverPieceID()) {
-                        System.out.println(a.getDamage());
-
-                        System.out.println("DOING AN ATTACK!" + grid.tileList[j][k].getUnit().getHp());
-
                         grid.tileList[j][k].getUnit().takeDamage(a.getDamage());
 
                         //If units health is zero. Remove it from the board.
@@ -1121,7 +1097,6 @@ public class GameMain extends Application {
                     root = FXMLLoader.load(this.getClass().getResource(fxmlDir));
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.println("load failed");
                 }
                 winner_alert.close();
                 gameCleanUp();
@@ -1145,7 +1120,6 @@ public class GameMain extends Application {
      * data will be loaded on a new game.
      */
     private void gameCleanUp() {
-        System.out.println("CLEAN UP HAPPENS");
         //Stuff that need to be closed or reset. Might not warrant its own method.
         if (waitTurnThread != null) {
             waitTurnRunnable.doStop();
