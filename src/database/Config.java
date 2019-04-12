@@ -1,8 +1,13 @@
 package database;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * Configuration file that contains information needed to connect to the MYSQL database
  * Configuration is set up on program launch
+ *
  * @see Database
  * @see ConnectionPool
  */
@@ -29,11 +34,11 @@ public class Config {
 
     /**
      * Sets the variables for the database pool connection.
+     *
      * @see Database
      */
     private void init() {
-        DB_USER_NAME = "thomabmo";
-        DB_PASSWORD = "EEo6fscj";
+        getDB_Login();
         DB_URL = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo?autoReconnect=true&useUnicode=yes";
         DB_DRIVER = "com.mysql.cj.jdbc.Driver";
         DB_MAX_CONNECTIONS = 10;
@@ -42,6 +47,7 @@ public class Config {
 
     /**
      * Returns a Config object
+     *
      * @return Config
      * @see Database
      */
@@ -51,15 +57,17 @@ public class Config {
 
     /**
      * Returns username as a String variable.
+     *
      * @return String
      * @see Database
      */
-    public  String getDB_USER_NAME() {
+    public String getDB_USER_NAME() {
         return DB_USER_NAME;
     }
 
     /**
      * Returns database password as a String
+     *
      * @return String
      * @see Database
      */
@@ -69,6 +77,7 @@ public class Config {
 
     /**
      * Returns database URL as a String
+     *
      * @return String
      * @see Database
      */
@@ -78,6 +87,7 @@ public class Config {
 
     /**
      * Returns database driver as a String
+     *
      * @return String
      * @see Database
      */
@@ -87,11 +97,23 @@ public class Config {
 
     /**
      * Returns max connections as an integer
+     *
      * @return int
      * @see Database
      * @see ConnectionPool
      */
     public int getDB_MAX_CONNECTIONS() {
         return DB_MAX_CONNECTIONS;
+    }
+
+    private void getDB_Login() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("src/database/DatabaseLogin.properties"));
+            DB_USER_NAME = reader.readLine();
+            DB_PASSWORD = reader.readLine();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
