@@ -91,11 +91,6 @@ public class GameInfoController extends Controller {
         gameInfoBackButton.setOnAction(event -> changeScene("MainMenu.fxml"));
 
 
-
-
-
-        //IMAGES USE 13:9 RATIO
-
     }
 
 }
