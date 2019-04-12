@@ -157,6 +157,7 @@ public class GameMain extends Application {
     private ArrayList<Move> movementList = new ArrayList<>();           //Keeps track of the moves made for the current turn.
     private ArrayList<Attack> attackList = new ArrayList<>();           //Keeps track of the attacks made for the current turn.
     private boolean movementPhase = true;                               //Controls if the player is in movement or attack phase
+    private boolean isPlacementPhase;
     private boolean surrendered = false;
     private boolean gameFinished = false;
     public static boolean hasPlacedAUnit = false;
@@ -265,6 +266,7 @@ public class GameMain extends Application {
     private void placementPhaseStart() {
 
         currentResources = startingResources; //Starts current resources to starting resources;
+        isPlacementPhase = true;
 
         Pane recruitPane = createRecruitPane();
         recruitPane.setId("recruitPane");
@@ -299,6 +301,19 @@ public class GameMain extends Application {
                 grid.tileList[i][j].setUntargetable();
             }
         }
+
+        grid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+          if (event.getButton() == MouseButton.SECONDARY && isPlacementPhase) {
+            int posX = getPosXFromEvent(event);
+            int posY = getPosYFromEvent(event);
+            if (grid.tileList[posY][posX].getUnit() != null) {
+              currentResources += grid.tileList[posY][posX].getUnit().getCost();
+              updateResourceLabel();
+              grid.tileList[posY][posX].removeUnit();
+              grid.tileList[posY][posX].setTargetable();
+            }
+          }
+        });
 
         finishedPlacingButton.setOnAction(event -> { //when button pressed, finishes the placementphase
             if (hasPlacedAUnit) {
@@ -345,6 +360,7 @@ public class GameMain extends Application {
      */
     private void placementPhaseFinished(Pane recruitPane) {
         root.getChildren().remove(recruitPane); //removes recruitmentpane with all necessities tied to placementphase
+        isPlacementPhase = false;
         phaseLabelPane = createPhaseLabelPane();
         phaseLabelPane.setId("phaseLabelPane");
         phaseLabelPane.getStylesheets().add(getClass().getResource("/gameplay/assets/css/GameMainCSS.css").toExternalForm());

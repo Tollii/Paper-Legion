@@ -147,6 +147,16 @@ public class Tile extends StackPane { //each tile is a stackpane containing a re
     }
 
     /**
+    * Is used to set tile targetable again if the unit is sold during the placementphase.
+    * @see GameMain
+    */
+    public void setTargetable() {
+      if (!isTargetable) {
+        isTargetable = true;
+      }
+    }
+
+    /**
      * Sets the fill color for the tile.
      * @param color Takes Paint class as parameter for which color to paint tile.
      * @see Rectangle
