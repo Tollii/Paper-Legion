@@ -28,6 +28,7 @@ public class  UnitGenerator {
 
     ////Swordsman////
     private static String swordsmanDescription =
+            "Quick melee unit.\n\n" +
             "Because he failed to get into clown college,\n" +
             "he was so distraught that he wowed \n" +
             "to get stronger and faster, but incidentally \n" +
@@ -43,6 +44,7 @@ public class  UnitGenerator {
 
     ////Archer////
     private static String archerDescription =
+            "Ranged unit with medium/short range.\n\n"+
             "He has mastered his Sodoku in such a ingenious way,\n"+
             "he is now considered godlike amongst his peers.\n"+
             "Too bad this doesn't help him in battle though.\n"+
@@ -56,11 +58,11 @@ public class  UnitGenerator {
 
     ////Juggernaut////
     private static String juggernautDescription =
+            "Slow melee unit with large health pool.\n\n" +
             "After receiving notice of owing taxes to the IRS, \n" +
             "he went into a raging killing frenzy. \n"+
             "Known as as Berserker to some, and to others, \n"+
-            "a big angry man with a stick.\n"+
-            "Attacks all units in a line, but takes damage every attack";
+            "a big angry man with a stick.";
     private static String juggernautDescriptionTag =
             "Juggernaut";
     private static Image juggernautImage;
@@ -70,11 +72,12 @@ public class  UnitGenerator {
 
     ////Catapult////
     private static String catapultDescription=
+            "Ranged unit with long/medium range. \n\n" +
             "The sharpest minds, created the greatest\n" +
             "ballistic device the world has ever seen. \n" +
-            "This is not that device. \n"+
-            "It can launch a payload a great distance, \n"+
-            "and has splash damage to nearby enemies.";
+            "This is not that device. This is a man...with big rock.\n"+
+            "He can launch a payload a great distance, \n"+
+            "but has trouble hitting things that get too close.";
     private static String catapultDescriptionTag =
             "Throwy-McGig";
     private static Image catapultImage;
