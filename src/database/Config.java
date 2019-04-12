@@ -106,6 +106,11 @@ public class Config {
         return DB_MAX_CONNECTIONS;
     }
 
+    /**
+     * Reads a property file that contains the database username and password. Anyone that wants to use this code as is, needs to add this file.
+     *
+     * @see Database
+     */
     private void getDB_Login() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("src/database/DatabaseLogin.properties"));
