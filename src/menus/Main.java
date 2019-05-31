@@ -109,6 +109,7 @@ public class Main extends Application {
      * Runs in the background while the program is open, and executes an select statement after a set amount of time to keep the database from timing out.
      *
      */
+    /*
     private void databaseNoTimeout() {
         databaseNoTimeoutRunnable = new RunnableInterface() {
             private boolean doStop = false;
@@ -140,7 +141,7 @@ public class Main extends Application {
                 return !this.doStop;
             }
         };
-    }
+    }*/
 
     /**
      * Stops the thread  that logs out users from database, which was created from main method.

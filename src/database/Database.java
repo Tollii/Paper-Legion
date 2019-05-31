@@ -1328,7 +1328,8 @@ public class Database {
      *
      * @see Database
      */
-    public void keepTheConnectionAlive() {
+
+    /*public void keepTheConnectionAlive() {
         String stmt = "SELECT version();";
         Connection myConn = connectionPool.getConnection();
         ResultSet rs = null;
@@ -1348,7 +1349,7 @@ public class Database {
             connectionPool.releaseConnection(myConn);
         }
     }
-
+*/
     /*
      __ _        _
     / _\ |_ __ _| |_ ___
