@@ -40,8 +40,8 @@ public class Config {
      */
     private void init() {
         DB_Login();
-        DB_URL = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/thomabmo?autoReconnect=true&useUnicode=yes";
-        DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+        DB_URL = "localhost";
+        DB_DRIVER = "";// MySQL driver
         DB_MAX_CONNECTIONS = 10;
     }
 
