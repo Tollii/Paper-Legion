@@ -69,6 +69,42 @@ public class Main extends Application {
         launch(args);
     }
 
+    private void databaseNoTimeout() {
+        // Runnable lambda implementation for turn waiting with it's own thread
+
+        databaseNoTimeoutRunnable = new RunnableInterface() {
+            private boolean doStop = false;
+
+            @Override
+            public void run() {
+                while (keepRunning()) {
+                    try {
+                        System.out.println("HALLOOOO from the thread");
+                        Thread.sleep(150000);
+                        db.keepTheConnectionAlive();
+
+                        Platform.runLater(() -> {
+
+                        });
+}
+                     catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public synchronized void doStop() {
+                this.doStop = true;
+            }
+
+            @Override
+            public synchronized boolean keepRunning() {
+                return !this.doStop;
+            }
+        };
+    }
+
     /**
      * Runs in the background while the program is open, and executes an select statement after a set amount of time to keep the database from timing out.
      *
@@ -143,6 +179,10 @@ public class Main extends Application {
         if(databaseNoTimeoutThread != null){
             databaseNoTimeoutRunnable.doStop();
             databaseNoTimeoutThread.interrupt();
+        }
+        if(databaseNoTimeoutThread != null){
+            databaseNoTimeoutRunnable.doStop();
+            searchGameThread.stop();
         }
         try {
             db.close();

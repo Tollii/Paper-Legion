@@ -822,6 +822,7 @@ public class GameMain extends Application {
      * @see GameLogic
      */
     private void endTurn() {
+        System.out.println("EndTurn called" + yourTurn);
         if (yourTurn) {
 
             //Increments turn. Opponents Turn.
@@ -934,6 +935,7 @@ public class GameMain extends Application {
      * @see database.Database
      */
     private void setUpNewTurn() {
+        System.out.println("setUpNewTurn" + " called" + yourTurn);
         deselect();
         selectedUnit = null;
         turn++;
