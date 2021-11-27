@@ -17,7 +17,6 @@ public class ConnectionPool {
     private static final int INITIAL_POOL_SIZE = 1;
     private static final int MAX_POOL_SIZE = 15;
 
-
     /**
      * Sets an array of Connection (ConnectionPool)
      * @param pool Takes in an ArrayList with Connection objects
@@ -65,7 +64,7 @@ public class ConnectionPool {
      */
     public Connection getConnection() {
         try {
-            if(connectionPool.isEmpty() || connectionPool.size() < MAX_POOL_SIZE) {
+            if (connectionPool.isEmpty() || connectionPool.size() < MAX_POOL_SIZE) {
                 connectionPool.add(createConnection());
             } else {
                 System.out.println("Max pool size reached");
@@ -109,7 +108,6 @@ public class ConnectionPool {
      * @throws SQLException when something goes wrong :)
      * @see Database
      */
-
     public void shutdown() throws SQLException{
         connectionPool.addAll(usedConnections);
         System.out.println("Closing connections...");
@@ -123,38 +121,11 @@ public class ConnectionPool {
     }
 
     /**
-     * Returns an integer with the pool size.
-     * @return int
-     * @see Database
-     */
-    public static int getInitialPoolSize() {
-        return INITIAL_POOL_SIZE;
-    }
-
-    /**
-     * Returns a integer with the max pool size
-     * @return int
-     * @see Database
-     */
-    public static int getMaxPoolSize() {
-        return MAX_POOL_SIZE;
-    }
-
-    /**
      * Returns a ArrayList with unused connections.
      * @return ArrayList with Connection
      * @see Database
      */
     public List<Connection> getConnectionPool() {
         return connectionPool;
-    }
-
-    /**
-     * Returns a list of used connections
-     * @return ArrayList with used connections.
-     * @see Database
-     */
-    public List<Connection> getUsedConnections() {
-        return usedConnections;
     }
 }
