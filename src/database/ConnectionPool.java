@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ConnectionPool {
     private final List<Connection> connectionPool;
-    private List<Connection> usedConnections = new ArrayList<>();
+    private final List<Connection> usedConnections = new ArrayList<>();
     private static final int INITIAL_POOL_SIZE = 1;
     private static final int MAX_POOL_SIZE = 15;
 
@@ -63,15 +63,13 @@ public class ConnectionPool {
      * @return a connection on success, null on failure
      * @see Database
      */
-    public Connection getConnection(){
-        try{
-            if(connectionPool.isEmpty()){
-                if(usedConnections.size() < MAX_POOL_SIZE){
-                    connectionPool.add(createConnection());
-                } else{
-                    System.out.println("Max pool size reached");
-                    return null;
-                }
+    public Connection getConnection() {
+        try {
+            if(connectionPool.isEmpty() || connectionPool.size() < MAX_POOL_SIZE) {
+                connectionPool.add(createConnection());
+            } else {
+                System.out.println("Max pool size reached");
+                return null;
             }
         } catch (SQLException sqle){
             sqle.printStackTrace();
@@ -79,7 +77,6 @@ public class ConnectionPool {
 
         Connection con = connectionPool.remove(connectionPool.size() - 1);
         usedConnections.add(con);
-        //System.out.println("Connection opened");
         return con;
     }
 
@@ -91,7 +88,6 @@ public class ConnectionPool {
      */
     public void releaseConnection(Connection con){
         connectionPool.add(con);
-        //System.out.println("Connection released");
         usedConnections.remove(con);
     }
 
@@ -116,16 +112,14 @@ public class ConnectionPool {
 
     public void shutdown() throws SQLException{
         connectionPool.addAll(usedConnections);
-        int i = 1;
-        for(Connection con : connectionPool){
-            con.close();
-            System.out.println("Connection " + i + " closed");
-            i++;
-        }
-        System.out.println("All connections closed");
-        connectionPool.clear();
-        usedConnections = new ArrayList<>();
+        System.out.println("Closing connections...");
 
+        for(Connection con : connectionPool)
+            con.close();
+
+        System.out.println("All connections closed!");
+        connectionPool.clear();
+        usedConnections.clear();
     }
 
     /**
