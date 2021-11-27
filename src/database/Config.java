@@ -38,8 +38,6 @@ public class Config {
      */
     private void init() {
         DB_Login();
-        DB_URL = "jdbc:mysql://localhost:3306/paper_legion";
-        DB_DRIVER = "jdbc:mysql";// MySQL driver
         DB_MAX_CONNECTIONS = 10;
     }
 
@@ -117,6 +115,8 @@ public class Config {
 
             DB_USER_NAME = prop.getProperty("username");
             DB_PASSWORD = prop.getProperty("password");
+            DB_URL = prop.getProperty("url");
+            DB_DRIVER = prop.getProperty("driver");
         } catch (IOException e) {
             e.printStackTrace();
         }
