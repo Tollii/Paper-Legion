@@ -11,6 +11,11 @@ Andreas Tolnes,
 Kristoffer Vanebo,
 Eric Younger.
 
+## Dependencies
+ - Java 8 with JavaFX
+ - jfoenix component library
+ - mysql-connector-java
+
 ## Installation manual:
 ```markdown
 1. Create tables in MySql database using the 'paperLegion.sql' file in the folder 'mysql'
@@ -21,7 +26,6 @@ Eric Younger.
   - password
   - url (database connection string)
   - driver (database driver)
-4. Java 8 is recommended. Depends on JavaFX
 ```
   
 In-game tutorial on how to play the game.
