@@ -1,5 +1,6 @@
 /.idea/
 /systemutvikling-team17.iml
-src/database/DatabaseLogin.properties
+DatabaseLogin.properties
 src/.DS_Store
 out/production/systemutvikling-team17/
+out/

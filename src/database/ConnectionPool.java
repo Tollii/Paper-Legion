@@ -35,18 +35,11 @@ public class ConnectionPool {
      * @see Database
      */
     public static ConnectionPool create() throws SQLException{
-        try{
-            Config config = Config.getInstance();
-            Class.forName(config.getDB_DRIVER());
-            List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-            for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
-                pool.add(createConnection());
-            }
-            return new ConnectionPool(pool);
-        } catch (ClassNotFoundException clne){
-            clne.printStackTrace();
+        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
+        for(int i  = 0; i < INITIAL_POOL_SIZE; i++){
+            pool.add(createConnection());
         }
-        return null;
+        return new ConnectionPool(pool);
     }
 
     /**

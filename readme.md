@@ -16,7 +16,7 @@ Eric Younger.
 1. Create tables in MySql database using the 'paperLegion.sql' file in the folder 'mysql'
 2. Alter the config file <database/Config.java> and insert jdbc driver and url.
 3. Add properties file named 'DatabaseLogin.properties' in the root folder.
-  3.1 The properties file should have two lines only, the first line username for database, and the second is for password.
+  3.1 The properties file should include two props. username=[USERNAME] and password=[PASSWORD]
 4. Java 8 is recommended.
 ```
   

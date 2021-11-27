@@ -20,8 +20,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="mysql-connector-java-8.0.13" level="application" />
-    <orderEntry type="library" name="jfoenix-8.0.8" level="project" />
-    <orderEntry type="library" name="mysql-connector-java-8.0.15" level="project" />
+    <orderEntry type="library" exported="" name="jfoenix-8.0.10" level="project" />
+    <orderEntry type="library" exported="" name="mysql-connector-java-8.0.11" level="project" />
   </component>
 </module>

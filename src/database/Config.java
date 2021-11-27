@@ -1,9 +1,7 @@
 package database;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * Configuration file that contains information needed to connect to the MYSQL database
@@ -40,8 +38,8 @@ public class Config {
      */
     private void init() {
         DB_Login();
-        DB_URL = "localhost";
-        DB_DRIVER = "";// MySQL driver
+        DB_URL = "jdbc:mysql://localhost:3306/paper_legion";
+        DB_DRIVER = "jdbc:mysql";// MySQL driver
         DB_MAX_CONNECTIONS = 10;
     }
 
@@ -113,13 +111,12 @@ public class Config {
      */
     private void DB_Login() {
         try {
-            InputStream stream = getClass().getResourceAsStream("DatabaseLogin.properties");
+            FileInputStream fis = new FileInputStream("DatabaseLogin.properties");
+            Properties prop = new Properties();
+            prop.load(fis);
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-            DB_USER_NAME = reader.readLine();
-            DB_PASSWORD = reader.readLine();
-            reader.close();
+            DB_USER_NAME = prop.getProperty("username");
+            DB_PASSWORD = prop.getProperty("password");
         } catch (IOException e) {
             e.printStackTrace();
         }
