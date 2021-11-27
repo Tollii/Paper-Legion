@@ -52,14 +52,6 @@ public class PiecePlacer {
     }
 
     /**
-     * Returns a integer with the matchID.
-     * @return int
-     */
-    public int getMatchId() {
-        return matchId;
-    }
-
-    /**
      * Returns a integer with the playerID associated with the piece.
      * @return int
      */

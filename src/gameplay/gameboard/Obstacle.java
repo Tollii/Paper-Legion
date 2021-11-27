@@ -45,15 +45,6 @@ public class Obstacle extends StackPane {
     }
 
     /**
-     * Sets the positon of the Obstacle in the form of graph coordinates.
-     * The grid coordinates are single digits, but is transformed into graph coordinates.
-     */
-    public void setTranslate(){
-        super.setTranslateX(posX*100);
-        super.setTranslateY(posY*100);
-    }
-
-    /**
      * Returns a Integer with the X-position in relation to the game Grid.
      * @return int
      * @see Grid

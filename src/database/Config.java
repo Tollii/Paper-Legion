@@ -18,10 +18,6 @@ public class Config {
 
     private String DB_URL;
 
-    private String DB_DRIVER;
-
-    private int DB_MAX_CONNECTIONS;
-
     private final static Config config = new Config();
 
     /**
@@ -38,7 +34,6 @@ public class Config {
      */
     private void init() {
         DB_Login();
-        DB_MAX_CONNECTIONS = 10;
     }
 
     /**
@@ -82,27 +77,6 @@ public class Config {
     }
 
     /**
-     * Returns database driver as a String
-     *
-     * @return String
-     * @see Database
-     */
-    public String getDB_DRIVER() {
-        return DB_DRIVER;
-    }
-
-    /**
-     * Returns max connections as an integer
-     *
-     * @return int
-     * @see Database
-     * @see ConnectionPool
-     */
-    public int getDB_MAX_CONNECTIONS() {
-        return DB_MAX_CONNECTIONS;
-    }
-
-    /**
      * Reads a property file that contains the database username and password. Anyone that wants to use this code as is, needs to add this file.
      *
      * @see Database
@@ -116,7 +90,6 @@ public class Config {
             DB_USER_NAME = prop.getProperty("username");
             DB_PASSWORD = prop.getProperty("password");
             DB_URL = prop.getProperty("url");
-            DB_DRIVER = prop.getProperty("driver");
         } catch (IOException e) {
             e.printStackTrace();
         }

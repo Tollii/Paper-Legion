@@ -25,7 +25,6 @@ Eric Younger.
   - username
   - password
   - url (database connection string)
-  - driver (database driver)
 ```
   
 In-game tutorial on how to play the game.

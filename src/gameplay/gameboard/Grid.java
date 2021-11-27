@@ -36,14 +36,6 @@ public class Grid extends GridPane {
     }
 
     /**
-     * Returns the number of columns in the grid.
-     * @return int
-     */
-    public int getColumns(){
-        return columns;
-    }
-
-    /**
      * Returns the number of rows in the grid.
      * @return int
      */

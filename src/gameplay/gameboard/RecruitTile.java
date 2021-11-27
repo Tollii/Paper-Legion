@@ -91,16 +91,6 @@ public class RecruitTile extends StackPane{ //each tile is a stackpane with an e
   }
 
   /**
-   * Sets the stroketype to be around the rectangle
-   * @param value Takes in a object of the class StrokeType
-   * @see StrokeType
-   * @see Rectangle
-   */
-  public void setStrokeType(StrokeType value) {
-      rect.setStrokeType(value);
-  }
-
-  /**
    * Sets the strokewidth of the Rectangle
    * @param value Takes in a double value.
    * @see Rectangle

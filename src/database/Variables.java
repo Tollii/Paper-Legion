@@ -57,7 +57,6 @@ public class Variables {
     public static Unit selectedUnit;
     public static int selectedPosX;
     public static int selectedPosY;
-    public static boolean doStopPlacement;
 
     //Tile selection variables
     public static final Paint standardTileColor = Color.WHITE;

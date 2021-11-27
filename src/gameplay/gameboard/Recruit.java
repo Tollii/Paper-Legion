@@ -38,7 +38,7 @@ public class Recruit extends StackPane {
     rect.setHeight(Variables.tileSize);
     rect.setFill(new ImagePattern(getImage()));
     this.getChildren().add(rect);
-    Label costLabel = new Label("$" + String.valueOf(type.getCost()));
+    Label costLabel = new Label("$" + type.getCost());
     this.getChildren().add(costLabel);
 
     // Styling of costLabel.

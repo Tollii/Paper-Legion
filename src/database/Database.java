@@ -94,7 +94,7 @@ public class Database {
             resultSet.next();
             type = resultSet.getString("unit_name");
             unitTypeId = resultSet.getInt("unit_type_id");
-            hp = (double) resultSet.getFloat("max_health");
+            hp = resultSet.getFloat("max_health");
             attack = resultSet.getInt("attack");
             defenceMultiplier = resultSet.getDouble("defence_multiplier");
             minAttackRange = resultSet.getInt("min_attack_range");
@@ -472,11 +472,10 @@ public class Database {
             //If the loop is successful, commit.
             myConn.commit();
 
-        }catch(SQLException e){
+        } catch(SQLException e) {
             e.printStackTrace();
             Cleaner.rollBack(myConn);
-        }finally {
-
+        } finally {
             Cleaner.setAutoCommit(myConn);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
@@ -498,27 +497,24 @@ public class Database {
         ResultSet resultSet;
         PreparedStatement preparedStatement = null;
 
-
         try {
-                preparedStatement = myConn.prepareStatement(sqlSetning);
+            preparedStatement = myConn.prepareStatement(sqlSetning);
 
-                preparedStatement.setInt(1, match_id);    //"Arrays begin at 1"
-                preparedStatement.setInt(2, opponent_id);
+            preparedStatement.setInt(1, match_id);    //"Arrays begin at 1"
+            preparedStatement.setInt(2, opponent_id);
 
-                resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
 
-                outputList = new ArrayList<>();
+            outputList = new ArrayList<>();
 
-                while(resultSet.next()){
+            while (resultSet.next()) {
+                outputList.add(new PiecePlacer(resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("player_id"), resultSet.getInt("position_x"), resultSet.getInt("position_y"), resultSet.getInt("unit_type_id")));
+            }
 
-                    outputList.add(new PiecePlacer(resultSet.getInt("piece_id"), resultSet.getInt("match_id"), resultSet.getInt("player_id"), resultSet.getInt("position_x"), resultSet.getInt("position_y"), resultSet.getInt("unit_type_id")));
-                }
-
-
-        }catch(SQLException e){
+        } catch(SQLException e) {
             e.printStackTrace();
             return null;
-        }finally {
+        } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
@@ -531,24 +527,22 @@ public class Database {
      *
      * @return Boolean. True if opponent is ready, false if not.
      */
-    public boolean checkIfOpponentReady(){
+    public boolean checkIfOpponentReady() {
 
         boolean returnBoolean = false;
 
         Connection myConn = connectionPool.getConnection();
 
-        String sqlSetning;
+        String sqlSetning = "SELECT player2_ready AS ready FROM Matches WHERE match_id = ?";
         ResultSet resultSet = null;
 
-        if(opponent_id == player1){
+        if(opponent_id == player1) {
             sqlSetning = "SELECT player1_ready AS ready FROM Matches WHERE match_id = ?";
-        }else{
-            sqlSetning = "SELECT player2_ready AS ready FROM Matches WHERE match_id = ?";
         }
 
         PreparedStatement preparedStatement = null;
 
-        try{
+        try {
 
             preparedStatement = myConn.prepareStatement(sqlSetning);
 
@@ -556,21 +550,19 @@ public class Database {
 
             resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 returnBoolean = resultSet.getBoolean("ready");
             }
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
 
-        }finally{
+        } finally {
             Cleaner.closeResSet(resultSet);
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
-
         return returnBoolean;
-
     }
 
     /**
@@ -579,42 +571,32 @@ public class Database {
      * @param ready if true, sets player as ready.
      * @see GameMain
      */
-    public void setReady(boolean ready){
+    public void setReady(boolean ready) {
 
         Connection myConn = connectionPool.getConnection();
 
-        String sqlSetning;
+        String sqlSetning = "UPDATE Matches SET player2_ready = ? WHERE match_id = ?";
 
-        if(user_id == player1){
-            sqlSetning = "UPDATE Matches SET player1_ready = ?";
-        }else{
-            sqlSetning = "UPDATE Matches SET player2_ready = ?";
+        if(user_id == player1) {
+            sqlSetning = "UPDATE Matches SET player1_ready = ? WHERE match_id = ?";
         }
 
         PreparedStatement preparedStatement = null;
 
-        try{
-
+        try {
             preparedStatement = myConn.prepareStatement(sqlSetning);
+            int readyFlag = 0;
 
-            if(ready){
+            if (ready)
+                readyFlag = 1;
 
-                preparedStatement.setInt(1, 1);
-
-            }else{
-
-                preparedStatement.setInt(1, 0);
-
-            }
-
-
+            preparedStatement.setInt(1, readyFlag);
+            preparedStatement.setInt(2, match_id);
             preparedStatement.executeUpdate();
 
-
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-
-        }finally{
+        } finally {
             Cleaner.closeStatement(preparedStatement);
             connectionPool.releaseConnection(myConn);
         }
@@ -1305,7 +1287,7 @@ public class Database {
     public void keepTheConnectionAlive() {
         String stmt = "SELECT version();";
         Connection myConn = connectionPool.getConnection();
-        ResultSet rs = null;
+        ResultSet rs;
         PreparedStatement preparedStatement = null;
         try {
             myConn.setAutoCommit(false);
@@ -1323,33 +1305,6 @@ public class Database {
         }
     }
 
-    /**
-     * A call to the database designed only to keep the connection alive
-     *
-     * @see Database
-     */
-
-    /*public void keepTheConnectionAlive() {
-        String stmt = "SELECT version();";
-        Connection myConn = connectionPool.getConnection();
-        ResultSet rs = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            myConn.setAutoCommit(false);
-            preparedStatement = myConn.prepareStatement(stmt);
-            rs = preparedStatement.executeQuery();
-            myConn.commit();
-            rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Cleaner.setAutoCommit(myConn);
-            Cleaner.closeResSet(rs);
-            Cleaner.closeStatement(preparedStatement);
-            connectionPool.releaseConnection(myConn);
-        }
-    }
-*/
     /*
      __ _        _
     / _\ |_ __ _| |_ ___
